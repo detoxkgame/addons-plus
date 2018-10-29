@@ -2,6 +2,7 @@
 	border-left: 1px solid #dfdfdf;
     top: 0px !important;
     position: sticky !important;
+    position: -webkit-sticky !important; /* Safari */
     background-color: #eee;
     z-index: 1 !important;
 }
