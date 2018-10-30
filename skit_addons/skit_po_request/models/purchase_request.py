@@ -135,7 +135,7 @@ class PurchaseRequest(models.Model):
     date_start = fields.Datetime('Creation date',
                                  help="Date when the user initiated the "
                                  "request.",
-                                 default=fields.Date.context_today,
+                                 default=fields.Datetime.now(),
                                  track_visibility='onchange')
     requested_by = fields.Many2one('res.users',
                                    'Requested by',
@@ -245,7 +245,7 @@ class PurchaseRequestLine(models.Model):
                          store=True)
     date_required = fields.Datetime(string='Request Date', required=True,
                                     track_visibility='onchange',
-                                    default=fields.Date.context_today)
+                                    default=fields.Datetime.now())
     is_editable = fields.Boolean(string='Is editable',
                                  compute="_compute_is_editable",
                                  readonly=True)
