@@ -26,7 +26,6 @@
              'views/sale_order_view.xml',
              'views/pos_order_view.xml',
              'data/step_discount_data.xml',
-             'security/step_discount_security.xml',
              'security/ir.model.access.csv',
              'report/inv_report.xml',
              ],
