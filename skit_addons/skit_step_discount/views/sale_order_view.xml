@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+		<record id='view_sale_quotation_from' model='ir.ui.view'>
+			<field name="name">sale.order.form</field>
+			<field name="model">sale.order</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+					<xpath expr="//field[@name='order_line']/form//field[@name='tax_id']"
+						position="after">
+						<field name="step_discount" widget="many2many_tags" />
+					</xpath>
+					<xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']"
+						position="after">
+						<field name="step_discount" widget="many2many_tags" />
+					</xpath>
+					<xpath expr="//field[@name='amount_tax']" position="after">
+						<field name="amount_discount" widget="monetary"
+							options="{'currency_field': 'currency_id'}" />
+					</xpath>					
+			</field>
+		</record>
+		
+		
+		<record model="ir.ui.view" id="account_invoice_form_inherit">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    
+                    <xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']" position="after">
+                        <field name="step_discount" widget="many2many_tags"/>
+                    </xpath>
+                    <xpath expr="//field[@name='amount_tax']"
+					position="after">
+                <field name="amount_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+           </xpath>
+                </data>
+            </field>
+        </record>
+	
+</odoo>

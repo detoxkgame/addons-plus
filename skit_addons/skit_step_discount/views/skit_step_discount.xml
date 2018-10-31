@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>		
+	
+    <record id="skit_step_discount_view_form" model="ir.ui.view">
+		<field name="name">skit.step.discount.form</field>
+		<field name="model">skit.step.discount</field>		
+		<field name="arch" type="xml">
+			<form string="Step Discount">
+				<sheet string="Step Discount">
+					<div class="oe_title">
+						<label class="oe_edit_only" for="name" string="Discount Name"/>
+						<h1>
+							<field name="name" placeholder="Discount Name"/>
+						</h1>
+					</div>
+					<group>
+						<field name="discount_percentage"/>
+						<field name="product_id" invisible="1"  options="{'no_create': True}" domain="[('name','=','Step Discount')]" />						
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+	<record id="skit_step_discount_view_tree" model="ir.ui.view">
+		<field name="name">skit.step.discount.tree</field>
+		<field name="model">skit.step.discount</field>		
+		<field name="arch" type="xml">
+			<tree string="Step Discount">
+				<field name="name"/>
+				<field name="discount_percentage"/>				
+			</tree>
+		</field>
+	</record>
+		
+	<record id="skit_step_discount_view_filter" model="ir.ui.view">
+        <field name="name">skit.step.discount.select</field>
+        <field name="model">skit.step.discount</field>            
+        <field name="arch" type="xml">
+            <search string="Search Step Discount">
+                <field name="name" string="Discount Name"/>
+                <field name="discount_percentage" string="Percent Discount"/>
+            </search>
+        </field>
+    </record>    
+	
+	<record id="skit_step_discount_action" model="ir.actions.act_window">
+		<field name="name">Step Discount</field>
+		<field name="res_model">skit.step.discount</field>
+		<field name="view_type">form</field>
+		<field name="view_id" ref="skit_step_discount_view_tree"/>
+		<field name="search_view_id" ref="skit_step_discount_view_filter"/>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+                Click here to add new step discount.
+            </p><p>
+                Apply multiple discounts for an orders in Sales and Purchase.
+				
+            </p>
+		</field>
+	</record>
+	 <menuitem id="skit_step_discount_menu"
+               parent="sale.menu_sale_config"
+            action="skit_step_discount_action"
+            sequence="3"/>
+	<!-- <menuitem id="skit_step_discount_menu" parent="sale.menu_sales_config"
+		      action="skit_step_discount_action"/>	 -->
+</odoo>
