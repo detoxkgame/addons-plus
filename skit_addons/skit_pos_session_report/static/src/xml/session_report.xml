@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">   
+
+	<t t-name="SessionReport"> 
+		<div class="session_report_button"> 	
+			<div class='control-button'>
+		    	<i class='fa fa-file-o' />Session Report
+		    </div>
+		</div> 
+	</t>
+	    
+</templates>
+	    
