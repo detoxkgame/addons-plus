@@ -79,7 +79,8 @@ class PosOrder(models.Model):
         return sum(tax.get('amount', 0.0) for tax in taxes)
 
     @api.depends('statement_ids', 'lines.price_subtotal_incl', 'lines.discount')
-    def _compute_amount_all(self):        
+    def _compute_amount_all(self):       
+        super(PosOrder, self)._compute_amount_all() 
         for order in self:
             order.amount_paid = order.amount_return = order.amount_tax = 0.0
             currency = order.pricelist_id.currency_id
@@ -87,7 +88,19 @@ class PosOrder(models.Model):
             order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in order.statement_ids)
             order.amount_tax = currency.round(sum(self._amount_line_tax(line, order.fiscal_position_id) for line in order.lines))
             amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines if 'Step Discount' not in line.product_id.name))
-            order.amount_total = order.amount_tax + amount_untaxed
+            original_total = order.amount_tax + amount_untaxed
+            total_credit_amt = 0
+            if 'credit_card_charge_amount' in self.env['account.bank.statement.line']._fields:
+                credit_charge = 0
+                credit_card_charge_value = 0
+                for statement_ids in order.statement_ids:
+                        if(statement_ids.journal_id.code == 'cc' or statement_ids.journal_id.code == 'CC' or ('Credit Card')in statement_ids.journal_id.name):
+                            credit_charge = statement_ids.credit_card_charge_amount
+                            credit_card_charge_value = currency.round(credit_charge)
+                            total_credit_amt+= credit_card_charge_value
+                order.credit_card_charges = total_credit_amt
+            order.amount_total = original_total+total_credit_amt
+
 
 
 class PosOrderLine(models.Model):

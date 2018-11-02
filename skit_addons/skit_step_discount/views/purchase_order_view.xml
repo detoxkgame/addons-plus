@@ -7,13 +7,13 @@
 					<field name="inherit_id" ref="purchase.purchase_order_form"/>
 					<field name="arch" type="xml">
 							<xpath expr="//field[@name='order_line']/form//field[@name='taxes_id']" position="after">
-									<field name="step_discount" widget="many2many_tags"/>
+									<field name="step_discount" string="Step Discount" widget="many2many_tags"/>
 							</xpath>
 							<xpath expr="//field[@name='order_line']/tree//field[@name='taxes_id']" position="after">
-									<field name="step_discount" widget="many2many_tags"/>
+									<field name="step_discount" string="Step Discount" widget="many2many_tags"/>
 							</xpath>
 							<xpath expr="//field[@name='amount_tax']" position="after">
-									<field name="amount_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+									<field name="amount_discount" string="Step Discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
 							</xpath>
 					</field>
 			</record>
@@ -26,14 +26,10 @@
 				<xpath
 					expr="/form/sheet/notebook/page[1]/field[@name='invoice_line_ids']/tree//field[@name='discount']"
 					position="after">
-					<field name="step_discount" widget="many2many_tags" options="{'no_create': True}" />
-				</xpath>
-				<xpath
-					expr="/form/sheet/notebook/page[1]/field[@name='invoice_line_ids']/tree//field[@name='discount']"
-					position="replace">
-				</xpath>
+					<field name="step_discount" string="Step Discount" widget="many2many_tags" options="{'no_create': True}" />
+				</xpath>				
 				<xpath expr="//field[@name='amount_tax']" position="after">
-					   <field name="amount_discount" widget="monetary"
+					   <field name="amount_discount" string="Step Discount" widget="monetary"
 						options="{'currency_field': 'currency_id'}" />						
 				</xpath>
 				

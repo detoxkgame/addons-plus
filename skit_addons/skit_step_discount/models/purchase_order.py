@@ -189,6 +189,42 @@ class AccountInvoice(models.Model):
                     tax_grouped[key]['amount'] += val['amount']
                     tax_grouped[key]['base'] += val['base']
         return tax_grouped
+    
+    @api.one
+    @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
+                 'currency_id', 'company_id', 'date_invoice', 'type')
+    def _compute_amount(self):
+        super(AccountInvoice, self)._compute_amount()
+        pos_order = self.env['pos.order'].search(
+                        [('invoice_id', '=', self.id)])
+        credit_charge = 0
+        if pos_order and  'credit_card_charge_amount' in self.env['account.bank.statement.line']._fields:
+            for pos in pos_order:
+                if pos.statement_ids:
+                    credit_amt = 0
+                    original_amount = 0
+                    for statement in pos.statement_ids:
+                        if statement.journal_id.code == 'cc' or statement.journal_id.code == 'CC':
+                            # card_charge = statement.journal_id.credit_card_charge
+                            credit_amt+= statement.credit_card_charge_amount
+                        original_amount += statement.amount
+                    total_amt =  original_amount
+                    credit_charge = (credit_amt)
+            self.credit_card_charges = credit_charge
+        self.amount_total = self.amount_untaxed + self.amount_tax + credit_charge        
+        amount_total_company_signed = self.amount_total
+        amount_untaxed_signed = self.amount_untaxed
+        if 'amount_discount' in self.env['account.invoice']._fields:
+            self.amount_discount = (sum((line.quantity * line.price_unit) for line in self.invoice_line_ids)) - self.amount_untaxed
+        if self.currency_id and self.company_id and self.currency_id != self.company_id.currency_id:
+            currency_id = self.currency_id
+            amount_total_company_signed = currency_id._convert(self.amount_total, self.company_id.currency_id, self.company_id, self.date_invoice or fields.Date.today())
+            amount_untaxed_signed = currency_id._convert(self.amount_untaxed, self.company_id.currency_id, self.company_id, self.date_invoice or fields.Date.today())
+        sign = self.type in ['in_refund', 'out_refund'] and -1 or 1
+        self.amount_total_company_signed = amount_total_company_signed * sign
+        self.amount_total_signed = self.amount_total * sign
+        self.amount_untaxed_signed = amount_untaxed_signed * sign
+
 
    
 class AcountTax(models.Model):

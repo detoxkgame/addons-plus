@@ -64,6 +64,5 @@
                parent="sale.menu_sale_config"
             action="skit_step_discount_action"
             sequence="3"/>
-	<!-- <menuitem id="skit_step_discount_menu" parent="sale.menu_sales_config"
-		      action="skit_step_discount_action"/>	 -->
+	
 </odoo>

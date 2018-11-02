@@ -9,14 +9,14 @@
 			<field name="arch" type="xml">
 					<xpath expr="//field[@name='order_line']/form//field[@name='tax_id']"
 						position="after">
-						<field name="step_discount" widget="many2many_tags" />
+						<field name="step_discount" string="Step Discount" widget="many2many_tags" />
 					</xpath>
 					<xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']"
 						position="after">
-						<field name="step_discount" widget="many2many_tags" />
+						<field name="step_discount" string="Step Discount" widget="many2many_tags" />
 					</xpath>
 					<xpath expr="//field[@name='amount_tax']" position="after">
-						<field name="amount_discount" widget="monetary"
+						<field name="amount_discount" string="Step Discount" widget="monetary"
 							options="{'currency_field': 'currency_id'}" />
 					</xpath>					
 			</field>
@@ -31,11 +31,11 @@
                 <data>
                     
                     <xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']" position="after">
-                        <field name="step_discount" widget="many2many_tags"/>
+                        <field name="step_discount" string="Step Discount" widget="many2many_tags"/>
                     </xpath>
                     <xpath expr="//field[@name='amount_tax']"
 					position="after">
-                <field name="amount_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="amount_discount" string="Step Discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
            </xpath>
                 </data>
             </field>
