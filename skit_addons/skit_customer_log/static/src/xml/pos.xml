@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<!--  Extend the OrderSelectorWidget for add the customer log -->
+   	<t t-extend="OrderSelectorWidget">
+	   	<t t-jquery='.deleteorder-button' t-operation='after'>
+	   		<span class="icon order-button square customerlog-button" title="Customer Log">
+				<i class="oe_link_icon oe-link fa fa-bar-chart oe-white oe_icon_customfloat" />
+			</span>
+	    </t>       
+   	</t>
+   	
+   	<!-- Customer Log Order Line Template -->
+   	<t t-name="CLOLineScreenWidget">
+		<table class='dl-olist' id="dl_oltable">
+			<thead>
+	        	<tr>
+	         		<th>S.no</th>
+	                <th>Product</th>      
+	                <th class='text-right' >Qty</th>
+	                <th class='text-right' >Amount</th>
+	            </tr>
+	  		</thead>
+          	<tbody>
+          		<t t-set="i" t-value="0"/>
+          		<t t-foreach="lines" t-as="line">
+		  			<tr t-att-id="i" t-attf-line_id="#{line.id}">
+		            	<td><t t-esc='line.sno or ""' /></td>
+		            	<td><t t-esc='line.product or ""' /></td>
+		            	<td class='text-right' ><t t-esc='line.qty or ""' /></td>
+		            	<td class='text-right' ><t t-esc='line.price_unit or ""' /></td>                 
+					</tr>
+					<t t-set="i" t-value="i+1"/>   
+				</t>
+			</tbody>
+		</table> 
+	</t>
+   	
+   	<!-- Customer Log - Template -->
+    <t t-name="CustomerLogScreenWidget">
+        <div class="customerlog clientlist-screen screen">
+            <div class="screen-content customerlog-screen-content">
+                <section class="top-content">   
+                <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Cancel
+                </span> 
+                <span>                                                  
+            		<t t-if='widget.pos.get_client()'>
+            			<div class='client-name'><t t-esc="widget.pos.get_client().name" /></div>  
+            		</t>
+            	</span>              		                              
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow'>  
+                             <p class="dltitle"> Order Details </p>
+								<div class="container">
+									<div class="row">
+								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">
+								            <div class="dl-col-lg-9 dl-col-md-9 dl-col-sm-9 dl-col-xs-9 bhoechie-tab customer-log-table-size customer_log-orderwidth">								            
+								             <div class="bhoechie-tab-content active">								             								             
+					                           <table id="dl_otable"></table>
+								             </div> 
+								            </div>
+								        </div>
+								  </div>
+								</div>                 	
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,211 @@
+/* e) The Client List Screen */
+
+.pos .clientlist-screen .dl-list,
+.pos .clientlist-screen .dl-olist,
+.bootstrap-table .table
+{
+    font-size: 16px; 
+    width: 100%;
+    line-height: 40px;
+}
+.pos .clientlist-screen .dltitle{
+    font-size: 1.5em;
+    width: 100%;
+    font-weight:bold;
+    text-align:center;
+}
+.pos .clientlist-screen .dl-list th,
+.pos .clientlist-screen .dl-list td {
+    padding: 0px 8px;
+}
+.pos .clientlist-screen .client-list.dl-list tr{
+     transition: all 150ms linear;
+     background: none;
+}
+.pos .clientlist-screen .dl-list thead > tr,
+.pos .clientlist-screen .client-list.dl-list tr:nth-child(even) {
+   background: none;
+}
+.pos .clientlist-screen .dl-list tr.highlight{
+    transition: all 150ms linear;
+    background: rgb(73, 166, 200) !important;
+    color: white;
+}
+.pos .clientlist-screen .dl-list tr.lowlight{
+    transition: all 150ms linear;
+    background: rgb(216, 238, 227);
+}
+.pos .clientlist-screen .dl-list tr.lowlight:nth-child(even){
+    transition: all 150ms linear;
+    background: rgb(227, 246, 237);
+}
+.pos .clientlist-screen .button {
+    line-height: 32px;
+    padding: 3px 13px;
+    background: rgb(230, 230, 230);
+    margin: 12px;
+    border-radius: 3px;
+    border: solid 1px rgb(209, 209, 209);
+    cursor: pointer;
+    transition: all 150ms linear;
+}
+.pos .clientlist-screen .full-content .subwindow-container.border {
+    height: auto;
+    border-bottom: dashed 1px rgb(215,215,215);
+}
+.pos .clientlist-screen .full-content .dl-window.subwindow {
+    display: block;
+    height: 500px;
+}
+.pos .clientlist-screen .renew-button{
+    border-left-width: 1px;
+    margin-left:-1px;
+}
+
+.pos .clientlist-screen .dl-olist table, 
+.pos .clientlist-screen .dl-olist th, 
+.pos .clientlist-screen .dl-olist td {
+    border: 1px solid #ddd;
+}
+
+.pos .clientlist-screen .dl-olist th,
+.pos .clientlist-screen .dl-olist td {
+    padding: 0px 30px;
+}
+.pos .clientlist-screen .dl-olist > thead > tr > th,
+.pos .clientlist-screen .dl-olist > tbody > tr > th,
+.pos .clientlist-screen .dl-olist > tfoot > tr > th,
+.pos .clientlist-screen .dl-olist > thead > tr > td,
+.pos .clientlist-screen .dl-olist > tbody > tr > td,
+.pos .clientlist-screen .dl-olist > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+.pos .clientlist-screen .dl-olist > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+table.menu {
+    width: auto;
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+/*  bhoechie tab */
+div.bhoechie-tab-container{
+  width: 100%;
+  height:75%;
+  z-index: 10;
+  background-color: #ffffff;
+  padding: 0 !important;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  border:1px solid #ddd;
+  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  background-clip: padding-box;
+  opacity: 0.97;
+  filter: alpha(opacity=97);
+}
+
+/* Scroll added for customer log and some css changed*/
+div.bhoechie-tab-menu{
+	padding-right: 0;
+	padding-left: 0;
+	padding-bottom: 0;
+	width: 20%;
+	overflow: scroll;
+	height: 500px;
+	overflow-x: auto;
+}
+div.bhoechie-tab-menu div.list-group{
+  margin-bottom: 0;
+  float: left;
+  font-size: 16px;
+}
+div.bhoechie-tab-menu div.list-group>a{
+  margin-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group>a .glyphicon,
+div.bhoechie-tab-menu div.list-group>a .fa {
+  color: #49A6C8; /* #C6B398; /*#5A55A3;*/
+}
+div.bhoechie-tab-menu div.list-group>a:first-child{
+  border-top-right-radius: 0;
+  -moz-border-top-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>a:last-child{
+  border-bottom-right-radius: 0;
+  -moz-border-bottom-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>a.active,
+div.bhoechie-tab-menu div.list-group>a.active .glyphicon,
+div.bhoechie-tab-menu div.list-group>a.active .fa{
+  background-color: #49A6C8; /*#5A55A3;*/
+  background-image: #49A6C8; /*#5A55A3;*/
+  color: #ffffff;
+}
+div.bhoechie-tab-menu div.list-group>a.active:after{
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-top: -13px;
+  border-left: 0;
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
+  border-left: 10px solid #49A6C8;/*#5A55A3;*/
+}
+
+div.bhoechie-tab-content{
+  background-color: #ffffff;
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+div.bhoechie-tab div.bhoechie-tab-content:not(.active){
+  display: none;
+}
+.pos .customerlog .window {
+	overflow-y:scroll !important;
+}
+.list-group{
+	font-size:16px;
+}
+
+.pos .customerlog .full-content .subwindow-container.border {
+    border-bottom: solid 3px #49A6C8;
+}
+.section-max-height{
+	max-height: 240px;
+    overflow: auto;
+}
+.dl_order_id{
+	display:none !important;
+}
+.dl_order_type{
+	display:none !important;
+}
+.pos_text_left{
+	text-align: left !important;
+}
+.payment_amount{
+	width: 40% !important;
+	font-size: 14px !important;
+}
+.customerlog-screen-content{
+	max-width: 90% !important;
+	margin-left: 5% !important;
+	margin-right: 5% !important;
+}
+.customer-log-table{
+	width: 100% !important;
+}
+.customer-log-table-size{
+	width: 98% !important;
+}
+
+

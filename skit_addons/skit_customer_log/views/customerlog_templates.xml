@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>       
+        <template id="assets" inherit_id="point_of_sale.assets">
+          <xpath expr="." position="inside">
+          		<script type="text/javascript" src="/skit_customer_log/static/src/js/pos_customerlog.js"></script>    
+    			<script type="text/javascript" src="/skit_customer_log/static/src/js/bootstrap.js"></script>
+    			<script type="text/javascript" src="/skit_customer_log/static/src/js/bootstrap-table.min.js"></script>
+   				<script type="text/javascript" src="/skit_customer_log/static/src/js/bootstrap-table.js"></script>
+    			<script type="text/javascript" src="/skit_customer_log/static/src/js/bootstrap.min.js"></script>
+   			    <script type="text/javascript" src="/skit_customer_log/static/src/js/ga.js"></script>
+   			    <script type="text/javascript" src="/skit_customer_log/static/src/js/bootstrap-table-locale-all.js"></script>
+   			    <script type="text/javascript" src="/skit_customer_log/static/src/js/bootstrap-table-locale-all.min.js"></script>
+   			    
+   			    <link rel="stylesheet" href="/skit_customer_log/static/src/css/bootstrap.css"/>
+    		    <link rel="stylesheet" href="/skit_customer_log/static/src/css/bootstrap-table.css"/>
+    		    <link rel="stylesheet" href="/skit_customer_log/static/src/css/bootstrap-table.min.css"/> 
+    		    <link rel="stylesheet" href="/skit_customer_log/static/src/css/pos_customerlog.css" /> 
+         </xpath>
+        </template>    
+    </data>
+</odoo>
