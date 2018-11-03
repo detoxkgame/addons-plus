@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<t t-extend='ClientListScreenWidget'>
+      <t t-jquery='.client-list thead tr' t-operation='prepend'>
+            <th>Code</th>
+        </t>
+    </t> 
+    
+    <t t-extend='ClientLine'>
+        <t t-jquery='.client-line' t-operation='prepend'>
+            <td>
+                <t t-esc='partner.code ? partner.code: "" '/>
+            </td>
+        </t>
+    </t> 
+    
+    <t t-extend="ClientDetails">
+    	<t t-jquery='.client-details-right div:first' t-operation='prepend'>
+    		<div class='client-detail'>
+            	<span class='label'>Code</span>
+                <t t-if='partner.code'>
+                	<span class='detail vat'><t t-esc='partner.code'/></span>
+                </t>
+            </div>
+    	</t>
+    </t>
+    
+    <t t-extend="ClientDetailsEdit">
+    	<t t-jquery='section .client-name' t-operation='after'>
+    		<span class='detail client-name'><t t-esc='partner.code ? partner.code: "" '/></span>
+    	</t>
+    </t>
+    
+</templates>

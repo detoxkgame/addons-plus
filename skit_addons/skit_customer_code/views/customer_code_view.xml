@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+	<!-- Sequence number for Customer -->
+   <record id="seq_number_for_customer" model="ir.sequence">
+            <field name="name">Code</field>
+            <field name="code">res.partner.code</field>
+            <field name="prefix">C</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+   </record>
+   
+    <!--Partner Search form Inherit and add the customer code  -->
+   <record id="skit_customer_view_res_partner_filter" model="ir.ui.view">
+		<field name="name">res.partner.select</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_res_partner_filter" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="code" />
+			</xpath>	
+		</field>
+   </record>
+   
+   	<!-- Partner Form Inherit -->
+   <record id="skit_view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.customer.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='company_type']" position="after">
+                      <field name="code"  attrs="{'readonly':True}"  />
+                </xpath>
+            </field>
+   </record>
+</odoo>
