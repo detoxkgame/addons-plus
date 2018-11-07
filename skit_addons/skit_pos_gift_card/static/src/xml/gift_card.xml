@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">  
+ 	<!-- Add Gift Card button in Pos -->
+	<t t-name="GiftCardButton">
+		<div class="gift_card_button">
+		<div class='control-button' id='gift_card'>
+			<i class='fa fa-gift' /> Gift Card
+		</div>
+		</div>
+	</t> 
+	<t t-name="RedeemGiftCardButton">
+		<div class="redeem_gift_card">
+		<div class='control-button' id='redeem_gift'>
+			<i class='fa fa-star' /> Manage Gift Coupon
+		</div>
+		</div>
+	</t> 
+  	<!-- End -->
+  	
+  	<!-- Create Popup for Gift Card button in POS -->
+ 	    <t t-name="GiftCard">
+	        <div class="modal-dialog clientlist-screen">
+	            <div class="popup popup-text card_popup" >  
+	            	<p class="title gift_title" ><t t-esc=" widget.options.title || '' "/></p>
+               		<div class="pos_gftcard">
+               		<span class="error">* Please fill in the mandatory field.</span>
+               		<span class="zero_error">* Please enter your amount greater than zero.</span>
+						<table  class="gift-table" id="card" style="line-height:60px;">   	
+							<tbody >
+		                			<tr>
+			                			<td>
+									       <t>
+										      To
+										   </t>
+								        </td>
+								    	<td>
+								            	<input type="text" class="gift-text gift-to" name="to" placeholder="Enter recipient name" t-att-value="widget.options.gift_to ? widget.options.gift_to : '' "/>
+								        </td>
+		                			</tr>
+		                			<tr>
+			                			<td>
+									       <t>
+										      From
+										   </t>
+								        </td>
+								    	<td>
+								            	<input type="text" class="gift-text gift-from" name="from" placeholder="Your Name" t-att-value="widget.options.gift_from ? widget.options.gift_from : '' "/>
+								        </td>
+		                			</tr>
+		                			
+		                			<tr>
+			                			<td>
+									       <t>
+										      Quantity<span class="required"></span>
+										   </t>
+								        </td>
+								    	<td>
+								            	<input type="number" class="gift-text gift_qty" name="qty" t-att-value="widget.options.quantity ? widget.options.quantity : '' "/>
+								            	
+								        </td>
+		                			</tr>
+		                			<tr>
+			                			<td>
+									       <t>
+										      Message
+										   </t>
+								        </td>
+								    	<td>
+								            	<textarea type="text" class="gift-text gift-msg" name="message" placeholder="Write a message" ><t t-esc=" widget.options.gift_message ? widget.options.gift_message: '' "/></textarea>
+								        </td>
+		                			</tr>
+			                	</tbody> 		                
+		                	</table>
+		                	<table class="gift-table">
+		                		<tbody>
+		                			<tr>
+			                			<td class="amt_gft">
+										      Amount<span class="required">*</span>
+								        </td>
+								    	<td class="first_btn ">
+								            	<input type="button" class="gift-btn btn-first" value="500"/>
+								        </td>
+								        <td class="sec_btn">
+								            	<input type="button" class="gift-btn btn-sec" value="1000" />
+								        </td>
+								        <td class="third_btn">
+								            	<input type="button" class="gift-btn btn-third" value="1500"/>
+								        </td>
+								         <td class="other_amt">
+								            	<input type="number" id="other_amount" class="gift-btn other_amount" placeholder="Other Amount" t-att-value="widget.options.other_amount ? widget.options.other_amount: '' "/>
+								        </td>
+								        <td>
+								        	<input  type="hidden" id="is-edit" class="is-edit" t-att-value="widget.options.is_edit ? widget.options.is_edit: '' "></input>
+								        </td>
+								        
+		                			</tr>
+		                		</tbody>
+		                	</table>
+               				<div class="footer">
+	                    		<div class="button cancel gift_cancel">
+	                        		Cancel 
+	                    		</div>
+	                    		<div class="button confirm gift_confrim">
+	                        		Ok
+	                    		</div>
+	                		</div>
+	                		
+            			</div>
+            			<div class="gift_amt_div">
+           					 <table class="gift_amt_table">
+		                		<tbody>
+		                			<tr>
+			                			<td class="gift_amount">
+										      <t t-esc="widget.format_currency('')" />
+								        </td>
+								    	<td>
+								    	<span id="gift_amount" class="gift_amount"><t t-esc="widget.options.total_amount? widget.options.total_amount: '0' "></t></span>
+								        </td>
+								        <td>
+								    	<input  type="hidden" id="in_gf_amt" class="in_gf_amt" t-att-value="widget.options.in_gf_amt ? widget.options.in_gf_amt: '' "></input>
+								        </td>
+								        <td>
+								    	<input  type="hidden" id="order_num" class="order_num" ></input>
+								        </td>
+								        <td>
+								    	<input  type="hidden" id="barcode" class="barcode" ></input>
+								        </td>
+
+		                			</tr>
+		                		</tbody>
+		                	</table>
+           				 </div>
+       			 </div>
+        </div>
+    </t>
+    <!-- End -->
+    
+    <t t-name="ManageCard">
+	        <div class="modal-dialog clientlist-screen">
+	            <div class="popup popup-text coupon_popup">  
+	            	<p class="title popup-title"><t t-esc=" widget.options.title || '' "/></p>
+               		<div class="manage_card">
+							<div class="voucher_label">
+							Voucher
+							</div>
+							<div class="voucher-input">
+								<input autofocus="autofocus" id="coupon_value" class="coupon" name="coupon_value" required="true" type="text"></input>
+								<span id="amt" class="text-value"/>
+								<!-- <span class="display_none">Amount Available:100</span> -->
+							</div>
+							<div class="voucher_label">
+							Amount
+							</div>
+							<div class="voucher-input1">
+								<input id="coupon_amount" class="coupon" name="amount" type="text"></input>
+							</div>
+               				<div class="footer">
+	                    		<div class="button cancel">
+	                        		Cancel 
+	                    		</div>
+	                    		<div class="button confirm redeem">
+	                        		Redeem
+	                    		</div>
+	                		</div>
+            			</div>
+       			 </div>
+        </div>
+    </t>
+   
+     
+     <t t-extend='Orderline'> 	 
+       <t t-jquery='.product-name' t-operation='append'>
+         <t t-if="line.get_product().display_name =='Gift Card'">
+         	<i t-attf-class="oe_link_icon fa fa-pencil-square-o oe_icon line-edit-icon oe_green" />     
+        </t>      
+      </t> 
+   </t> 
+   
+    
+    <!-- Added Gift Card button in POS Receipt screen -->
+    <t t-extend='ReceiptScreenWidget'>
+        <t t-jquery='.top-content' t-operation='prepend'>
+            <span class='button gift_card_template' style="margin-left:-457px; background-color:#6ec89b; color:white;">
+                       Gift Card
+                <i class='fa fa-gift' style="color:white"></i>
+            </span>
+        </t>
+    </t> 
+     <!-- End -->
+</templates>

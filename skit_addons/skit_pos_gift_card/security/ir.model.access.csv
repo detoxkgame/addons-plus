@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+gift_card_user_access,skit_gift_card.user.skit.gift.card,skit_pos_gift_card.model_skit_pos_gift_card,point_of_sale.group_pos_user,1,0,0,0
+gift_card_manager_user_access,skit_gift_card.manager.skit.gift.card,skit_pos_gift_card.model_skit_pos_gift_card,point_of_sale.group_pos_manager,1,1,1,1
+gift_voucher_user_access,skit_gift_voucher.user.skit.gift.voucher,skit_pos_gift_card.model_skit_gift_voucher,point_of_sale.group_pos_user,1,0,0,0
+gift_voucher_manager_user_access,skit_gift_voucher.manager.skit.gift.voucher,skit_pos_gift_card.model_skit_gift_voucher,point_of_sale.group_pos_manager,1,1,1,1

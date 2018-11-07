@@ -1,0 +1,66 @@
+.gcard{
+	margin-left:-20px !important; 
+	margin-right: -3% !important;
+}
+.rib_image{
+	background-repeat: no-repeat !important;
+}
+.gift_table{
+	margin-top:15% !important;
+	height:410px !important;
+}
+.gc_td{
+	font-size:30px !important; 
+	color: FF0000 !important; 
+	padding-left:80px !important; 
+	font-weight: bold !important;
+ 	padding-top:10px !important;
+ 	font-family: satisfy;
+}
+.g_amount{
+	color: 00AFF0 !important;
+ 	padding-left:180px !important;
+ 	font-size:30px !important;
+ 	font-weight: bold !important; 
+	padding-top:10px !important;
+	font-family: satisfy;
+}
+.g_to{
+	font-size:30px !important; 
+	color:gray !important; 
+	padding-left:80px !important; 
+	padding-top:20px !important;
+	font-family: satisfy;
+}
+.g_msg{
+	color:gray !important; 
+	padding-left:150px !important; 
+	font-size:25px !important;
+ 	width:20px !important;
+ 	font-family: satisfy;
+}
+.g_barcode{
+	padding-left:40px !important;
+}
+.g_wish{
+	font-weight: bold !important; 
+	font-family: satisfy; 
+	color:black !important;
+}
+.gcrd_from{
+ 	padding-left:180px !important;
+ 	font-size:30px !important
+}
+.gc_from{
+	font-size:30px !important; 
+	padding-left:180px !important;	
+}
+.gc_barcode_val{
+	padding-left:80px !important; 
+	font-weight: bold !important;
+ 	padding-top:10px !important;
+}
+.gc_barcode-text{
+	text-align:center;
+	font-weight:bold
+}

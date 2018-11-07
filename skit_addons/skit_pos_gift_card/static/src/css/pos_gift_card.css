@@ -1,0 +1,118 @@
+.card_popup{
+	width:60% !important ;
+	height:72% !important ;
+}
+.gift_title{
+	background-color: #6EC89B !important;
+}
+.pos_gftcard{
+	display: inline-block;
+	width: 75% !important;
+}
+.gift-btn{
+	background-color: #6EC89B !important;
+	width: 100% !important;
+    	text-align: center;
+	display: inline-block;	
+}
+.gift-text{
+	margin-left:15% !important;
+	max-width:100% !important;
+	width:250px !important;
+}
+.gift-table{
+	width:100%;
+	margin-left:15%;
+	text-align:left;
+}
+.first_btn{
+	width: 78px;
+	max-inline-size: 90% !important;
+}
+.sec_btm{
+
+	max-inline-size: 90% !important;
+}
+.third_btm{
+	max-inline-size: 90% !important;
+}
+.amt_gft{
+	width: 35%;
+}
+.gift_confrim{   
+	width: 10% !important;
+    	height: 55% !important;
+}
+.gift_cancel{
+	width: 10% !important;
+    	height: 55% !important;
+}
+.other_amt{
+	width: 149px;
+}
+.gift_amt_div{
+    display: inline-block;
+    width: 25% !important;
+    float: right;
+}
+.gift_amt_table{
+	display: block;
+    	margin: 0 auto;
+    	
+}
+.gift_amount{
+    	font-size: 64px;
+	color: #43996E;
+}
+.pos_gift_card{
+	margin-left:-42% !important;
+}
+.error{
+	display: none;
+	color: red;
+	text-align: left;
+	margin-left: 10%;
+    	width: 100%;
+}
+.zero_error{
+	display: none;
+	color: red;
+	text-align: left;
+	margin-left: 10%;
+    	width: 100%;
+}
+.voucher_label{
+	margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    color: #404040;
+    width: 20%;
+}
+.coupon_popup{
+	height: 300px !important;
+    margin-top: 100px !important;
+}
+.voucher-input{
+	width: 80%;
+    margin-top: -6%;
+    margin-bottom: 10%;
+    margin-left: 20%;
+}
+.voucher-input1{
+	margin-top: -7%;
+    width: 80%;
+    margin-left: 20%;
+}
+.popup-title{
+	background: rgb(110,200,155) !important;
+}
+.display_none{
+	display:none;
+}
+.text-value{
+	float: left;
+    margin-left: 10%;
+    color: red;
+}

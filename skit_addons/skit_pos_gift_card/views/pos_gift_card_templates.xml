@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="skit_gift_card_assets" inherit_id="point_of_sale.assets">
+			<xpath expr="." position="inside">
+				<script type="text/javascript" src="/skit_pos_gift_card/static/src/js/pos_gift_card.js"></script>
+				<link rel="stylesheet" type="text/css" href="/skit_pos_gift_card/static/src/css/pos_gift_card.css"></link>
+			</xpath>
+		</template>
+    	<template id="gift_inherit" inherit_id="web.minimal_layout">
+      		<xpath expr="//head" position="inside">
+            	 <link rel="stylesheet" type="text/css" href="/skit_pos_gift_card/static/src/css/giftcard.css"></link>
+            	 <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'/>
+     		 </xpath>
+		</template>
+	</data>
+</openerp>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record model="ir.ui.view" id="view_pos_config_form">
+		<field name="name">pos.config.form.inherit</field>
+		<field name="model">pos.config</field>
+		<field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//h2[7]" position="after">
+				<group string="Gift Product">
+					<field name='gift_product_id' required="1" />
+				</group>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="skit_pos_gift_card_form" model="ir.ui.view">
+		<field name="name">skit.pos.gift.card.form</field>
+		<field name="model">skit.pos.gift.card</field>
+		<field name="arch" type="xml">
+			<form string="Gift Card" create="false" edit="false">
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+                        <button type="object"
+                            name="action_view_voucher"
+                            class="oe_stat_button" string="History"
+                            icon="fa-filter">
+                            <field name="voucher_ids" invisible="1"/>
+                        </button>
+                    </div>
+					<group>
+						<group>
+							<field name="gift_card_number" />
+							<field name="date" />
+							<field name="customer" />
+							<field name="gift_to" />
+							<field name="gift_from" />
+							<field name="gift_message" />
+						</group>
+						<group>
+							<field name="gift_qty" />
+							<field name="price" />
+							<field name="total_amount" />
+							<field name="session_id" />
+							<field name="order_id" />
+							<field name="barcode" readonly="1" />
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<!-- Gift Card tree view -->
+	<record id="skit_pos_gift_card_tree" model="ir.ui.view">
+		<field name="name">skit.pos.gift.card.tree</field>
+		<field name="model">skit.pos.gift.card</field>
+		<field name="arch" type="xml">
+			<tree string="Gift Card" create="false" edit="false">
+				<field name="gift_card_number" />
+				<field name="date" />
+				<field name="customer" />
+				<field name="gift_to" />
+				<field name="gift_from" />
+				<field name="gift_message" />
+				<field name="gift_qty" />
+				<field name="price" />
+				<field name="total_amount" />
+				<field name="session_id" />
+				<field name="order_id" />
+				<field name="barcode" />
+			</tree>
+		</field>
+	</record>
+	<!-- End tree view -->
+
+	<record id="gift_voucher_tree" model="ir.ui.view">
+		<field name="name">gift.voucher.tree</field>
+		<field name="model">skit.gift.voucher</field>
+		<field name="arch" type="xml">
+			<tree string="Gift Voucher" create="false" edit="false">
+				<field name="voucher_code" />
+				<field name="amount" invisible="1"/>
+				<field name="voucher_value"/>
+				<field name="transaction_type" />
+				<field name="order_id" />
+			</tree>
+		</field>
+	</record>
+	
+	<record id="gift_voucher_form" model="ir.ui.view">
+		<field name="name">gift.voucher.form</field>
+		<field name="model">skit.gift.voucher</field>
+		<field name="arch" type="xml">
+			<form string="Gift Voucher" create="false" edit="false">
+				<sheet>
+					<group>
+						<field name="voucher_code" />
+						<field name="amount" invisible="1"/>
+						<field name="voucher_value"/>
+						<field name="transaction_type" />
+						<field name="order_id" />
+						<field name="order_line_id" />
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!-- Gift Card action -->
+	<record id="action_skit_pos_gift_card" model="ir.actions.act_window">
+		<field name="name">Gift Card</field>
+		<field name="res_model">skit.pos.gift.card</field>
+		<field name="view_type">form</field>
+		<field name="view_id" ref="skit_pos_gift_card_tree" />
+		<field name="view_mode">form,tree</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+				Create a Card , the first step of a new Card.
+			</p>
+		</field>
+	</record>
+	<!-- End Gift Card action -->
+
+	<record id="action_gift_voucher" model="ir.actions.act_window">
+		<field name="name">Voucher History</field>
+		<field name="res_model">skit.gift.voucher</field>
+		<field name="view_type">form</field>
+		<field name="view_id" ref="gift_voucher_tree" />
+		<field name="view_mode">form,tree</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+				Create a Voucher , the first step for a new voucher.
+			</p>
+		</field>
+	</record>
+	
+	<!-- Menu -->
+	<!-- Gift Card menu added under point of sale -->
+	<menuitem id="menu_gift_card" name="Gift Card"
+		parent="point_of_sale.menu_point_config_product" action="action_skit_pos_gift_card"
+		sequence="101" />
+	<menuitem id="menu_gift_voucher" name="Gift Card History"
+		parent="point_of_sale.menu_point_config_product" action="action_gift_voucher"
+		sequence="102" />
+	<!-- End Menu -->
+
+</odoo>

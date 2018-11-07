@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- Gift Card print receipt template -->
+<template id="report_gift_card_receipt">
+     <t t-call="web.html_container">
+    	<t t-set="validity_to" t-value="''" />
+        <t t-foreach="docs" t-as="doc">
+         <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h3>Greetings</h3>
+                     <h4><span t-field="doc.gift_message"/></h4>
+                            <h3>Date:</h3><![CDATA[&nbsp;]]><span t-esc="(datetime.datetime.strptime(doc.date, '%Y-%m-%d %H:%M:%S')).strftime('%Y-%m-%d')"/>
+                            <h4><strong>From:</strong><![CDATA[&nbsp;]]><span t-esc="doc.gift_from" /><br/><br/>
+                            <strong>To:</strong><![CDATA[&nbsp;]]><span t-esc="doc.gift_to"/></h4>
+                            <h3>Gift Amount:</h3><h3><span t-field="doc.total_amount"/></h3>
+                            <h3>Gift Card Number:</h3>
+                            <hr color="gray"></hr>
+                            <h3><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]><span t-field="doc.barcode"/></h3>
+                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128',doc.barcode, 600, 900)" style="width:300px;height:50px; margin-top:30px"/>
+                            <h5><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]><span t-field="doc.barcode"/></h5>
+                            <hr color="gray"></hr>
+                            <h4>Note: Keep Your Gift Card Number Safe.</h4> 
+                            <hr color="gray"></hr>   
+                    <div class="oe_structure"/>
+                </div>
+        </t>
+    </t>
+    </t>
+    </template>
+    <!-- End -->
+</odoo>
