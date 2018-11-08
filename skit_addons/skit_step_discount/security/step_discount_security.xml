@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>    
+        <record id="step_discount_group_user" model="res.groups">
+            <field name="name">Step Discount Group User</field> 
+        </record>
+
+        <record id="step_discount_group_manager" model="res.groups">
+            <field name="name">Step Discount Group Manager</field>
+            <field name="implied_ids" eval="[(4, ref('step_discount_group_user'))]"/>          
+        </record>
+    </data>
+</odoo>

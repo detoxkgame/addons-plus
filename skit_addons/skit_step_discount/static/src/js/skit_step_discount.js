@@ -79,6 +79,34 @@ screens.PaymentScreenWidget.include({
 	
 	var StepDiscountButtonPopupWidget = PopupWidget.extend({
 	    template: 'StepDiscountButtonPopupWidget',
+	    show: function(options){
+	    	this._super(options);
+	    	$("select").change(function()
+
+	                {
+	                       $("select option").prop("disabled", false); //enable everything
+
+	                               //collect the values from selected;
+	                               var arr = $.map
+	                                   (
+	                                   $("select option:selected"), function (n) {
+	                                       return n.value;
+	                                   }
+	                                   );
+	                               //disable elements
+	                               $("select option").filter(function () {
+	                            	   if($(this).val() != ''){
+	                            		   return $.inArray($(this).val(), arr) > -1; //if value is in the array of selected values
+	                            	   }
+	                               }).prop("disabled", true);
+
+	                               //re-enable elements
+	                               $("select option").filter(function () {
+	                                   return $.inArray($(this).val(), arr) == -1; //if value is not in the array of selected values
+	                               }).prop("disabled",false);
+	   });
+	    },
+	    
 	});
     gui.define_popup({name:'stepdiscount', widget: StepDiscountButtonPopupWidget});
     
@@ -567,7 +595,7 @@ screens.PaymentScreenWidget.include({
 						 })	
 						 
 						 // each time append options in new discount column				 
-						 $("#additional_discounts").append('\n'+
+						 $("#additional_discounts tbody").append('\n'+
 								 '<tr style="background: #e6e6e6">\n'+
 								 '	<td style="padding: 0px 8px;padding-left:14px;">\n'+
 								 '		<span id="span_discounts" class="input-group-addon">Discount '+ row +': </span>\n'+

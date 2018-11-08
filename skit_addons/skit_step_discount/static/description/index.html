@@ -6,13 +6,9 @@
         <div class="oe_centeralign oe_mt32 oe_mb32">
             <a href="https://youtu.be/cHqpjM_20NQ" target="_blank" class="btn-primary oe_button oe_big">Watch the video</a>
         </div>
-        <div class="oe_span6">
-            <div class="oe_demo oe_picture oe_screenshot">
-                <img src="pos_sd_01.png">
-            </div>
-        </div>
-        <div class="oe_span6">
-        <h3 class="oe_slogan" style="color:#875A7B;">Configuration</h3>
+        
+        <div class="oe_span12">
+        <h2 class="oe_slogan" style="color:#875A7B;">Configuration</h2>
            
             <p class='oe_mt32'>
                Goto Sales->Step Discount window.
@@ -24,45 +20,65 @@
             <p class='oe_mt32'>
                
             </p>
-            <p class='oe_mt32'>
-               
-            </p>
+            
+        </div>
+        <div class="oe_span12">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img src="pos_sd_01.png">
+            </div>
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img src="pos_sd_02.png">
+            </div>
         </div>
     </div>
 </section>
 
 <section class="oe_container oe_dark">
     <div class="oe_row oe_spaced">
-        <h3 class="oe_slogan" style="color:#875A7B;">Sales</h3>
-        <div class="oe_span6">
-            <p class="oe_mt32">How does step discount works in Sales module</p>
+        <h2 class="oe_slogan" style="color:#875A7B;">Sales</h2>
+        <div class="oe_span4">
+            <p class="oe_mt3">How does step discount works in Sales module</p>
             
-             <p class='oe_mt32'>
+             <p class='oe_mt3'>
                In Sales order lines, there is a column  step discount displayed with list of discount created.
                 select product and step discount you want to apply.
-                Step discount applied  before tax for product price.
-               <i><b>Example:</b><br></br>
-                    product price =288<br>
-                    tax =
-					NIL<br> 
-					step discount=10%, 5%<br></br> 
-					Then ,<br></br> 
-					10% of
-					product price =(288*10%) => 28.8<br></br>
-					apply 5% discount on
-					288-28.8 <font color="blue"> (i.e) result= 259.2</font><br></br>
-					5% of price = (259.2 *5%) => 12.96<br> i.e Total price = 259.2-
-					12.96<br></br><b>actual_price of product=246.24 </b><br></br>If
-					tax avaiable for product,then<br></br> tax=2%<br> tax applied
-					for product = 246.24*2%<br></br> </i>
+                Step discount applied before tax apply for product price.
+                
+                <br>
+                </br>
+                <b>Example</b>
+                product price =750<br></br>
+                tax = 15%<br>
+                step discount=10%<br></br>
+                Then ,<br></br>
+                10% of product price =(750*5%) =>75<br></br>
+                 <b>actual_price of product=750-75 = 675 </b><br></br>
+                  If tax avaiable for product,then<br></br>                 
+                 15%tax applied for product = 675*15% = 101.25<br></br>
+              
             </p>
         </div>
         
-        <div class="oe_span6">
+        <div class="oe_span8">
             <div class="oe_row_img oe_centered">
-                <img class="oe_picture oe_screenshot" src="pos_sd_02.png">
+                <img class="oe_picture oe_screenshot" src="sd_so_01.png">
             </div>
         </div>
+         
+         
+          <div class="oe_span8">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="sd_so_02.png">
+            </div>
+        </div>
+        <div class="oe_span4">
+            <p class="oe_mt32"></p>
+            <p class="oe_mt32"><b>Customer Invoice</b></p>
+          <p class='oe_mt32'>
+               Step discount could not create journal entry while validate invoice.
+              
+            </p>
+         </div>
     </div>
 </section>
 
@@ -70,85 +86,97 @@
 
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h3 class="oe_slogan" style="color:#875A7B;">Purchase</h3>
-        <div class="oe_span6">
+        <h2 class="oe_slogan" style="color:#875A7B;">Purchase</h2>
+        <div class="oe_span8">
             <div class="oe_row_img oe_centered">
-                <img class="oe_picture oe_screenshot" src="pos_sd_03.png">
+                <img class="oe_picture oe_screenshot" src="sd_po_01.png">
             </div>
         </div>
-        <div class="oe_span6">
+        <div class="oe_span4">
             <p class="oe_mt32">How does step discount works in Purchase module</p>
             
              <p class='oe_mt32'>
 				In Purchase order lines, there is a column step discount displayed
 				with list of discount created. select product and step discount you
-				want to apply. Step discount applied before tax for product price.
+				want to apply. Step discount applied before tax apply for product price.
 				<i>
 				<b>Example:</b><br>
-				product price =1,207.83<br></br>
-                tax = NIL<br>
-                step discount=5%, 10%<br></br>
+				product price =750<br></br>
+                tax = 15%<br>
+                step discount=10%<br></br>
                 Then ,<br></br>
-                5% of product price =(1,207.83*5%) =>60.3915<br></br>
-                apply 10% discount on 1,207.83-60.3915
-                <font color="blue">	(i.e) result= 1147.4385</font><br></br>
-                	10% of price = (1147.4385 *10%) => 114.74385<br></br>
-                 i.e Total price = 1147.4385- 114.74385<br></br>
-                  <b>actual_price of product=1032.69</b><br></br>
+                10% of product price =(750*5%) =>75<br></br>
+                 <b>actual_price of product=750-75 = 675 </b><br></br>
                   If tax avaiable for product,then<br></br>
-                 tax=2%<br>
-                 tax applied for product = 1032.69*2%<br></br>
+                 tax=15%<br>
+                 15%tax applied for product = 675*15% = 101.25<br></br>
 			</i>
 			</p>
         </div>
+        <div class="oe_span4">
+            <p class="oe_mt32"></p>
+            <p class="oe_mt32"><b>Vendor Bil</b></p>
+          <p class='oe_mt32'>
+               Step discount could not create journal entry while validate Bill.
+              
+            </p>
+         </div>
+        <div class="oe_span8">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="sd_po_02.png">
+            </div>
+        </div>
+        
     </div>
 </section>
 
 
 <section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <h3 class="oe_slogan" style="color:#875A7B;">Step Discount in POS</h3>
-        <div class="oe_span6">
+<div class="oe_row oe_spaced">
+        <h2 class="oe_slogan" style="color:#875A7B;">Step Discount in POS</h2>
+        <div class="oe_span4">
             <p class="oe_mt32"></p>
-            <p>Select the Product in  POS. click on step discount button near by customer button.</p>
-            <p>New Popup will displayed with list of step discount.
-            	select the discount and click OK button</p>
-            <p><b><i>Step discounts will be applied before tax calculation.</i></b></p>
+            <p>Before Proceed to Step discount in POS,Please confirm  "Step discount" product and its available in POS. </p>
+         </div>
+          <div class="oe_span8">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="pos_sd_03.png">
+            </div>
         </div>
-        <div class="oe_span6">
+        
+        </div>
+    <div class="oe_row oe_spaced">
+          <div class="oe_span8">
             <div class="oe_row_img oe_centered">
                 <img class="oe_picture oe_screenshot" src="pos_sd_04.png">
             </div>
         </div>
-        <div class="oe_span6">
+        <div class="oe_span4">
             <p class="oe_mt32"></p>
-            <p>Calculation</p>
-            <p><i>
-			<b> Example:</b><br>
-				product price =1000<br>
-                 tax = NIL<br>
-                 step discount=10%, 5%<br>
-                 Then ,<br>
-                 10% of product price =(1000*10%) => 100<br>
-                 step discount1=100<br>
-                 apply 5% discount on 1000-100
-                 	<font color="blue">	(i.e) result= 900</font><br>
-                 5% of price = 900 *5% =>45<br>
-                 step discount2=45<br>
-                  <b>Total step discount = step discount1+step discount2</b><br>
-                <font color="blue">Total step discount =145</font>
-                 <br>
-                 If tax avaiable for product,then<br>
-                 tax=2%<br>
-                 tax applied for product = (1000-145)*2%<br>
-				</i>
-                 </p>
+            <p>Select the Product in  POS. click on step discount button near by customer button.</p>
+            <p>New Popup will displayed with list of step discount.
+            	select the discount and click OK button</p>
+            <p><b><i>Step discounts will be applied before tax calculation.</i></b>
+            <br></br> Without SD <br></br>
+            Actual product price :800.40 <br></br>
+			Tax 15% ,15% of 800.40 = 120.06	<br></br>
+			With SD	 <br></br>	
+			Step discount:5%	<br></br>		
+			then, Apply discount before tax<br></br>
+			5% 800.4o = 40.02		<br></br>	
+			Total: 800.40— 40.02=760.38<br></br>
+			Apply 15%tax on 760.38 = 114.06 <br></br></p>
         </div>
-        <div class="oe_span6">
+       
+        <div class="oe_span8">
+            <p class="oe_mt32"></p>
+                 
+        </div>
+        <div class="oe_span8">
             <p class="oe_mt32"></p>
           
         </div>
-         <div class="oe_span6">
+         <div class="oe_span8">
             <div class="oe_row_img oe_centered">
                 <img class="oe_picture oe_screenshot" src="pos_sd_05.png">
             </div>
@@ -158,17 +186,32 @@
 
 <section class="oe_container">
     <div class="oe_row oe_spaced">
-        <h3 class="oe_slogan" style="color:#875A7B;">Step Discount in Backend POS orders</h3>
-        <div class="oe_span6">
+        <h2 class="oe_slogan" style="color:#875A7B;">Step Discount in Backend POS orders</h2>
+        <div class="oe_span4">
+            
+        </div>
+           <div class="oe_span12">
+            <p class="oe_mt32"><b> POS Order </b>
             <div class="oe_row_img oe_centered">
                 <img class="oe_picture oe_screenshot" src="pos_sd_06.png">
             </div>
         </div>
-        <div class="oe_span6">
-            <p class="oe_mt32">POS order lines contains new column Actual price.
-            It will display the actual price of product before discount,tax applied.</p>
+        
+        <div class="oe_span4">
+            <div class="oe_row_img oe_centered">
+                <p class="oe_mt32"><b> Customer Invoice </b>
+                </p>
+        
+            </div>
+            </div>
+            <div class="oe_span12">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="pos_sd_07.png">
+        
+            </div>
         </div>
-    </div>
+        
+    
 </section>
 <section class="oe_container oe_dark">
     <div class="oe_row oe_spaced">

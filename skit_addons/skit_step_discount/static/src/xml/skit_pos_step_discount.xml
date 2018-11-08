@@ -28,7 +28,7 @@
 							                        <option value=''></option>
 							                        <t t-if='widget.pos.step_discount.length > 0'>
 								                        <t t-foreach='widget.pos.step_discount' t-as='step_discount'>
-									                       <option t-att-value='widget.pos.step_discount'> 
+									                       <option t-att-value='step_discount.name'> 
 										                          <t t-esc='step_discount.name'/>										                                									                                    
 									                       </option>
 									                       							                                	
@@ -51,7 +51,7 @@
 							                         <option value=''></option>
 							                         <t t-if='widget.pos.step_discount.length > 0'>
 								                          <t t-foreach='widget.pos.step_discount' t-as='step_discount'>
-									                           <option t-att-value='widget.pos.step_discount'> 
+									                           <option t-att-value='step_discount.name'> 
 										                           <t t-esc='step_discount.name'/>										                                									                                    
 									                           </option>							                                	
 								                          </t>
@@ -72,7 +72,7 @@
 							                         <option value=''></option>
 							                         <t t-if='widget.pos.step_discount.length > 0'>
 								                          <t t-foreach='widget.pos.step_discount' t-as='step_discount'>
-									                           <option t-att-value='widget.pos.step_discount'> 
+									                           <option t-att-value='step_discount.name'> 
 										                            <t t-esc='step_discount.name'/>										                                									                                    
 									                           </option>							                                	
 								                          </t>
