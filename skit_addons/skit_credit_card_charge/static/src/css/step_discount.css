@@ -1,0 +1,60 @@
+/** POS Order Step Discount Components Style**/
+.pos .order .orderline.step_discount {
+	background: #e8fbf6;
+	width: 100%;
+	margin: 0px;
+	padding-top: 1px;
+	padding-bottom: 3px;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-transition: background 250ms ease-in-out;
+	-moz-transition: background 250ms ease-in-out;
+	transition: background 250ms ease-in-out;
+}
+
+.pos .order .orderline.step_discount.selected {
+	background: rgba(140, 143, 183, 0.2);
+	-webkit-transition: background 250ms ease-in-out;
+	-moz-transition: background 250ms ease-in-out;
+	transition: background 250ms ease-in-out;
+	cursor: default;
+}
+
+.pos .order .orderline.step_discount .product-name {
+	font-weight: normal;
+	width: 70%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-style: italic;
+}
+
+.pos .order .orderline.step_discount .price {
+	padding: 0;
+	font-weight: normal;
+	float: right;
+	font-style: italic;
+	font-size: 14px;
+}
+
+.pos .order .orderline.step_discount .info-list {
+	font-size: 14px;
+	margin-left: 10px;
+	font-style: italic;
+}
+
+.pos .order .orderline.step_discount .info-list em {
+	font-weight: normal;
+	font-size: 14px;
+	font-style: italic;
+}
+.step_discount_input {
+	font-size: 16px;
+	width: 290px;
+	height: 40px;
+	border-radius: 4px;
+}

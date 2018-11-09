@@ -78,11 +78,10 @@ class PosOrder(models.Model):
                                       partner=line.order_id.partner_id or False)['taxes']
         return sum(tax.get('amount', 0.0) for tax in taxes)
 
-    @api.depends('statement_ids', 'lines.price_subtotal_incl', 'lines.discount')
-    def _compute_amount_all(self):       
-        super(PosOrder, self)._compute_amount_all() 
+    @api.onchange('statement_ids', 'lines', 'lines')
+    def _onchange_amount_all(self):
+        super(PosOrder, self)._onchange_amount_all() 
         for order in self:
-            order.amount_paid = order.amount_return = order.amount_tax = 0.0
             currency = order.pricelist_id.currency_id
             order.amount_paid = sum(payment.amount for payment in order.statement_ids)
             order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in order.statement_ids)
@@ -100,9 +99,8 @@ class PosOrder(models.Model):
                             total_credit_amt+= credit_card_charge_value
                 order.credit_card_charges = total_credit_amt
             order.amount_total = original_total+total_credit_amt
-
-
-
+ 
+    
 class PosOrderLine(models.Model):
     _inherit = "pos.order.line"
 
