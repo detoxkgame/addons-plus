@@ -348,9 +348,10 @@ class PosOrder(models.Model):
     def add_payment(self, data):
         statement_id = super(PosOrder, self).add_payment(data)
         paid_amount =  format(data['amount'], '.2f')
+        journal = data.get('journal') or data.get('journal_id')
         statement_lines = self.env['account.bank.statement.line'].search([('statement_id', '=', statement_id),
                                                                          ('pos_statement_id', '=', self.id),
-                                                                         ('journal_id', '=', data['journal']),
+                                                                         ('journal_id', '=', journal),
                                                                          ('amount', '=', paid_amount)])
 
         for line in statement_lines:
