@@ -212,7 +212,7 @@ class Skit_AccountInvoice(models.Model):
                             'partner_id': invoice.partner_id.id or False,
                             'statement_id': statement_id,
                             'pos_statement_id': order.id,
-                            'journal_id': journal_id,
+                            'journal': journal_id,
                             'ref': pl['name'],
                             'open_inv': True
                     }
