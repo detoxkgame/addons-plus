@@ -242,12 +242,15 @@ screens.PaymentScreenWidget.include({
 	    		else{
 	    			if(this.pending_is_valid()){
 		    			this.click_pending();
+		    			order.set_is_pending(false);
 		    		}
 	    		}
 	    		
 	    	}else{
-	    		if (this.order_is_valid(force_validation)) {
+	    		var is_pending_invoice_id = order.p_invoice_id;
+	    		if (is_pending_invoice_id==0  && this.order_is_valid(force_validation)) {
 	                this.finalize_validation();
+	                this._super(force_validation);
 	                $('.PayLaterButton').css({"display":"none"});
 	                $('.customerlog-button').css({"display":"none"});
 	            }
