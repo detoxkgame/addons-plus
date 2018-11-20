@@ -248,8 +248,7 @@ screens.PaymentScreenWidget.include({
 	    		
 	    	}else{
 	    		var is_pending_invoice_id = order.p_invoice_id;
-	    		if (is_pending_invoice_id==0  && this.order_is_valid(force_validation)) {
-	                this.finalize_validation();
+	    		if (is_pending_invoice_id==0) {
 	                this._super(force_validation);
 	                $('.PayLaterButton').css({"display":"none"});
 	                $('.customerlog-button').css({"display":"none"});
