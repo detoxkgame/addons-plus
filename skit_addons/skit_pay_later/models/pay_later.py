@@ -179,7 +179,20 @@ class Skit_PosOrder(models.Model):
                 'amount': iLine.price_subtotal
             })
         return line
+    
+    def add_payment(self, data):
+        """ update the statement_id for pending invoice."""
+        statement_id = super(Skit_PosOrder, self).add_payment(data)
+        statement_lines = self.env['account.bank.statement.line'].search([('statement_id', '=', statement_id),
+                                                                         ('pos_statement_id', '=', self.id),
+                                                                         ('journal_id', '=', data['journal']),
+                                                                         ('amount', '=', data['amount'])])
 
+        for line in statement_lines:           
+            if data.get('open_inv'):
+                line.statement_id = data.get('statement_id')
+                line.ref = data.get('ref')
+        return statement_id
 
 class Skit_AccountInvoice(models.Model):
     _inherit = 'account.invoice'
