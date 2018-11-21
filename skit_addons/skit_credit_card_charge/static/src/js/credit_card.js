@@ -239,11 +239,11 @@ screens.PaymentScreenWidget.include({
 
 	                order.selected_paymentline.set_amount(amount);
 	                order.selected_paymentline.set_line_paid_amount(amount);
+	                var name = order.selected_paymentline.name;
 	                if(name.indexOf('Credit')>-1)
 	                {	var credit_per= order.get_credit_card_charge(this.pos.cashregisters[0]);
 	                	var credit_amt = amount; //order.get_due();	// Credit
 						var credit_charge = (credit_amt * credit_per) / 100;
-						
 	                	order.selected_paymentline.set_line_paid_amount(amount+credit_charge);	                	
 	                	
 	                }
