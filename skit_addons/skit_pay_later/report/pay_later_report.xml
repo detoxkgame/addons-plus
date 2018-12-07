@@ -50,9 +50,9 @@
 						<t t-if="statement">
 							<t t-if="o._get_current_pending_invoice()">
 								<tr t-foreach="statement" t-as="payment">
-									<t t-if="(not(payment['journal'].name) in ('Pay Later'))">
+									<t t-if="(not(payment['journal'].is_pay_later))">
 										<td></td>
-										<td><t t-if="(not(payment['journal'].name) in ('Pay Later'))"><h5><span t-esc="payment['journal'].name"></span></h5></t></td>
+										<td><t t-if="(not(payment['journal'].is_pay_later))"><h5><span t-esc="payment['journal'].name"></span></h5></t></td>
 										<td class="text-right"><h5><span t-esc="payment['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'></span></h5></td>
 									</t>
 								</tr>

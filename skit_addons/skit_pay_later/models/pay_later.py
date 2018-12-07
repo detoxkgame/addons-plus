@@ -1,8 +1,37 @@
 # -*- coding: utf-8 -*-
 import logging
-from odoo import api, models, fields
+from odoo import api, models, fields, _
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
+
+
+class account_journal(models.Model):
+    _inherit = "account.journal"
+    _description = "Checkbox for Pay Later"
+
+    is_pay_later = fields.Boolean('Is Pay Later', default=False)
+
+    @api.model
+    def create(self, vals):
+        """ Create New Records """
+        account_ids = self.search([])
+        for account in account_ids:
+            if account.is_pay_later and vals['is_pay_later'] is True:
+                raise UserError(_('Pay Later is already selected for another journal. You cannot use it for multiple journals.'))
+        res = super(account_journal, self).create(vals)
+        return res
+
+    @api.multi
+    def write(self, vals):
+        """ Update Records """
+
+        account_ids = self.search([])
+        for account in account_ids:
+            if account.is_pay_later and vals['is_pay_later'] is True:
+                raise UserError(_('Pay Later is already selected for another journal. You cannot use it for multiple journals.'))
+        res = super(account_journal, self).write(vals)
+        return res
 
 
 class Skit_PosOrder(models.Model):
@@ -136,11 +165,11 @@ class Skit_PosOrder(models.Model):
             paid_amount2 = 0
             if posorder:
                 if posorder.statement_ids:
-                    paid_amount1 = sum([x.amount for x in posorder.statement_ids if not x.journal_id.name in ('Pay Later')])
+                    paid_amount1 = sum([x.amount for x in posorder.statement_ids if not x.journal_id.is_pay_later])
                 account_payment = self.env['account.payment'].sudo().search(
                                        [('invoice_ids', 'in', invoice.id)])
                 if account_payment:
-                    paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.name in ('Pay Later')])
+                    paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
                 paid_amount = paid_amount1 + paid_amount2
                 dateinvoice = fields.Date.from_string(invoice.date_invoice)
                 diff = (invoice.amount_total - paid_amount)

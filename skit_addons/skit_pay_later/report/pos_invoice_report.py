@@ -81,11 +81,11 @@ class AccountInvoice_Report(models.Model):
             paid_amount1 = 0
             paid_amount2 = 0
             if order.statement_ids:
-                paid_amount1 = sum([x.amount for x in order.statement_ids if not x.journal_id.name in ('Pay Later')])
+                paid_amount1 = sum([x.amount for x in order.statement_ids if not x.journal_id.is_pay_later])
             account_payment = self.env['account.payment'].sudo().search([
                                     ('invoice_ids', 'in', current_invoice.id)])
             if account_payment:
-                paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.name in ('Pay Later')])
+                paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
             paid_amount = paid_amount1 + paid_amount2
         else:
             for x in current_invoice.payment_move_line_ids:

@@ -14,6 +14,7 @@
                 'account', 'sale_management'],
     'data': [
         'views/pay_later_template.xml',
+        'views/account_view.xml',
         'report/pay_later_report.xml',
     ],
     'qweb': ['static/src/xml/pay_later.xml'],

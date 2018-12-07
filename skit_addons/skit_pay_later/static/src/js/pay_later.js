@@ -416,7 +416,6 @@ PaymentScreenWidget.include({
         for (var i = 0; i < plines.length; i++) {
         	var payment_name = plines[i].name;
         	var client = order.get_client();
-        	if(payment_name.match('Pay Later')){
         		if(!client){
         			this.gui.show_popup('confirm',{
         				'title': _t('Please select the Customer'),
@@ -427,7 +426,6 @@ PaymentScreenWidget.include({
         			});
         			return false;
         		}
-        	}
             if (plines[i].get_type() === 'bank' && plines[i].get_amount() < 0) {
                 this.gui.show_popup('error',{
                     'message': _t('Negative Bank Payment'),
