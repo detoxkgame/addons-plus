@@ -17,7 +17,7 @@ class account_journal(models.Model):
         """ Create New Records """
         account_ids = self.search([])
         for account in account_ids:
-            if account.is_pay_later and vals['is_pay_later'] is True:
+            if account.is_pay_later and vals.get('is_pay_later') is True:
                 raise UserError(_('Pay Later is already selected for another journal. You cannot use it for multiple journals.'))
         res = super(account_journal, self).create(vals)
         return res
@@ -28,7 +28,7 @@ class account_journal(models.Model):
 
         account_ids = self.search([])
         for account in account_ids:
-            if account.is_pay_later and vals['is_pay_later'] is True:
+            if account.is_pay_later and vals.get('is_pay_later') is True:
                 raise UserError(_('Pay Later is already selected for another journal. You cannot use it for multiple journals.'))
         res = super(account_journal, self).write(vals)
         return res
