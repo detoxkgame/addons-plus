@@ -2,7 +2,7 @@
 # See LICENSE file for full copyright and licensing details.
 
 from odoo.exceptions import ValidationError
-from odoo import models, fields, api, _
+from odoo import models, fields, tools, api, _
 from decimal import Decimal
 
 
@@ -222,9 +222,33 @@ class CurrencyExchange(models.Model):
                                         'must not be same'))
 
 
+#===============================================================================
+# class IrUiMenu(models.Model):
+#     _inherit = 'ir.ui.menu'
+# 
+#     is_hotel_management = fields.Boolean(default=False)
+#===============================================================================
+
+
 class VendorDashboard(models.Model):
 
     _name = 'hm.vendor.dashboard'
+    _rec_name = 'vendor_category_id'
+
+    image = fields.Binary("Image", attachment=True,
+                          help="This field holds the image used as avatar for \
+        this contact, limited to 1024x1024px",)
+    image_medium = fields.Binary("Medium-sized image", attachment=True,
+                                 help="Medium-sized image of this contact. \
+                            It is automatically \
+                            resized as a 128x128px image, \
+                            with aspect ratio preserved \
+                         Use this field in form views or some kanban views.")
+
+    image_small = fields.Binary("Small-sized image", attachment=True,
+                                help="Small-sized image of this contact. It is automatically \
+             resized as a 64x64px image, with aspect ratio preserved. \
+             Use this field anywhere a small image is required.")
 
     vendor_category_id = fields.Many2one('res.partner.category',
                                          string="Vendor Category")
@@ -236,6 +260,150 @@ class VendorDashboard(models.Model):
                             'res_partner_category_dashboard_rel',
                             'vendor_dashboard_id', 'category_id',
                             string='Vendor Category')
+    dashboard_line_ids = fields.One2many('hm.vendor.dashboard.line',
+                                         'vendor_dashboard_id',
+                                         string="Dashboard Line",
+                                         copy=True)
+    color = fields.Char(string='Color Index')
+    name = fields.Char()
+
+    @api.onchange('vendor_category_id')
+    def onchange_vendor_category_id(self):
+        partner_category = self.env['res.partner.category'].search([
+                         ('id', '=', self.vendor_category_id.id)])
+        if partner_category and partner_category.name == 'Others':
+            self.vendor_other_category = 'other'
+        else:
+            self.vendor_other_category = ''
+
+    @api.model
+    def create(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(VendorDashboard, self).create(vals)
+        return res
+
+    @api.multi
+    def write(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(VendorDashboard, self).write(vals)
+        return res
+
+
+class VendorDashboardLine(models.Model):
+    _name = 'hm.vendor.dashboard.line'
+    _rec_name = 'dashboard_menu'
+
+    image = fields.Binary("Image", attachment=True,
+                          help="This field holds the image used as avatar for \
+        this contact, limited to 1024x1024px",)
+    image_medium = fields.Binary("Medium-sized image", attachment=True,
+                                 help="Medium-sized image of this contact. \
+                            It is automatically \
+                            resized as a 128x128px image, \
+                            with aspect ratio preserved \
+                         Use this field in form views or some kanban views.")
+
+    image_small = fields.Binary("Small-sized image", attachment=True,
+                                help="Small-sized image of this contact. It is automatically \
+             resized as a 64x64px image, with aspect ratio preserved. \
+             Use this field anywhere a small image is required.")
+    dashboard_menu = fields.Many2one('ir.ui.menu',
+                                     string="Dashboard Menu")
+    vendor_dashboard_id = fields.Many2one('hm.vendor.dashboard',
+                                          string="Vendor Dashboard")
+
+    @api.model
+    def create(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(VendorDashboardLine, self).create(vals)
+        return res
+
+    @api.multi
+    def write(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(VendorDashboardLine, self).write(vals)
+        return res
+
+
+class FormTemplate(models.Model):
+    _name = 'hm.form.template'
+
+    name = fields.Char(string="Name")
+    form_model_id = fields.Many2one('ir.model', string="Model Name")
+    vendor_dashboard_id = fields.Many2one('hm.vendor.dashboard',
+                                          string="Dashboard")
+    vendor_dashboard_line_id = fields.Many2one('hm.vendor.dashboard.line',
+                                               string="Dashboard Line")
+    form_template_line_ids = fields.One2many('hm.form.template.line',
+                                             'form_template_id',
+                                             string='Form Template Line',
+                                             copy=True)
+
+    @api.onchange('vendor_dashboard_id')
+    def _onchange_vendor_dashboard_id(self):
+        dashboard = self.env['hm.vendor.dashboard']
+        dashboard_val = dashboard.search([
+                         ('id', '=', self.vendor_dashboard_id.id)])
+        if dashboard_val:
+            self.name = dashboard_val.vendor_category_id.name
+
+
+class FormTemplateLine(models.Model):
+    _name = 'hm.form.template.line'
+
+    form_label = fields.Char(string='Label')
+    form_field_id = fields.Many2one('ir.model.fields', string="Form Fields")
+    form_field_type = fields.Selection([
+        ('input_char', _('Input(Char)')),
+        ('input_int', _('Input(Int)')),
+        ('checkbox', _('CheckBox')),
+        ('radio', _('Radio')),
+        ('date', _('Date')),
+        ('textarea', _('Text Area')),
+        ('header_label', _('Header label')),
+        ('selection', _('Selection')),
+        ('label', _('Label')),
+        ('input_intchar', _('Input(Int&char)'))], string='Field Type',
+                                       required=True)
+
+    sameline = fields.Boolean(string='Same Line')
+    isMandatory = fields.Boolean(string='Mandatory')
+    sequence = fields.Integer(string='Sequence')
+    form_template_id = fields.Many2one('hm.form.template',
+                                       string='Form Template', copy=False)
+    form_placeholder = fields.Char(string='Placeholder')
+    form_template_selection_fields = fields.Many2many('hm.form.selection.item',
+                                                      string='Selection items')
+
+
+class FormTemplateSelectionItem(models.Model):
+    _name = "hm.form.selection.item"
+    _description = "Selection items for m2m fields in Form Template design"
+
+    name = fields.Char(string='Name')
+    value = fields.Char(string='Value of name field')
+
+
+class IrModelFields(models.Model):
+    _inherit = 'ir.model.fields'
+    _description = "Fields"
+    _order = "name asc"
+
+    @api.multi
+    def name_get(self):
+        res = []
+        if self._context.get('view_model_fields', False):
+            for field in self:
+                res.append((field.id, '%s' % (field.field_description)))
+        else:
+            for field in self:
+                res.append((field.id, '%s (%s)' % (field.field_description,
+                                                   field.model)))
+        return res
 
 
 class PosOrder(models.Model):
@@ -303,6 +471,7 @@ class ProductCategory(models.Model):
     is_room = fields.Boolean(string="Is Room")
     is_service = fields.Boolean(string="Is Service")
     is_amenities = fields.Boolean(string="Is Amenity")
+
 
 class ProductTemplate(models.Model):
 

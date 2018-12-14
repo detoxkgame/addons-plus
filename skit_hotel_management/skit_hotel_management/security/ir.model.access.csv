@@ -25,3 +25,11 @@ access_hm_currency_exchange_user,hm.currency.exchange.user,model_hm_currency_exc
 access_hm_currency_exchange_manager,hm.currency.exchange.manager,model_hm_currency_exchange,skit_hotel_management.group_hotel_manager,1,1,1,1
 access_hm_vendor_dahboard_user,hm.vendor.dashboard.user,model_hm_vendor_dashboard,skit_hotel_management.group_hotel_user,1,1,1,0
 access_hm_vendor_dahboard_manager,hm.vendor.dashboard.manager,model_hm_vendor_dashboard,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_vendor_dahboard_line_user,hm.vendor.dashboard.line.user,model_hm_vendor_dashboard_line,skit_hotel_management.group_hotel_user,1,1,1,0
+access_hm_vendor_dahboard_line_manager,hm.vendor.dashboard.line.manager,model_hm_vendor_dashboard_line,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_form_template_user,hm.form.template.user,model_hm_form_template,skit_hotel_management.group_hotel_user,1,1,1,0
+access_hm_form_template_manager,hm.form.template.manager,model_hm_form_template,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_form_template_line_user,hm.form.template.line.user,model_hm_form_template_line,skit_hotel_management.group_hotel_user,1,1,1,0
+access_hm_form_template_line_manager,hm.form.template.line.manager,model_hm_form_template_line,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_form_selection_item_user,hm.form.selection.item.user,model_hm_form_selection_item,skit_hotel_management.group_hotel_user,1,1,1,0
+access_hm_form_selection_item_manager,hm.form.selection.item.manager,model_hm_form_selection_item,skit_hotel_management.group_hotel_manager,1,1,1,1

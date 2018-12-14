@@ -14,7 +14,7 @@
         """,
     #'images': ['images/main_screenshot.png'],
     'category': "Hotel Management",
-    'depends': ['sale', 'purchase', 'point_of_sale'],
+    'depends': ['web', 'sale', 'purchase', 'point_of_sale'],
     'data': [
             'security/hotel_security.xml',
             'security/ir.model.access.csv',
