@@ -37,6 +37,7 @@
 
     <menuitem id="menu_aged_trial_balance"
         name="Aged Partner Balance"
+        sequence="120"
         action="action_account_aged_balance_view"
         parent="menu_finance_legal_statement"/>
 

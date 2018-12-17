@@ -5,3 +5,4 @@ from . import account_report_trial_balance
 from . import account_report_general_ledger
 from . import account_report_common_partner
 from . import account_report_aged_partner_balance
+from . import account_report_partner_ledger

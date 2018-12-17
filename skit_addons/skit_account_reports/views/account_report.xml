@@ -36,5 +36,13 @@
             name="skit_account_reports.report_agedpartnerbalance"
             file="skit_account_reports.report_agedpartnerbalance"
         />
+        	<report 
+            id="action_report_partnerledger"
+            model="account.report_partnerledger"
+            string="Partner Ledger"
+            report_type="qweb-pdf"
+            name="skit_account_reports.report_partnerledger"
+            file="skit_account_reports.report_partnerledger"
+            />
     </data>
 </odoo>

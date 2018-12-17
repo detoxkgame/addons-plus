@@ -3,14 +3,14 @@
 {
     'name': 'Odoo12 Financial Reports in PDF',
     'version': '1.1',
-    'summary': 'This module helps to generate Financial reports Balance Sheet, Profit and Loss, Trial Balance, General Ledger and Aged Partner Balance in PDF format',
+    'summary': 'This module helps to generate Financial reports Balance Sheet, Profit and Loss, Trial Balance, General Ledger, Partner Ledger and Aged Partner Balance in PDF format',
     'author': 'Srikesh Infotech',
     'license': "AGPL-3",
     'website': 'http://www.srikeshinfotech.com',
     'price': 75,
     'currency': 'EUR',
     'description': """
-        This module helps to generate Financial reports Balance Sheet, Profit and Loss, Trial Balance, General Ledger and Aged Partner Balance in PDF format
+        This module helps to generate Financial reports Balance Sheet, Profit and Loss, Trial Balance, General Ledger, Partner Ledger and Aged Partner Balance in PDF format
         """,
     'images': ['images/main_screenshot.png'],
     'category': "Invoicing Management",
@@ -26,7 +26,8 @@
         'views/report_financial.xml',
         'wizard/account_report_aged_partner_balance_view.xml',        
         'views/report_agedpartnerbalance.xml',
-        
+        'wizard/account_report_partner_ledger_view.xml',        
+        'views/report_partnerledger.xml',
     ],
     'installable': True,    
     'auto_install': False,
