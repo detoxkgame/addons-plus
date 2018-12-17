@@ -342,6 +342,11 @@ class FormTemplate(models.Model):
                                              'form_template_id',
                                              string='Form Template Line',
                                              copy=True)
+    form_view = fields.Selection([
+                    ('form', _('Form')),
+                    ('list', _('List')),
+                    ('kanban', _('Kanban'))], string="Form View",
+                                  default='')
 
     @api.onchange('vendor_dashboard_id')
     def _onchange_vendor_dashboard_id(self):
@@ -367,6 +372,7 @@ class FormTemplateLine(models.Model):
         ('header_label', _('Header label')),
         ('selection', _('Selection')),
         ('label', _('Label')),
+        ('image', _('Image')),
         ('input_intchar', _('Input(Int&char)'))], string='Field Type',
                                        required=True)
 
@@ -376,6 +382,14 @@ class FormTemplateLine(models.Model):
     form_template_id = fields.Many2one('hm.form.template',
                                        string='Form Template', copy=False)
     form_placeholder = fields.Char(string='Placeholder')
+    font_size = fields.Integer(string="Font Size")
+    font_style = fields.Selection([
+                    ('normal', _('Normal')),
+                    ('italic', _('Italic')),
+                    ('oblique', _('Oblique'))], string="Font Style",
+                                  default="normal")
+    font_family = fields.Char(string="Font Family")
+    name = fields.Char(string="Name")
     form_template_selection_fields = fields.Many2many('hm.form.selection.item',
                                                       string='Selection items')
 
