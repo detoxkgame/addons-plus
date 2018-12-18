@@ -12,7 +12,7 @@
     """,
     'price': 35,
     'currency': 'EUR',
-    'category': 'Invoicing',
+    'category': 'Accounting',
     'images': ['images/main_screenshot.png'],
     'depends': ['account','skit_financial_form'],
     'data': [
