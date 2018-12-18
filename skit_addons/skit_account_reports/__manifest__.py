@@ -13,7 +13,7 @@
         This module helps to generate Financial reports Balance Sheet, Profit and Loss, Trial Balance, General Ledger, Partner Ledger and Aged Partner Balance in PDF format
         """,
     'images': ['images/main_screenshot.png'],
-    'category': "Invoicing Management",
+    'category': "Accounting",
     'depends': ['account','skit_financial_form'],
     'data': [
         'views/account_menuitem.xml',
