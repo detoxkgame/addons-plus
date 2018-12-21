@@ -37,9 +37,9 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink" href="#">
-	            <img src="https://image.flaticon.com/icons/svg/227/227307.svg" alt="" />
-	            <h1>WALK IN</h1>
+	          <a class="night_audit hexLink" href="#">
+	            <img src="/skit_pos_hm_night_audit/static/src/img/night_audit_1.png" alt="" />
+	            <h1>Night Audit</h1>
 	            <p></p>
 	          </a>
 	        </div>

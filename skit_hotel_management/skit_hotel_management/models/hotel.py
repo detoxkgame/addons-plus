@@ -600,6 +600,7 @@ class ProductTemplate(models.Model):
                                           'room_no_id', 'amenities_id',
                                           string='Room Amenities')
     state = fields.Selection([('available', 'Available'),
+                              ('reserved', 'Reserved'),
                               ('occupied', 'Occupied'),
                               ('blocked', 'Blocked')],
                              'Status', default='available')

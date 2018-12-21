@@ -11,9 +11,14 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
         'click .hotel': 'show_hotel',	
         'click .checkin': 'show_checkin',
         'click .show_productscreen': 'show_productscreen',
+        'click .night_audit': 'show_night_audit',
        
     }),
-    
+    show_night_audit:function(){
+       	// this.gui.show_screen('products');
+        	$('.session').trigger("click");
+    	//$('.night_audit').trigger("click");
+       },   
     show_productscreen:function(){
    	// this.gui.show_screen('products');
     	$('.rooomstatus').trigger("click");
