@@ -27,7 +27,7 @@ ol.hexgrid_even {
 	    margin-left: 1% !izzz;
 }
  .hex:hover{
- transform: scale(1.2); 
+ transform: scale(1); 
     /* z-index: 2;
     -webkit-transition: all 200ms ease-in;
     -webkit-transform: scale(1.5);
