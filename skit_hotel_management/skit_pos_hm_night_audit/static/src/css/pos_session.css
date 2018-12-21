@@ -1,0 +1,511 @@
+.pos .SessionButton:hover {
+     color: rgb(94, 185, 55);
+}
+.pos .endsessionbutton{
+	font-size: 14px;
+    text-align: center;
+    height: 40px;
+    padding: 0;
+    background: #7c7bad;
+    color: #fff;
+    width:15%;
+    border:1px solid #7c7bad;
+}
+.pos .validate{
+	width:35%;
+}
+.pos .modal-dialog .popup.session-popup {
+	width: 850px;
+	height: 650px;
+	/* #e2e2e2 */
+}
+.pos .popup .session-title {
+	 background:#e2e2e2 
+}	
+.session-group > thead > tr > th,
+.session-group > tbody > tr > th,
+.session-group > tfoot > tr > th,
+.session-group > thead > tr > td,
+.session-group > tbody > tr > td,
+.session-group > tfoot > tr > td,
+.session-group  {
+	padding: 10px; 
+	font-size: 16px;
+	font-weight: normal;
+	border-spacing: 10px;
+	padding-top: .5em;
+	padding-bottom: .5em;
+	vertical-align: top;
+}
+.text1 > tbody > tr > td:first-child,
+.text2 > tbody > tr > td:first-child,
+.text3 > tbody > tr > td:first-child,
+.text4 > tbody > tr > td:first-child,
+.text5 > tbody > tr > td:first-child 
+{
+	font-weight: bold;
+}
+.text3 > tbody > tr > td,
+.text4 > tbody > tr > td,
+.text5 > tbody > tr > td
+{
+	text-align: right;
+}
+.text3 tr:first-child td,
+.text4 tr:first-child td,
+.text5 tr:first-child td
+{
+   font-weight: bold;
+}
+.pos .modal-dialog .session-button
+{
+	font-size: 14px;
+	text-align: left;
+	height: 40px;
+}
+.pos_button_box {
+    text-align: right;
+    float: right;
+    padding-right: 20px;
+}
+.pos .modal-dialog .session-button:hover {
+    background: #6EC89B;
+}
+.box { 
+	display: block; 
+	padding: 4px; 
+	margin: 10px 0; 
+	font-size: 16px;
+	font-weight: normal;
+}
+.pos .modal-dialog .popup.balance-popup {
+	width: 700px;
+	height: 600px;
+}
+.pos .popup .session-balance{
+    overflow: auto;
+    height: 450px;
+    margin: 10px;
+}
+.pos .modal-dialog .popup.balance-popup input{
+    text-align: left;
+    display: inline-block;
+    overflow: hidden;
+    background: white;
+    min-height: 34px;
+    font-family: "Lato";
+    font-size: 18px;
+    color: #444;
+    padding: 10px;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0px 0px 0px 1px rgb(220,220,220) inset;
+    box-sizing: border-box;
+    width: 100%;
+}
+.display-hide{
+	display:none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.pos .SessionButton:hover {
+     color: rgb(94, 185, 55);
+}
+.pos .modal-dialog .popup.session-popup {
+	width: 75%;
+	height: 85%;
+    border-style: solid;   
+    font-family: "Raleway", sans-serif !important;
+}
+.pos .popup .session-title {
+	 background:#e2e2e2 
+}	
+/* .session-group > thead > tr > th,
+.session-group > tbody > tr > th,
+.session-group > tfoot > tr > th,
+.session-group > thead > tr > td,
+.session-group > tbody > tr > td,
+.session-group > tfoot > tr > td,
+.session-group  {
+	padding: 20px; 
+	font-size: 16px;
+	font-weight: normal;
+	border-spacing: 20px;
+	padding-top: .5em;
+	padding-bottom: .5em;
+	vertical-align: top;
+} */
+.text1 > tbody > tr > td:first-child,
+.text2 > tbody > tr > td:first-child,
+.text3 > tbody > tr > td:first-child,
+.text4 > tbody > tr > td:first-child,
+.text5 > tbody > tr > td:first-child 
+{
+	font-weight: bold;
+}
+.text3 > tbody > tr > td,
+.text4 > tbody > tr > td,
+.text5 > tbody > tr > td
+{
+	text-align: right;
+}
+.text3 tr:first-child td,
+.text4 tr:first-child td,
+.text5 tr:first-child td
+{
+   font-weight: bold;
+}
+/* .group
+{
+	display:inline-block;
+    float:left;
+    vertical-align:top;
+    padding: 5px;
+} */
+.pos .modal-dialog .session-button,
+.pos .modal-dialog .header-button
+{
+	font-size: 14px;
+	text-align: left;
+/* 	width: 132px !important; */
+	/* height: 40px; */
+	/* margin: 0px -1px -1px 0px; */
+/* 	margin: 3px 2px -10px -10px; */
+	/* padding: 0; */
+}
+.session_form_header{
+	 float: left;
+	 width:100%;
+	 text-align:left;
+	 margin: 3px;
+	 margin-left: 40px;
+     margin-top: 10px;
+     margin-bottom: 20px;
+}
+.pos_button_box {
+    width: auto;
+    text-align: right;
+    
+    /* margin-right: 10px; */
+}
+button.session-button {
+    margin-top: 3px;
+}
+.pos .modal-dialog .session-button {
+     cursor:pointer !important;
+}
+.box { 
+	display: block; 
+	padding: 4px; 
+	margin: 10px 0; 
+	font-size: 16px;
+	font-weight: normal;
+	text-align: right;
+    margin-right: 8px;
+}
+.pos .modal-dialog .popup.balance-popup {
+	width: 700px;
+	height: 600px;
+	/* #e2e2e2 */
+}
+.pos .popup .session-balance{
+    overflow: auto;
+    height: 65%;
+    margin: 10px;
+}
+.pos .modal-dialog .popup.balance-popup input{
+    text-align: left;
+    display: inline-block;
+    overflow: hidden;
+    background: white;
+    min-height: 34px;
+    font-family: "Raleway", sans-serif !important;
+    font-size: 18px;
+    color: #444;
+    padding: 10px;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0px 0px 0px 1px rgb(220,220,220) inset;
+    box-sizing: border-box;
+    width: 100%;
+}
+.display-hide{
+	display:none !important;
+}
+/** UL list Wizard CSS **/ 
+ul.nav-wizard {
+  border: 1px solid #d4d4d4;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  *zoom: 1;
+  position: relative;
+  overflow: hidden;
+  /* margin-left: 40px; */
+}
+ul.nav-wizard:before {
+  display: block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 46px;
+  height: 47px;
+  border-top: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  z-index: 11;
+  content: " ";
+}
+ul.nav-wizard:after {
+  display: block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 138px;
+  height: 47px;
+  border-top: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  z-index: 11;
+  content: " ";
+}
+ul.nav-wizard li {
+  position: relative;
+  float: left;
+  /* height: 46px; */
+  display: inline-block;
+  text-align: middle;
+/*   padding: 0 20px 0 30px;
+  margin: 0; */
+  font-size: 14px;
+  line-height: 46px;
+  color: #3a87ad;
+  background: #d9edf7;
+  /* width: 155px; */
+}
+ul.nav-wizard li a {
+  color: #3a87ad;
+  /* padding: 0; */
+ /*  padding-left: 12% !important; */
+}
+ul.nav-wizard li:hover,ul.nav-wizard li:hover:before {
+  background-color: transparent;
+}
+ul.nav-wizard li:before {
+  position: absolute;
+  display: block;
+  border: 24px solid transparent;
+  border-left: 16px solid #d4d4d4;
+  border-right: 0;
+  top: -1px;
+  z-index: 10;
+  content: '';
+  right: -16px;
+}
+ul.nav-wizard li:after {
+  position: absolute;
+  display: block;
+  border: 24px solid transparent;
+ border-left: 16px solid #d9edf7;
+  border-right: 0;
+  top: -1px;
+  z-index: 10;
+  content: '';
+  right: -15px;
+}
+ul.nav-wizard li.active {
+  color: #3a87ad;
+  background: #d9edf7;
+}
+ul.nav-wizard li.active:after {
+  border-left: 16px solid #d9edf7;
+}
+
+.sks-pos-session-header-btns {
+	width: 98%;
+    margin: 1%;
+}
+.sks-pos-breadcrumb-nav {
+	width: 98%;
+    margin: 1% !important;
+}
+.sks-pos-nav-buttons {
+    width: 18%;
+    padding: 0;
+    margin: 0;
+    height: 46px;
+}
+.sks-pos-sesn-body {
+	width: 96%;
+    font-size: 16px;
+    line-height: 2em;
+    margin-right: 2%;
+    margin-left: 2%;
+}
+/* .sks-shortfall-btn {
+	margin-right: 100%;
+    margin-left: 100%;
+    width: 100%;
+} */
+.sks-pos-sesn-col-td40 {
+	width: 40%;
+}
+.sks-pos-sesn-col-td20 {
+	width: 20%;
+	vertical-align: bottom;
+}
+.sks-pos-session-btn-1 {
+	width: 15%;
+	height: 46px !important;
+}
+.sks-pos-session-btn-2 {
+	width: 5%;
+	height: 46px !important;
+}
+.sks-pos-session-btn-3 {
+	width: auto;
+	height: 46px !important;
+}
+
+@media only screen and (min-width:566px) and (max-width:1024px) {
+.sks-pos-session-btn-1 {
+	width: 32%;
+}
+.sks-pos-session-btn-2 {
+	width: 32%;
+}
+.sks-pos-sesn-body {
+    font-size: 15px;
+    line-height: 1.5em;
+}
+.sks-pos-sesn-popup-tablet {
+	width: 98% !important;
+    height: 98% !important;
+}
+}
+.pos-session-nav-buttons {
+    width: 9%;
+    margin: 0;
+    height: 46px;
+    padding-left: 1% !important;
+}
+.popup_size{
+	width: 64% !important;
+	height: 85% !important;
+}
+.session_text_size{
+	font-size : 16px !important;
+	/* padding-left:11%; */
+	font-weight:normal;
+}
+.session_row_height{
+	height: 15px;
+}
+.session_text_left{
+	text-align: left;
+	/* padding-left: 11%; */
+	/* width: 80%; */
+}
+/* .session_transaction_padding{
+	padding-left: 27% !important;	
+} */
+.session_field_left{
+	text-align: left !important;
+}
+/* .session_td_width{
+	width: 70%;
+} */
+.session_padding{
+	/* text-align: left; */
+	padding-left: 6%;
+}
+.session_amt_reason_width{
+	width: 50% !important;
+}
+.session_body_padding{
+	text-align: left;
+	padding-left: 9.5%;
+}
+.session_text_center{
+	text-align: center;
+}
+
+.setopen_balance{
+	width: 18% !important;
+	padding-left:13px !important;
+	padding-right:13px !important;
+}
+.setcash_hand{
+	width:16% !important;
+	padding-left:13px !important;
+	padding-right:13px !important;
+}
+.take_money{
+	width:14% !important;
+	padding-left:13px !important;
+	padding-right:13px !important;
+}
+.set_adjust{
+	width:10% !important;
+	padding-left:13px !important;
+	padding-right:13px !important;
+}
+.set_closebalance{
+	padding-left:13px !important;
+	padding-right:13px !important;
+}
+.stmt_print{
+	width:8.3% !important;
+	padding-left:12px !important;
+	padding-right:13px !important;
+}
+.printstmt{
+	padding-right:20px !important;
+}
+.session_print_btn{
+	display: block !important;
+	margin: 0 auto !important;
+	float: none !important;
+	
+}
+.session_validate_posting_btn{
+	width: 50% !important;
+}
+.session_shortfall_btn{
+	width: 30% !important;
+}
+.cash_control_padding{
+	padding-left: 11% !important;	
+}
+.session_small_text{
+	font-size: 12px !important;
+}
+.session_td{
+	width: 80%;
+}
+.session_table{
+	margin-left: 6%;
+}
