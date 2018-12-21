@@ -152,7 +152,7 @@
 /* .order-btn{
 	background: white;
 } */
- section{
+ .section{
 	margin: 20px;
 	width: 97vw;
 	text-align: center;
@@ -184,20 +184,20 @@
 		/* margin: 0.5em 0 0.5em 0.5em; */
 		} 
 		
-.order-list-view{
+/* .order-list-view{
 	width: 100%;
 	margin-top: 20px;
-}	
-.order-list-view table{
+} */	
+/* .order-list-view table{
 	border-collapse: collapse;
 }	
-/* .order-list-view tr{
+.order-list-view tr{
 	display: inline-block;
-} */
+}
 .order-list-view table, th, td{
 	border: 1px solid gray;
 	padding: 10px;
-}
+} */
 		
 		
 /* h1 {

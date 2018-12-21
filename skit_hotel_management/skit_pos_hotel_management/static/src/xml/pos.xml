@@ -70,7 +70,7 @@
 	    	
 	    	<!-- List View -->
 	    	<t t-if="form_view == 'list'">
-	    		<table id="vendor_order_list" class="table table-striped table-hover table-condensed table-responsive item-table">
+	    		<table id="vendor_order_list" class="table stripe hover row-border order-column dataTable no-footer">
 	    			<thead>
 	    				<t t-set="head_count" t-value="1" />
 	    				<t t-foreach="line_group_key" t-as="line_key" >
@@ -210,7 +210,7 @@
     </t>
     
     <t t-name="VendorDashboard">
-	    <section style="height:88vh;">
+	    <section style="height:88vh;" class="section">
 	    	<t t-foreach="dashboards" t-as="dashboard">
 				<div class="item" t-attf-style="background-color:#{dashboard.color};">
 					<div>
