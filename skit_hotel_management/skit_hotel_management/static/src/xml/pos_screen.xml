@@ -19,7 +19,7 @@
 	        <div class="hexIn">
 	          <a class="hexLink checkin" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227333.svg" alt="" />
-	            <h1>CHECK IN</h1>
+	            <h1>RESERVATION</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -30,7 +30,7 @@
 	        <div class="hexIn">
 	          <a class="hexLink" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227385.svg" alt="" />
-	            <h1>GUIDE</h1>
+	            <h1>CHECK IN</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -39,7 +39,7 @@
 	        <div class="hexIn">
 	          <a class="hexLink" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227307.svg" alt="" />
-	            <h1>SUITE ROOM</h1>
+	            <h1>WALK IN</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -48,7 +48,7 @@
 	        <div class="hexIn">
 	          <a class="hexLink" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227339.svg" alt="" />
-	            <h1>OUT DOOR</h1>
+	            <h1>VENDOR</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -59,7 +59,7 @@
 	        <div class="hexIn">
 	          <a class="hexLink show_productscreen" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227302.svg" alt="" />
-	            <h1>GYM</h1>
+	            <h1>ROOM SERVICE</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -68,7 +68,7 @@
 	        <div class="hexIn">
 	          <a class="hexLink" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227348.svg" alt="" />
-	            <h1>LAUNDARY</h1>
+	            <h1>ROOM STATUS</h1>
 	            <p></p>
 	          </a>
 	        </div>
