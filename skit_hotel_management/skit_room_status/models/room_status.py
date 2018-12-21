@@ -1,7 +1,5 @@
 from odoo import fields, models
 from datetime import datetime, timedelta
-from dataclasses import field
-import array as arr
 
  
 class ProductHistory(models.Model):
