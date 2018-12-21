@@ -21,9 +21,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-					<t t-set="j" t-value="0"></t>
-					<t t-foreach="lines['history']" t-as="kpi">
+			<t t-set="j" t-value="0"></t>
+			<t t-foreach="lines['history']" t-as="kpi">
+				<tr>
 					       	<td><t t-esc="kpi.name" /></td>
 					       	<td><t t-esc="kpi.periodicity" /></td>
 					       	<td>Actual</td>
@@ -46,9 +46,10 @@
 								  	</t>
 								</t>	        
 						    </tr>
-					<t t-set="j" t-value="j+1"></t>
-					</t>
-			</tr>
+					
+					</tr>
+				<t t-set="j" t-value="j+1"></t>
+			</t>
 		</tbody>
 		</table>
 	</t>
