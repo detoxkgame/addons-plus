@@ -62,7 +62,7 @@ var KPIReportScreenWidget = screens.ScreenWidget.extend({
         var order = self.pos.get_order();
     	var partner = order.get_client();
     	this.$('.back').click(function(){
-        	 self.gui.show_screen('products');
+        	 self.gui.show_screen('firstpage');
         });   
     	
     	self.render_order(self.get_data()); 
