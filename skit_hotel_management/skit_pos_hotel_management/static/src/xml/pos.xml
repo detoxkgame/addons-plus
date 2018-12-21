@@ -21,7 +21,7 @@
     </t>
     
     <t t-name="VendorListContent">
-    	<div style="display: inline-block;width: 100%;height: 87%;overflow-y: auto;">
+    	<div style="display: inline-block;width: 100%;overflow-y: auto;">
     		<h1 t-attf-style="text-align: left;border-bottom: 0.1px solid gray;color:#{color}"><t t-esc="form_name" /></h1>
     		<!-- Kanban View -->
     		<t t-if="form_view == 'kanban'">
@@ -129,15 +129,23 @@
 		    			<table class="order-form-detail">
 		    				<tbody>
 		    				<div style="width:100%;border-bottom: 1px solid gray;background-color: #F8F8F8;display: inline-block;">
-		    					<button style="background: white;padding: 10px;float: left;margin-left: 20px;font-size: 14px;">Confirm</button>
-		    					<button style="background: white;padding: 10px;float: left;margin-left: 20px;font-size: 14px;">cancel</button>
+		    					<div>
+			    					<button class="header-btn">Confirm</button>
+			    					<button class="header-btn">cancel</button>
+		    					</div>
+		    					<div style="float: right;">
+		    						<ul class="state-breadcrumb">
+		    							<li><span>Open</span></li>
+		    							<li><span>In Progress</span></li>
+		    							<li><span>Done</span></li>
+		    						</ul>
+		    					</div>
 		    				</div>
-		    				<span>TEST</span>
 		    					<t t-foreach="line_group_key" t-as="line_key" >
 			    					<t t-set="first_col" t-value="line_group[line_key][0]" />
 			    					<tr>
 			    						<!-- First Column -->
-			    						<td style="border: none;">
+			    						<td class="form-td">
 			    							<t t-if="(first_col.form_field_type)=='header_label'">
 			    								<span t-attf-style="font-size:#{first_col.font_size}px;float: left;margin-left: 20px;"><t t-esc="first_col.form_label" /></span>
 			    							</t>
@@ -147,28 +155,32 @@
 			    								</t>
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='input_char'">
-			    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+			    								<input type="text" t-attf-value="#{first_col.form_field_id}" t-attf-placeholder="#{first_col.form_placeholder}" 
+			    								onfocus="this.placeholder=''"/>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='selection'">
-			    								<select class="selection-type">
-						                            <t t-foreach='widget.pos.car_types' t-as='car'>                            	
-						                                <option t-att-value='car.id'> 
-						                                    <t t-esc='car.name'/>
-						                                </option>
-						                            </t>
-					    						</select>
+					    						<input class="selection-type" t-attf-list="#{first_col.form_fields}" onfocus="this.placeholder=''"
+					    						t-attf-placeholder="#{first_col.form_placeholder}"/>
 					    						<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
+					    						<datalist t-attf-id="#{first_col.form_fields}">
+					    							<t t-foreach='widget.pos.car_types' t-as='car'> 
+													    <option t-att-value='car.name' /> 
+												    </t>
+												 </datalist>
+					    						
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='date'">
-			    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+			    								<i class="fa fa-calendar icon"></i>
+			    								<input type="text" t-attf-placeholder="#{first_col.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
+			    								onfocus="this.placeholder=''"/>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
 			    						</td>
 			    						<!-- Same Row -->
 			    						<t t-foreach="line_group[line_key]" t-as="same_row">
 			    							<t t-if="same_row.sameline">
-			    								<td style="border: none;">
+			    								<td class="form-td">
 					    							<t t-if="(same_row.form_field_type)=='header_label'">
 					    								<span t-attf-style="font-size:#{same_row.font_size}px;float: left;margin-left: 20px;"><t t-esc="same_row.form_label" /></span>
 					    							</t>
@@ -178,21 +190,24 @@
 					    								</t>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='input_char'">
-					    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+					    								<input type="text" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
+					    								onfocus="this.placeholder=''"/>
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='selection'">
-					    								<select class="selection-type">
-								                            <t t-foreach='widget.pos.car_types' t-as='car'>                            	
-								                                <option t-att-value='car.id'> 
-								                                    <t t-esc='car.name'/>
-								                                </option>
-								                            </t>
-							    						</select>
-					    								<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
+					    								<input class="selection-type" t-attf-list="#{same_row.form_fields}" onfocus="this.placeholder=''"
+							    							t-attf-placeholder="#{same_row.form_placeholder}"/>
+							    						<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
+							    						<datalist t-attf-id="#{same_row.form_fields}">
+							    							<t t-foreach='widget.pos.car_types' t-as='car'> 
+															    <option t-att-value='car.name' /> 
+														    </t>
+														</datalist>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='date'">
-					    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+					    								<i class="fa fa-calendar icon" style="margin-right: 29.5%;"></i>
+					    								<input type="text" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
+					    								onfocus="this.placeholder=''"/>
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
 					    							</t>
 					    						</td>
@@ -210,7 +225,7 @@
     </t>
     
     <t t-name="VendorDashboard">
-	    <section style="height:88vh;" class="section">
+	    <section class="section" style="height:88vh;">
 	    	<t t-foreach="dashboards" t-as="dashboard">
 				<div class="item" t-attf-style="background-color:#{dashboard.color};">
 					<div>

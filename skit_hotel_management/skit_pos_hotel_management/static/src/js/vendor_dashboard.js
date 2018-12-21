@@ -128,9 +128,9 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                
                 
                 var table = el_node.find('#vendor_order_list').DataTable({
-    		        sScrollX: true,
-    		        sScrollXInner: "100%",
-    		        bScrollCollapse: true,
+    		        //sScrollX: true,
+    		       // sScrollXInner: "100%",
+    		        //bScrollCollapse: true,
     		        bSort: false,
     		        //'rowsGroup': [0],
     		        bFilter: false,
@@ -196,6 +196,12 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             		});
     	        	
     	    	});
+                
+                /** Form */
+                contents.on('click','.span-tag',function(){
+                	$(this).css({'display': 'none'});
+                	$(this).closest('td').find('.input-tag').css({'display': 'inline-block'});
+                });
     		});
         	       	
         });
