@@ -31,7 +31,7 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
 	    	var partner = order.get_client();
 	
 	    	this.$('.back').click(function(){
-	        	 self.gui.show_screen('products');
+	        	 self.gui.show_screen('firstpage');
 	        });
 	    	
 	    	self._rpc({
