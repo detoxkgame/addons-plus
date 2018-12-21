@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<t t-extend="OrderSelectorWidget">
+	   	<t t-jquery='.deleteorder-button' t-operation='after'>
+	   		<span class="icon order-button square kpi-report-button" title="KPI">
+				<i class="oe_link_icon oe-link fa fa-line-chart oe-white oe_icon_customfloat" />
+			</span>
+	    </t>       
+   	</t>
+   	
+   	<t t-name="KPIReportDetailsScreenWidget">
+   	<table id="kpi_table" class="kpi_table stripe hover row-border order-column">
+   		<thead class="table-thead">
+			<tr>
+				<th>KPI Name</th>
+				<th>Frequency</th>
+				<th>Measure</th>
+				<t t-foreach="lines['all_dates']" t-as="kpi_date">
+					<th><t t-esc="kpi_date.date"/></th>
+				</t>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+					<t t-set="j" t-value="0"></t>
+					<t t-foreach="lines['history']" t-as="kpi">
+					       	<td><t t-esc="kpi.name" /></td>
+					       	<td><t t-esc="kpi.periodicity" /></td>
+					       	<td>Actual</td>
+					       	<t t-set="k" t-value="0"></t>
+					       	<t t-foreach="lines['all_values']" t-as="values">
+					       		<t t-if="values.kpi_id == kpi.kpi_id">
+								       	<td t-attf-style="background-color:#{values.color}; color:#ffffff"><t t-esc="values.value"/></td>
+							       	<t t-set="k" t-value="k+1"></t>
+						       </t>
+					       	</t>
+						    <tr>
+						    	<td style="border-color: rgb(251, 250, 250); background: rgb(251, 250, 250);"></td>
+					       		<td style="border-color: rgb(251, 250, 250); background: rgb(251, 250, 250);"></td>
+								<td>Target</td>
+								<t t-set="l" t-value="0"></t>
+					       		<t t-foreach="lines['all_values']" t-as="values">
+					       			<t t-if="values.kpi_id == kpi.kpi_id">
+								    <td><t t-esc="values.target_value"/></td>
+								  	<t t-set="l" t-value="l+1"></t>	
+								  	</t>
+								</t>	        
+						    </tr>
+					<t t-set="j" t-value="j+1"></t>
+					</t>
+			</tr>
+		</tbody>
+		</table>
+	</t>
+   	<!-- KPI Report - Template -->
+    <t t-name="KPIReportScreenWidget">
+        <div class="kpireport clientlist-screen screen">
+            <div class="screen-content kpireport-screen-content">
+                <section class="top-content">   
+                <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Cancel
+                </span> 
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow'>  
+                             <p class="dltitle"> KPI Report </p>
+								<div class="container">
+									<div class="row">
+								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">
+								            <div class="dl-col-lg-9 dl-col-md-9 dl-col-sm-9 dl-col-xs-9 bhoechie-tab customer-log-table-size customer_log-orderwidth">	
+								             <div class="bhoechie-tab-content active">	
+							                	<div class="span5 col-md-5 date-picker" id="sandbox-container">
+							                	<div class="input-daterange input-group" id="datepicker">
+							                		<span class="input-group-addon datepicker-span">From</span>
+												    <input type="text" class="input-sm form-control date_from datepicker-input" name="start" />
+												    <span class="input-group-addon datepicker-span">To</span>
+												    <input type="text" class="input-sm form-control date_to datepicker-input" name="end" />
+												</div>
+												</div>
+							                	<div><br></br></div>
+							                	<div class="dl_otable"></div>
+					                           <!-- </table> -->
+								             </div> 
+								            </div>
+								        </div>
+								  </div>
+								</div>                 	
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>
