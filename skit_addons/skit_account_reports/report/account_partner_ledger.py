@@ -114,7 +114,7 @@ class ReportPartnerLedger(models.AbstractModel):
             'doc_ids': partner_ids,
             'doc_model': self.env['res.partner'],
             'data': data,
-            'docs': partners,
+            'partners': partners,
             'time': time,
             'lines': self._lines,
             'sum_partner': self._sum_partner,
