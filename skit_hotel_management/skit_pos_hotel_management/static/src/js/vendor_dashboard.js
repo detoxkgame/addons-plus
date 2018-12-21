@@ -80,6 +80,10 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         	$(this).siblings(".item").css({'display': 'block'});
         });
        
+        /** Back Icon */
+        this.$('.back-icon').click(function(e){
+        	self.gui.show_screen('firstpage');
+        });
         
         /** Action for Dashboard Element */
         this.$('.dashboard-element').click(function(e){
@@ -198,10 +202,13 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     	    	});
                 
                 /** Form */
-                contents.on('click','.span-tag',function(){
+                /*contents.on('click','.span-tag',function(){
                 	$(this).css({'display': 'none'});
                 	$(this).closest('td').find('.input-tag').css({'display': 'inline-block'});
-                });
+                });*/
+               /* contents.on('click','.date',function(){
+                	$(this).datepicker();
+                });*/
     		});
         	       	
         });

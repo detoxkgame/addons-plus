@@ -172,7 +172,7 @@
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='date'">
 			    								<i class="fa fa-calendar icon"></i>
-			    								<input type="text" t-attf-placeholder="#{first_col.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
+			    								<input type="text" class="date" t-attf-placeholder="#{first_col.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
 			    								onfocus="this.placeholder=''"/>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
@@ -206,7 +206,7 @@
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='date'">
 					    								<i class="fa fa-calendar icon" style="margin-right: 29.5%;"></i>
-					    								<input type="text" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
+					    								<input type="text" class="date" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-value="#{first_col.form_field_id}" 
 					    								onfocus="this.placeholder=''"/>
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
 					    							</t>
@@ -319,6 +319,9 @@
     		<!-- <div class="content-container">
             	<span class="placeholder-VendorCategoryWidget" />
             </div> -->
+             <div style="float: left;margin-top: 20%;">
+             	<i class="fa fa-angle-left back-icon" style="font-size: 50px;color: #92278F;cursor: pointer;" aria-hidden="true"></i>
+             </div>
              <div class="vendor-category" style="height:90vh;">
              </div>
     	</div>
