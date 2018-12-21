@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<t t-extend="OrderSelectorWidget">
+	    <t t-jquery='.order-selector' t-operation='append'>			
+            	<div class="room-status" title="Room Status">
+	        	 <span class="order-button square rooomstatus">
+	                 <i class='fa fa-bar-chart'></i>
+	            </span>  
+            </div>         
+        </t>       
+   	</t>
+   <t t-name="RoomStatusReportDetailsScreenWidget">
+   	<table id="rs_table" class="rs_table stripe hover row-border order-column">
+   
+   	<t t-set="list_array" t-value="lines['date_key']"/>
+   <!-- 	<t t-set="list_array_values" t-value="lines['date_values']"/> -->
+   	<t t-set="room_list_array" t-value="lines['room_list_array']"/>
+    <!-- 	 <t t-esc="room_list_array['18>Dec 24 2018']['product_name']"/>
+    	  <t t-esc="room_list_array['18>Dec 24 2018'].product_name"/>  
+    	<t t-set="a" t-value="18"/>
+    	<t t-set="b" t-value="'Dec 24 2018'"/>
+    	<t t-set="foo" t-value="a+'&gt;'+b"/>
+    	<t t-esc="foo"/>
+    	<t t-esc="room_list_array[foo]"/> 
+    	<t t-esc="''+foo"/> -->
+   <!-- <t t-foreach="dict" t-as="li">
+   <t t-esc="li"/>
+   </t> -->
+   	
+		   	<thead class="table-thead">
+		    	<tr>
+						<th>Room Name</th>
+						<!-- <th>Order Ref</th> -->
+						<t t-foreach="list_array" t-as="kpi_date">
+							<th><t t-esc="kpi_date"/></th>
+						</t>
+					</tr>
+			</thead>  
+			<tbody>
+				<t t-foreach="lines['list_product_id_array']" t-as="detailsrows">	
+				<tr>
+				<td><t t-esc="lines['list_product_id_array'][detailsrows]"/></td>
+				<t t-foreach="list_array" t-as="line">
+				<t t-set="key" t-value="detailsrows+'&gt;'+line"/>
+				<t t-set="state" t-value="room_list_array[key]"/>
+				<!-- <t t-esc="state"/> -->
+				<t t-if="state">
+				 <t t-if="state=='checkin'">
+					 <t t-set="cellcolor" t-value="'ff9933'"/>
+					 </t>
+					 <t t-if="state=='checkout'">
+					 <t t-set="cellcolor" t-value="'ffcc99'"/>
+					 </t>
+					 <t t-if="state=='reserved'">
+					 <t t-set="cellcolor" t-value="'ff1a1a'"/>
+					  </t>	
+					  <t t-if="state=='free'">
+				 	 <t t-set="cellcolor" t-value="'339933'"/>
+				 	 </t>
+				 	  <t t-if="state=='noshow'">
+				 	 <t t-set="cellcolor" t-value="'ddea0f'"/>
+				 	 </t>
+									
+					 
+				</t>
+				<t t-else="">				
+				 	 <t t-set="cellcolor" t-value="'339933'"/>
+				 	 <t t-set="state" t-value="'free'"/>
+				</t>
+				
+				 <!-- <t t-esc="cellcolor"/> -->
+				 
+				 <td t-attf-style="background-color:##{cellcolor}" class="rowhhs_item"><t t-esc="state"/></td>
+				 
+				 <!-- <td><t t-esc="key"/></td> -->
+				 <!-- <t t-if="room_list_array[key]">
+				 <td> <t t-esc="room_list_array[key]"/></td>
+				 </t>
+				 <t t-else="">
+				  <td><t t-esc="'NO'"></t></td>
+				 </t> -->
+				 </t></tr></t>
+				<!-- <t t-set="j" t-value="1" />
+				<t t-foreach="lines['details']" t-as="detailsrows">	
+				<tr>
+				<td><t t-esc="detailsrows.product_name"/></td>
+				<td><t t-esc="detailsrows.ordername"/></td>
+				<t t-foreach="list_array" t-as="line">
+				 <t t-foreach="list_array_values[line]" t-as="rows">
+				<t t-set="state" t-value="rows.state"/>	
+						
+				 <t t-if="rows.value==j">				
+					  <t t-set="cellcolor" t-value="''"/>		 
+                        
+					 <t t-if="state=='checkin'">
+					 <t t-set="cellcolor" t-value="'ff9933'"/>
+					 </t>
+					 <t t-if="state=='checkout'">
+					 <t t-set="cellcolor" t-value="'ffcc99'"/>
+					 </t>
+					 <t t-if="state=='reserved'">
+					 <t t-set="cellcolor" t-value="'ff1a1a'"/>
+					  </t>	
+					  <t t-if="state=='free'">
+				 	 <t t-set="cellcolor" t-value="'339933'"/>
+				 	 </t>
+				 	  <t t-if="state=='noshow'">
+				 	 <t t-set="cellcolor" t-value="'85AF2A'"/>
+				 	 </t>
+					 <t t-esc="cellcolor"/>				
+					 <t t-if="state=='Free'">
+				 	 <t t-set="color" t-value="#339933"/>
+				 	  <td style="background-color:#339933" ><t t-esc="rows.state"/></td>
+				 	  <td t-attf-style="background-color:##{cellcolor}" class="rows_item"><t t-esc="rows.state"/></td>
+				 	  
+				 	 </t>	
+					
+				 </t>
+				
+				
+				</t> 
+				
+				</t></tr>
+				<t t-set="j" t-value="j+1" />
+	   			</t> -->
+   	
+  		 </tbody></table></t>
+   	<t t-name="RoomstatusReportScreenWidget">
+        <div class="roomstatusreport clientlist-screen screen">
+            <div class="screen-content roomstatusreport-screen-content">
+                <section class="top-content">   
+                <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Back
+                </span> 
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow'>  
+                             <p class="dltitle"> Room Status Report </p>
+                             <div class="container">
+									<div class="row">
+								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">
+								            <div class="dl-col-lg-9 dl-col-md-9 dl-col-sm-9 dl-col-xs-9 bhoechie-tab customer-log-table-size customer_log-orderwidth">	
+								             <div class="bhoechie-tab-content active">	
+							                	<div class="span5 col-md-5 date-picker" id="sandbox-container">
+							                	<div class="input-daterange input-group" id="datepicker">
+							                		<span class="input-group-addon datepicker-span">From</span>
+												    <input type="text" class="input-sm form-control date_from datepicker-input" name="start" />
+												    <span class="input-group-addon datepicker-span">To</span>
+												    <input type="text" class="input-sm form-control date_to datepicker-input" name="end" />
+												</div>
+												</div>
+							                	<div><br></br></div>
+							                	<div class="dl_otable"></div>
+								             </div> 
+								            </div>
+								        </div>
+								  </div>
+								</div> 
+								                	
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>       
+        <template id="room_status_assets" inherit_id="point_of_sale.assets">
+          <xpath expr="." position="inside">
+          		<script type="text/javascript" src="/skit_room_status/static/src/js/room_status.js"></script>  
+       			<link rel="stylesheet" type="text/css" href="/skit_room_status/static/src/css/report.css"></link>
+         </xpath>
+        </template>    
+    </data>
+</odoo>
