@@ -21,7 +21,6 @@ var _t = core._t;
     },
 });*/
 
-
 var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     template: 'VendorDashboardScreenWidget',
     init: function(parent, options){
@@ -38,7 +37,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         this.chrome.widget.order_selector.hide();
         var dashboards = this.pos.vendor_dashboard;
         var dashboard_lines = this.pos.vendor_dashboard_line;
-        var parent_devotee = this.pos.db.get_dashboardline_by_dashboard(1);
+        //var parent_devotee = this.pos.db.get_dashboardline_by_dashboard(1);
         var self = this;
         var el_node = this;
         //console.log('DASH'+ JSON.stringify(dashboards));
@@ -80,13 +79,16 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             .prev(".info").css({'display': 'none'});*/
         	$(this).siblings(".item").css({'display': 'block'});
         });
+       
         
+        /** Action for Dashboard Element */
         this.$('.dashboard-element').click(function(e){
         	var line_id = $(this).attr('id');
         	var vendor_categ_id = $(this).attr('categid');
         	var dashboard_id = $(this).attr('dashid');
         	var menu_name = $(this).attr('menu');
         	var color_code = $(this).attr('color');
+        	var sub_id = 0;
        	
         	$('div').filter('.highlight').each(function(i) {
         		$(this).removeClass('highlight');
@@ -100,7 +102,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         	self._rpc({
     			model: 'hm.form.template',
     			method: 'get_vendor_list',
-    			args: [0,vendor_categ_id, dashboard_id, line_id],
+    			args: [0,vendor_categ_id, dashboard_id, line_id, false, sub_id],
     		}).then(function(result){ 
     			var result_datas = result[0]['result_datas']
     			var line_group = result[0]['line_group']
@@ -108,19 +110,22 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var form_view = result[0]['form_view']
     			var form_name = result[0]['form_name']
     			var color = result[0]['color']
-    			
+    			var sub_form_template = result[0]['sub_form_template']
     			
     			
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
                 var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-                						form_name: form_name, color:color,
+                						form_name: form_name, color:color, sub_form_template: sub_form_template,
                 						line_group: line_group, line_group_key: line_group_key});
                 var vendorlist = document.createElement('div');
                 vendorlist.innerHTML = vendor_html;
                 vendorlist = vendorlist.childNodes[1];
                 contents.empty();
                 contents.append(vendorlist);
+               // alert(JSON.stringify(contents.html()))
+               // alert("vendorlist"+JSON.stringify(vendorlist.html()))
+               
                 
                 var table = el_node.find('#vendor_order_list').DataTable({
     		        sScrollX: true,
@@ -132,37 +137,69 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     		        bPaginate: true, 
     		        pageLength: 10,
     			});
+                
+                /** Action for Back Button */
+                contents.on('click','.back-btn',function(){
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'get_vendor_list',
+            			args: [0,vendor_categ_id, dashboard_id, line_id, false, sub_id],
+            		}).then(function(result){ 
+            			var result_datas = result[0]['result_datas']
+            			var line_group = result[0]['line_group']
+            			var line_group_key = result[0]['line_group_key']
+            			var form_view = result[0]['form_view']
+            			var form_name = result[0]['form_name']
+            			var color = result[0]['color']
+            			var sub_form_template = result[0]['sub_form_template']
+            			
+            			
+            			var contents = el_node.find('.vendor-contents');
+                        contents.innerHTML = "";
+                        var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
+                        						form_name: form_name, color:color, sub_form_template: sub_form_template,
+                        						line_group: line_group, line_group_key: line_group_key});
+                        var vendorlist = document.createElement('div');
+                        vendorlist.innerHTML = vendor_html;
+                        vendorlist = vendorlist.childNodes[1];
+                        contents.empty();
+                        contents.append(vendorlist);
+            		});
+                });
+                /** Action for Vendors */
+                contents.on('click','.vendor-form-icon',function(){ 
+                	var sub_temp_id = $(this).attr('id');
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'get_vendor_list',
+            			args: [0,vendor_categ_id, dashboard_id, 2, true, sub_temp_id],
+            		}).then(function(result){ 
+            			var result_datas = result[0]['result_datas']
+            			var line_group = result[0]['line_group']
+            			var line_group_key = result[0]['line_group_key']
+            			var form_view = result[0]['form_view']
+            			var form_name = result[0]['form_name']
+            			var color = result[0]['color']
+            			var sub_form_template = result[0]['sub_form_template']
+            			var model = result[0]['model']
+            			
+            			var fcontents = el_node.find('.vendor-contents');
+        	        	fcontents.innerHTML = "";
+        	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
+    						form_name: form_name, color:color, sub_form_template: sub_form_template, model:model,
+    						line_group: line_group, line_group_key: line_group_key});
+                        var vendorlist = document.createElement('div');
+                        vendorlist.innerHTML = vendor_html;
+                        vendorlist = vendorlist.childNodes[1];
+                        fcontents.empty();
+                        fcontents.append(vendorlist);
+            		});
+    	        	
+    	    	});
     		});
         	       	
         });
-        /*$('.info').first().show().animate({
-            width: '40%'
-          });*/
-      
-          /*$('.item').click(function() {
-        	  alert('item');
-            $(this)
-              .next().show().animate({
-                width: '40%'
-              })
-              .siblings(".info").animate({
-                width: 0
-              });
-
-          });*/
-        /*var activeItem = $('#accordion').children(':first');
-        $('#accordion').on('click', '.list', function() {
-        	alert('dfgdg')
-        	$(activeItem).css({'width': '5vw'})
-        	$(activeItem).children(':first').toggleClass('blur-filter');
-        	activeItem = this;
-        	$(activeItem).css({'width': '75vw'})
-        	$(activeItem).children(':first').removeClass('blur-filter');
-         
-        });*/
-       /* this.$('#acc1').click(function(){
-            alert('accordion');
-        });*/
+        
     },
     dashboard_icon_url: function(id){
         return '/web/image?model=hm.vendor.dashboard&id='+id+'&field=image';
@@ -184,15 +221,13 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     	return '/web/image?model=res.partner&id='+id+'&field=image';
     },
     
-    /*get_form_template: function(dashboard_line_id){
-    	self._rpc({
-			model: 'hm.form.template',
-			method: 'get_form_template_line',
-			args: [0,dashboard_line_id],
-		}).then(function(result){ 
-			console.log('TEMplate:'+JSON.stringify(result));
-		});
-    },*/
+    sub_template_icon_url: function(id){
+    	return '/web/image?model=hm.sub.form.template&id='+id+'&field=image';
+    },
+    car_icon_url: function(id){
+    	return '/web/image?model=hm.car.type&id='+id+'&field=image';
+    },
+
     render_list: function(dashboards){
         var contents = this.$el[0].querySelector('.vendor-category');
         contents.innerHTML = "";
@@ -201,23 +236,6 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         dashboardline.innerHTML = dashboard_html;
         dashboardline = dashboardline.childNodes[1];
         contents.appendChild(dashboardline);
-        /*for(var i = 0, len = Math.min(partners.length,1000); i < len; i++){
-            var partner    = partners[i];
-            var clientline = this.partner_cache.get_node(partner.id);
-            if(!clientline){
-                var clientline_html = QWeb.render('ClientLine',{widget: this, partner:partners[i]});
-                var clientline = document.createElement('tbody');
-                clientline.innerHTML = clientline_html;
-                clientline = clientline.childNodes[1];
-                this.partner_cache.cache_node(partner.id,clientline);
-            }
-            if( partner === this.old_client ){
-                clientline.classList.add('highlight');
-            }else{
-                clientline.classList.remove('highlight');
-            }
-            contents.appendChild(clientline);
-        }*/
     },
    
   

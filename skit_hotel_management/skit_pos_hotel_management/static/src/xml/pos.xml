@@ -54,9 +54,14 @@
 						</div>
 						<div class="vendor-process">
 							<ul>
-								<li style="background-color: #00BFFF;"><img  src="/skit_pos_hotel_management/static/src/img/order_icon.png" width="24" height="21" /></li>
-								<li style="background-color: #483D8B;"><img  src="/skit_pos_hotel_management/static/src/img/delivery_icon.png" width="24" height="21" /></li>
-								<li style="background-color: #819FF7;"><img  src="/skit_pos_hotel_management/static/src/img/payment_icon.png" width="24" height="21" /></li>
+								<!-- <li class="order_icon" style="background-color: #00BFFF;"><img  src="/skit_pos_hotel_management/static/src/img/order_icon.png" width="24" height="21" /></li>
+								<li class="delivery_icon" style="background-color: #483D8B;"><img  src="/skit_pos_hotel_management/static/src/img/delivery_icon.png" width="24" height="21" /></li>
+								<li class="payment_icon" style="background-color: #819FF7;"><img  src="/skit_pos_hotel_management/static/src/img/payment_icon.png" width="24" height="21" /></li> -->
+								<t t-foreach="sub_form_template" t-as="temp" >
+									<li t-attf-id="#{temp.id}" class="vendor-form-icon" t-attf-style="background-color: #{temp.color}">
+										<img  t-att-src='widget.sub_template_icon_url(temp.id)' width="24" height="21" />
+									</li>
+								</t>
 							</ul>
 						</div>
 					</div>
@@ -112,6 +117,94 @@
 	    				</t>
 	    			</tbody>
 	    		</table>
+	    	</t>
+	    	<!-- Form View -->
+	    	<t t-if="form_view == 'form'">
+	    		<div style="display: inline-block;width: 100%;">
+	    			<button class="back-btn" style="float: left;background: #147FD0;color: white;">Back</button>
+	    		</div>
+	    		<div>
+	    		<t t-if="line_group_key">
+	    			<div style="width:98%;border: 1px solid gray;">
+		    			<table class="order-form-detail">
+		    				<tbody>
+		    				<div style="width:100%;border-bottom: 1px solid gray;background-color: #F8F8F8;display: inline-block;">
+		    					<button style="background: white;padding: 10px;float: left;margin-left: 20px;font-size: 14px;">Confirm</button>
+		    					<button style="background: white;padding: 10px;float: left;margin-left: 20px;font-size: 14px;">cancel</button>
+		    				</div>
+		    				<span>TEST</span>
+		    					<t t-foreach="line_group_key" t-as="line_key" >
+			    					<t t-set="first_col" t-value="line_group[line_key][0]" />
+			    					<tr>
+			    						<!-- First Column -->
+			    						<td style="border: none;">
+			    							<t t-if="(first_col.form_field_type)=='header_label'">
+			    								<span t-attf-style="font-size:#{first_col.font_size}px;float: left;margin-left: 20px;"><t t-esc="first_col.form_label" /></span>
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='label'">
+			    								<t t-if="(first_col.form_fields)=='date_order'">
+			    									<span t-attf-style="font-size:#{first_col.font_size}px;"><t t-esc="moment().format('L LT')"/></span>
+			    								</t>
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='input_char'">
+			    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='selection'">
+			    								<select class="selection-type">
+						                            <t t-foreach='widget.pos.car_types' t-as='car'>                            	
+						                                <option t-att-value='car.id'> 
+						                                    <t t-esc='car.name'/>
+						                                </option>
+						                            </t>
+					    						</select>
+					    						<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='date'">
+			    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
+			    							</t>
+			    						</td>
+			    						<!-- Same Row -->
+			    						<t t-foreach="line_group[line_key]" t-as="same_row">
+			    							<t t-if="same_row.sameline">
+			    								<td style="border: none;">
+					    							<t t-if="(same_row.form_field_type)=='header_label'">
+					    								<span t-attf-style="font-size:#{same_row.font_size}px;float: left;margin-left: 20px;"><t t-esc="same_row.form_label" /></span>
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='label'">
+					    								<t t-if="(same_row.form_fields)=='date_order'">
+					    									<span t-attf-style="font-size:#{same_row.font_size}px;"><t t-esc="moment().format('L LT')"/></span>
+					    								</t>
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='input_char'">
+					    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='selection'">
+					    								<select class="selection-type">
+								                            <t t-foreach='widget.pos.car_types' t-as='car'>                            	
+								                                <option t-att-value='car.id'> 
+								                                    <t t-esc='car.name'/>
+								                                </option>
+								                            </t>
+							    						</select>
+					    								<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='date'">
+					    								<input type="text" t-attf-value="#{first_col.form_field_id}" />
+					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
+					    							</t>
+					    						</td>
+			    							</t>
+			    						</t>
+			    					</tr>
+			    				</t>
+		    				</tbody>
+		    			</table>
+	    			</div>
+	    		</t>
+	    		</div>
 	    	</t>
     	</div>
     </t>

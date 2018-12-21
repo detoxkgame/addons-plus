@@ -347,6 +347,10 @@ class FormTemplate(models.Model):
                     ('list', _('List')),
                     ('kanban', _('Kanban'))], string="Form View",
                                   default='')
+    sub_form_template_ids = fields.One2many('hm.sub.form.template',
+                                            'form_template_id',
+                                            string='Sub Form Template',
+                                            copy=True)
 
     @api.onchange('vendor_dashboard_id')
     def _onchange_vendor_dashboard_id(self):
@@ -355,6 +359,59 @@ class FormTemplate(models.Model):
                          ('id', '=', self.vendor_dashboard_id.id)])
         if dashboard_val:
             self.name = dashboard_val.vendor_category_id.name
+
+
+class SubFormTemplate(models.Model):
+    _name = 'hm.sub.form.template'
+
+    name = fields.Char(string="Name")
+    sequence = fields.Integer(string='Sequence')
+    color = fields.Char(string='Color Index')
+    image = fields.Binary("Image", attachment=True,
+                          help="This field holds the image used as avatar for \
+        this contact, limited to 1024x1024px",)
+    image_medium = fields.Binary("Medium-sized image", attachment=True,
+                                 help="Medium-sized image of this contact. \
+                            It is automatically \
+                            resized as a 128x128px image, \
+                            with aspect ratio preserved \
+                         Use this field in form views or some kanban views.")
+
+    image_small = fields.Binary("Small-sized image", attachment=True,
+                                help="Small-sized image of this contact. It is automatically \
+             resized as a 64x64px image, with aspect ratio preserved. \
+             Use this field anywhere a small image is required.")
+    form_template_id = fields.Many2one('hm.form.template',
+                                       string='Form Template', copy=False)
+    sub_form_template_id = fields.Many2one('hm.form.template',
+                                           domain=[('form_view', '=', 'form')],
+                                           string='Sub Form Template',
+                                           copy=False)
+    sub_dashboard_line_id = fields.Many2one('hm.vendor.dashboard.line',
+                                            string="Dashboard Line",
+                                            copy=False, readonly=True)
+
+    @api.onchange('sub_form_template_id')
+    def _onchange_sub_form_template_id(self):
+        form_template = self.env['hm.form.template']
+        form_template_val = form_template.search([
+                         ('id', '=', self.sub_form_template_id.id)])
+        if form_template_val:
+            self.sub_dashboard_line_id = form_template_val.vendor_dashboard_line_id.id
+
+    @api.model
+    def create(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(SubFormTemplate, self).create(vals)
+        return res
+
+    @api.multi
+    def write(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(SubFormTemplate, self).write(vals)
+        return res
 
 
 class FormTemplateLine(models.Model):
@@ -400,6 +457,40 @@ class FormTemplateSelectionItem(models.Model):
 
     name = fields.Char(string='Name')
     value = fields.Char(string='Value of name field')
+
+
+class CarType(models.Model):
+    _name = "hm.car.type"
+
+    image = fields.Binary("Image", attachment=True,
+                          help="This field holds the image used as avatar for \
+        this contact, limited to 1024x1024px",)
+    image_medium = fields.Binary("Medium-sized image", attachment=True,
+                                 help="Medium-sized image of this contact. \
+                            It is automatically \
+                            resized as a 128x128px image, \
+                            with aspect ratio preserved \
+                         Use this field in form views or some kanban views.")
+
+    image_small = fields.Binary("Small-sized image", attachment=True,
+                                help="Small-sized image of this contact. It is automatically \
+             resized as a 64x64px image, with aspect ratio preserved. \
+             Use this field anywhere a small image is required.")
+    name = fields.Char(string="Name")
+
+    @api.model
+    def create(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(CarType, self).create(vals)
+        return res
+
+    @api.multi
+    def write(self, vals):
+        """ render image size """
+        tools.image_resize_images(vals)
+        res = super(CarType, self).write(vals)
+        return res
 
 
 class IrModelFields(models.Model):
@@ -460,6 +551,14 @@ class PosOrder(models.Model):
                                                'pos_order_id',
                                                string="Shift Room",
                                                copy=True)
+    driver_name = fields.Char(string="Driver Name")
+    car_no = fields.Char(string="Car Number")
+    pickup_date = fields.Datetime(string="Pick Up")
+    return_date = fields.Datetime(string="Return")
+    vendor_mobile = fields.Char(string="Vendor Mobile")
+    location = fields.Char(string="Location")
+    capacity = fields.Integer(string="Person")
+    car_type_id = fields.Many2one('hm.car.type', string="Car Type")
 
 
 class PosOrderLine(models.Model):

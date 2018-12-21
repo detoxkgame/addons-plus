@@ -59,6 +59,13 @@ odoo.define('skit_pos_hotel_management.pos_model',function(require){
 	            	        	 self.selection_items = selection_items;
 	            	        },
 	       	          },
+	       	          {
+	            		    model:  'hm.car.type',
+	            	        fields: ['name'],          	       
+	            	        loaded: function(self,car_types){
+	            	        	 self.car_types = car_types;
+	            	        },
+	       	          },
 		       	      {
 		       	           model:  'res.partner',
 		       	           fields: ['name','street','city','state_id','country_id','vat',

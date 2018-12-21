@@ -104,6 +104,54 @@
 	letter-spacing: 6px;
 	color: white;
 }
+.order-form-detail{
+	width:100%;
+}
+.order-form-detail input[type="text"]{
+	display: inline-block;
+	width: 60%;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    padding: 10px 10px 10px 10px;
+    transition: all 0.1s ease-out;
+    box-shadow: 1px 2px 2px #888;
+}
+.order-form-detail input[type=text]:focus {
+  border: 1px solid lightblue;;
+}
+
+.selection-type{
+	display: inline-block;
+	width: 60%;
+	box-sizing: border-box;
+	outline: none;
+	border: 1px solid lightgray;
+	border-radius: 3px;
+	padding: 10px 10px 10px 100px;
+	transition: all 0.1s ease-out;
+	box-shadow: 1px 2px 2px #888;
+}
+.selection-type + img{
+    position: absolute;
+   /*  top: 0; */
+    left: 0;
+   /*  bottom: 0; */
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    border-radius: 3px 0 0 3px;
+    padding: 0 20px;
+    /* background: #E03616; */
+    transform: translateZ(0) translateX(0);
+    transition: all 0.3s ease-in;
+    transition-delay: 0.2s;
+    margin-left: 15%;
+  }
+/* .order-btn{
+	background: white;
+} */
  section{
 	margin: 20px;
 	width: 97vw;

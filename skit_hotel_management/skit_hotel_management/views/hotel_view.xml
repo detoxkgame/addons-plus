@@ -121,6 +121,8 @@
             			<field name="checkout_date" />
             			<field name="adult" />
             			<field name="child" />
+            			<field name="driver_name" />
+            			<field name="car_no" />
             		</group>
             	</xpath>
             	<page name="extra" position="after">  
@@ -1250,6 +1252,32 @@
 		                            </tree>
 		                        </field>
 	                        </page>
+	                        <page string="Sub Form Template" name="sub_form_template">
+	                        	<field name="sub_form_template_ids">
+		                            <tree string='Sub Template'>
+		                                <field name="name" />   
+		                                <field name="sequence" />   
+		                                <field name="sub_form_template_id" /> 
+		                                <field name="form_template_id" invisible="1"/>       
+		                            </tree>
+		                            <form>
+		                            	<sheet>
+		                            		<field name="image" widget="image" class="oe_avatar"/>
+						                	<group>
+						                		<group>
+						                			<field name="name" />
+						                			<field name="sub_form_template_id" />
+						                		</group>
+						                		<group>
+						                			<field name="sequence" />
+						                			<field name="sub_dashboard_line_id" />
+						                			<field name="color" widget="color" />
+						                		</group>
+						                	</group>
+		                            	</sheet>
+		                            </form>
+		                        </field>
+	                        </page>
 	                	</notebook>
 	            	</sheet>
 	                
@@ -1281,6 +1309,61 @@
 	    <!-- Menu for Form Template -->
 	    <menuitem id="menu_form_template_form_tree" name="Form Template"
 	        action="open_form_template" sequence="6"
+	        parent="skit_hotel_management.hotel_configuration_menu" />
+	        
+	   	<!-- Search option of car type -->
+        <record id="view_car_type_filter" model="ir.ui.view">
+            <field name="name">hm.car.type.filter</field>
+            <field name="model">hm.car.type</field>
+            <field name="priority" eval="15"/>
+            <field name="arch" type="xml">
+                <search string="Car Type">
+                	<field name="name" />
+                </search>
+            </field>
+        </record>
+	        
+	   	<!-- Form view of car type -->
+	    <record id="view_car_type_form" model="ir.ui.view">
+	        <field name="name">hm.car.type.form</field>
+	        <field name="model">hm.car.type</field>
+	        <field name="arch" type="xml">
+	            <form string="Car">
+	                <sheet>
+	                	<field name="image" widget="image" class="oe_avatar"/>
+	                	<group>
+	                		<group>
+	                			<field name="name" />
+	                		</group>
+	                	</group>
+	                </sheet>
+	            </form>
+	        </field>
+	    </record>
+	        
+	    <!-- Tree view of car type -->
+	    <record id="view_car_type_tree" model="ir.ui.view">
+	        <field name="name">hm.car.type.tree</field>
+	        <field name="model">hm.car.type</field>
+	        <field name="arch" type="xml">
+	            <tree string="Car Type">
+	                <field name="name" />
+	            </tree>
+	        </field>
+	    </record>
+	        
+	    <!-- Action for Car Type -->
+	    <record id="open_car_type" model="ir.actions.act_window">
+	        <field name="name">Car Type</field>
+	        <field name="res_model">hm.car.type</field>
+	        <field name="view_type">form</field>
+	        <field name="context">{}</field>
+	        <field name="view_mode">tree,form</field>
+	    </record>
+	        
+	    <!-- Menu for Car Type -->
+	    <menuitem id="menu_form_car_form_tree" name="Car Type"
+	        action="open_car_type" sequence="6"
 	        parent="skit_hotel_management.hotel_configuration_menu" />
 	        
 	    <!-- Form view of hotel management menu -->
