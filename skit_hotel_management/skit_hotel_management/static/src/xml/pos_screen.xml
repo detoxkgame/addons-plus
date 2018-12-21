@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+	 <t t-name="POSFirstPageWidget">
+	    <div class="Main_Page"  >
+		<div align="center">
+	    <ol id="hexGrid" class="hexgrid_even">
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink hotel" href="#">
+	          
+	            <img  src="https://image.flaticon.com/icons/svg/227/227365.svg" alt="" />
+	            <h1>HOME</h1>
+	            <p><t t-esc="widget.pos.config.id"/></p>
+	          </a>
+	        </div>
+	      </li>
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink checkin" href="#">
+	            <img src="https://image.flaticon.com/icons/svg/227/227333.svg" alt="" />
+	            <h1>CHECK IN</h1>
+	            <p></p>
+	          </a>
+	        </div>
+	      </li>
+		</ol>
+		<ol id="hexGrid" class="hexgrid_odd">
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink" href="#">
+	            <img src="https://image.flaticon.com/icons/svg/227/227385.svg" alt="" />
+	            <h1>GUIDE</h1>
+	            <p></p>
+	          </a>
+	        </div>
+	      </li>
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink" href="#">
+	            <img src="https://image.flaticon.com/icons/svg/227/227307.svg" alt="" />
+	            <h1>SUITE ROOM</h1>
+	            <p></p>
+	          </a>
+	        </div>
+	      </li>
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink" href="#">
+	            <img src="https://image.flaticon.com/icons/svg/227/227339.svg" alt="" />
+	            <h1>OUT DOOR</h1>
+	            <p></p>
+	          </a>
+	        </div>
+	      </li>
+		</ol>
+		<ol id="hexGrid" class="hexgrid_even">
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink show_productscreen" href="#">
+	            <img src="https://image.flaticon.com/icons/svg/227/227302.svg" alt="" />
+	            <h1>GYM</h1>
+	            <p></p>
+	          </a>
+	        </div>
+	      </li>
+	      <li class="hex">
+	        <div class="hexIn">
+	          <a class="hexLink" href="#">
+	            <img src="https://image.flaticon.com/icons/svg/227/227348.svg" alt="" />
+	            <h1>LAUNDARY</h1>
+	            <p></p>
+	          </a>
+	        </div>
+	      </li>
+		</ol>
+	</div>
+	</div>
+    </t>
+</templates>

@@ -18,8 +18,11 @@
     'data': [
             'security/hotel_security.xml',
             'security/ir.model.access.csv',
-            'views/hotel_view.xml'
+            'views/hotel_view.xml',
+           # 'views/pos_config.xml',
+            
     ],
+    'qweb': ['static/src/xml/pos_screen.xml'],
     'installable': True,
     'auto_install': False,
     'application': True,
