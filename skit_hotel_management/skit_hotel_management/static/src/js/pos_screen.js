@@ -10,29 +10,21 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     events: _.extend({}, PopupWidget.prototype.events, {	        
         'click .hotel': 'show_hotel',	
         'click .checkin': 'show_checkin',
-        'click .show_productscreen': 'show_productscreen',
+        'click .roomstatus': 'show_roomstatus',
         'click .night_audit': 'show_night_audit',
        
     }),
     show_night_audit:function(){
-       	// this.gui.show_screen('products');
-        	$('.session').trigger("click");
-    	//$('.night_audit').trigger("click");
+        $('.session').trigger("click");
        },   
-    show_productscreen:function(){
-   	// this.gui.show_screen('products');
+    show_roomstatus:function(){
     	$('.rooomstatus').trigger("click");
    },
     show_hotel:function(){
     	 this.gui.show_screen('vendor_dashboard');
     },
-    /*show_checkin:function(){
-    	// this.gui.show_screen('kpireport');
-    	$('.rooomstatus').trigger("click");
-    },*/
     
     show_checkin:function(){
-    	// this.gui.show_screen('kpireport');
     	$('.kpi-report-button').trigger("click");
     },
     init: function(parent, options) {
@@ -54,11 +46,20 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
         this.chrome.widget.order_selector.hide();
        
     },
+    get_widget_style: function() {
+        var style = "";
+        var imageurl =  window.location.origin + '/web/image?model=pos.config&field=image&id='+1;
+            style += "background-image: url(" + imageurl + "); ";
+            style += "background-image:no-repeat; ";
+            style += "background-size: cover; ";
+            style += " background-position: center; ";
+            style += " height: 100%; ";
+           
+        return style;
+    },
     renderElement: function(){
         var self = this;
-        this._super();    
-
-    
+        this._super();   
 
     },
 

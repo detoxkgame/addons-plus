@@ -2,11 +2,15 @@
     margin: 0;
     padding: 0;
 }
-.Main_Page{
+.main_page_background{
 	margin-top: 0%; margin-bottom: 15vh; width: 100%;
-	 background-image: url("../img/home.jpg") !important;
+/** background-image: url("../img/home.jpg") !important;**/
 	     background-repeat: round;
 	     height:100%;
+}
+.Main_Page{
+	margin-top: 0%; margin-bottom: 15vh; width: 100%;
+	     
 	
 }
 .hexgrid_even {

@@ -655,3 +655,13 @@ class AccountPayment(models.Model):
     room_id = fields.Many2one('product.product', string="Room No")
     id_proof_no = fields.Char(string="ID No")
     remark = fields.Text(string="Remark")
+
+class POSorder(models.Model):
+    _inherit = 'pos.order'
+    
+    state = fields.Selection(
+        [('draft', 'New'),('reserved', 'Reserved'),('noshow', 'No show'), ('checkin', 'CheckIn'),('checkout', 'CheckOut'),('cancel', 'Cancelled'), ('paid', 'Paid'), ('done', 'Posted'), ('invoiced', 'Invoiced')],
+        'Status',  copy=False, default='draft')
+    
+    
+    

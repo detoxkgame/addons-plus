@@ -2,7 +2,7 @@
 
 <templates id="template" xml:space="preserve">
 	 <t t-name="POSFirstPageWidget">
-	    <div class="Main_Page"  >
+	    <div class="Main_Page" t-att-style='widget.get_widget_style()' >
 		<div align="center">
 	    <ol id="hexGrid" class="hexgrid_even">
 	      <li class="hex">
@@ -57,7 +57,7 @@
 		<ol id="hexGrid" class="hexgrid_even">
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink show_productscreen" href="#">
+	          <a class="hexLink roomstatus" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227302.svg" alt="" />
 	            <h1>ROOM SERVICE</h1>
 	            <p></p>
