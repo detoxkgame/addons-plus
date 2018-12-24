@@ -15,8 +15,8 @@ var rpc = require('web.rpc');
 var RoomstatusReportScreenWidget = screens.ScreenWidget.extend({
 	template: 'RoomstatusReportScreenWidget',
 	events: _.extend({}, PopupWidget.prototype.events, {
-        'change .date_from': 'change_date',
-        'change .date_to': 'change_date',
+        'change .rdate_from': 'change_date',
+        'change .rdate_to': 'change_date',
 
     }),
     init: function(parent, options){
@@ -40,10 +40,10 @@ var RoomstatusReportScreenWidget = screens.ScreenWidget.extend({
     	var self = this;
     	var from_date;
     	var to_date;
-    	$('.date_from').each(function(){			   	 
+    	$('.rdate_from').each(function(){			   	 
 			   from_date = $(this).val();			
 		   });
-    	$('.date_to').each(function(){			   	 
+    	$('.rdate_to').each(function(){			   	 
     		to_date = $(this).val();			
 		   });
     	if(from_date && to_date){

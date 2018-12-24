@@ -16,7 +16,8 @@
     "data": [
         'security/ir.model.access.csv',
         'views/room_status_templates.xml',
-       # 'views/room_status.xml',
+        'views/room_status.xml',
     ],
     'installable': True,
+    'application': True,
 }
