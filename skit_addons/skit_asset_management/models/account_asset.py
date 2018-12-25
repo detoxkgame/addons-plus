@@ -161,7 +161,7 @@ class AccountAssetAsset(models.Model):
                     amount = amount_to_depr / self.method_number
                     if sequence == 1:
                         if self.method_period % 12 != 0:
-                            date = datetime.strptime(self.date, '%Y-%m-%d')
+                            date = datetime.strptime(str(self.date), '%Y-%m-%d')
                             month_days = calendar.monthrange(date.year, date.month)[1]
                             days = month_days - date.day + 1
                             amount = (amount_to_depr / self.method_number) / month_days * days
@@ -173,7 +173,7 @@ class AccountAssetAsset(models.Model):
                 if self.prorata:
                     if sequence == 1:
                         if self.method_period % 12 != 0:
-                            date = datetime.strptime(self.date, '%Y-%m-%d')
+                            date = datetime.strptime(str(self.date), '%Y-%m-%d')
                             month_days = calendar.monthrange(date.year, date.month)[1]
                             days = month_days - date.day + 1
                             amount = (residual_amount * self.method_progress_factor) / month_days * days
@@ -185,7 +185,7 @@ class AccountAssetAsset(models.Model):
     def _compute_board_undone_dotation_nb(self, depreciation_date, total_days):
         undone_dotation_number = self.method_number
         if self.method_time == 'end':
-            end_date = datetime.strptime(self.method_end, DF).date()
+            end_date = datetime.strptime(str(self.method_end), DF).date()
             undone_dotation_number = 0
             while depreciation_date <= end_date:
                 depreciation_date = date(depreciation_date.year, depreciation_date.month, depreciation_date.day) + relativedelta(months=+self.method_period)
@@ -209,7 +209,7 @@ class AccountAssetAsset(models.Model):
             if self.prorata:
                 # if we already have some previous validated entries, starting date is last entry + method perio
                 if posted_depreciation_line_ids and posted_depreciation_line_ids[-1].depreciation_date:
-                    last_depreciation_date = datetime.strptime(posted_depreciation_line_ids[-1].depreciation_date, DF).date()
+                    last_depreciation_date = datetime.strptime(str(posted_depreciation_line_ids[-1].depreciation_date), DF).date()
                     depreciation_date = last_depreciation_date + relativedelta(months=+self.method_period)
                 else:
                     result_date = self._get_last_depreciation_date()
@@ -224,7 +224,7 @@ class AccountAssetAsset(models.Model):
                     asset_date = datetime.strptime(date_val[:7] + '-01', DF).date()
                 # if we already have some previous validated entries, starting date isn't 1st January but last entry + method period
                 if posted_depreciation_line_ids and posted_depreciation_line_ids[-1].depreciation_date:
-                    last_depreciation_date = datetime.strptime(posted_depreciation_line_ids[-1].depreciation_date, DF).date()
+                    last_depreciation_date = datetime.strptime(str(posted_depreciation_line_ids[-1].depreciation_date), DF).date()
                     depreciation_date = last_depreciation_date + relativedelta(months=+self.method_period)
                 else:
                     depreciation_date = asset_date
