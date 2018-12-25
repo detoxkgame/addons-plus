@@ -212,7 +212,8 @@ class AccountAssetAsset(models.Model):
                     last_depreciation_date = datetime.strptime(posted_depreciation_line_ids[-1].depreciation_date, DF).date()
                     depreciation_date = last_depreciation_date + relativedelta(months=+self.method_period)
                 else:
-                    depreciation_date = datetime.strptime(self._get_last_depreciation_date()[self.id], DF).date()
+                    result_date = self._get_last_depreciation_date()
+                    depreciation_date = datetime.strptime(str(result_date[self.id]), DF).date()
             else:
                 # depreciation_date = 1st of January of purchase year if annual valuation, 1st of
                 # purchase month in other cases               
