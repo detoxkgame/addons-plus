@@ -15,7 +15,7 @@ Keeps track of depreciations, and creates corresponding journal entries.
     'category': 'Accounting',
     'sequence': 32,
     'demo': [
-        'data/account_asset_demo.yml',
+        
     ],
     'data': [
          'security/account_asset_security.xml',
