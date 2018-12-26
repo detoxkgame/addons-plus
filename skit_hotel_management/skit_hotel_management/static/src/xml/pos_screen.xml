@@ -17,7 +17,7 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink checkin" href="#">
+	          <a class="hexLink " href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227333.svg" alt="" />
 	            <h1>RESERVATION</h1>
 	            <p></p>
@@ -28,7 +28,7 @@
 		<ol id="hexGrid" class="hexgrid_odd">
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink" href="#">
+	          <a class="hexLink checkin" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227385.svg" alt="" />
 	            <h1>CHECK IN</h1>
 	            <p></p>
