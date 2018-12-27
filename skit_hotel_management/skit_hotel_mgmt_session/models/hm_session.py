@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 # See LICENSE file for full copyright and licensing details.
 
-from odoo.exceptions import ValidationError
-from odoo import models, fields, api, tools, _
-from decimal import Decimal
+from odoo import models, fields, api, tools
 
 
 class ShiftMaster(models.Model):

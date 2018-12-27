@@ -8,7 +8,7 @@
 	                 <i class='fa fa-cubes' />
 	            </span>  
             </div>
-            <div class="night_audit" title="Night Audit">
+            <div class="night_audit_session" title="Night Audit">
 	        	 <span class="order-button square NightAuditButton">
 	                 <div class="">Night Audit</div>
 	            </span>  
@@ -36,7 +36,7 @@
 		              			<t t-set="i" t-value="0" />
 				                <t t-foreach='widget.options.pos_cashbox_line' t-as='cashbox'>
 			                        <tr t-att-id="i">
-			                             <td style="display:none;">
+			                             <td class="display_none">
 			                             	<t t-esc="cashbox.id" />
 			                             </td>
 			                             <td> 
@@ -49,9 +49,9 @@
 				                         	<t t-esc="cashbox.subtotal" />
 				                         </td>	
 				                         <td> 
-				                         	<!-- <t t-if="cashbox.is_delete">  -->
+				                         	<t t-if="cashbox.is_delete">
 				                         		<span class="cashbox-delete fa fa-trash-o" name="delete"></span>
-				                         	<!-- </t> -->
+				                         	</t> 
 								         </td>	  	                            
 			                        </tr>	
 			                    	<t t-set="i" t-value="i+1" />   
@@ -167,8 +167,8 @@
 						                    	<tr>
 						                    		<td>Hand over to :</td>
 						                    		<td>
-						                    			<select id ="partner_select" class="display_none devotee_list_select styled-select" 
-						                    				style="height: 35px !important;" name='devotee_list' >
+						                    			<select id ="partner_select" class="partner_select" 
+						                    				 name='partner_list' >
 							        						<t t-foreach="widget.options.partner_list" t-as="partner_list">
 							        							<t t-if="partner_list.value == widget.options.selected_devotee_id">
 																	<option  t-attf-name="#{partner_list.key}" t-att-value="partner_list.value" t-att-selected="true"><t t-esc="partner_list.key"/></option>
@@ -197,7 +197,7 @@
 				                       	</table>
 				            		</td>
 		                 		</tr> 
-		                 		<tr style="height: 50px"></tr> 
+		                 		<tr class="session_tr_height"></tr> 
 			                   	<t t-if="session.cash_control == true">  
 				             		<tr>
 				                        <td>   
@@ -247,232 +247,127 @@
         </div>
     </t>
     
+	<t t-name="SessionDataWidget">
+		<t t-if="session">     
+			<t t-if="session.cash_control == true">  	                	                   	                      
+				<div class="pos_button_section">
+		   			<button class="session-button endsessionbutton PutMoneyIn">
+		    			<i class='fa fa-level-down' /> Put Money In
+		    		</button>		                        
+		     		<button class="session-button endsessionbutton TakeMoneyOut">
+		    			<i class='fa fa-level-up' /> Take Money Out
+		  			</button>	
+		 			<button class="session-button endsessionbutton SetClosingBalance" value="end">
+		       			<i class='fa fa-money' /> Set Closing Balance
+		     		</button>
+		 			<button class="session-button endsessionbutton printstatement" value="end">
+		      			<i class='fa fa-print' /> Print
+		      		</button> 
+	      			<button t-attf-class="EndOfSession endsessionbutton #{ session.state !='opened'  ? 'display-hide' : '' }">
+		        		End of Session
+		    		</button>
+		 			<button t-attf-class="endsessionbutton ValidateClosingControl vcpentries validate #{ session.state !='closing_control'  ? 'display-hide' : '' }">
+	           			Validate Closing &amp; Posting Entries
+	      			</button>	
+	     		</div>
+			</t>
+			<div class="session_form"> 
+				<table class="session-group">	
+	   				<tbody>
+	         			<tr>
+			   				<td>
+				     			<table class="session-group text1">	                     
+					   				<tbody>
+										<tr><td>Responsible : </td><td><t t-esc="session.user_id[1]" /></td></tr>
+						             	<tr><td>Point of Sale : </td><td><t t-esc="session.config_id[1]" /></td></tr>
+						           		<tr><td>Available Rooms : </td><td><t t-esc="session.rooms_available" /></td></tr>
+						       			<tr><td>Reserved Rooms : </td><td><t t-esc="session.rooms_reserved" /></td></tr>
+					            	</tbody>
+					     		</table>
+							</td>
+					    	<td>   
+				  				<table class="session-group text2">
+									<tbody>
+										<tr>
+											<td>Opening Date :</td><td><t t-esc="session.start_at" /></td>
+						     			</tr>
+						           		<tr>
+						      				<td>Hand over to :</td>
+											<td>
+												<input name="partners" list="partner_list" class="partner_datalist"/>
+												<datalist id="partner_list">
+													<t t-foreach="partners_all" t-as="partner">
+														<option  t-attf-name="#{partner.name}" t-att-value="partner.id"><t t-esc="partner.name"/></option>
+													</t>
+												</datalist>
+											</td>
+										</tr>
+										<tr><td></td></tr>
+						                <tr><td>Occupied Rooms : </td><td><t t-esc="session.rooms_occupied" /></td></tr>
+						                <tr><td>Maintenance Rooms : </td><td><t t-esc="session.rooms_blocked" /></td></tr> 
+						    		</tbody>
+				         		</table>
+				    		</td>
+		       			</tr> 
+		              	<tr class="session_tr_height"></tr> 
+			       		<t t-if="session.cash_control == true">  
+							<tr>
+				    			<td>   
+					         		<table class="session-group text3">
+						     			<tbody> 
+							          		<tr><td>Opening Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_start)" /></td></tr>
+							           		<t t-if="session.is_admin ==1">
+								          		<tr><td>+ Transactions  :</td><td><t t-esc="widget.format_currency(session.cash_register_total_entry_encoding)" /></td></tr>
+								             	<tr><td>= Theoretical Closing Balance : </td><td><t t-esc="widget.format_currency(session.cash_register_balance_end)" /></td></tr>
+							               </t>
+						        		</tbody>
+					        		</table>
+					     		</td>
+						   		<td>   
+					         		<table class="session-group text4">
+						     			<tbody>
+						      				<t t-if="session.is_admin ==1">
+						                   		<tr><td> Real Closing Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_end_real)" /></td></tr>
+						              		</t>
+						         		</tbody>
+					         		</table>
+					    		</td>
+				     		</tr> 
+				        	<tr>
+				     			<td></td>
+				             	<td>
+					           		<t t-if="session.is_admin ==1">
+						  				<table class="session-group text5">
+							    			<tbody>			                      
+							           			<tr><td> Difference :</td><td><t t-esc="widget.format_currency(session.cash_register_difference)" /></td></tr>	
+							         		</tbody>
+						          		</table>
+					      			</t>
+				         		</td>
+				     		</tr>
+			         	</t>  
+		     		</tbody>
+		    	</table>
+		   	</div>    
+		</t>                 	                      	                                              		                       
+	</t>
     
-    
-    
-    
-    
-    
-        <t t-name="SessionDataWidget">
-	             <t t-if="session">     
-	                  <!--  <div class="session_form_header">
-	                    <button t-attf-class="sks-pos-session-btn-1 display-hide header-button highlight EndOfSession #{ session.state !='opened'  ? 'display-hide' : '' }">
-	                    		End Of Session</button>	
-	                    <button t-attf-class="sks-pos-session-btn-2 header-button highlight printstatement">
-	                    		Print</button>	
-	                    <button t-attf-class="sks-pos-session-btn-3 display-hide header-button highlight vcpentries #{ session.state !='closing_control'  ? 'display-hide' : '' }">
-	                    		Validate Closing &amp; Posting Entries</button>		                    
-	                    <t t-if="session.cash_control == true"> 
-	                    <button class="sks-pos-session-btn-1 session-button PutMoneyIn highlight">
-		                        <i class='fa fa-level-down'/> Put Money In
-		                </button>	
-		                </t>	               	
-	                 </div>   -->
-	                 	               		<t t-if="session.cash_control == true">  	                	                   	                      
-	                   		<!-- <div class="pos_button_box">  -->
-	                   		<div style="padding: 20px">
-		                        <button class="session-button endsessionbutton PutMoneyIn">
-		                        	<i class='fa fa-level-down' /> Put Money In
-		                        </button>		                        
-		                        <button class="session-button endsessionbutton TakeMoneyOut">
-		                        	<i class='fa fa-level-up' /> Take Money Out
-		                        </button>	
-		                        <button class="session-button endsessionbutton SetClosingBalance" value="end">
-		                        	<i class='fa fa-money' /> Set Closing Balance
-		                        </button>
-		                        <button class="session-button endsessionbutton printstatement" value="end">
-		                        	<i class='fa fa-print' /> Print
-		                        </button>                        	  
-	                       <!-- </div>  -->
-	                       <button t-attf-class="EndOfSession endsessionbutton #{ session.state !='opened'  ? 'display-hide' : '' }">
-		                   		End of Session
-		                   </button>
-		                   <button t-attf-class="endsessionbutton ValidateClosingControl vcpentries validate #{ session.state !='closing_control'  ? 'display-hide' : '' }">
-	                    		Validate Closing &amp; Posting Entries
-	                    	</button>	
-	                    	</div>
-						</t>
-	                 <div class="session_form"> 
-	                 
- 	        <!--          	<table class="session-group sks-pos-sesn-body">	
-	                       <tbody>
-		                       <tr>
-			                        <td class="sks-pos-sesn-col-td40">
-				                       <table class="session-group text1">	                     
-					                       <tbody>
-						                       <tr><td>Responsible : </td><td><t t-esc="session.user_id[1]" /></td></tr>
-						                       <tr><td>Point of Sale : </td><td><t t-esc="session.config_id[1]" /></td></tr>
-					                       </tbody>
-					                   </table>
-					                </td>
-									
-									<td class="sks-pos-sesn-col-td20"></td>
-					                
-					                <td class="sks-pos-sesn-col-td40" style="vertical-align: top;">   
-				                       <table class="session-group text2">
-					                       <tbody>
-						                       	<tr><td>Opening Date :</td><td><t t-esc="session.start_at" /></td></tr>
-						                     	<t t-if="session.is_admin ==1">
-													<tr><td>+ Transactions  :</td><td><t t-esc="widget.format_currency(session.cash_register_total_entry_encoding)" /></td></tr>
-											       	<tr><td>= Theoretical Closing Balance : </td><td><t t-esc="widget.format_currency(session.cash_register_balance_end)" /></td></tr>
-										       	</t>
-					                       </tbody>
-				                       </table>
-				                     </td>
-			                   	</tr>
-		                   
-		                   		<tr class="dlheight"></tr> 
-			                   
-			                   	<t t-if="session.cash_control == true">  
-				                   <tr>
-			                        <td class="sks-pos-sesn-col-td40">   
-				                       <table class="session-group text3">
-					                       <tbody> 
-					                       <tr><td>Opening Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_start)" /></td></tr>
-					                       <tr><td class="session_small_text"> <hr></hr>= Theoretical Closing Balance : </td><td class="session_small_text"><hr></hr><t t-esc="widget.format_currency(session.cash_register_balance_end)" /></td></tr>
-					                      <tr><td class="session_small_text"><hr></hr>Difference :</td><td class="session_small_text"><hr></hr><t t-esc="widget.format_currency(session.cash_register_difference)" /></td></tr>
-					                       </tbody>
-				                       </table>
-				                    </td>
-				                   </tr>
-			                   	</t>  
-			                 	</tbody>
-			               	</table>    -->  
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	
-			               		                    <table class="session-group">	
-	                   		<tbody>
-	                       		<tr>
-			                   		<td>
-				                    	<table class="session-group text1">	                     
-					                  		<tbody>
-						                       	<tr><td>Responsible : </td><td><t t-esc="session.user_id[1]" /></td></tr>
-						                       	<tr><td>Point of Sale : </td><td><t t-esc="session.config_id[1]" /></td></tr>
-						                       	<tr><td>Available Rooms : </td><td><t t-esc="session.rooms_available" /></td></tr>
-						                       	<tr><td>Reserved Rooms : </td><td><t t-esc="session.rooms_reserved" /></td></tr>
-						                       	
-					                       	</tbody>
-					                   	</table>
-					                </td>
-					                <td>   
-				                   		<table class="session-group text2">
-						                 	<tbody>
-						                    	<tr>
-						                    		<td>Opening Date :</td><td><t t-esc="session.start_at" /></td>
-						                    	</tr>
-						                    	<tr>
-						                    		<td>Hand over to :</td>
-						                    		<!-- <td>
-						                    			<select id ="partner_select" class="display_none devotee_list_select styled-select" 
-						                    				style="height: 35px !important;" name='devotee_list' >
-							        						<t t-foreach="widget.options.partner_list" t-as="partner_list">
-							        							<t t-if="partner_list.value == widget.options.selected_devotee_id">
-																	<option  t-attf-name="#{partner_list.key}" t-att-value="partner_list.value" t-att-selected="true"><t t-esc="partner_list.key"/></option>
-																</t>
-																<t t-else="">
-														  			<option  t-attf-name="#{partner_list.key}" t-att-value="partner_list.value"><t t-esc="partner_list.key"/></option>
-													        	</t>
-												        	</t>
-														</select>
-													</td> -->
-												</tr>
-												<tr>
-													<!-- <td>
-														<input type="text" name="product" value="Pen" list="productName" />
-														<datalist id="productName">
-														    <option value="Pen" label="the developer's choice">Pen</option>
-														    <option value="Pencil">Pencil</option>
-														    <option value="Paper">Paper</option>
-														</datalist>
-													
-													</td> -->
-												</tr>
-						                 		<tr><td>Occupied Rooms : </td><td><t t-esc="session.rooms_occupied" /></td></tr>
-						                       	<tr><td>Maintenance Rooms : </td><td><t t-esc="session.rooms_blocked" /></td></tr> 
-						                 	</tbody>
-				                       	</table>
-				            		</td>
-		                 		</tr> 
-		                 		<tr style="height: 50px"></tr> 
-			                   	<t t-if="session.cash_control == true">  
-				             		<tr>
-				                        <td>   
-					                       <table class="session-group text3">
-						                       <tbody> 
-							                       <tr><td>Opening Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_start)" /></td></tr>
-							                       <t t-if="session.is_admin ==1">
-								                       <tr><td>+ Transactions  :</td><td><t t-esc="widget.format_currency(session.cash_register_total_entry_encoding)" /></td></tr>
-								                       <tr><td>= Theoretical Closing Balance : </td><td><t t-esc="widget.format_currency(session.cash_register_balance_end)" /></td></tr>
-							                       </t>
-						                       </tbody>
-					                       </table>
-					                    </td>
-						                <td>   
-					                    	<table class="session-group text4">
-						                    	<tbody>
-						                       		<t t-if="session.is_admin ==1">
-						                       			<tr><td> Real Closing Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_end_real)" /></td></tr>
-						                       		</t>
-						                       </tbody>
-					                       	</table>
-					                  	</td>
-				                   	</tr> 
-				                   	<tr>
-				                   		<td></td>
-				                   		<td>
-					                   		<t t-if="session.is_admin ==1">
-						                   		<table class="session-group text5">
-							                		<tbody>			                      
-							                      		<tr><td> Difference :</td><td><t t-esc="widget.format_currency(session.cash_register_difference)" /></td></tr>	
-							                      	</tbody>
-						                   		</table>
-					                       	</t>
-				                   		</td>
-				                   	</tr>
-			              		</t>  
-		                   	</tbody>
-		          		</table>
-			               	
-			               	
-			               	
-			               	
-			               	
-			               	                  	 
-		                 </div>    
-		             	</t>                 	                      	                                              		                       
-	     			</t>
-    
-    
-    
-    
-        <t t-name="SessionScreenWidget">
-        <div class="sessionscreen clientlist-screen screen">
-            <div class="screen-content">
-                <section class="top-content">   
-	                <span class='button back'>
-	                	<i class='fa fa-angle-double-left'></i>
-	                    Cancel
-	                </span> 
-                </section>
-                <section class="full-content">
-                    <div class='window'>
-                       	  <div class="session-data-contents"></div>             
-                    </div>
-                </section>
-            </div>
-        </div>
+	<t t-name="SessionScreenWidget">
+		<div class="sessionscreen clientlist-screen screen">
+	 		<div class="screen-content">
+	 			<section class="top-content">   
+		  			<span class='button back'>
+		    			<i class='fa fa-angle-double-left'></i>
+		                    Back
+		            </span> 
+	     		</section>
+	    		<section class="full-content">
+	       			<div class='window'>
+	         			<div class="session-data-contents"></div>             
+	        		</div>
+	      		</section>
+			</div>
+		</div>
     </t>
+    
 </templates>

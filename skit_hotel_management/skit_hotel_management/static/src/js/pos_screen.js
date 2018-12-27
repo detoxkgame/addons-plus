@@ -15,7 +15,7 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
        
     }),
     show_night_audit:function(){
-        $('.session').trigger("click");
+        $('.night_audit_session').trigger("click");
        },   
     show_roomstatus:function(){
     	$('.rooomstatus').trigger("click");

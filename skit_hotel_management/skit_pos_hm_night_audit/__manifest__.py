@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'POS Night Audit',
+    'name': 'POS Hotel Management Night Audit',
     'version': '1.1',
     'author': 'Srikesh Infotech',
     'license': "AGPL-3",
