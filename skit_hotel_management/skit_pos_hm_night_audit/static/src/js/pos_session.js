@@ -50,7 +50,6 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
 	                'body': _t(err_msg),
 	            });
 	        });
-
 	    },
 
 	    render_data: function(order, session){	 
@@ -71,13 +70,13 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
             category_node.innerHTML = category_html;
             rcontents.append(category_node);
              
-             $('.PutMoneyIn').on('click',function(event){
+            $('.PutMoneyIn').on('click',function(event){
     	    	
-     	    	self.pos.gui.show_popup('popupMoney',{
-                     'title': 'Put Money In',
-                     'body': 'Fill in this form if you put money in the cash register: ',
-                     confirm: function(){                	
-                     	var values ={};
+            	self.pos.gui.show_popup('popupMoney',{
+            		'title': 'Put Money In',
+            		'body': 'Fill in this form if you put money in the cash register: ',
+            		confirm: function(){                	
+            			var values ={};
                      	values.reason = this.$('.reason').val();
                      	values.amount = this.$('.amount').val();
                      	values.session_id = self.pos.pos_session.id;    
@@ -95,7 +94,6 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
          	            	else{
         	            		self.gui.show_screen('sessionscreen',null,'refresh');	
          	            	}
-         	            		
          	            });                	
                      },
                      cancel: function(){
@@ -104,12 +102,12 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
           		});	
        	    });
              
-             $('.TakeMoneyOut').on('click',function(event){
-    	    	self.pos.gui.show_popup('popupMoney',{
-                    'title': 'Take Money Out',
-                    'body': 'Describe why you take money from the cash register: ',
-                    confirm: function(){    
-                    	var values ={};
+            $('.TakeMoneyOut').on('click',function(event){
+            	self.pos.gui.show_popup('popupMoney',{
+            		'title': 'Take Money Out',
+            		'body': 'Describe why you take money from the cash register: ',
+            		confirm: function(){    
+            			var values ={};
                     	values.reason = this.$('.reason').val();
                     	values.amount = this.$('.amount').val();
                     	values.session_id = self.pos.pos_session.id;
@@ -132,7 +130,6 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
                     },
          		});	
              });
-             
              
              $('.SetClosingBalance').on('click',function(e){
     	    	var tr = $(e.currentTarget);
@@ -201,57 +198,55 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
   	    	});
        
              $('.EndOfSession').on('click',function(event){
-    	    	var id = self.pos.pos_session.id;   
-    	    	self._rpc({
-                    model: 'pos.session',
-                    method: 'action_pos_session_closing_control',
-                    args: [id],
-    	    	}).then(function(result){  
-    	    		self.gui.show_screen('sessionscreen',null,'refresh');	
-    			},function(err,event){
-    	            event.preventDefault();
-    	            var err_msg = 'Please verify the details given or Check the Internet Connection./n';
-    	            if(err.data.message)
-    	            	err_msg = err.data.message;
-    	            self.gui.show_popup('alert',{
-    	                'title': _t('Odoo Warning'),
-    	                'body': _t(err_msg),
-    	            });
-    	        }); 
-  	    	});
+            	 var id = self.pos.pos_session.id;   
+            	 self._rpc({
+            		 model: 'pos.session',
+            		 method: 'action_pos_session_closing_control',
+            		 args: [id],
+            	 }).then(function(result){  
+            		 self.gui.show_screen('sessionscreen',null,'refresh');	
+            	 },function(err,event){
+            		 event.preventDefault();
+            		 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
+            		 if(err.data.message)
+            			 err_msg = err.data.message;
+            		 self.gui.show_popup('alert',{
+            			 'title': _t('Odoo Warning'),
+            			 'body': _t(err_msg),
+            		 });
+            	 }); 
+             });
              
              $('.vcpentries').on('click',function(event){
-    	    	var id = self.pos.pos_session.id;
+            	 var id = self.pos.pos_session.id;
 
-    	    	self._rpc({
-                    model: 'pos.session',
-                    method: 'action_pos_session_validate',
-                    args: [id],
-    	    	}).then(function(result){  
-    	    		self.gui.close_popup();
-					self.gui.close();
-    			},function(err,event){
-    	            event.preventDefault();
-    	            var err_msg = 'Please verify the details given or Check the Internet Connection./n';
-    	            if(err.data.message)
-    	            	err_msg = err.data.message;
-    	            self.gui.show_popup('alert',{
-    	                'title': _t('Odoo Warning'),
-    	                'body': _t(err_msg),
-    	            });
-    	        }); 
-  	    	});
+            	 self._rpc({
+            		 model: 'pos.session',
+            		 method: 'action_pos_session_validate',
+            		 args: [id],
+            	 }).then(function(result){  
+            		 self.gui.close_popup();
+            		 self.gui.close();
+            	 },function(err,event){
+            		 event.preventDefault();
+            		 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
+            		 if(err.data.message)
+            			 err_msg = err.data.message;
+            		 self.gui.show_popup('alert',{
+            			 'title': _t('Odoo Warning'),
+            			 'body': _t(err_msg),
+            		 });
+            	 }); 
+             });
              
              $('.printstatement').on('click',function(event){
-     	    	var id = self.pos.pos_session.id;
-     	    	self.chrome.do_action('skit_pos_hm_night_audit.pos_session_report',
-     	    	   {additional_context:{active_ids:[id],}
-     	    	});
-  	    	});
-			 return rcontents;
+            	 var id = self.pos.pos_session.id;
+            	 self.chrome.do_action('skit_pos_hm_night_audit.pos_session_report',
+            			 {additional_context:{active_ids:[id],}
+            			 });
+             });
+             return rcontents;
 	    },
-	    
-	
 	});
 	gui.define_screen({name:'sessionscreen', widget: SessionScreenWidget});
 	
@@ -288,7 +283,6 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
 		   if(self.options.pos_cashbox_line[0]['is_delete']){
 			   col5.innerHTML=col5html;       
 		   }
-		  
 	    },
 	    
 	    onclick_cashboxdelete: function(e){
@@ -569,39 +563,9 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
 	    		});
 	    	}
 	    	
-	    	/*this.$('.session').click(function(event){
-		        	self.sessionevent_click_handler(event,$(this));
-		       });*/
-	    	
 	    	this.$('.night_audit_session').click(function(event){
 	        	self.sessionevent_click_handler(event,$(this));
-	       });
-	    	
-/*	        this.$('.session').click(function(event){
-	        	self._rpc({
-	                model: 'pos.session',
-	                method: 'get_pos_session',
-	                args: [0, self.pos.pos_session.id],
-	            }).then(function(result){ 
-	            	if(result)
-	            		self.pos.gui.show_popup('popupsession',{
-	            			'title': 'Sessions',
-	            			'pos_session': result,
-	            			'partner_list': partner_list
-	            		}); 							
-	            	else
-	            		self.pos.gui.show_popup('error',{
-	            			'title': 'Sessions',
-	            			'body': 'No Opened Session.',	                   
-	            		});	
-	            });
-	        	
-	        	self.pos.gui.show_popup('popupsession',{
-	        		'title': 'Sessions',
-	        		'body': 'Loading...',
-	        	});
-	        });*/
-
+	    	});
 	    },		    
 	});
 });
