@@ -48,19 +48,19 @@ var HotelManagementScreenWidget = screens.ScreenWidget.extend({
 gui.define_screen({name:'hotel', widget: HotelManagementScreenWidget});
 
 //Add the HotelManagement to the GUI, and set it as the default screen
-chrome.Chrome.include({
+/*chrome.Chrome.include({
     build_widgets: function(){
-        this._super();
-        this.gui.set_startup_screen('vendor_dashboard');
-        this.gui.set_default_screen('vendor_dashboard');
+     //   this._super();
+     //   this.gui.set_startup_screen('vendor_dashboard');
+       // this.gui.set_default_screen('vendor_dashboard');
        // this.gui.set_default_screen('hotel');
-        /*if (this.pos.config.iface_hotel) {
+        if (this.pos.config.iface_hotel) {
         	alert('test123')
             this.gui.set_startup_screen('hotel');
-        }*/
+        }
     },
 	
-});
+});*/
 
 //Hide the OrderSelectorWidget
 chrome.OrderSelectorWidget.include({
