@@ -3,6 +3,7 @@
 from odoo import api, fields, models, _
 from odoo import SUPERUSER_ID
 from odoo.exceptions import UserError
+from datetime import datetime, timedelta
 
 
 class FormTemplate(models.Model):
@@ -74,14 +75,14 @@ class ResPartner(models.Model):
     _inherit = 'hm.form.template'
 
     @api.multi
-    def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id):
+    def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id):
         vendors = self.env['res.partner'].sudo().search(
                                     [('supplier', '=', True),
                                      ('category_id', 'in', [int(category_id)])])
         if is_form:
-            sub_form_template = self.env['hm.sub.form.template'].sudo().search([('id', '=', int(sub_temp_id))])
+            sub_template = self.env['hm.sub.form.template'].sudo().search([('id', '=', int(sub_temp_id))])
             form_template = self.env['hm.form.template'].sudo().search(
-                            [('id', '=', sub_form_template.sub_form_template_id.id)])
+                            [('id', '=', sub_template.sub_form_template_id.id)])
             form_template_line = self.env['hm.form.template.line'].sudo().search(
                             [('form_template_id', '=', form_template.id)],
                             order='sequence asc')
@@ -103,8 +104,9 @@ class ResPartner(models.Model):
         fields = []
         field_type = []
         for line in form_template_line:
-            fields.append(line.form_field_id.name)
-            field_type.append(line.form_field_id.ttype)
+            if line.form_field_id:
+                fields.append(line.form_field_id.name)
+                field_type.append(line.form_field_id.ttype)
             datas = {'id': line.id,
                                    'form_label': line.form_label,
                                    'form_field_type': line.form_field_type,
@@ -117,6 +119,7 @@ class ResPartner(models.Model):
                                    'font_style': line.font_style,
                                    'font_family': line.font_family
                                    }
+            template_lines.append(datas)
             if count == 0:
                 key = line.sequence
                 temp_id.append(datas)
@@ -133,6 +136,8 @@ class ResPartner(models.Model):
             count = count+1
         result_datas = []
         sub_form_template = []
+        products = []
+        current_order = []
         if form_template.form_view == 'kanban':
             for vendor in vendors:
                 result_datas.append({'id': vendor.id,
@@ -160,10 +165,49 @@ class ResPartner(models.Model):
                     else:
                         order_data[field] = data[field]
                     count = count + 1
+                order_data['id'] = data['id']
                 result_datas.append(order_data)
+            sub_temp = self.env['hm.sub.form.template'].sudo().search([
+                                ('form_template_id', '=', form_template.id)],
+                                            order='sequence asc')
+            for temp in sub_temp:
+                sub_form_template.append({'id': temp.id,
+                                          'name': temp.name,
+                                          'color': temp.color
+                                          })
 
         if form_template.form_view == 'form':
             result_datas = []
+            prod_temp = self.env['product.template'].sudo().search([('categ_id.is_room', '=', True)])
+            for prod in prod_temp:
+                products.append({'id': prod.id,
+                                 'name': prod.name})
+            orders = self.env['sale.order'].sudo().search([('id', '=', int(order_id))])
+            if orders:
+                for order in orders:
+                    order_data = {}
+                    count = 0
+                    for field in fields:
+                        if field_type[count] == 'many2one':
+                            order_data[field] = order[field].name or ''
+                        else:
+                            order_data[field] = order[field] or ''
+                        count = count + 1
+                    order_data['id'] = order['id']
+                    order_data['state'] = order['state']
+                    current_order.append(order_data)
+            else:
+                order_data = {}
+                count = 0
+                for field in fields:
+                    if field_type[count] == 'many2one':
+                        order_data[field] = ''
+                    else:
+                        order_data[field] = ''
+                    count = count + 1
+                order_data['id'] = ''
+                order_data['state'] = ''
+                current_order.append(order_data)
 
         result.append({'line_group': line_group,
                        'line_group_key': sorted(line_group.keys()),
@@ -172,6 +216,74 @@ class ResPartner(models.Model):
                        'color': form_template.vendor_dashboard_id.color,
                        'result_datas': result_datas,
                        'sub_form_template': sub_form_template,
-                       'model': self.env['hm.car.type']
+                       'template_lines': template_lines,
+                       'products': products,
+                       'current_order': current_order,
+                       'form_temp_id': form_template.id,
+                       'model_name': form_template.form_model_id.model
                        })
         return result
+
+    @api.multi
+    def set_draft_order(self, order_id, model_name):
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+        if model_name == 'sale.order':
+            order.action_draft()
+        if model_name == 'purchase.order':
+            order.button_draft()
+        return True
+
+    @api.multi
+    def cancel_order(self, order_id, model_name):
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+        if model_name == 'sale.order':
+            order.action_cancel()
+        if model_name == 'purchase.order':
+            order.button_cancel()
+        return True
+
+    @api.multi
+    def create_order(self, order_datas, order_id, form_temp_id, model_name):
+        partner_id = 14
+        prod_temp = self.env['product.template'].sudo().search([
+                            ('id', '=', int(order_datas['product_id']))])
+        prod_prod = self.env['product.product'].sudo().search([
+                            ('product_tmpl_id', '=', prod_temp.id)])
+        datas = {}
+        current_date = fields.Datetime.from_string(fields.Datetime.now())
+        form_template_line = self.env['hm.form.template.line'].sudo().search(
+                            [('form_template_id', '=', int(form_temp_id))],
+                            order='sequence asc')
+        for line in form_template_line:
+            if line.form_field_id:
+                if line.form_field_id.ttype == 'date' or line.form_field_id.ttype == 'datetime':
+                    if line.form_field_id.name == 'date_order':
+                        datas[line.form_field_id.name] = current_date
+                    else:
+                        date = datetime.strptime(order_datas[line.form_field_id.name], '%Y-%m-%d').date()
+                        datas[line.form_field_id.name] = date
+                else:
+                    datas[line.form_field_id.name] = order_datas[line.form_field_id.name]
+        datas['partner_id'] = partner_id
+
+        if int(order_id) > 0:
+            order = self.env[model_name].search([('id', '=', int(order_id))])
+            if order.state == 'draft':
+                order.update(datas)
+        else:
+            order = self.env[model_name].create(datas)
+            if model_name == 'sale.order':
+                self.env['sale.order.line'].create({
+                                    'product_id': prod_prod.id,
+                                    'name': '',
+                                    'product_uom_qty': 1,
+                                    'price_unit': prod_prod.lst_price,
+                                    'tax_id': prod_prod.taxes_id.ids,
+                                    'order_id': order.id
+                                    })
+        if model_name == 'sale.order':
+            order.action_confirm()
+        if model_name == 'purchase.order':
+            order.button_confirm()
+
+        return order.id

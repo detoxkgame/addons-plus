@@ -577,6 +577,21 @@ class PosOrderLine(models.Model):
     user_id = fields.Many2one('res.users', string="Users")
 
 
+class SaleOrder(models.Model):
+
+    _inherit = 'sale.order'
+
+    guest_name = fields.Char(string="Guest Name")
+    driver_name = fields.Char(string="Driver Name")
+    car_no = fields.Char(string="Car Number")
+    pickup_date = fields.Date(string="Pick Up")
+    return_date = fields.Date(string="Return")
+    vendor_mobile = fields.Char(string="Vendor Mobile")
+    location = fields.Char(string="Location")
+    capacity = fields.Integer(string="Person")
+    car_type_id = fields.Many2one('hm.car.type', string="Car Type")
+
+
 class ProductCategory(models.Model):
 
     _inherit = 'product.category'

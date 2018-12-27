@@ -123,7 +123,7 @@
     font-size: 1em;
 }
 .order-form-detail input:focus {
-  border: 1px solid lightblue;
+  border: 1px solid lightblue !important;
 } 
 .order-form-detail input::placeholder {
   font-size: 1.5em;
@@ -142,6 +142,21 @@
     transition-delay: 0.2s;
     margin-right: 64.5%;
     font-size: 22px;
+}
+.drop-down-select{
+	display: inline-block;
+	width: 60%;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 10px 10px 10px 10px;
+    transition: all 0.1s ease-out;
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.2); 
+    font-size: 1em;
+}
+.drop-down-select:focus {
+  border: 1px solid lightblue !important;
 }
 .selection-type{
 	display: inline-block;
@@ -176,6 +191,10 @@
 	float: left !important;
 	margin-left: 20px !important;
 	font-size: 14px !important;
+}
+.btn-active{
+	background: rgb(20, 127, 208) !important;
+	color: white !important;
 }
 .header-state-btn{
     background: white !important;
@@ -270,20 +289,32 @@
 .state-breadcrumb li span:hover { background: gray; }
 .state-breadcrumb li span:hover:after { border-left-color: gray !important; }
 
+.state-breadcrumb .active{
+	background: gray !important;
+}
+.state-breadcrumb .active:after{
+	border-left: 30px solid gray !important;
+}
+
+.edit-datatable{
+	font-size: 20px;
+	cursor: pointer;
+}
+
 /** End */
  .section{
-	margin: 20px;
-	width: 97vw;
+	margin: 1%;
+	width: 98%;
 	text-align: center;
 	/* background-color: #666; */
-	overflow: auto;
+	/* overflow: auto; */
 	/* border-radius: 5px;
 	box-shadow: 0 3px 3px rgba(0,0,0,0.3); */
 	height: 95%;
 }
 .item{
-	width:4vw;
-	height:87.5vh;
+	width:4%;
+	height:100%;
 	float:left;
 	/* background-color:#19B5FE; */
 	border:1px solid #fff;
@@ -294,7 +325,7 @@
 	}
 	.info{
 		
-		height:87.5vh;
+		height:100%;
 		float:left;
 		/* background-color:#003171; */
 		width:0;
