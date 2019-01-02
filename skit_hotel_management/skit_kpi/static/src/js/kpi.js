@@ -45,8 +45,8 @@ models.load_models([
 var KPIReportScreenWidget = screens.ScreenWidget.extend({
 	template: 'KPIReportScreenWidget',
 	events: _.extend({}, PopupWidget.prototype.events, {
-        'change .date_from': 'change_date',
-        'change .date_to': 'change_date',
+        'change input.date_from': 'change_date',
+        'change input.date_to': 'change_date',
 
     }),
 	
@@ -71,24 +71,68 @@ var KPIReportScreenWidget = screens.ScreenWidget.extend({
     	var self = this;
     	var from_date;
     	var to_date;
-    	$('.date_from').each(function(){			   	 
-			   from_date = $(this).val();			
-		   });
-    	$('.date_to').each(function(){			   	 
-    		to_date = $(this).val();			
-		   });
-    	if(from_date && to_date){
+    	var fdate;
+    	var tdate;
+    	fdate = $(event.currentTarget).closest('div').find('input.date_from').val()
+    	tdate = $(event.currentTarget).closest('div').find('input.date_to').val()
+    	var $id = $(event.currentTarget).closest('div').find('input.date_from').attr('id').replace('from-', '');
+    	var categ_id = $("#kpi-"+$id).closest('div').find('div.kpi_reports').attr('id');//$("#kpi_table"+$id).find('tbody tr').attr('id');
+    	if(fdate && tdate){
     		self._rpc({
                 model: 'kpi.history',
-                method: 'get_history',
-                args: [0, from_date, to_date],
+                method: 'onchange_date',
+                args: [0, fdate, tdate, categ_id],
             })
             .then(function(val) {
-            	var table = $("#kpi_table").DataTable()
+            	var table = $("#kpi_table"+$id).DataTable();
             	table.destroy();
-            	self.render_order(val);    
+            	$("#kpi_table"+$id).empty();
+            	var $th = []
+            	var $td = []
+            	for(var i = 0; i < val['all_dates'].length; i++) { 
+            				$th.push('<th>'+val['all_dates'][i].date+'</th>')
+            			}
+            	for(var j = 0; j < val['history'].length; j++) {
+            		var $tds = [];
+            		$tds = '<tr>'+'<td>'+val['history'][j].name+'</td>'+'<td>'+val['history'][j].periodicity+'</td>'+'<td>Actual</td>';
+            		for(var k = 0; k < val['all_values'].length; k++) {
+	            		if(val['history'][j].kpi_id == val['all_values'][k].kpi_id){
+	                			$tds = $tds +'<td style="background-color:'+val['all_values'][k].color+'; color:#ffffff">'+val['all_values'][k].value+'</td>';
+	            		}
+	            		
+	            		}
+	            		$tds = $tds +'</tr>'+
+	            		'<tr>'+
+	            		'<td style="border-color: rgb(251, 250, 250); background: rgb(251, 250, 250);"></td>'+
+	            		'<td style="border-color: rgb(251, 250, 250); background: rgb(251, 250, 250);"></td>'+
+	            		'<td>Target</td>';
+	            		
+	            		for(var l = 0; l < val['all_values'].length; l++) {
+		            		if(val['history'][j].kpi_id == val['all_values'][l].kpi_id){
+		                			$tds = $tds +'<td>'+val['all_values'][l].target_value+'</td>';
+		            		}
+		            		
+		            		}
+	            		$tds = $tds + '</tr>';
+	            		$td.push($tds)
+    			}
+            	$("#kpi_table"+$id).append('<thead class="table-thead"><th>KPI Name</th>'+
+            			'<th>Frequency</th>'+
+            			'<th>Measure</th>'+
+            			$th+
+            			'</thead>'+
+            			'<tbody>'+
+            				$td+
+            			'</tbody>');
+            	var $tab = $("#kpi_table"+$id).DataTable({
+            		sScrollX: true,
+        	        sScrollXInner: "100%",
+        	        bScrollCollapse: true,
+        	        bSort: false,
+        	        bPaginate: true, 
+        	        pageLength: 10,
+            	});
             });
-    		//self.chrome.widget.order_selector.kpi_report_handler(event,$(this), from_date, to_date);
     	}
     },
     
@@ -104,30 +148,45 @@ var KPIReportScreenWidget = screens.ScreenWidget.extend({
         return this.gui.get_current_screen_param('dldata');
     },
     
+    render_table: function(result, id){
+    	var self = this;
+   	 	var histories = result;
+	   	var contents = $('.kpi_report'+id);
+	   	if(contents!=null)
+		{	
+	   		var order_html = QWeb.render('KPIReportDetailsScreenWidget',{widget: self,lines:result});
+			contents.innerHTML=order_html;
+		}
+   },
+    
     render_order: function(result){
     	var self = this;
    	 	var histories = result;
-	   	 $('#sandbox-container .input-daterange').datepicker({
-	   		//todayBtn: "linked"
-	   		todayHighlight: true
-	   	});
+   	 	
+	   	 $(document).on('focus', '#sandbox-container .input-daterange',function(){
+	         $(this).datepicker({
+	        	 todayHighlight: true,
+	         })
+	     });
 	   	var contents = this.$el[0].querySelector('.dl_otable');
 	   	if(contents!=null)
 		{	
 	   		var order_html = QWeb.render('KPIReportDetailsScreenWidget',{widget: self,lines:result});
 			contents.innerHTML=order_html;
 		}
-	   	//var rline_html = QWeb.render('KPIReportScreenWidget',{widget: self, lines:result});
-	   	var table = self.$el.find('table#kpi_table').DataTable({
-	        sScrollX: true,
-	        sScrollXInner: "100%",
-	        bScrollCollapse: true,
-	        bSort: false,
-	        //'rowsGroup': [0],
-	        //"bFilter": false,
-	        bPaginate: true, 
-	        pageLength: 10,
-		});
+	   	var $table = self.$el.find('table.kpi_table');
+	   	$table.each(function() {
+	   		var $id = $(this).attr('id');
+	   		var $kpi_table = $(this);
+	   		$('#'+$id).DataTable({
+		        sScrollX: true,
+		        sScrollXInner: "100%",
+		        bScrollCollapse: true,
+		        bSort: false,
+		        bPaginate: true, 
+		        pageLength: 10,
+			});
+	   	});
    },
 
 });
@@ -143,6 +202,7 @@ chrome.OrderSelectorWidget.include({
     	var order = self.pos.get_order();
     	var partner = order.get_client();
     	var history = self.pos.kpi_history;
+    	var categ;
     	self._rpc({
             model: 'kpi.history',
             method: 'get_history',
@@ -151,11 +211,6 @@ chrome.OrderSelectorWidget.include({
         .then(function(val) {
         	self.pos.gui.show_screen('kpireport',{dldata: val},'refresh');   
         });
-    	//var list_h = self.pos.kpi_history;
-    	//console.log('list:;'+JSON.stringify(list_h));
-    	//alert("kpi_history"+JSON.stringify(self.pos.kpi_history_by_id))
-    	//alert("kpi"+JSON.stringify(self.pos.kpi_by_id[1]))
-    		
     },
     renderElement: function(){
     	var self = this;
