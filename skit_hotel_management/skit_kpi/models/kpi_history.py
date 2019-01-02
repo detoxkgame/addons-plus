@@ -23,7 +23,7 @@ class KPIHistory(models.Model):
     value = fields.Float('Value', required=True, readonly=True)
     target_value = fields.Float('Target Value', required=True, readonly=True)
     periodicity = fields.Char("Periodicity")
-    color = fields.Text('Color', required=True,
+    color = fields.Char('Color', required=True,
                         readonly=True, default='#FFFFFF')
     company_id = fields.Many2one(
         'res.company', 'Company',
@@ -32,7 +32,7 @@ class KPIHistory(models.Model):
     def onchange_date(self, from_date, to_date, categ):
         "Fetch KPI History"
         # kpi_ids = self.env['kpi'].search([])
-        kpi_category = self.env['kpi.category'].search([])
+        # kpi_category = self.env['kpi.category'].search([])
         if(from_date and to_date):
             from_date = datetime.strptime(from_date, '%m/%d/%Y')
             to_date = datetime.strptime(to_date, '%m/%d/%Y')
@@ -56,8 +56,8 @@ class KPIHistory(models.Model):
                                 'periodicity': kpi.periodicity_uom,
                                 'category': kpi.category_id
                                 })
-        list_arra = []
-        list_key_value = {}
+        # list_arra = []
+        # list_key_value = {}
         # for category in kpi_category:
         all_values = []
         cr = self.env.cr
@@ -120,9 +120,10 @@ class KPIHistory(models.Model):
         kpi_history = []
         list_arra = []
         list_key_value = {}
-        categories = []
+        # categories = []
         for category in kpi_category:
-            kpi_datas = self.env['kpi'].search([('category_id', '=', category.id)])
+            kpi_datas = self.env['kpi'].search([
+                ('category_id', '=', category.id)])
             list_arra = []
             cr = self.env.cr
             for kpis in kpi_datas:
@@ -133,20 +134,20 @@ class KPIHistory(models.Model):
                     cr.execute('''select max(id) as id from kpi_history
                     where kpi_id = %s and
                     cast(date as date) = date %s''', (kpi_id,
-                                                          dates,
-                                                          ))
+                                                      dates,
+                                                      ))
                     vals = cr.dictfetchall()[0]
                     val = self.search([('id', '=', vals.get('id'))])
                     if not val:
                         categ_arry.append({'name': kpis.name,
-                                            'kpi_id': kpis.id,
-                                            'periodicity': kpis.periodicity_uom,
-                                            'category': kpis.category_id.id,
-                                            'value': 0,
-                                            'date': date.get('date'),
-                                            'target_value': 0,
-                                            'color': '#F3051B'
-                                            })
+                                           'kpi_id': kpis.id,
+                                           'periodicity': kpis.periodicity_uom,
+                                           'category': kpis.category_id.id,
+                                           'value': 0,
+                                           'date': date.get('date'),
+                                           'target_value': 0,
+                                           'color': '#F3051B'
+                                           })
                     else:
                         categ_arry.append({'name': kpis.name,
                                            'kpi_id': kpis.id,
