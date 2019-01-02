@@ -77,6 +77,27 @@ odoo.define('skit_pos_hotel_management.pos_model',function(require){
 		       	               self.db.add_vendor(vendors);
 		       	           },
 		       	       },
+			       	   {
+			       	       model:  'res.users',
+			       	       fields: ['name','company_id'],
+			       	       loaded: function(self,users){ 
+			       	    	   self.res_users = users; 
+			       	       },
+			       	   },
+			       	   {
+			       	       model:  'washing.type',
+			       	       fields: ['name','assigned_person','amount'],
+			       	       loaded: function(self,washingtypes){ 
+			       	    	   self.washing_types = washingtypes; 
+			       	       },
+			       	   },
+			       	   {
+			       	       model:  'washing.work',
+			       	       fields: ['name','assigned_person','amount'],
+			       	       loaded: function(self,washingworks){ 
+			       	    	   self.washing_works = washingworks; 
+			       	       },
+			       	   },
 	       	          
 	           ]);
 	

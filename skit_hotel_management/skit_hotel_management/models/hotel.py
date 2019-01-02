@@ -347,10 +347,12 @@ class FormTemplate(models.Model):
                     ('list', _('List')),
                     ('kanban', _('Kanban'))], string="Form View",
                                   default='')
-    sub_form_template_ids = fields.One2many('hm.sub.form.template',
-                                            'form_template_id',
-                                            string='Sub Form Template',
-                                            copy=True)
+    #===========================================================================
+    # sub_form_template_ids = fields.One2many('hm.sub.form.template',
+    #                                         'form_template_id',
+    #                                         string='Sub Form Template',
+    #                                         copy=True)
+    #===========================================================================
 
     @api.onchange('vendor_dashboard_id')
     def _onchange_vendor_dashboard_id(self):
@@ -363,6 +365,16 @@ class FormTemplate(models.Model):
 
 class SubFormTemplate(models.Model):
     _name = 'hm.sub.form.template'
+
+    name = fields.Char(string="Name")
+    form_template_line_ids = fields.One2many('hm.sub.form.template.line',
+                                             'sub_form_template_id',
+                                             string='Form Template Line',
+                                             copy=True)
+
+
+class SubFormTemplateLine(models.Model):
+    _name = 'hm.sub.form.template.line'
 
     name = fields.Char(string="Name")
     sequence = fields.Integer(string='Sequence')
@@ -381,21 +393,21 @@ class SubFormTemplate(models.Model):
                                 help="Small-sized image of this contact. It is automatically \
              resized as a 64x64px image, with aspect ratio preserved. \
              Use this field anywhere a small image is required.")
-    form_template_id = fields.Many2one('hm.form.template',
+    sub_form_template_id = fields.Many2one('hm.sub.form.template',
                                        string='Form Template', copy=False)
-    sub_form_template_id = fields.Many2one('hm.form.template',
+    form_template_id = fields.Many2one('hm.form.template',
                                            domain=[('form_view', '=', 'form')],
                                            string='Sub Form Template',
                                            copy=False)
     sub_dashboard_line_id = fields.Many2one('hm.vendor.dashboard.line',
                                             string="Dashboard Line",
-                                            copy=False, readonly=True)
+                                            copy=False)
 
-    @api.onchange('sub_form_template_id')
-    def _onchange_sub_form_template_id(self):
+    @api.onchange('form_template_id')
+    def _onchange_form_template_id(self):
         form_template = self.env['hm.form.template']
         form_template_val = form_template.search([
-                         ('id', '=', self.sub_form_template_id.id)])
+                         ('id', '=', self.form_template_id.id)])
         if form_template_val:
             self.sub_dashboard_line_id = form_template_val.vendor_dashboard_line_id.id
 
@@ -403,14 +415,14 @@ class SubFormTemplate(models.Model):
     def create(self, vals):
         """ render image size """
         tools.image_resize_images(vals)
-        res = super(SubFormTemplate, self).create(vals)
+        res = super(SubFormTemplateLine, self).create(vals)
         return res
 
     @api.multi
     def write(self, vals):
         """ render image size """
         tools.image_resize_images(vals)
-        res = super(SubFormTemplate, self).write(vals)
+        res = super(SubFormTemplateLine, self).write(vals)
         return res
 
 
@@ -430,6 +442,8 @@ class FormTemplateLine(models.Model):
         ('selection', _('Selection')),
         ('label', _('Label')),
         ('image', _('Image')),
+        ('many2many', _('Many2Many')),
+        ('sub_form', _('Sub Form Template')),
         ('input_intchar', _('Input(Int&char)'))], string='Field Type',
                                        required=True)
 
@@ -449,6 +463,8 @@ class FormTemplateLine(models.Model):
     name = fields.Char(string="Name")
     form_template_selection_fields = fields.Many2many('hm.form.selection.item',
                                                       string='Selection items')
+    sub_template_id = fields.Many2one('hm.sub.form.template',
+                                      string='Sub Template', copy=False)
 
 
 class FormTemplateSelectionItem(models.Model):

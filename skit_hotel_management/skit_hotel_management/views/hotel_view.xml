@@ -1255,6 +1255,7 @@
 		                                <field name="sequence" /> 
 		                                <field name="form_field_id"  context="{'view_model_fields': True}" domain="[('model_id', '=', context.get('default_model_id'))]" options="{'no_create_edit': True}"/> 
 		                                <field name="form_field_type"/> 
+		                                <field name="sub_template_id"  attrs="{'invisible': [('form_field_type','!=','sub_form')]}"></field>
 		                                <field name="form_placeholder" />
 		                                <field name="font_size" />
 		                                <field name="font_style" />
@@ -1266,7 +1267,7 @@
 		                            </tree>
 		                        </field>
 	                        </page>
-	                        <page string="Sub Form Template" name="sub_form_template">
+	                        <!-- <page string="Sub Form Template" name="sub_form_template">
 	                        	<field name="sub_form_template_ids">
 		                            <tree string='Sub Template'>
 		                                <field name="name" />   
@@ -1291,7 +1292,7 @@
 		                            	</sheet>
 		                            </form>
 		                        </field>
-	                        </page>
+	                        </page> -->
 	                	</notebook>
 	            	</sheet>
 	                
@@ -1323,6 +1324,88 @@
 	    <!-- Menu for Form Template -->
 	    <menuitem id="menu_form_template_form_tree" name="Form Template"
 	        action="open_form_template" sequence="6"
+	        parent="skit_hotel_management.hotel_configuration_menu" />
+	        
+	    <!-- Search option of sub form template -->
+        <record id="view_sub_form_template_filter" model="ir.ui.view">
+            <field name="name">hm.sub.form.template.filter</field>
+            <field name="model">hm.sub.form.template</field>
+            <field name="priority" eval="15"/>
+            <field name="arch" type="xml">
+                <search string="Sub Form Template">
+                	<field name="name" />
+                </search>
+            </field>
+        </record>
+	        
+	    <!-- Form view of sub form template -->
+	    <record id="view_sub_form_template_form" model="ir.ui.view">
+	        <field name="name">hm.sub.form.template.form</field>
+	        <field name="model">hm.sub.form.template</field>
+	        <field name="arch" type="xml">
+	            <form string="Sub Form Template">
+	            	<sheet>
+	            		<group>
+	            			<group>
+						    	<field name="name" />
+						    </group>
+	            		</group>
+	            		<notebook>
+		            		<page string="Sub Form Template" name="sub_form_template">
+	                        	<field name="form_template_line_ids">
+		                            <tree string='Sub Template'>
+		                                <field name="name" />   
+		                                <field name="sequence" />   
+		                                <field name="sub_form_template_id" /> 
+		                                <field name="form_template_id" invisible="1"/>       
+		                            </tree>
+		                            <form>
+		                            	<sheet>
+		                            		<field name="image" widget="image" class="oe_avatar"/>
+						                	<group>
+						                		<group>
+						                			<field name="name" />
+						                			<field name="form_template_id" />
+						                		</group>
+						                		<group>
+						                			<field name="sequence" />
+						                			<field name="sub_dashboard_line_id" />
+						                			<field name="color" widget="color" />
+						                		</group>
+						                	</group>
+		                            	</sheet>
+		                            </form>
+		                        </field>
+	                        </page>
+						</notebook>
+		            </sheet>
+	            </form>
+	        </field>
+	    </record>
+	        
+	    <!-- Tree view of sub form template -->
+	    <record id="view_sub_form_template_tree" model="ir.ui.view">
+	        <field name="name">hm.sub.form.template.tree</field>
+	        <field name="model">hm.sub.form.template</field>
+	        <field name="arch" type="xml">
+	            <tree string="Sub Form Template">
+	                <field name="name" />
+	            </tree>
+	        </field>
+	    </record>
+	        
+	    <!-- Action for Sub form template -->
+	    <record id="open_sub_form_template" model="ir.actions.act_window">
+	        <field name="name">Sub Template</field>
+	        <field name="res_model">hm.sub.form.template</field>
+	        <field name="view_type">form</field>
+	        <field name="context">{}</field>
+	        <field name="view_mode">tree,form</field>
+	    </record>
+	        
+	    <!-- Menu for Sub Form Template -->
+	    <menuitem id="menu_sub_form_template_form_tree" name="Sub Form Template"
+	        action="open_sub_form_template" sequence="6"
 	        parent="skit_hotel_management.hotel_configuration_menu" />
 	        
 	   	<!-- Search option of car type -->

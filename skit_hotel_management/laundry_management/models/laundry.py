@@ -50,8 +50,9 @@ class LaundryManagement(models.Model):
     def confirm_order(self):
         self.state = 'order'
         sale_obj = self.env['sale.order'].create({'partner_id': self.partner_id.id,
-                                                  'partner_invoice_id': self.partner_invoice_id.id,
-                                                  'partner_shipping_id': self.partner_shipping_id.id})
+                                                  #'partner_invoice_id': self.partner_invoice_id.id,
+                                                  #'partner_shipping_id': self.partner_shipping_id.id
+                                                  })
         self.sale_obj = sale_obj
         product_id = self.env.ref('laundry_management.laundry_service')
         self.env['sale.order.line'].create({'product_id': product_id.id,
@@ -178,10 +179,10 @@ class LaundryManagement(models.Model):
     partner_id = fields.Many2one('res.partner', string='Customer', readonly=True,
                                  states={'draft': [('readonly', False)], 'order': [('readonly', False)]}, required=True,
                                  change_default=True, index=True, track_visibility='always')
-    partner_invoice_id = fields.Many2one('res.partner', string='Invoice Address', readonly=True, required=True,
+    partner_invoice_id = fields.Many2one('res.partner', string='Invoice Address', readonly=True, 
                                          states={'draft': [('readonly', False)], 'order': [('readonly', False)]},
                                          help="Invoice address for current sales order.")
-    partner_shipping_id = fields.Many2one('res.partner', string='Delivery Address', readonly=True, required=True,
+    partner_shipping_id = fields.Many2one('res.partner', string='Delivery Address', readonly=True, 
                                           states={'draft': [('readonly', False)], 'order': [('readonly', False)]},
                                           help="Delivery address for current sales order.")
     order_date = fields.Datetime(string="Date", default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -198,6 +199,8 @@ class LaundryManagement(models.Model):
         ('return', 'Returned'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
+    folio_id = fields.Many2one('pos.order', string="Folio")
+    guest_name = fields.Char(string="Guest Name")
 
 
 class LaundryManagementLine(models.Model):

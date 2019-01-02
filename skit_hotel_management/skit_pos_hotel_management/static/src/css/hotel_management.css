@@ -126,9 +126,9 @@
   border: 1px solid lightblue !important;
 } 
 .order-form-detail input::placeholder {
-  font-size: 1.5em;
+  /* font-size: 1.5em; */
   text-align: center;
-  text-shadow: 1px 1px #888;
+  /* text-shadow: 1px 1px #888; */
 } 
 .order-form-detail .icon{
 	position: absolute;
@@ -143,6 +143,70 @@
     margin-right: 64.5%;
     font-size: 22px;
 }
+
+/** Order Line CSS */
+.orderline-form-detail{
+	width:100%;
+	border-collapse: collapse;
+	padding: 10px;
+}
+.orderline-form-detail input[type="text"]{
+	display: inline-block;
+	width: 60%;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 10px 10px 10px 10px;
+    transition: all 0.1s ease-out;
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.2); 
+    /* box-shadow: 0 1px 2px 1px rgba(0,0,0,0.2); */
+    font-size: 1em;
+}
+.orderline-form-detail input[type="number"]{
+	display: inline-block;
+	width: 60%;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 10px 10px 10px 10px;
+    transition: all 0.1s ease-out;
+    box-shadow: 1px 2px 2px rgba(0,0,0,0.2); 
+    /* box-shadow: 0 1px 2px 1px rgba(0,0,0,0.2); */
+    font-size: 1em;
+}
+.orderline-form-detail input:focus {
+  border: 1px solid lightblue !important;
+} 
+.line-tab{
+	display: flex;
+	width: 100%;
+	margin-top: 10px;
+}
+.line-tab-span{
+	margin-left: 10px;
+	padding: 10px;
+	display: inline-block;
+	float: left;
+	border-top: 1px solid gray;
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
+}
+.line-table-div{
+	border: 1px solid gray;
+	padding: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+.add-line{
+	cursor: pointer;
+}
+.delete-line{
+	cursor: pointer;
+}
+
 .drop-down-select{
 	display: inline-block;
 	width: 60%;

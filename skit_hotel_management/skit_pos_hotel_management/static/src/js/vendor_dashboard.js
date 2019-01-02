@@ -95,6 +95,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         	var sub_id = 0;
         	var order_id = 0;
         	var form_fields_records;
+        	var line_form_fields;
         	//alert('Element');
         	$('div').filter('.highlight').each(function(i) {
         		$(this).removeClass('highlight');
@@ -120,13 +121,22 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var current_order = result[0]['current_order']
     			var form_temp_id = result[0]['form_temp_id']
     			var model_name = result[0]['model_name']
+    			var vendor_id = result[0]['vendor_id']
+    			var sub_line_group = result[0]['sub_line_group']
+    			var sub_line_group_key = result[0]['sub_line_group_key']
+    			var temp_order_lines = result[0]['temp_order_lines']
+    			var line_form_temp_id = result[0]['line_form_temp_id']
+    			var line_model_name = result[0]['line_model_name']
     			
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
                 var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
                 						form_name: form_name, color:color, sub_form_template: sub_form_template, current_order: current_order,
-                						form_temp_id: form_temp_id, model_name: model_name,
-                						line_group: line_group, line_group_key: line_group_key});
+                						form_temp_id: form_temp_id, model_name: model_name, vendor_id: vendor_id,
+                						line_form_temp_id: line_form_temp_id, line_model_name: model_name,
+                						line_group: line_group, line_group_key: line_group_key,
+                						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+                						temp_order_lines: temp_order_lines});
                 var vendorlist = document.createElement('div');
                 vendorlist.innerHTML = vendor_html;
                 vendorlist = vendorlist.childNodes[1];
@@ -157,7 +167,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'get_vendor_list',
-            			args: [0,vendor_categ_id, dashboard_id, 2, true, sub_temp_id, current_order_id],
+            			args: [0,vendor_categ_id, dashboard_id, line_id, true, sub_temp_id, current_order_id],
             		}).then(function(result){ 
             			var result_datas = result[0]['result_datas']
             			var line_group = result[0]['line_group']
@@ -171,6 +181,12 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var current_order = result[0]['current_order']     
             			var form_temp_id = result[0]['form_temp_id']
             			var model_name = result[0]['model_name']
+            			var vendor_id = result[0]['vendor_id']
+            			var sub_line_group = result[0]['sub_line_group']
+            			var sub_line_group_key = result[0]['sub_line_group_key']
+            			var temp_order_lines = result[0]['temp_order_lines']
+            			var line_form_temp_id = result[0]['line_form_temp_id']
+            			var line_model_name = result[0]['line_model_name']
 
             			
             			form_fields_records = template_lines;
@@ -178,9 +194,12 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-    						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products,
+    						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
     						template_lines: template_lines, current_order: current_order, form_temp_id: form_temp_id, model_name: model_name,
-    						line_group: line_group, line_group_key: line_group_key});
+    						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
+    						line_group: line_group, line_group_key: line_group_key,
+    						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+    						temp_order_lines: temp_order_lines});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -207,13 +226,22 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var current_order = result[0]['current_order']
             			var form_temp_id = result[0]['form_temp_id']
             			var model_name = result[0]['model_name']
+            			var vendor_id = result[0]['vendor_id']
+            			var sub_line_group = result[0]['sub_line_group']
+            			var sub_line_group_key = result[0]['sub_line_group_key']
+            			var temp_order_lines = result[0]['temp_order_lines']
+            			var line_form_temp_id = result[0]['line_form_temp_id']
+            			var line_model_name = result[0]['line_model_name']
             			//alert('dashboard_id'+dashboard_id);
             			var contents = el_node.find('.vendor-contents');
                         contents.innerHTML = "";
                         var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-                        						form_name: form_name, color:color, sub_form_template: sub_form_template, 
+                        						form_name: form_name, color:color, sub_form_template: sub_form_template, vendor_id: vendor_id,
                         						current_order: current_order, form_temp_id: form_temp_id, model_name: model_name,
-                        						line_group: line_group, line_group_key: line_group_key});
+                        						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
+                        						line_group: line_group, line_group_key: line_group_key,
+                        						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+                        						temp_order_lines: temp_order_lines});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -232,10 +260,11 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 contents.off('click','.vendor-form-icon');
                 contents.on('click','.vendor-form-icon',function(){ 
                 	var sub_temp_id = $(this).attr('id');
+                	var vendor_id = $(this).attr('vendor');
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'get_vendor_list',
-            			args: [0,vendor_categ_id, dashboard_id, 2, true, sub_temp_id, order_id],
+            			args: [0,vendor_categ_id, dashboard_id, 2, true, sub_temp_id, order_id, vendor_id],
             		}).then(function(result){ 
             			var result_datas = result[0]['result_datas']
             			var line_group = result[0]['line_group']
@@ -249,23 +278,52 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var current_order = result[0]['current_order']
             			var form_temp_id = result[0]['form_temp_id']
             			var model_name = result[0]['model_name']
+            			var vendor_id = result[0]['vendor_id']
+            			var sub_line_group = result[0]['sub_line_group']
+            			var sub_line_group_key = result[0]['sub_line_group_key']
+            			var temp_order_lines = result[0]['temp_order_lines']
+            			var line_form_temp_id = result[0]['line_form_temp_id']
+            			var line_model_name = result[0]['line_model_name']
             			
             			form_fields_records = template_lines;
+            			line_form_fields = temp_order_lines;
             			
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-    						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products,
+    						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
     						template_lines: template_lines, current_order: current_order, form_temp_id: form_temp_id, model_name: model_name,
-    						line_group: line_group, line_group_key: line_group_key});
+    						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
+    						line_group: line_group, line_group_key: line_group_key, 
+    						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+    						temp_order_lines: temp_order_lines});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
                         fcontents.empty();
                         fcontents.append(vendorlist);
+                        fcontents.find("#extra_work").chosen({
+        					width : "69%",
+        					enable_search_threshold : 10
+        				}).change(function(e) {
+        					// $('#extra_work_chosen').css({'border': '0px solid red'});
+        					 var value = $(this).val();
+        					 $(this).find("#extra_work").val(value);
+        					 	
+        				});
             		});
     	        	
     	    	});
+                
+                /*contents.find("#extra_work").chosen({
+					width : "69%",
+					enable_search_threshold : 10
+				}).change(function(e) {
+					// $('#extra_work_chosen').css({'border': '0px solid red'});
+					 var value = $(this).val();
+					 $("#extra_work").val(value);
+					 	
+				});*/
                 
                 /** Form */
                 /*contents.on('click','.span-tag',function(){
@@ -284,6 +342,11 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 /** Remove Required */
                 contents.off('focus','input');
                 contents.on('focus','input',function(){
+                	$(this).css({'border': '1px solid white'});
+                	
+                });
+                contents.off('focus','select');
+                contents.on('focus','select',function(){
                 	$(this).css({'border': '1px solid white'});
                 	
                 });
@@ -341,14 +404,20 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 contents.off('click','#order-confirm');
                 contents.on('click','#order-confirm',function(){
                 	var order_datas = {}
+                	var line_order_datas = []
+                	var line_data = {}
                 	var error = false;
                 	var order_id = contents.find('#order_id').text();
                 	var form_temp_id = contents.find('#form_temp_id').text();
                 	var model_name = contents.find('#model_name').text();
+                	var vendor_id = contents.find('#vendor_id').text();
+                	var line_form_temp_id = contents.find('#line_form_temp_id').text();
+                	var line_model_name = contents.find('#line_model_name').text();
+                	
+                	/** Order Details */
                 	
                 	$('table.order-form-detail').each(function() {
 	                	for(var i=0; i<form_fields_records.length; i++){
-	                		console.log('field'+ form_fields_records[i].form_fields)
 	                		var field = form_fields_records[i].form_fields;
 	                		var mandatory =form_fields_records[i].isMandatory;
 	                		if(form_fields_records[i].form_field_type == 'label'){
@@ -384,19 +453,84 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			order_datas[field] = value;
 	                			if(!value && mandatory){
 	                				error = true;
-	                				$(this).find('input#'+form_fields_records[i].form_fields).css({'border': '1px solid red'});
+	                				$(this).find('select#'+form_fields_records[i].form_fields).css({'border': '1px solid red'});
 	                			}
 	                			//console.log('value'+value);
 	                			//console.log('value1:'+value1);
 	                		}
 	                	}
                 	});
-                	//console.log('Order Datas'+ JSON.stringify(order_datas));
+                	
+                	/** OrderLine Details */
+                	var tr_count = 0;
+                	$('table.orderline-form-detail tr').each(function() {
+                		line_data = {}
+                		if(tr_count > 0) {
+	                		for(var i=0; i<line_form_fields.length; i++){
+		                		console.log('field'+ line_form_fields[i].form_fields)
+		                		var field = line_form_fields[i].form_fields;
+		                		var mandatory =line_form_fields[i].isMandatory;
+		                		
+		                		if(line_form_fields[i].form_field_type == 'label'){
+		                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
+		                			line_data[field] = value;
+		                			if(!value && mandatory){
+		                				error = true;
+		                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+		                			}
+		                		}
+		                		
+		                		if(line_form_fields[i].form_field_type == 'input_char'){
+		                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
+		                			line_data[field] = value;
+		                			if(!value && mandatory){
+		                				error = true;
+		                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+		                			}
+		                		}
+		                		if(line_form_fields[i].form_field_type == 'input_int'){
+		                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
+		                			line_data[field] = value;
+		                			if(!value && mandatory){
+		                				error = true;
+		                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+		                			}
+		                		}
+		                		if(line_form_fields[i].form_field_type == 'selection'){
+		                			var value1 =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').val();
+		                			var value =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').attr("id");
+		                			line_data[field] = value;
+		                			if(!value && mandatory){
+		                				error = true;
+		                				$(this).find('select#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+		                			}
+		                		}
+		                		if(line_form_fields[i].form_field_type == 'many2many'){
+		                			var extra_work = []
+		                			var j=0;
+		                			$(this).find('#'+line_form_fields[i].form_fields+' option:selected').each(function(){
+		                				var value = parseInt($(this).val(), 10);
+		                				extra_work[j] = value;
+		                				j = j +1;
+		                			});	
+		                			if(extra_work.length > 0){
+		                				extra_work = [[6, false, extra_work]] ;
+		            				}
+		                			line_data[field] = extra_work;
+		                		}
+	                		}
+	                		line_order_datas.push(line_data)
+                		}
+                		tr_count = tr_count + 1;
+                	});
+                	console.log('Order Datas'+ JSON.stringify(line_order_datas));
+                	console.log('error'+ error);
                 	if(!error){
+                		console.log('inner')
 	                	self._rpc({
 	            			model: 'hm.form.template',
 	            			method: 'create_order',
-	            			args: [0,order_datas, order_id, form_temp_id, model_name],
+	            			args: [0,order_datas, order_id, form_temp_id, model_name, vendor_id, line_order_datas, line_form_temp_id, line_model_name],
 	            		}).then(function(result){
 	            			//console.log('result'+result)
 	            			contents.find('#order_id').text(result);
@@ -410,6 +544,134 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	            			//console.log('span:'+contents.find('#order_id').text())
 	            		});
                 	}
+                });
+                
+                /** Add Line Action */
+                contents.off('click','.add-line');
+                contents.on('click','.add-line',function(e){
+                	var line_order_datas = {};
+                	var error = false;
+                	$(this).closest('tr').each(function() {
+                		for(var i=0; i<line_form_fields.length; i++){
+	                		console.log('field'+ line_form_fields[i].form_fields)
+	                		var field = line_form_fields[i].form_fields;
+	                		var mandatory =line_form_fields[i].isMandatory;
+	                		
+	                		if(line_form_fields[i].form_field_type == 'input_char'){
+	                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
+	                			line_order_datas[field] = value;
+	                			if(!value && mandatory){
+	                				error = true;
+	                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+	                			}
+	                		}
+	                		if(line_form_fields[i].form_field_type == 'input_int'){
+	                			console.log('int')
+	                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
+	                			line_order_datas[field] = value;
+	                			if(!value && mandatory){
+	                				error = true;
+	                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+	                			}
+	                		}
+	                		if(line_form_fields[i].form_field_type == 'selection'){
+	                			var value1 =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').val();
+	                			var value =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').attr("id");
+	                			line_order_datas[field] = value;
+	                			if(!value && mandatory){
+	                				error = true;
+	                				$(this).find('select#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
+	                			}
+	                		}
+	                		if(line_form_fields[i].form_field_type == 'many2many'){
+	                			var extra_work = []
+	                			var j=0;
+	                			$(this).find('#'+line_form_fields[i].form_fields+' option:selected').each(function(){
+	                				var value = parseInt($(this).val(), 10);
+	                				extra_work[j] = value;
+	                				j = j +1;
+	                			});	
+	                			line_order_datas[field] = extra_work;
+	                			//console.log('extra_work'+extra_work)
+	                		}
+                		}
+                	});
+                	if(!error){
+	                	var new_row = $(".orderline-form-detail").find('tr').eq(1).clone(true);
+	                	new_row.find('span.delete-line').css({'display':'block'});
+	                	new_row.find("input[type='text']").each(function() {
+	                		$(this).val('')
+	    	    		});
+	    	    		new_row.find("input[type='number']").each(function() {
+	    	    			$(this).val('')
+	    	    		});
+	    	    		new_row.find('.chosen-choices li.search-choice').each(function() {
+	    	    			$(this).remove();
+	    	    		});
+	                	$('.orderline-form-detail tbody').append(new_row);
+                	}
+                });
+                
+                /** Delete Action */
+                contents.off('click','.delete-line');
+                contents.on('click','.delete-line',function(e){
+                	$(this).closest('tr').remove();
+                });
+                
+                /** Set the amount for Laundry */
+                //contents.off('click','.washing_type');
+                contents.on('change','#washing_type',function(e){
+                	var extra_amt = 0;
+                	var work_amt = $(this).closest('td').find("option:selected").attr('amt');
+                	if(work_amt == undefined || work_amt == ''){
+                		work_amt = 0;
+                	}
+                	var qty = $(this).closest('tr').find('input#qty').val();
+                	if(qty == '' || qty == undefined){
+                		qty = 0;
+                	}
+                	$(this).closest('tr').find('#extra_work option:selected').each(function(){
+                		extra_amt = extra_amt + parseFloat($(this).attr('amt'));
+                	});
+                	var tamt = parseFloat(extra_amt) + parseFloat(work_amt);
+                	var total_amount = parseInt(qty) * tamt;
+                	$(this).closest('tr').find('#amount').val(total_amount);
+                });
+               
+                contents.on('change','#extra_work',function(e){
+                	var extra_amt = 0;
+                	var work_amt = $(this).closest('tr').find("#washing_type option:selected").attr('amt');
+                	if(work_amt == undefined || work_amt == ''){
+                		work_amt = 0;
+                	}
+                	var qty = $(this).closest('tr').find('input#qty').val();
+                	if(qty == '' || qty == undefined){
+                		qty = 0;
+                	}
+                	$(this).closest('td').find('#extra_work option:selected').each(function(){
+                		extra_amt = extra_amt + parseFloat($(this).attr('amt'));
+                	});
+                	var tamt = parseFloat(extra_amt) + parseFloat(work_amt);
+                	var total_amount = parseInt(qty) * tamt;
+                	$(this).closest('tr').find('#amount').val(total_amount);
+                });
+                
+                contents.on('blur change keydown keyup paste input','#qty',function(e){
+                	var extra_amt = 0;
+                	var work_amt = $(this).closest('tr').find("#washing_type option:selected").attr('amt');
+                	if(work_amt == undefined || work_amt == ''){
+                		work_amt = 0;
+                	}
+                	var qty = $(this).closest('td').find('input#qty').val();
+                	if(qty == '' || qty == undefined){
+                		qty = 0;
+                	}
+                	$(this).closest('tr').find('#extra_work option:selected').each(function(){
+                		extra_amt = extra_amt + parseFloat($(this).attr('amt'));
+                	});
+                	var tamt = parseFloat(extra_amt) + parseFloat(work_amt);
+                	var total_amount = parseInt(qty) * tamt;
+                	$(this).closest('tr').find('#amount').val(total_amount);
                 });
     		});
         	       	
@@ -436,8 +698,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     	return '/web/image?model=res.partner&id='+id+'&field=image';
     },
     
-    sub_template_icon_url: function(id){
-    	return '/web/image?model=hm.sub.form.template&id='+id+'&field=image';
+    sub_template_line_icon_url: function(id){
+    	return '/web/image?model=hm.sub.form.template.line&id='+id+'&field=image';
     },
     car_icon_url: function(id){
     	return '/web/image?model=hm.car.type&id='+id+'&field=image';

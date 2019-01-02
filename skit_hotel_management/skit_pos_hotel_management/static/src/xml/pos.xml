@@ -57,10 +57,16 @@
 								<!-- <li class="order_icon" style="background-color: #00BFFF;"><img  src="/skit_pos_hotel_management/static/src/img/order_icon.png" width="24" height="21" /></li>
 								<li class="delivery_icon" style="background-color: #483D8B;"><img  src="/skit_pos_hotel_management/static/src/img/delivery_icon.png" width="24" height="21" /></li>
 								<li class="payment_icon" style="background-color: #819FF7;"><img  src="/skit_pos_hotel_management/static/src/img/payment_icon.png" width="24" height="21" /></li> -->
-								<t t-foreach="sub_form_template" t-as="temp" >
-									<li t-attf-id="#{temp.id}" class="vendor-form-icon" t-attf-style="background-color: #{temp.color}">
-										<img  t-att-src='widget.sub_template_icon_url(temp.id)' width="24" height="21" />
-									</li>
+								<t t-foreach="line_group_key" t-as="line_key" >
+									<t t-foreach="line_group[line_key]" t-as="same_row">
+										<t t-if="(same_row.form_field_type)=='sub_form'">
+											<t t-foreach="sub_form_template[same_row.sub_template_id]" t-as="temp" >
+												<li t-attf-id="#{temp.id}" t-attf-vendor="#{vendor.id}" class="vendor-form-icon" t-attf-style="background-color: #{temp.color}">
+													<img  t-att-src='widget.sub_template_line_icon_url(temp.id)' width="24" height="21" />
+												</li>
+											</t>
+										</t>
+									</t>
 								</t>
 							</ul>
 						</div>
@@ -76,11 +82,18 @@
 	    				<t t-foreach="line_group_key" t-as="line_key" >
 	    					<t t-if="head_count == 1" >
 			    				<tr style="background-color: #875A7B;color: white;">
-			    					<t t-foreach="sub_form_template" t-as="temp" >
+			    					<!-- <t t-foreach="sub_form_template[line_group[line_key].]" t-as="temp" >
 			    						<th><t t-esc="temp.name" /></th>
-			    					</t>
+			    					</t> -->
 						    		<t t-foreach="line_group[line_key]" t-as="label">
-						    			<th><t t-esc="label.form_label" /></th>
+						    			<t t-if="(label.form_field_type)=='sub_form'">
+						    				<t t-foreach="sub_form_template[label.sub_template_id]" t-as="temp" >
+						    					<th><t t-esc="temp.name" /></th>
+						    				</t>
+						    			</t>
+						    			<t t-else="" >
+						    				<th><t t-esc="label.form_label" /></th>
+						    			</t>
 						    		</t>
 					    		</tr>
 					    	<t t-set="head_count" t-value="head_count + 1" />
@@ -100,16 +113,20 @@
 			    					</tr>
 		    					</t> -->
 		    					<tr>
-		    						<t t-foreach="sub_form_template" t-as="temp" >
+		    						<t t-if="(first_col.form_field_type)=='sub_form'">
+			    						<t t-foreach="sub_form_template[first_col.sub_template_id]" t-as="temp" >
+				    						<td>
+				    							<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" class="edit-datatable" ><img t-att-src='widget.sub_template_line_icon_url(temp.id)' width="20" height="17" /></span>
+				    						</td>
+			    						</t>
+			    					</t>
+			    					<t t-else="" >
 			    						<td>
-			    							<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" class="edit-datatable" ><img t-att-src='widget.sub_template_icon_url(temp.id)' width="20" height="17" /></span>
+			    							<t t-if="(first_col.form_field_type)=='label'">
+			    								<span><t t-esc="order[first_col.form_fields]" /></span>
+			    							</t>
 			    						</td>
 		    						</t>
-		    						<td>
-		    							<t t-if="(first_col.form_field_type)=='label'">
-		    								<span><t t-esc="order[first_col.form_fields]" /></span>
-		    							</t>
-		    						</td>
 		    						<t t-foreach="line_group[line_key]" t-as="same_row">
 		    							<t t-if="same_row.sameline">
 		    								<td>
@@ -165,6 +182,7 @@
 			    					</t>
 			    					<span id="form_temp_id" style="display:none;"><t t-esc="form_temp_id" /></span>
 			    					<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
+			    					<span id="vendor_id" style="display:none;"><t t-esc="vendor_id" /></span>
 		    					</div>
 		    					<div style="float: right;">
 		    						<ul class="state-breadcrumb">
@@ -207,7 +225,7 @@
 			    								<span t-attf-style="font-size:#{first_col.font_size}px;float: left;margin-left: 20px;"><t t-esc="first_col.form_label" /></span>
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='label'">
-			    								<t t-if="(first_col.form_fields)=='date_order'">
+			    								<t t-if="(first_col.form_fields)=='date_order' or (first_col.form_fields)=='order_date'">
 			    									<span t-attf-id="#{first_col.form_fields}" t-attf-style="font-size:#{first_col.font_size}px;">
 			    									<!-- <t t-esc="moment().format('L LT')"/> -->
 			    									<t t-esc="c_order[first_col.form_fields] ? c_order[first_col.form_fields] : moment().format('L LT')" />
@@ -236,7 +254,7 @@
 			    												<td>
 			    													<input type="text"  style="float:left;" t-attf-id="#{first_col.form_fields}"
 			    													t-attf-placeholder="#{first_col.form_placeholder}" t-attf-value="#{c_order[first_col.form_fields]}"
-				    													onfocus="this.placeholder=''"/>
+				    												/>
 			    												</td>
 			    											</tr>
 			    										</tbody>
@@ -244,7 +262,7 @@
 			    								</t>
 			    								<t t-else="">
 				    								<input type="text" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
-				    								onfocus="this.placeholder=''" t-attf-value="#{c_order[first_col.form_fields]}"/>
+				    								t-attf-value="#{c_order[first_col.form_fields]}"/>
 			    								</t>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
@@ -257,19 +275,31 @@
 													    <option t-att-value='car.name' /> 
 												    </t>
 												 </datalist> -->
-
-												 <select class="selection-type" t-attf-id="#{first_col.form_fields}">
-												 	<t t-foreach='widget.pos.car_types' t-as='car'> 
-												 		<t t-if="c_order[first_col.form_fields] == car.name">
-												 			<option t-att-id='car.id' t-att-selected="true"><t t-esc="car.name" /></option>
-												 		</t>
-												 		<t t-else="">
-												 			<option t-att-id='car.id'><t t-esc="car.name" /></option>
-												 		</t>
-												 	</t>
-												 </select>
-												 <img  id="car-image" t-att-src='widget.car_icon_url(widget.pos.car_types[0].id)' width="35" height="32" />
-					    						
+												<t t-if="(first_col.form_fields) == 'laundry_person'" >
+													<select class="selection-type" t-attf-id="#{first_col.form_fields}">
+													 	<t t-foreach='widget.pos.res_users' t-as='user'> 
+													 		<t t-if="c_order[first_col.form_fields] == user.name">
+													 			<option t-att-id='res_users.id' t-att-selected="true"><t t-esc="user.name" /></option>
+													 		</t>
+													 		<t t-else="">
+													 			<option t-att-id='user.id'><t t-esc="user.name" /></option>
+													 		</t>
+													 	</t>
+													 </select>
+												</t>
+												<t t-else="">
+													 <select class="selection-type" t-attf-id="#{first_col.form_fields}">
+													 	<t t-foreach='widget.pos.car_types' t-as='car'> 
+													 		<t t-if="c_order[first_col.form_fields] == car.name">
+													 			<option t-att-id='car.id' t-att-selected="true"><t t-esc="car.name" /></option>
+													 		</t>
+													 		<t t-else="">
+													 			<option t-att-id='car.id'><t t-esc="car.name" /></option>
+													 		</t>
+													 	</t>
+													 </select>
+													 <img  id="car-image" t-att-src='widget.car_icon_url(widget.pos.car_types[0].id)' width="35" height="32" />
+					    						</t>
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='date'">
 			    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
@@ -277,12 +307,13 @@
 					    								<i class="fa fa-calendar icon"></i>
 					    								<input type="text" class="input-sm form-control datepicker-input"  t-attf-placeholder="#{first_col.form_placeholder}" 
 					    								t-attf-id="#{first_col.form_fields}" t-attf-value="#{c_order[first_col.form_fields]}"
-					    								onfocus="this.placeholder=''"/>
+					    								/>
 				    								</div>
 			    								</div>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
 			    						</td>
+			    						
 			    						<!-- Same Row -->
 			    						<t t-foreach="line_group[line_key]" t-as="same_row">
 			    							<t t-if="same_row.sameline">
@@ -291,7 +322,7 @@
 					    								<span t-attf-style="font-size:#{same_row.font_size}px;float: left;margin-left: 20px;"><t t-esc="same_row.form_label" /></span>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='label'">
-					    								<t t-if="(same_row.form_fields)=='date_order'">
+					    								<t t-if="(same_row.form_fields)=='date_order' or (same_row.form_fields)=='order_date'">
 					    									<span t-attf-id="#{same_row.form_fields}" t-attf-style="font-size:#{same_row.font_size}px;">
 					    									<!-- <t t-esc="moment().format('L LT')"/> -->
 					    									<t t-esc="c_order[same_row.form_fields] ? c_order[same_row.form_fields] : moment().format('L LT')" />
@@ -300,18 +331,35 @@
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='input_char'">
 					    								<input type="text" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
-					    								t-attf-value="#{c_order[same_row.form_fields]}" onfocus="this.placeholder=''"/>
+					    								t-attf-value="#{c_order[same_row.form_fields]}" />
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='selection'">
-					    								<input class="selection-type" t-attf-list="#{same_row.form_fields}" onfocus="this.placeholder=''"
-							    							t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"/>
-							    						<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
-							    						<datalist t-attf-id="#{same_row.form_fields}">
-							    							<t t-foreach='widget.pos.car_types' t-as='car'> 
-															    <option t-att-value='car.name' /> 
-														    </t>
-														</datalist>
+					    								<t t-if="(same_row.form_fields) == 'laundry_person'" >
+															<select class="selection-type" t-attf-id="#{same_row.form_fields}">
+															 	<t t-foreach='widget.pos.res_users' t-as='user'> 
+															 		<t t-if="c_order[same_row.form_fields] == user.name">
+															 			<option t-att-id='res_users.id' t-att-selected="true"><t t-esc="user.name" /></option>
+															 		</t>
+															 		<t t-else="">
+															 			<option t-att-id='user.id'><t t-esc="user.name" /></option>
+															 		</t>
+															 	</t>
+															 </select>
+														</t>
+														<t t-else="">
+															 <select class="selection-type" t-attf-id="#{same_row.form_fields}">
+															 	<t t-foreach='widget.pos.car_types' t-as='car'> 
+															 		<t t-if="c_order[same_row.form_fields] == car.name">
+															 			<option t-att-id='car.id' t-att-selected="true"><t t-esc="car.name" /></option>
+															 		</t>
+															 		<t t-else="">
+															 			<option t-att-id='car.id'><t t-esc="car.name" /></option>
+															 		</t>
+															 	</t>
+															 </select>
+															 <img  id="car-image" t-att-src='widget.car_icon_url(widget.pos.car_types[0].id)' width="35" height="32" />
+							    						</t>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='date'">
 					    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
@@ -319,7 +367,7 @@
 							    								<i class="fa fa-calendar icon" style="margin-right: 29.5%;"></i>
 							    								<input type="text" class="input-sm form-control datepicker-input" t-attf-placeholder="#{same_row.form_placeholder}" 
 							    								t-attf-id="#{same_row.form_fields}" t-attf-value="#{c_order[same_row.form_fields]}"
-							    								onfocus="this.placeholder=''"/>
+							    								/>
 						    								</div>
 					    								</div>
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
@@ -331,6 +379,136 @@
 			    				</t>
 		    				</tbody>
 		    			</table>
+		    			<t t-foreach="line_group_key" t-as="line_key" >
+		    			<t t-foreach="line_group[line_key]" t-as="same_row">
+		    			<t t-if="((same_row.form_field_type)=='sub_form') and ((same_row.ttype)=='one2many')">
+		    			<t t-foreach="sub_form_template[same_row.sub_template_id]" t-as="temp" >
+		    				<t t-if="sub_line_group_key">
+		    					<div class="line-tab">
+		    						<span class="line-tab-span">Order Lines</span>
+		    						<span id="line_form_temp_id" style="display:none;"><t t-esc="line_form_temp_id" /></span>
+			    					<span id="line_model_name" style="display:none;"><t t-esc="line_model_name" /></span>
+		    					</div>
+		    					<div class="line-table-div">
+		    					<table class="orderline-form-detail">
+		    						<thead>
+					    				<t t-set="line_count" t-value="1" />
+					    				<tr>
+						    				<t t-foreach="sub_line_group_key" t-as="line_key" >
+						    					<t t-if="line_count == 1" >
+											   		<t t-foreach="sub_line_group[line_key]" t-as="label">
+											    		<th><t t-esc="label.form_label" /></th>
+											    	</t>
+										    		<t t-set="line_count" t-value="line_count + 1" />
+									    		</t>
+								    		</t>
+								    		<th><span style="visibility: hidden;">Add</span></th>
+								    		<th><span style="visibility: hidden;">Delete</span></th>
+							    		</tr>
+					    			</thead>
+					    			<tbody>
+					    				<t t-set="tcount" t-value="0" />
+					    				<t t-foreach="sub_line_group_key" t-as="line_key" >
+			    							<t t-set="first_col" t-value="sub_line_group[line_key][0]" />
+			    							<tr>
+			    								<!-- First Column -->
+			    								<td>
+			    									<t t-if="(first_col.form_field_type)=='input_char'">
+			    										<input type="text" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+			    										t-attf-value="" />
+			    									</t>
+			    									<t t-if="(first_col.form_field_type)=='input_int'">
+					    								<input type="number" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+					    								t-attf-value=""  />
+					    							</t>
+					    							<t t-if="(first_col.form_field_type)=='selection'">
+					    								<t t-if="(first_col.form_fields) == 'product_id'">
+						    								<select class="drop-down-select" t-attf-id="#{first_col.form_fields}" style="width: 100%;">
+						    									<option></option>
+																<t t-foreach='products' t-as='prod'> 
+																	<option t-att-id='prod.id'><t t-esc="prod.name" /></option>
+																</t>
+															</select>
+														</t>
+					    							</t>
+					    							<t t-if="(first_col.form_field_type)=='label'">
+					    								<input type="text" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+					    								t-attf-value="" readonly="readonly" />
+					    							</t>
+			    								</td>
+			    								
+			    								<!-- Same Row -->
+			    								<t t-set="same_row_count" t-value="((sub_line_group[line_key]).length) - 1" />
+												<t t-set="sameline_count" t-value="0" />
+			    								<t t-foreach="sub_line_group[line_key]" t-as="same_row">
+			    									<t t-if="same_row.sameline">
+			    										<td>
+			    											<t t-if="(same_row.form_field_type)=='input_char'">
+					    										<input type="text" t-attf-id="#{same_row.form_fields}" t-attf-placeholder="#{same_row.form_placeholder}" 
+					    										t-attf-value=""  />
+					    									</t>
+					    									<t t-if="(same_row.form_field_type)=='input_int'">
+					    										<input type="number" t-attf-id="#{same_row.form_fields}" t-attf-placeholder="#{same_row.form_placeholder}" 
+					    										t-attf-value=""  />
+					    									</t>
+					    									<t t-if="(same_row.form_field_type)=='selection'">
+					    										<t t-if="(same_row.form_fields) == 'washing_type'">
+						    										<select class="drop-down-select" t-attf-id="#{same_row.form_fields}" style="width: 100%;">
+						    											<option></option>
+																	 	<t t-foreach='widget.pos.washing_types' t-as='type'> 
+																	 		<option t-att-amt="type.amount" t-att-id='type.id'><t t-esc="type.name" /></option>
+																	 	</t>
+																	 </select>
+																 </t>
+					    									</t>
+					    									<t t-if="(same_row.form_field_type)=='label'">
+					    										<input type="text" t-attf-id="#{same_row.form_fields}" t-attf-placeholder="#{same_row.form_placeholder}" 
+					    										t-attf-value="" readonly="readonly" />
+					    									</t>
+					    									<t t-if="(same_row.form_field_type)=='many2many'">
+					    										<select  class="detail chosen washing-work"  data-order="true" name="washing-work" t-attf-id="#{same_row.form_fields}" multiple="true" >
+										                            <t t-foreach="widget.pos.washing_works" t-as="work">           									
+										           						<t t-set="i" t-value="0"/>   
+										           						<!-- <t t-foreach="partner.parents_devotee || [] " t-as="parent">
+																			<t t-if="(devotee.id ==  parent)">	
+																				<t t-set="i" t-value="1"/> 												
+																				<option  selected="selected" t-att-value="devotee.id"><t t-esc="devotee.name"/></option>	
+																			</t> 
+																		</t> -->	
+																		<t t-if="(i == 0)">  
+																			<option t-att-amt="work.amount" t-att-value="work.id"><t t-esc="work.name"/></option>	 
+																		</t>
+																	</t>
+										                        </select> 
+					    									</t>
+			    										</td>
+			    									</t>
+													<t t-if="(sameline_count)==(same_row_count)">
+														<td>
+															<span class="add-line" t-attf-trrowid="#{tcount}"><i class="fa fa-plus"></i></span>
+														</td>
+														<td>
+															<t t-if="tcount == 0" >
+																<span class="delete-line" style="display:none"><i class="fa fa-trash-o"></i></span>
+															</t>
+															<t t-else="" >
+																<span class="delete-line" style="display:block"><i class="fa fa-trash-o"></i></span>
+															</t>
+														</td>
+													</t>
+			    									<t t-set="sameline_count" t-value="sameline_count + 1" />
+			    								</t>
+			    							</tr>
+			    							<t t-set="tcount" t-value="tcount + 1" />
+			    						</t>
+					    			</tbody>
+		    					</table>
+		    					</div>
+		    				</t>
+		    			</t>
+		    			</t>
+		    			</t>
+		    			</t>
 	    			</div>
 	    			</t>
 	    		</t>
