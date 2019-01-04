@@ -119,6 +119,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var color = result[0]['color']
     			var sub_form_template = result[0]['sub_form_template']
     			var current_order = result[0]['current_order']
+    			var current_order_lines = result[0]['current_order_lines']
     			var form_temp_id = result[0]['form_temp_id']
     			var model_name = result[0]['model_name']
     			var vendor_id = result[0]['vendor_id']
@@ -131,7 +132,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
                 var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-                						form_name: form_name, color:color, sub_form_template: sub_form_template, current_order: current_order,
+                						form_name: form_name, color:color, sub_form_template: sub_form_template, 
+                						current_order: current_order, current_order_lines: current_order_lines,
                 						form_temp_id: form_temp_id, model_name: model_name, vendor_id: vendor_id,
                 						line_form_temp_id: line_form_temp_id, line_model_name: model_name,
                 						line_group: line_group, line_group_key: line_group_key,
@@ -178,7 +180,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var sub_form_template = result[0]['sub_form_template']
             			var products = result[0]['products']
             			var template_lines = result[0]['template_lines']
-            			var current_order = result[0]['current_order']     
+            			var current_order = result[0]['current_order']
+            			var current_order_lines = result[0]['current_order_lines']
             			var form_temp_id = result[0]['form_temp_id']
             			var model_name = result[0]['model_name']
             			var vendor_id = result[0]['vendor_id']
@@ -190,12 +193,14 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 
             			
             			form_fields_records = template_lines;
+            			line_form_fields = temp_order_lines;
             			
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
     						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
-    						template_lines: template_lines, current_order: current_order, form_temp_id: form_temp_id, model_name: model_name,
+    						template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
+    						form_temp_id: form_temp_id, model_name: model_name,
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
     						line_group: line_group, line_group_key: line_group_key,
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
@@ -205,6 +210,30 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         vendorlist = vendorlist.childNodes[1];
                         fcontents.empty();
                         fcontents.append(vendorlist);
+                        fcontents.find(".washing-work").chosen({
+        					width : "69%",
+        					enable_search_threshold : 10
+        				}).change(function(e) {
+        					 var value = $(this).val();
+        					 $(this).find("#extra_work").val(value);
+        					 	
+        				});
+                        
+                        /** Disabled the Order details for [order, done, cancel, return] state */
+                        if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
+                        		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return')){
+                        	$('table.order-form-detail').each(function() {
+                        		$(this).find("input").attr('disabled',true);
+                        		$(this).find("select").attr('disabled',true);
+                        	});
+                        	$('table.orderline-form-detail tr').each(function() {
+                        		$(this).find("input").attr('disabled',true);
+                        		$(this).find("select").attr('disabled',true);
+                        		$(this).find("select.chosen").attr('disabled',true).trigger("chosen:updated");
+                        		$(this).find("span.add-line").css({'display':'none'});
+                        		$(this).find("span.delete-line").css({'display':'none'});
+                        	});
+                        }
             		});
                 });
                 
@@ -224,6 +253,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var color = result[0]['color']
             			var sub_form_template = result[0]['sub_form_template']
             			var current_order = result[0]['current_order']
+            			var current_order_lines = result[0]['current_order_lines']
             			var form_temp_id = result[0]['form_temp_id']
             			var model_name = result[0]['model_name']
             			var vendor_id = result[0]['vendor_id']
@@ -237,7 +267,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         contents.innerHTML = "";
                         var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
                         						form_name: form_name, color:color, sub_form_template: sub_form_template, vendor_id: vendor_id,
-                        						current_order: current_order, form_temp_id: form_temp_id, model_name: model_name,
+                        						current_order: current_order, current_order_lines: current_order_lines,
+                        						form_temp_id: form_temp_id, model_name: model_name,
                         						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
                         						line_group: line_group, line_group_key: line_group_key,
                         						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
@@ -264,7 +295,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'get_vendor_list',
-            			args: [0,vendor_categ_id, dashboard_id, 2, true, sub_temp_id, order_id, vendor_id],
+            			args: [0,vendor_categ_id, dashboard_id, line_id, true, sub_temp_id, order_id, vendor_id],
             		}).then(function(result){ 
             			var result_datas = result[0]['result_datas']
             			var line_group = result[0]['line_group']
@@ -276,6 +307,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var products = result[0]['products']
             			var template_lines = result[0]['template_lines']
             			var current_order = result[0]['current_order']
+            			var current_order_lines = result[0]['current_order_lines']
             			var form_temp_id = result[0]['form_temp_id']
             			var model_name = result[0]['model_name']
             			var vendor_id = result[0]['vendor_id']
@@ -292,7 +324,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
     						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
-    						template_lines: template_lines, current_order: current_order, form_temp_id: form_temp_id, model_name: model_name,
+    						template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
+    						form_temp_id: form_temp_id, model_name: model_name,
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
     						line_group: line_group, line_group_key: line_group_key, 
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
@@ -302,15 +335,27 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         vendorlist = vendorlist.childNodes[1];
                         fcontents.empty();
                         fcontents.append(vendorlist);
-                        fcontents.find("#extra_work").chosen({
+                        fcontents.find('.chosen-select').chosen({}).change( function(obj, result) {
+                            
+                        });
+                        fcontents.find(".washing-work").chosen({
         					width : "69%",
         					enable_search_threshold : 10
         				}).change(function(e) {
         					// $('#extra_work_chosen').css({'border': '0px solid red'});
         					 var value = $(this).val();
-        					 $(this).find("#extra_work").val(value);
+        					 $(this).find(".washing-work").val(value);
         					 	
         				});
+                        /*fcontents.find("#worktest").chosen({
+            				width : "69%",
+            				enable_search_threshold : 10
+            			}).change(function(e) {
+            				// $('#extra_work_chosen').css({'border': '0px solid red'});
+            				 var value = $(this).val();
+            				 $(this).find("#extra_work").val(value);
+            				 	
+            			});*/
             		});
     	        	
     	    	});
@@ -358,51 +403,55 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 });
                 
                 /** Set to Draft Action */
-                contents.off('click','#order-draft');
-                contents.on('click','#order-draft',function(){
+                contents.off('click','#order_draft');
+                contents.on('click','#order_draft',function(){
                 	var order_id = contents.find('#order_id').text();
                 	var model_name = contents.find('#model_name').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
                 	
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'set_draft_order',
-            			args: [0, order_id, model_name],
+            			args: [0, order_id, model_name, form_temp_id],
             		}).then(function(result){
-            			contents.find('#order-draft').css({'display': 'none'});
+            			/*contents.find('#order-draft').css({'display': 'none'});
             			contents.find('#order-confirm').addClass('btn-active');
             			contents.find('#order-draft').removeClass('btn-active');
             			contents.find('#cancel').css({'display': 'none'});
             			contents.find('#open').addClass('active');
-                    	contents.find('#cancel').removeClass('active');
+                    	contents.find('#cancel').removeClass('active');*/
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
                     	
             		});
                 });
                 
                 /** Cancel Action */
-                contents.off('click','#order-cancel');
-                contents.on('click','#order-cancel',function(){
+                contents.off('click','#order_cancel');
+                contents.on('click','#order_cancel',function(){
                 	var order_id = contents.find('#order_id').text();
                 	var model_name = contents.find('#model_name').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
                 	
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'cancel_order',
-            			args: [0, order_id, model_name],
+            			args: [0, order_id, model_name, form_temp_id],
             		}).then(function(result){
             			//console.log('result'+result)
-            			contents.find('#order-draft').addClass('btn-active');
+            			/*contents.find('#order-draft').addClass('btn-active');
             			contents.find('#order-cancel').removeClass('btn-active');
             			contents.find('#order-draft').css({'display': 'block'});
             			contents.find('#cancel').css({'display': 'block'});
             			contents.find('#cancel').addClass('active');
-                    	contents.find('#done').removeClass('active');
+                    	contents.find('#done').removeClass('active');*/
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
                     	
             		});
                 });
                
                 /** Confirm Action */
-                contents.off('click','#order-confirm');
-                contents.on('click','#order-confirm',function(){
+                contents.off('click','#order_confirm');
+                contents.on('click','#order_confirm',function(){
                 	var order_datas = {}
                 	var line_order_datas = []
                 	var line_data = {}
@@ -532,16 +581,17 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	            			method: 'create_order',
 	            			args: [0,order_datas, order_id, form_temp_id, model_name, vendor_id, line_order_datas, line_form_temp_id, line_model_name],
 	            		}).then(function(result){
-	            			//console.log('result'+result)
-	            			contents.find('#order_id').text(result);
+	            			console.log('result'+result)
+	            			/*contents.find('#order_id').text(result);
 	            			contents.find('#order-confirm').removeClass('btn-active');
 	            			contents.find('#order-cancel').addClass('btn-active');
 	            			contents.find('#order-draft').css({'display': 'none'});
 	            			
 	            			contents.find('#open').removeClass('active');
 	                    	contents.find('#done').addClass('active');
-	                    	contents.find('#cancel').css({'display': 'none'});
+	                    	contents.find('#cancel').css({'display': 'none'});*/
 	            			//console.log('span:'+contents.find('#order_id').text())
+	            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
 	            		});
                 	}
                 });
@@ -605,10 +655,39 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	    	    		new_row.find("input[type='number']").each(function() {
 	    	    			$(this).val('')
 	    	    		});
-	    	    		new_row.find('.chosen-choices li.search-choice').each(function() {
+	    	    		/*new_row.find('.chosen-choices li.search-choice').each(function() {
 	    	    			$(this).remove();
-	    	    		});
+	    	    		});*/
+	    	    		//console.log('HTML'+new_row.find('#extra_work').html())
+	    	    		//console.log('TD::'+new_row.find('.washing-work').closest('td').html().find('#extra_work'))
+	    	    		new_row.find('.washing-work').closest('td').replaceWith('<td><select class="detail chosen washing-work" data-order="true" multiple="true" name="washing-work" id="extra_work" style="display: none;">'+
+	    	    				new_row.find('#extra_work').html()+
+	    	    				'</select></td>');
+	    	    		
+	    	    		//console.log('new_row'+JSON.stringify(new_row));
+	    	    		//new_row.find('.washing-work').attr('id', 'worktest');
+	    	    		//new_row.find('.washing-work').removeClass('washing-work');
+	    	    		//new_row.find('.extra_work_chosen').attr('id','extra_work_chosen1');
+	    	    		/*new_row.find(".washing-work").chosen({
+        					width : "69%",
+        					enable_search_threshold : 10
+        				}).change(function(e) {
+        					// $('#extra_work_chosen').css({'border': '0px solid red'});
+        					 var value = $(this).val();
+        					 $(this).find(".washing-work").val(value);
+        					 	
+        				});*/
+	    	    		
 	                	$('.orderline-form-detail tbody').append(new_row);
+	                	contents.find(".washing-work").chosen({
+        					width : "69%",
+        					enable_search_threshold : 10
+        				}).change(function(e) {
+        					// $('#extra_work_chosen').css({'border': '0px solid red'});
+        					 var value = $(this).val();
+        					 $(this).find(".washing-work").val(value);
+        					 	
+        				});
                 	}
                 });
                 
@@ -714,6 +793,75 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         dashboardline = dashboardline.childNodes[1];
         contents.appendChild(dashboardline);
     },
+    update_records: function(self, el_node, vendor_categ_id, dashboard_id, line_id, if_form, sub_temp_id, order_id, vendor_id){
+    	self._rpc({
+			model: 'hm.form.template',
+			method: 'get_vendor_list',
+			args: [0,vendor_categ_id, dashboard_id, line_id, if_form, sub_temp_id, order_id, vendor_id],
+		}).then(function(result){ 
+			var result_datas = result[0]['result_datas']
+			var line_group = result[0]['line_group']
+			var line_group_key = result[0]['line_group_key']
+			var form_view = result[0]['form_view']
+			var form_name = result[0]['form_name']
+			var color = result[0]['color']
+			var sub_form_template = result[0]['sub_form_template']
+			var products = result[0]['products']
+			var template_lines = result[0]['template_lines']
+			var current_order = result[0]['current_order']
+			var current_order_lines = result[0]['current_order_lines']
+			var form_temp_id = result[0]['form_temp_id']
+			var model_name = result[0]['model_name']
+			var vendor_id = result[0]['vendor_id']
+			var sub_line_group = result[0]['sub_line_group']
+			var sub_line_group_key = result[0]['sub_line_group_key']
+			var temp_order_lines = result[0]['temp_order_lines']
+			var line_form_temp_id = result[0]['line_form_temp_id']
+			var line_model_name = result[0]['line_model_name']
+			
+			
+			var fcontents = el_node.find('.vendor-contents');
+        	fcontents.innerHTML = "";
+        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
+				form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+				template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
+				form_temp_id: form_temp_id, model_name: model_name,
+				line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
+				line_group: line_group, line_group_key: line_group_key, 
+				sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+				temp_order_lines: temp_order_lines});
+            var vendorlist = document.createElement('div');
+            vendorlist.innerHTML = vendor_html;
+            vendorlist = vendorlist.childNodes[1];
+            fcontents.empty();
+            fcontents.append(vendorlist);
+            fcontents.find(".washing-work").chosen({
+				width : "69%",
+				enable_search_threshold : 10
+			}).change(function(e) {
+				 var value = $(this).val();
+				 $(this).find("#extra_work").val(value);
+				 	
+			});
+            
+            /** Disabled the Order details for [order, done, cancel, return] state */
+            if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
+            		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return')){
+            	$('table.order-form-detail').each(function() {
+            		$(this).find("input").attr('disabled',true);
+            		$(this).find("select").attr('disabled',true);
+            	});
+            	$('table.orderline-form-detail tr').each(function() {
+            		$(this).find("input").attr('disabled',true);
+            		$(this).find("select").attr('disabled',true);
+            		$(this).find("select.chosen").attr('disabled',true).trigger("chosen:updated");
+            		$(this).find("span.add-line").css({'display':'none'});
+            		$(this).find("span.delete-line").css({'display':'none'});
+            	});
+            }
+           
+		});
+    }
    
   
 });

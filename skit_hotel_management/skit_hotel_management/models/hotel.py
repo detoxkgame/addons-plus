@@ -444,6 +444,8 @@ class FormTemplateLine(models.Model):
         ('image', _('Image')),
         ('many2many', _('Many2Many')),
         ('sub_form', _('Sub Form Template')),
+        ('statusbar', _('Status Bar')),
+        ('top_buttons', _('Top Buttons')),
         ('input_intchar', _('Input(Int&char)'))], string='Field Type',
                                        required=True)
 

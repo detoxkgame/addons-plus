@@ -1262,7 +1262,7 @@
 		                                <field name="font_family" />
 		                                <field name="sameline" />
 		                                <field name="isMandatory" />
-		                                <field name="form_template_selection_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','!=','selection')]}"></field>
+		                                <field name="form_template_selection_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('selection','statusbar','top_buttons'))]}"></field>
 		                                <field name="form_template_id" invisible="1"/>       
 		                            </tree>
 		                        </field>

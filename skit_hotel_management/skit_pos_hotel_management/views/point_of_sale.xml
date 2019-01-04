@@ -14,7 +14,8 @@
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/dataTables.bootstrap.js"></script>
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap-datepicker.js"></script>
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap-datepicker.min.js"></script>
-				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/chosen.jquery.min.js"></script>
+			    <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/chosen.jquery.min.js"></script>
+				<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script> -->
 				
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/hotel_management.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/jquery.dataTables.css"></link>
@@ -24,7 +25,8 @@
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datepicker.min.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datepicker.standalone.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datepicker.standalone.min.css"></link>
-				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/chosen.min.css"></link>
+				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/chosen.min.css"></link> 
+				<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" /> -->
 			</xpath>
 		</template>
         <!-- <template id="hotel_management_inherit" inherit_id="web.minimal_layout">
