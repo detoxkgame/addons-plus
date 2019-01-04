@@ -446,6 +446,9 @@ class FormTemplateLine(models.Model):
         ('sub_form', _('Sub Form Template')),
         ('statusbar', _('Status Bar')),
         ('top_buttons', _('Top Buttons')),
+        ('button', _('Button')),
+        ('many2one', _('Many2One')),
+        ('empty_line', _('Empty Line')),
         ('input_intchar', _('Input(Int&char)'))], string='Field Type',
                                        required=True)
 
@@ -467,8 +470,23 @@ class FormTemplateLine(models.Model):
                                                       string='Selection items')
     sub_template_id = fields.Many2one('hm.sub.form.template',
                                       string='Sub Template', copy=False)
+    form_template_model_fields = fields.Many2many('ir.model.fields',
+                                                      string='display values')
+    field_styles = fields.Char(string='Field Styles')
+    field_group =  fields.Selection([
+        ('htmlheader', _('HTML<Header>')),
+        ('htmlbody', _('HTML<Body>')),
+        ('htmlfooter', _('HTML<Footer>'))], string='Field Group',
+                                       required=True)
 
-
+    @api.onchange('form_field_type')
+    def change_form_field_type(self):
+        if self.form_field_type =='many2one':
+            if self.form_field_id.relation:
+                ir_model = self.env['ir.model'].sudo().search([('model','=',self.form_field_id.relation)])
+                if ir_model:
+                    return {'domain':{'form_template_model_fields':[('model_id','=',ir_model.id)]}}
+            
 class FormTemplateSelectionItem(models.Model):
     _name = "hm.form.selection.item"
     _description = "Selection items for m2m fields in Form Template design"

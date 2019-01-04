@@ -17,7 +17,7 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink " href="#">
+	          <a class="hexLink reservation" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227333.svg" alt="" />
 	            <h1>RESERVATION</h1>
 	            <p></p>

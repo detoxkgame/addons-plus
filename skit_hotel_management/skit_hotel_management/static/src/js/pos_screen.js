@@ -12,8 +12,14 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
         'click .checkin': 'show_checkin',
         'click .roomstatus': 'show_roomstatus',
         'click .night_audit': 'show_night_audit',
+        'click .reservation': 'show_reservationscreen',
        
     }),
+    show_reservationscreen:function(){
+    	var self = this;
+    	self.pos.gui.show_screen('reservation2');
+    },
+    
     show_night_audit:function(){
         $('.night_audit_session').trigger("click");
        },   

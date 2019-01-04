@@ -1100,6 +1100,7 @@
 	                <sheet>
 	                	<group>
 	                		<group>
+	                		
 	                			<field name="proof_type" />
 	                		</group>
 	                	</group>
@@ -1257,12 +1258,17 @@
 		                                <field name="form_field_type"/> 
 		                                <field name="sub_template_id"  attrs="{'invisible': [('form_field_type','!=','sub_form')]}"></field>
 		                                <field name="form_placeholder" />
+		                                  <field name="field_group" />
+		                                  <field name="field_styles" /> 
 		                                <field name="font_size" />
 		                                <field name="font_style" />
 		                                <field name="font_family" />
 		                                <field name="sameline" />
 		                                <field name="isMandatory" />
 		                                <field name="form_template_selection_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('selection','statusbar','top_buttons'))]}"></field>
+		                               	<field name="form_template_model_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','!=','many2one')]}"></field>
+		                               
+		                                
 		                                <field name="form_template_id" invisible="1"/>       
 		                            </tree>
 		                        </field>
