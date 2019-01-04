@@ -15,7 +15,8 @@ class account_journal(models.Model):
     @api.model
     def create(self, vals):
         """ Create New Records """
-        account_ids = self.search([])
+        company_id = vals.get('company_id') or self.company_id.id 
+        account_ids = self.search([('company_id','=',company_id)]) # load the journal of self.company        
         for account in account_ids:
             if account.is_pay_later and vals.get('is_pay_later') is True:
                 raise UserError(_('Pay Later is already selected for another journal. You cannot use it for multiple journals.'))
@@ -26,7 +27,8 @@ class account_journal(models.Model):
     def write(self, vals):
         """ Update Records """
 
-        account_ids = self.search([])
+        company_id = vals.get('company_id') or self.company_id.id 
+        account_ids = self.search([('company_id','=',company_id)]) # load the journal of self.company
         for account in account_ids:
             if account.is_pay_later and vals.get('is_pay_later') is True:
                 raise UserError(_('Pay Later is already selected for another journal. You cannot use it for multiple journals.'))
