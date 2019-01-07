@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hm_shift_master_user,hm.shift.master.user,model_hm_shift_master,skit_hotel_management.group_hotel_user,1,1,1,0
-access_hm_shift_master_manager,hm.shift.master.manager,model_hm_shift_master,skit_hotel_management.group_hotel_manager,1,1,1,1
-access_hm_service_details_user,hm.service.details.user,model_hm_service_details,skit_hotel_management.group_hotel_user,1,1,1,0
-access_hm_service_details_manager,hm.service.details.manager,model_hm_service_details,skit_hotel_management.group_hotel_manager,1,1,1,1
