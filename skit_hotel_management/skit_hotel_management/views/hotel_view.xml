@@ -884,6 +884,8 @@
             <field name="arch" type="xml">
             	<xpath expr="//field[@name='parent_id']" position="after">
             		<field name="is_amenities" string="Amenity"/>
+            		<field name="is_room" string="Room"/>
+            		<field name="is_service" string="Service"/>
             	</xpath>
             </field>
         </record>
