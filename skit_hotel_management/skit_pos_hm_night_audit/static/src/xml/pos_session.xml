@@ -112,134 +112,108 @@
         </div>
     </t>
     
-    <!-- Session Button - POPUP Widget -->
-    <t t-name="PopupSessionWidget">
+    <!-- Room details - POPUP Widget -->
+    <t t-name="RoomDetailsWidget">
 		<div class="modal-dialog">     
             <div class="popup popup-text session-popup">
-                <p class="title session-title"><t t-esc=" widget.options.title || '' " /></p>
-                <p class="body"><t t-esc=" widget.options.body || '' " /></p>
+           		<p class="title session-title night_audit_popup_title" >
+                	<t t-esc=" widget.options.title || '' " />
+             	</p>
+             	<p class="body"><t t-esc=" widget.options.body || '' " /></p> 
+             	<div class="float_left">
+	 				<t t-if="widget.options.is_room_confirmed">
+						<img src="/skit_pos_hm_night_audit/static/src/img/ok.png" alt="" class="ok_img" />
+					</t> 
+					<t t-else="">
+						<span class="checkmark"></span>
+					</t> 
+				</div>    
                 <div class="session_form">  
-	            	<t t-if="widget.options.pos_session">
-	                	<t t-value="widget.options.pos_session" t-set="session" />	
-	               		<t t-if="session.cash_control == true">  	                	                   	                      
-	                   		<div class="pos_button_box"> 
-		                        <button class="session-button PutMoneyIn">
-		                        	<i class='fa fa-level-down' /> Put Money In
-		                        </button>		                        
-		                        <button class="session-button TakeMoneyOut">
-		                        	<i class='fa fa-level-up' /> Take Money Out
-		                        </button>	
-		                        <button class="session-button SetClosingBalance" value="end">
-		                        	<i class='fa fa-money' /> Set Closing Balance
-		                        </button>
-		                        <button class="session-button printstatement" value="end">
-		                        	<i class='fa fa-print' /> Print
-		                        </button>                        	  
-	                       </div> 
-	                       <button t-attf-class="EndOfSession endsessionbutton #{ session.state !='opened'  ? 'display-hide' : '' }">
-		                   		End of Session
-		                   </button>
-		                   <button t-attf-class="endsessionbutton ValidateClosingControl validate #{ session.state !='closing_control'  ? 'display-hide' : '' }">
-	                    		Validate Closing &amp; Posting Entries
-	                    	</button>	
-						</t>
-	                    <h5>Session : <t t-esc="session.name" /></h5>
-	                    <table class="session-group">	
-	                   		<tbody>
-	                       		<tr>
-			                   		<td>
-				                    	<table class="session-group text1">	                     
-					                  		<tbody>
-						                       	<tr><td>Responsible : </td><td><t t-esc="session.user_id[1]" /></td></tr>
-						                       	<tr><td>Point of Sale : </td><td><t t-esc="session.config_id[1]" /></td></tr>
-						                       	<tr><td>Available Rooms : </td><td><t t-esc="session.rooms_available" /></td></tr>
-						                       	<tr><td>Reserved Rooms : </td><td><t t-esc="session.rooms_reserved" /></td></tr>
-						                       	
-					                       	</tbody>
-					                   	</table>
-					                </td>
-					                <td>   
-				                   		<table class="session-group text2">
-						                 	<tbody>
-						                    	<tr>
-						                    		<td>Opening Date :</td><td><t t-esc="session.start_at" /></td>
-						                    	</tr>
-						                    	<tr>
-						                    		<td>Hand over to :</td>
-						                    		<td>
-						                    			<select id ="partner_select" class="partner_select" 
-						                    				 name='partner_list' >
-							        						<t t-foreach="widget.options.partner_list" t-as="partner_list">
-							        							<t t-if="partner_list.value == widget.options.selected_devotee_id">
-																	<option  t-attf-name="#{partner_list.key}" t-att-value="partner_list.value" t-att-selected="true"><t t-esc="partner_list.key"/></option>
-																</t>
-																<t t-else="">
-														  			<option  t-attf-name="#{partner_list.key}" t-att-value="partner_list.value"><t t-esc="partner_list.key"/></option>
-													        	</t>
-												        	</t>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<input type="text" name="product" value="Pen" list="productName" />
-														<datalist id="productName">
-														    <option value="Pen" label="the developer's choice">Pen</option>
-														    <option value="Pencil">Pencil</option>
-														    <option value="Paper">Paper</option>
-														</datalist>
-													
-													</td>
-												</tr>
-						                 		<!-- <tr><td>Occupied Rooms : </td><td><t t-esc="session.rooms_occupied" /></td></tr>
-						                       	<tr><td>Maintenance Rooms : </td><td><t t-esc="session.rooms_blocked" /></td></tr> -->
-						                 	</tbody>
-				                       	</table>
-				            		</td>
-		                 		</tr> 
-		                 		<tr class="session_tr_height"></tr> 
-			                   	<t t-if="session.cash_control == true">  
-				             		<tr>
-				                        <td>   
-					                       <table class="session-group text3">
-						                       <tbody> 
-							                       <tr><td>Opening Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_start)" /></td></tr>
-							                       <t t-if="session.is_admin ==1">
-								                       <tr><td>+ Transactions  :</td><td><t t-esc="widget.format_currency(session.cash_register_total_entry_encoding)" /></td></tr>
-								                       <tr><td>= Theoretical Closing Balance : </td><td><t t-esc="widget.format_currency(session.cash_register_balance_end)" /></td></tr>
-							                       </t>
-						                       </tbody>
-					                       </table>
-					                    </td>
-						                <td>   
-					                    	<table class="session-group text4">
-						                    	<tbody>
-						                       		<t t-if="session.is_admin ==1">
-						                       			<tr><td> Real Closing Balance :</td><td><t t-esc="widget.format_currency(session.cash_register_balance_end_real)" /></td></tr>
-						                       		</t>
-						                       </tbody>
-					                       	</table>
-					                  	</td>
-				                   	</tr> 
-				                   	<tr>
-				                   		<td></td>
-				                   		<td>
-					                   		<t t-if="session.is_admin ==1">
-						                   		<table class="session-group text5">
-							                		<tbody>			                      
-							                      		<tr><td> Difference :</td><td><t t-esc="widget.format_currency(session.cash_register_difference)" /></td></tr>	
-							                      	</tbody>
-						                   		</table>
-					                       	</t>
-				                   		</td>
-				                   	</tr>
-			              		</t>  
-		                   	</tbody>
-		          		</table>
-	              	</t>                            		
+	            	 <t t-if="widget.options.room_details"> 
+	               		<t t-value="widget.options.room_details" t-set="room_details" />	
+	               		<t t-value='room_details["room_status"]' t-set='room_state' />   
+						<div class="night_audit_box">  	     	
+					   		<div class="hm_night_audit_container">
+								<ul class="hm_night_audit_table">
+									<li class="night_audit_table_row night_audit_li night_audit_li_background_color" >
+								  		<div class="col col-1" >Available</div>
+								      	<div class="col col-1" >Reserved</div>
+								      	<div class="col col-2" >Occupied</div>
+								     	<div class="col col-3" >Blocked/Maintenance</div>
+								    </li>
+								    <li class="night_audit_table_row night_audit_li" >
+								      <div class="col col-1" ><t t-esc="room_state.rooms_available" /></div>
+								      <div class="col col-2" ><t 	t-esc="room_state.rooms_reserved" /></div>
+								      <div class="col col-3" ><t t-esc="room_state.rooms_occupied" /></div>
+								      <div class="col col-4" ><t t-esc="room_state.rooms_blocked" /></div>
+									</li>
+								</ul>
+							</div>  	
+						</div>			                   	
+					  	<br></br>                 	
+						<div class="night_audit_box">  	     	
+					    	<div class="hm_night_audit_container night_audit_overflow">
+						  		<ul class="hm_night_audit_table">
+									<li class="night_audit_table_row night_audit_li night_audit_li_background_color">
+								  		<div class="col col-1" >Check In</div>
+										<div class="col col-1" >Room No.</div>
+									    <div class="col col-2" >Guest</div>
+									    <div class="col col-3" >Time</div>
+									    <div class="col col-4" >Amount</div>
+									    <div class="col col-4" >Payment mode</div>
+									    <div class="col col-4" >Payment</div>
+								    </li>
+						   			<t t-foreach='room_details["checkin_val"]' t-as='checkin_details'>  
+									    <li class="night_audit_table_row night_audit_li">
+									    	<div class="col col-1" ></div>
+									      	<div class="col col-1" ><t t-esc="checkin_details.product_name" /></div>
+									      	<div class="col col-2" ><t t-esc="checkin_details.partner_name" /></div>
+									      	<div class="col col-3" ><t t-esc="checkin_details.checkin_date" /></div>
+									      	<div class="col col-4" ><t t-esc="checkin_details.price_subtotal" /></div>
+									      	<div class="col col-4" ><t t-esc="checkin_details.journal_id" /></div>
+									      	<div class="col col-4" ><t t-esc="checkin_details.payment" /></div>
+									    </li>
+						   			</t>
+								</ul>
+							</div>  	
+						</div>		                   	
+						<br></br>
+						<div class="night_audit_box">  	     	
+							<div class="hm_night_audit_container night_audit_overflow">
+								<ul class="hm_night_audit_table">
+									<li class="night_audit_table_row night_audit_li night_audit_li_background_color">
+								  		<div class="col col-1" >Check Out</div>
+									   	<div class="col col-1" >Room No.</div>
+									    <div class="col col-2" >Guest</div>
+									    <div class="col col-3" >Time</div>
+									    <div class="col col-4" >Amount</div>
+									    <div class="col col-4" >Payment mode</div>
+									    <div class="col col-4" >Payment</div>
+								    </li>
+   									<t t-foreach='room_details["checkout_val"]' t-as='checkout_details'>  
+								    	<li class="night_audit_table_row night_audit_li" >
+								    		<div class="col col-1" ></div>
+								      		<div class="col col-1" ><t t-esc="checkout_details.product_name" /></div>
+								      		<div class="col col-2" ><t t-esc="checkout_details.partner_name" /></div>
+								      		<div class="col col-3" ><t t-esc="checkout_details.checkin_date" /></div>
+								      		<div class="col col-4" ><t t-esc="checkout_details.price_subtotal" /></div>
+								      		<div class="col col-4" ><t t-esc="checkout_details.journal_id" /></div>
+								      		<div class="col col-4" ><t t-esc="checkout_details.payment" /></div>
+								    	</li>
+   									</t>
+  								</ul>
+							</div>  	
+						</div>				                   	
+		      		</t>
                	</div>
             	<div class="footer">
-            		<div class="button cancel">
+            		<div class="button room_btn_confirm_next night_audit_footer_btn" >
+               			Confirm &amp; Next
+                  	</div>
+                  	<div class="button room_btn_next night_audit_footer_btn" >
+               			Next
+                  	</div>
+                  	<div class="button cancel float_left night_audit_footer_btn night_audit_footer_btn_left">
                			Cancel
                   	</div>
               	</div>
@@ -247,6 +221,163 @@
         </div>
     </t>
     
+    <!-- Service details - POPUP Widget -->
+	<t t-name="ServiceDetailsWidget">
+		<div class="modal-dialog">     
+            <div class="popup popup-text session-popup">
+              	<p class="title session-title night_audit_popup_title" >
+                	<t t-esc=" widget.options.title || '' " />
+              	</p>
+                <p class="body"><t t-esc=" widget.options.body || '' " /></p>
+                <div class="float_left">
+					<t t-if="widget.options.is_service_confirmed">
+						<img src="/skit_pos_hm_night_audit/static/src/img/ok.png" alt="" class="ok_img"/>
+					</t> 
+					<t t-else="">
+						<span class="checkmark"></span>
+					</t>
+				</div>    
+                <div class="session_form">  
+	           		<t t-if="widget.options.service_details"> 
+					    <div class="night_audit_box">  	     	
+					  		<div class="hm_night_audit_container night_audit_overflow">
+  								<ul class="hm_night_audit_table">
+									<li class="night_audit_table_row night_audit_li night_audit_li_background_color" >
+										<div class="col col-1" >Service</div>
+									   	<div class="col col-1" >Room No.</div> 
+									    <div class="col col-2" >Guest</div>
+									    <div class="col col-3" >Time</div>
+									    <div class="col col-4" >Responsible</div>
+									    <div class="col col-4" >Status</div>
+									    <div class="col col-4" >Payment</div>
+									</li>
+									<t t-foreach='widget.options.service_details["service_val"]' t-as='service'>  
+										<li class="night_audit_table_row night_audit_li">
+											<div class="col col-1" ><t t-esc="service.category_name" /></div>
+											<div class="col col-1" ><t t-esc="service.product_name" /></div>
+										    <div class="col col-2" ><t t-esc="service.partner_name" /></div>
+										     <div class="col col-3" ><t t-esc="service.time" /></div>
+										    <div class="col col-3" ><t t-esc="service.user_name" /></div>
+										   	<div class="col col-4" ><t t-esc="service.order_state" /></div>
+										  	<div class="col col-4" ><t t-esc="service.invoice_state" /></div>
+									   	</li>
+   									</t>
+  								</ul>
+							</div>  	
+						</div>		                   	
+					  	<br></br>
+		          	</t>
+               	</div>
+            	<div class="footer">
+            		<div class="button service_btn_confirm_next night_audit_footer_btn" >
+               			Confirm &amp; Next
+                  	</div>
+                  	<div class="button service_btn_next night_audit_footer_btn" >
+               			Next
+                  	</div>
+                  	<div class="button cancel service_btn_back float_left night_audit_footer_btn night_audit_footer_btn_left" >
+               			Back
+                  	</div>
+              	</div>
+        	</div>
+        </div>
+    </t>
+    
+    
+    <!-- Purchase details - POPUP Widget -->
+	<t t-name="PurchaseDetailsWidget">
+		<div class="modal-dialog">     
+            <div class="popup popup-text session-popup">
+              	<p class="title session-title night_audit_popup_title">
+                	<t t-esc=" widget.options.title || '' " />
+              	</p>
+                <p class="body"><t t-esc=" widget.options.body || '' " /></p>
+               	<div class="float_left">
+					<t t-if="widget.options.is_purchase_confirmed">
+				  		<img src="/skit_pos_hm_night_audit/static/src/img/ok.png" alt="" class="ok_img" />
+				  	</t> 
+				  	<t t-else="">
+				  		<span class="checkmark"></span>
+				  	</t>
+				</div>
+                <div class="session_form">  
+	           		<t t-if="widget.options.purchase_details"> 
+					    <div class="night_audit_box">  	     	
+					  		<div class="hm_night_audit_container night_audit_overflow">
+  								<ul class="hm_night_audit_table">
+									<li class="night_audit_table_row night_audit_li night_audit_li_background_color" >
+										<div class="col col-1" >Product</div>
+										<div class="col col-1" >Qty.</div>  
+									    <div class="col col-2" >Vendor</div>
+									    <div class="col col-3" >Time</div>
+									    <div class="col col-4" >Amount</div>
+									    <div class="col col-4" >Status</div>
+									    <div class="col col-4" >Payment</div>
+									</li>
+									    
+									<t t-foreach='widget.options.purchase_details["purchase_val"]' t-as='purchase'>  
+										<li class="night_audit_table_row night_audit_li" >
+											<div class="col col-1"><t t-esc="purchase.category_name" /></div>
+											<div class="col col-1"><t t-esc="purchase.qty" /></div>
+										    <div class="col col-2"><t t-esc="purchase.partner_name" /></div>
+										    <div class="col col-3"><t t-esc="purchase.time" /></div>
+										    <div class="col col-3"><t t-esc="purchase.price_total" /></div>
+										   	<div class="col col-4"><t t-esc="purchase.order_state" /></div>
+										  	<div class="col col-4"><t t-esc="purchase.invoice_state" /></div>
+									   	</li>
+   									</t>
+  								</ul>
+							</div>  	
+						</div>
+					  	<br></br>
+		          	</t>
+               	</div>
+            	<div class="footer">
+            		<div class="button btn_confirm_next night_audit_footer_btn" >
+               			Confirm &amp; Next
+                  	</div>
+                  	<div class="button btn_next night_audit_footer_btn" >
+               			Next
+                  	</div>
+                  	<div class="button cancel btn_back float_left night_audit_footer_btn night_audit_footer_btn_left" >
+               			Back
+                  	</div>
+              	</div>
+        	</div>
+        </div>
+    </t>    
+    
+  
+    <!-- Confirmation detail - POPUP Widget -->
+	<t t-name="ConfirmationDetailsWidget">
+		<div class="modal-dialog">     
+            <div class="popup popup-text popup_confirm">
+         		<p class="title session-title night_audit_popup_title">
+             		<t t-esc=" widget.options.title || '' " />
+             	</p>
+           		<p class="body"><t t-esc=" widget.options.body || '' " /></p>
+             	<t t-esc="widget.options.title_msg"></t>
+             	<br></br> 
+             	<br></br> 
+            	<t t-if="widget.options.confirm_msg">
+		    		<t t-foreach='widget.options.confirm_msg' t-as='msg'>
+		   				<t t-esc="msg"></t>
+		   				<br></br> <br></br> 
+		   			</t> 
+                </t>
+            	<div class="footer">
+                  	<div class="button btn_ok confirm night_audit_footer_btn" >
+               			OK
+                  	</div>
+                  	<div class="button cancel btn_back night_audit_footer_btn night_audit_footer_btn_left float_left" >
+               			Back
+                  	</div>
+              	</div>
+        	</div>
+        </div>
+    </t>  
+ 
+ 
 	<t t-name="SessionDataWidget">
 		<t t-if="session">     
 			<t t-if="session.cash_control == true">  	                	                   	                      

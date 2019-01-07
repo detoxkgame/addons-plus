@@ -8,23 +8,22 @@
     'license': "AGPL-3",
     'website': 'http://www.srikeshinfotech.com',
     'sequence': 15,
-    'summary': 'Close session in Point of Sale screen',
+    'summary': 'Night audit',
     'description': """
-Session In POS
+Night Audit
 ==================================================================
-This module allows you to directly close the session, manage
-the Cash control and print the session summary report from
-Point of Sale.
-
+This module allows you to easily manage room availability.
 """,
     'images': ['images/main_screenshot.png'],
     'price': 30,
     'currency': 'EUR',
     'category': 'Point of sales',
-    'depends': ['point_of_sale'],
+    'depends': ['sale', 'purchase', 'point_of_sale'],
     'data': ['views/pos_session_templates.xml',
              'views/pos_session_action.xml',
+             'views/night_audit_view.xml',
              'report/report_pos_statement.xml',
+             'security/ir.model.access.csv',
              ],
     'qweb': ['static/src/xml/pos_session.xml'],
 

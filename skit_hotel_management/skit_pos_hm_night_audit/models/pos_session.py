@@ -112,6 +112,131 @@ class pos_session(models.Model):
                                  })
         return cashbox_line
 
+    @api.multi
+    def get_room_details(self, session_id):
+        """ Get room details data
+
+        :param session_id: POS Open Session id .
+
+        :return: Array of values required for room screen.
+        """
+        checkin_val = []
+        checkout_val = []
+
+        session = self.browse(int(session_id))
+        pos_order = self.env['pos.order'].sudo().search(
+            [('session_id', '=', session.id)]
+        )
+        room_status = {"rooms_available": session.rooms_available,
+                       "rooms_reserved": session.rooms_reserved,
+                       "rooms_occupied": session.rooms_occupied,
+                       "rooms_blocked": session.rooms_blocked}
+        for order in pos_order:
+            product_history = self.env['product.history'].sudo().search(
+                [('order_id', '=', order.id),
+                 ('product_id.categ_id.is_room', '=', True),
+                 ('state', '=', ('check_in', 'check_out'))
+                 ])
+            for history in product_history:
+                val = {
+                     "partner_name": history.order_id.partner_id.name,
+                     'product_name': history.product_id.name,
+                     'price_subtotal': history.order_id.amount_total,
+                     'checkin_date': history.date.time(),
+                     'journal_id': history.order_id.statement_ids.journal_id.name,
+                     'payment': history.order_id.invoice_id.state
+                }
+                if history.state == 'check_in':
+                    checkin_val.append(val)
+                elif history.state == 'check_out':
+                    checkout_val.append(val)
+        room_details = {"checkin_val": checkin_val,
+                        "checkout_val": checkout_val,
+                        "room_status": room_status}
+        return room_details
+
+    @api.multi
+    def get_service_details(self, session_id):
+        """ Get service details data
+
+        :param session_id: POS Open Session id .
+
+        :return: Array of values required for service screen.
+        """
+        service_val = []
+        session = self.browse(int(session_id))
+        sale_order = self.env['sale.order'].sudo().search(
+            [('session_id', '=', session.id),
+             ('partner_id.category_id.name', '=', 'Taxi')]
+        )
+        invoice_ids = sale_order.invoice_ids
+        account_invoice = self.env['account.invoice'].sudo().search(
+            [('id', '=', invoice_ids.id)]
+        )
+        invoice_state = account_invoice.state
+        for s_order in sale_order:
+            category_name = s_order.partner_id.category_id.name
+            time = s_order.date_order.time()
+            pos_order = self.env['pos.order'].sudo().search(
+                [('id', '=', s_order.pos_order_id.id)]
+            )
+            pos_order_line = self.env['pos.order.line'].sudo().search([
+                ('order_id', '=', pos_order.id)
+            ])
+            for line in pos_order_line:
+                val = {
+                    "category_name": category_name,
+                    "product_name": line.product_id.name,
+                    "partner_name": line.order_id.partner_id.name,
+                    'time': time,
+                    'user_name': session.user_id.name,
+                    'order_state': s_order.state,
+                    'invoice_state': invoice_state,
+                }
+                service_val.append(val)
+        service_details = {"service_val": service_val}
+        return service_details
+
+    @api.multi
+    def get_purchase_details(self, session_id):
+        """ Get purchase details data
+
+        :param session_id: POS Open Session id .
+
+        :return: Array of values required for purchase screen.
+        """
+        purchase_val = []
+        session = self.browse(int(session_id))
+        purchase_order = self.env['purchase.order'].sudo().search(
+            [('session_id', '=', session.id),
+             ('partner_id.category_id.name', '=', 'Vegetables')]
+        )
+        purchase_order_line = self.env['purchase.order.line'].sudo().search(
+            [('order_id', '=', purchase_order.id)]
+        )
+        category_name = purchase_order.partner_id.category_id.name
+        # if purchase_order:
+        # time = purchase_order.date_order.time()
+        invoice_ids = purchase_order.invoice_ids
+        account_invoice = self.env['account.invoice'].sudo().search(
+            [('id', '=', invoice_ids.id)]
+        )
+        invoice_state = account_invoice.state
+        for line in purchase_order_line:
+            val = {
+                "category_name": category_name,
+                "qty": line.product_qty,
+                "product_name": line.product_id.name,
+                "partner_name": line.order_id.partner_id.name,
+                'time': purchase_order.date_order.time() if purchase_order else '',
+                'price_total': line.price_total,
+                'order_state': purchase_order.state,
+                'invoice_state': invoice_state,
+            }
+            purchase_val.append(val)
+        purchase_details = {"purchase_val": purchase_val}
+        return purchase_details
+
 
 class AccountBankStmtCashWizard(models.Model):
     """
