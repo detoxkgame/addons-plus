@@ -12,7 +12,7 @@ class ProductHistory(models.Model):
     product_id = fields.Many2one('product.product', string='Product id', ondelete='cascade')
     product_tmpl_id = fields.Many2one('product.template', string='Product template id', ondelete='cascade')
     date = fields.Datetime(string=' Date')
-    order_id = fields.Many2one('product.product', string='Product id', ondelete='cascade')
+    order_id = fields.Many2one('pos.order', string='Product id', ondelete='cascade')
     status = fields.Char(string='status')
     created_by = fields.Many2one('res.users', string='Created user', ondelete='cascade')
     state = fields.Selection(
