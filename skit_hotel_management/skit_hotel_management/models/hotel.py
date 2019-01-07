@@ -396,7 +396,7 @@ class SubFormTemplateLine(models.Model):
     sub_form_template_id = fields.Many2one('hm.sub.form.template',
                                        string='Form Template', copy=False)
     form_template_id = fields.Many2one('hm.form.template',
-                                           domain=[('form_view', '=', 'form')],
+                                           #domain=[('form_view', '=', 'form')],
                                            string='Sub Form Template',
                                            copy=False)
     sub_dashboard_line_id = fields.Many2one('hm.vendor.dashboard.line',
@@ -446,6 +446,7 @@ class FormTemplateLine(models.Model):
         ('sub_form', _('Sub Form Template')),
         ('statusbar', _('Status Bar')),
         ('top_buttons', _('Top Buttons')),
+        ('view_buttons', _('View Buttons')),
         ('button', _('Button')),
         ('many2one', _('Many2One')),
         ('empty_line', _('Empty Line')),
@@ -473,20 +474,24 @@ class FormTemplateLine(models.Model):
     form_template_model_fields = fields.Many2many('ir.model.fields',
                                                       string='display values')
     field_styles = fields.Char(string='Field Styles')
-    field_group =  fields.Selection([
+    field_group = fields.Selection([
         ('htmlheader', _('HTML<Header>')),
         ('htmlbody', _('HTML<Body>')),
         ('htmlfooter', _('HTML<Footer>'))], string='Field Group',
-                                       required=True)
+                                       required=False)
 
     @api.onchange('form_field_type')
     def change_form_field_type(self):
-        if self.form_field_type =='many2one':
+        if self.form_field_type == 'many2one' or self.form_field_type == 'many2many':
             if self.form_field_id.relation:
-                ir_model = self.env['ir.model'].sudo().search([('model','=',self.form_field_id.relation)])
+                ir_model = self.env['ir.model'].sudo().search([
+                                ('model', '=', self.form_field_id.relation)])
                 if ir_model:
-                    return {'domain':{'form_template_model_fields':[('model_id','=',ir_model.id)]}}
-            
+                    return {'domain': {'form_template_model_fields': [
+                                                ('model_id', '=', ir_model.id)]
+                                       }}
+
+
 class FormTemplateSelectionItem(models.Model):
     _name = "hm.form.selection.item"
     _description = "Selection items for m2m fields in Form Template design"

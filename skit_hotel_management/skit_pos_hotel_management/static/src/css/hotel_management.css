@@ -416,6 +416,35 @@
 	padding: 10px;
 	width: 50%;
 }
+
+.oe-view-btn{
+	float: right;
+	margin-right: 5%;
+	margin-top: 1%;
+	border-radius: 0 !important;
+	border-color: #ccc !important;
+	background: white !important;
+	outline: none !important;
+	height: 40px;
+	width: 132px;
+}
+.oe-view-btn:hover{
+	background-color: #e6e6e6 !important;
+}
+.oe-view-div{
+	display: inline-block;
+	vertical-align: middle;
+	max-width: 70%;
+	line-height: 1.2;
+}
+.oe-view-value{
+	display: block;
+	max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: top;
+}
 		
 /* h1 {
   color: white;

@@ -75,10 +75,12 @@ class ResPartner(models.Model):
     _inherit = 'hm.form.template'
 
     @api.multi
-    def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id, vendor_id = 0):
+    def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id, vendor_id = 0, invoice_ids = []):
         vendors = self.env['res.partner'].sudo().search(
                                     [('supplier', '=', True),
                                      ('category_id', 'in', [int(category_id)])])
+        vendor_dashboard = self.env['hm.vendor.dashboard'].sudo().search(
+                                        [('id', '=', int(dashboard_id))])
         if is_form:
             sub_template = self.env['hm.sub.form.template.line'].sudo().search([('id', '=', int(sub_temp_id))])
             form_template = self.env['hm.form.template'].sudo().search(
@@ -94,7 +96,11 @@ class ResPartner(models.Model):
             form_template_line = self.env['hm.form.template.line'].sudo().search(
                             [('form_template_id', '=', form_template.id)],
                             order='sequence asc')
-        model_datas = self.env[form_template.form_model_id.model].search([])
+        if invoice_ids:
+            model_datas = self.env[form_template.form_model_id.model].search(
+                                                [('id', 'in', [invoice_ids])])
+        else:
+            model_datas = self.env[form_template.form_model_id.model].search([])
         line_group = {}
         temp_id = []
         key = 0
@@ -109,27 +115,40 @@ class ResPartner(models.Model):
             if line.form_field_id:
                 fields.append(line.form_field_id.name)
                 field_type.append(line.form_field_id.ttype)
-            if line.form_field_type == 'sub_form':
+            if line.form_field_type == 'sub_form' or line.form_field_type == 'view_buttons':
                 sub_form_temp_ids.append(line.sub_template_id.id)
             selection_items = []
             if line.form_template_selection_fields:
                 for selection in line.form_template_selection_fields:
                     selection_items.append({'value': selection.value,
                                             'name': selection.name})
+            many2one_list = []
+            if line.form_field_type == 'many2one' or line.form_field_type == 'many2many':
+                if line.form_field_id.relation:
+                    records = self.env[line.form_field_id.relation].search([])
+                    records_model_fields = self.env['ir.model.fields'].search(
+                        [('id', 'in', line.form_template_model_fields.ids)])
+                    for rec in records:
+                        arr = {}
+                        for fields_rec in records_model_fields:
+                            field_name = fields_rec.name
+                            arr[str(field_name)] = rec[field_name]
+                        many2one_list.append(arr)
             datas = {'id': line.id,
-                                   'form_label': line.form_label,
-                                   'form_field_type': line.form_field_type,
-                                   'form_fields': line.form_field_id.name,
-                                   'sameline': line.sameline,
-                                   'isMandatory': line.isMandatory,
-                                   'sequence': line.sequence,
-                                   'form_placeholder': line.form_placeholder,
-                                   'font_size': line.font_size,
-                                   'font_style': line.font_style,
-                                   'font_family': line.font_family,
-                                   'sub_template_id': line.sub_template_id.id,
-                                   'ttype': line.form_field_id.ttype,
-                                   'form_template_selection_fields': selection_items
+                     'form_label': line.form_label,
+                     'form_field_type': line.form_field_type,
+                     'form_fields': line.form_field_id.name,
+                     'sameline': line.sameline,
+                     'isMandatory': line.isMandatory,
+                     'sequence': line.sequence,
+                     'form_placeholder': line.form_placeholder,
+                     'font_size': line.font_size,
+                     'font_style': line.font_style,
+                     'font_family': line.font_family,
+                     'sub_template_id': line.sub_template_id.id,
+                     'ttype': line.form_field_id.ttype,
+                     'form_template_selection_fields': selection_items,
+                     'form_template_model_fields': many2one_list
                                    }
             template_lines.append(datas)
             if count == 0:
@@ -155,6 +174,8 @@ class ResPartner(models.Model):
         sub_temp_id = []
         sub_key = 0
         temp_order_lines = []
+        sub_line_group_array = []
+        sub_line_group_key_array = []
         #is_orderline = False
         line_tmp = 0
         line_model = ''
@@ -221,12 +242,18 @@ class ResPartner(models.Model):
                     count = 0
                     for field in fields:
                         if field_type[count] == 'many2one':
-                            order_data[field] = order[field].name or ''
+                            order_data[field] = order[field].display_name or ''
                         else:
                             order_data[field] = order[field] or ''
                         count = count + 1
                     order_data['id'] = order['id']
                     order_data['state'] = order['state']
+                    if form_template.form_model_id.model == 'laundry.order':
+                        order_data['invoice_ids'] = order.sale_obj.invoice_ids.ids
+                    if form_template.form_model_id.model == 'sale.order':
+                        order_data['invoice_ids'] = order.invoice_ids.ids
+                    if form_template.form_model_id.model == 'purchase.order':
+                        order_data['invoice_ids'] = order.invoice_ids.ids
                     current_order.append(order_data)
             else:
                 order_data = {}
@@ -239,89 +266,126 @@ class ResPartner(models.Model):
                     count = count + 1
                 order_data['id'] = ''
                 order_data['state'] = ''
+                order_data['invoice_ids'] = []
                 current_order.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])
             #sub_temp_array = {}
             line_fields = []
             line_field_type = []
+            line_fields_array = []
+            line_field_type_array = []
 
             for temp in sub_temp:
+                #sub_line_group = {}
+                #sub_temp_id = []
+                #sub_key = 0
                 sub_temp_line = self.env['hm.sub.form.template.line'].sudo().search(
                             [('sub_form_template_id', '=', temp.id)],
                             order='sequence asc')
 
+                tmp_line = self.env['hm.form.template.line'].sudo().search([('sub_template_id', '=', temp.id)])
                 temp_array = []
+                tid = 0
                 for sline in sub_temp_line:
+                    tid = sline.id
                     temp_array.append({'id': sline.id,
                                        'name': sline.name,
                                        'color': sline.color
                                        })
-                    line_form_template = self.env['hm.form.template'].sudo().search(
-                                [('id', '=', sline.form_template_id.id)])
-                    line_form_template_line = self.env['hm.form.template.line'].sudo().search(
-                                    [('form_template_id', '=', line_form_template.id)],
-                                    order='sequence asc')
-                    temp_order_lines = []
-                    for line in line_form_template_line:
-                        # is_orderline = True
-                        if line.form_field_id:
-                            line_fields.append(line.form_field_id.name)
-                            line_field_type.append(line.form_field_id.ttype)
-                        selection_items = []
-                        if line.form_template_selection_fields:
-                            for selection in line.form_template_selection_fields:
-                                selection_items.append({'value': selection.value,
-                                                        'name': selection.name})
-                        line_tmp = line.form_template_id.id
-                        line_model = line.form_template_id.form_model_id.model
-                        datas = {'id': line.id,
-                                               'form_label': line.form_label,
-                                               'form_field_type': line.form_field_type,
-                                               'form_fields': line.form_field_id.name,
-                                               'sameline': line.sameline,
-                                               'isMandatory': line.isMandatory,
-                                               'sequence': line.sequence,
-                                               'form_placeholder': line.form_placeholder,
-                                               'font_size': line.font_size,
-                                               'font_style': line.font_style,
-                                               'font_family': line.font_family,
-                                               'sub_template_id': line.sub_template_id.id,
-                                               'ttype': line.form_field_id.ttype,
-                                               'form_template_selection_fields': selection_items
-                                               }
-                        temp_order_lines.append(datas)
-                        if count == 0:
-                            sub_key = line.sequence
-                            sub_temp_id.append(datas)
-                            sub_line_group[sub_key] = sub_temp_id
-                        else:
-                            if line.sameline:
-                                    sub_temp_id.append(datas)
-                                    sub_line_group[sub_key] = sub_temp_id
-                            else:
+                    if tmp_line.form_field_id.ttype == 'one2many':
+                        line_form_template = self.env['hm.form.template'].sudo().search(
+                                    [('id', '=', sline.form_template_id.id)])
+                        line_form_template_line = self.env['hm.form.template.line'].sudo().search(
+                                        [('form_template_id', '=', line_form_template.id)],
+                                        order='sequence asc')
+                        temp_order_lines = []
+                        for line in line_form_template_line:
+                            # is_orderline = True
+                            if line.form_field_id:
+                                line_fields.append(line.form_field_id.name)
+                                line_field_type.append(line.form_field_id.ttype)
+                            selection_items = []
+                            if line.form_template_selection_fields:
+                                for selection in line.form_template_selection_fields:
+                                    selection_items.append({'value': selection.value,
+                                                            'name': selection.name})
+                            many2one_list = []
+                            if line.form_field_type == 'many2one' or line.form_field_type == 'many2many':
+                                if line.form_field_id.relation:
+                                    records = self.env[line.form_field_id.relation].search([])
+                                    records_model_fields = self.env['ir.model.fields'].search(
+                                        [('id', 'in', line.form_template_model_fields.ids)])
+                                    for rec in records:
+                                        arr = {}
+                                        for fields_rec in records_model_fields:
+                                            field_name = fields_rec.name
+                                            arr[str(field_name)] = rec[field_name]
+                                        many2one_list.append(arr)
+                            line_tmp = line.form_template_id.id
+                            line_model = line.form_template_id.form_model_id.model
+                            datas = {'id': line.id,
+                                     'form_label': line.form_label,
+                                     'form_field_type': line.form_field_type,
+                                     'form_fields': line.form_field_id.name,
+                                     'sameline': line.sameline,
+                                     'isMandatory': line.isMandatory,
+                                     'sequence': line.sequence,
+                                     'form_placeholder': line.form_placeholder,
+                                     'font_size': line.font_size,
+                                     'font_style': line.font_style,
+                                     'font_family': line.font_family,
+                                     'sub_template_id': line.sub_template_id.id,
+                                     'ttype': line.form_field_id.ttype,
+                                     'form_template_selection_fields': selection_items,
+                                     'form_template_model_fields': many2one_list
+                                     }
+                            temp_order_lines.append(datas)
+                            if count == 0:
                                 sub_key = line.sequence
-                                sub_temp_id = []
                                 sub_temp_id.append(datas)
                                 sub_line_group[sub_key] = sub_temp_id
-                        count = count+1
+                            else:
+                                if line.sameline:
+                                        sub_temp_id.append(datas)
+                                        sub_line_group[sub_key] = sub_temp_id
+                                else:
+                                    sub_key = line.sequence
+                                    sub_temp_id = []
+                                    sub_temp_id.append(datas)
+                                    sub_line_group[sub_key] = sub_temp_id
+                            count = count+1
+                    #line_fields_array.append({tid: line_fields})
+                    #line_field_type_array.append({tid: line_field_type_array})
+                #===============================================================
+                # sub_line_group_key_array.append({
+                #                     tid: sorted(sub_line_group.keys())
+                #                     })
+                # sub_line_group_array.append({
+                #                       tid: sub_line_group
+                #                       })
+                #===============================================================
                 sub_form_template[temp.id] = temp_array
             if orders:
+                data_lines = []
                 if form_template.form_model_id.model == 'laundry.order':
-                    for oline in orders.order_lines:
-                        orderline_data = {}
-                        count = 0
-                        for field in line_fields:
-                            if line_field_type[count] == 'many2one':
-                                orderline_data[field] = oline[field].name or ''
-                            elif line_field_type[count] == 'many2many':
-                                orderline_data[field] = oline[field].ids
-                            else:
-                                orderline_data[field] = oline[field] or ''
-                            count = count + 1
-                        orderline_data['id'] = order['id']
-                        orderline_data['state'] = order['state']
-                        current_order_lines.append(orderline_data)
+                    data_lines = orders.order_lines
+                if form_template.form_model_id.model == 'account.invoice':
+                    data_lines = orders.invoice_line_ids
+                for oline in data_lines:
+                    orderline_data = {}
+                    count = 0
+                    for field in line_fields:
+                        if line_field_type[count] == 'many2one':
+                            orderline_data[field] = oline[field].display_name or ''
+                        elif line_field_type[count] == 'many2many':
+                            orderline_data[field] = oline[field].ids
+                        else:
+                            orderline_data[field] = oline[field] or ''
+                        count = count + 1
+                    orderline_data['id'] = order['id']
+                    orderline_data['state'] = order['state']
+                    current_order_lines.append(orderline_data)
             else:
                 orderline_data = {}
                 count = 0
@@ -345,8 +409,8 @@ class ResPartner(models.Model):
         result.append({'line_group': line_group,
                        'line_group_key': sorted(line_group.keys()),
                        'form_view': form_template.form_view,
-                       'form_name': form_template.vendor_dashboard_line_id.dashboard_menu.name,
-                       'color': form_template.vendor_dashboard_id.color,
+                       'form_name': form_template.vendor_dashboard_line_id.dashboard_menu.name or form_template.name,
+                       'color': form_template.vendor_dashboard_id.color or vendor_dashboard.color,
                        'result_datas': result_datas,
                        'sub_form_template': sub_form_template,
                        'template_lines': template_lines,
@@ -358,6 +422,8 @@ class ResPartner(models.Model):
                        'vendor_id': vendor_id,
                        'sub_line_group': sub_line_group,
                        'sub_line_group_key': sorted(sub_line_group.keys()),
+                       'sub_line_group_key_array': sub_line_group_key_array,
+                       'sub_line_group_array': sub_line_group_array,
                        'temp_order_lines': temp_order_lines,
                        'line_form_temp_id': line_tmp,
                        'line_model_name': line_model,
@@ -462,6 +528,53 @@ class ResPartner(models.Model):
             order.button_confirm()
         if model_name == 'laundry.order':
             order.confirm_order()
+
+        edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
+                            ('form_template_id', '=', int(form_temp_id)),
+                            ('name', '=', 'Edit')])
+        result = {'order_id': order.id,
+                  'edit_form_id': edit_form_id.id}
+
+        return result
+
+    @api.multi
+    def create_invoice(self, order_id, form_temp_id, model_name):
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+        if model_name == 'laundry.order':
+            if order.sale_obj.state in ['draft', 'sent']:
+                order.sale_obj.action_confirm()
+            order.invoice_status = order.sale_obj.invoice_status
+            order.sale_obj.action_invoice_create()
+        else:
+            order.action_invoice_create()
+
+        edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
+                            ('form_template_id', '=', int(form_temp_id)),
+                            ('name', '=', 'Edit')])
+        result = {'order_id': order.id,
+                  'edit_form_id': edit_form_id.id}
+
+        return result
+
+    @api.multi
+    def validate_invoice(self, order_id, form_temp_id, model_name):
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+
+        order.action_invoice_open()
+
+        edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
+                            ('form_template_id', '=', int(form_temp_id)),
+                            ('name', '=', 'Edit')])
+        result = {'order_id': order.id,
+                  'edit_form_id': edit_form_id.id}
+
+        return result
+
+    @api.multi
+    def return_dress(self, order_id, form_temp_id, model_name):
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+
+        order.return_dress()
 
         edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
                             ('form_template_id', '=', int(form_temp_id)),

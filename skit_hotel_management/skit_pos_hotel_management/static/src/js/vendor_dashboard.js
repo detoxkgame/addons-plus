@@ -125,6 +125,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var vendor_id = result[0]['vendor_id']
     			var sub_line_group = result[0]['sub_line_group']
     			var sub_line_group_key = result[0]['sub_line_group_key']
+    			//var sub_line_group_array = result[0]['sub_line_group_array']
+    			//var sub_line_group_key_array = result[0]['sub_line_group_key_array']
     			var temp_order_lines = result[0]['temp_order_lines']
     			var line_form_temp_id = result[0]['line_form_temp_id']
     			var line_model_name = result[0]['line_model_name']
@@ -138,6 +140,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 						line_form_temp_id: line_form_temp_id, line_model_name: model_name,
                 						line_group: line_group, line_group_key: line_group_key,
                 						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+                						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
                 						temp_order_lines: temp_order_lines});
                 var vendorlist = document.createElement('div');
                 vendorlist.innerHTML = vendor_html;
@@ -187,6 +190,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var vendor_id = result[0]['vendor_id']
             			var sub_line_group = result[0]['sub_line_group']
             			var sub_line_group_key = result[0]['sub_line_group_key']
+            			//var sub_line_group_array = result[0]['sub_line_group_array']
+            			//var sub_line_group_key_array = result[0]['sub_line_group_key_array']
             			var temp_order_lines = result[0]['temp_order_lines']
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
@@ -204,6 +209,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
     						line_group: line_group, line_group_key: line_group_key,
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+    						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
     						temp_order_lines: temp_order_lines});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
@@ -259,6 +265,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var vendor_id = result[0]['vendor_id']
             			var sub_line_group = result[0]['sub_line_group']
             			var sub_line_group_key = result[0]['sub_line_group_key']
+            			//var sub_line_group_array = result[0]['sub_line_group_array']
+            			//var sub_line_group_key_array = result[0]['sub_line_group_key_array']
             			var temp_order_lines = result[0]['temp_order_lines']
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
@@ -272,6 +280,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
                         						line_group: line_group, line_group_key: line_group_key,
                         						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+                        						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
                         						temp_order_lines: temp_order_lines});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
@@ -288,14 +297,16 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             		});
                 });
                 /** Action for Vendors */
-                contents.off('click','.vendor-form-icon');
-                contents.on('click','.vendor-form-icon',function(){ 
+                contents.off('click','.vendor-form-icon, .invoice-action');
+                contents.on('click','.vendor-form-icon, .invoice-action',function(){ 
                 	var sub_temp_id = $(this).attr('id');
                 	var vendor_id = $(this).attr('vendor');
+                	var invoice_ids = contents.find('#invoice_ids').text()
+                	//alert('invoice_ids'+invoice_ids);
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'get_vendor_list',
-            			args: [0,vendor_categ_id, dashboard_id, line_id, true, sub_temp_id, order_id, vendor_id],
+            			args: [0,vendor_categ_id, dashboard_id, line_id, true, sub_temp_id, order_id, vendor_id, invoice_ids],
             		}).then(function(result){ 
             			var result_datas = result[0]['result_datas']
             			var line_group = result[0]['line_group']
@@ -313,6 +324,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var vendor_id = result[0]['vendor_id']
             			var sub_line_group = result[0]['sub_line_group']
             			var sub_line_group_key = result[0]['sub_line_group_key']
+            			//var sub_line_group_array = result[0]['sub_line_group_array']
+            			//var sub_line_group_key_array = result[0]['sub_line_group_key_array']
             			var temp_order_lines = result[0]['temp_order_lines']
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
@@ -329,6 +342,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
     						line_group: line_group, line_group_key: line_group_key, 
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+    						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
     						temp_order_lines: temp_order_lines});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
@@ -596,6 +610,57 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	}
                 });
                 
+                /** Create Invoice */
+                contents.off('click','#order_invoice');
+                contents.on('click','#order_invoice',function(){
+                	var order_id = contents.find('#order_id').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
+                	var model_name = contents.find('#model_name').text();
+                	
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'create_invoice',
+            			args: [0, order_id, form_temp_id, model_name],
+            		}).then(function(result){
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
+                    	
+            		});
+                });
+                
+                /** Action for Validate the Invoice */
+                contents.off('click','#invoice_validate');
+                contents.on('click','#invoice_validate',function(){
+                	var order_id = contents.find('#order_id').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
+                	var model_name = contents.find('#model_name').text();
+                	
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'validate_invoice',
+            			args: [0, order_id, form_temp_id, model_name],
+            		}).then(function(result){
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
+                    	
+            		});
+                });
+                
+                /** Action for Return Dress */
+                contents.off('click','#order_return');
+                contents.on('click','#order_return',function(){
+                	var order_id = contents.find('#order_id').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
+                	var model_name = contents.find('#model_name').text();
+                	
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'return_order',
+            			args: [0, order_id, form_temp_id, model_name],
+            		}).then(function(result){
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
+                    	
+            		});
+                });
+                
                 /** Add Line Action */
                 contents.off('click','.add-line');
                 contents.on('click','.add-line',function(e){
@@ -815,6 +880,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var vendor_id = result[0]['vendor_id']
 			var sub_line_group = result[0]['sub_line_group']
 			var sub_line_group_key = result[0]['sub_line_group_key']
+			//var sub_line_group_array = result[0]['sub_line_group_array']
+			//var sub_line_group_key_array = result[0]['sub_line_group_key_array']
 			var temp_order_lines = result[0]['temp_order_lines']
 			var line_form_temp_id = result[0]['line_form_temp_id']
 			var line_model_name = result[0]['line_model_name']
@@ -829,6 +896,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 				line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
 				line_group: line_group, line_group_key: line_group_key, 
 				sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
+				//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
 				temp_order_lines: temp_order_lines});
             var vendorlist = document.createElement('div');
             vendorlist.innerHTML = vendor_html;

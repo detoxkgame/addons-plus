@@ -21,7 +21,7 @@
     </t>
     
     <t t-name="VendorListContent">
-    	<div style="display: inline-block;width: 100%;overflow-y: auto;">
+    	<div style="display: inline-block;width: 100%;height: 100%;overflow-y: auto;">
     		<h1 t-attf-style="text-align: left;border-bottom: 0.1px solid gray;color:#{color}"><t t-esc="form_name" /></h1>
     		<!-- Kanban View -->
     		<t t-if="form_view == 'kanban'">
@@ -156,30 +156,6 @@
 		    				<tbody>
 		    				<div style="width:100%;border-bottom: 1px solid gray;background-color: #F8F8F8;display: inline-block;">
 		    					<div>
-		    						<!-- <t t-if="c_order['id']">
-		    							<t t-if="c_order['state'] == 'draft'">
-		    								<button id="order-confirm" class="header-btn btn-active">Confirm</button>
-				    						<button id="order-cancel" class="header-btn">cancel</button>
-				    						<button id="order-draft" style="display:none;" class="header-btn btn-active">Set to Draft</button>
-		    							</t>
-		    							<t t-if="c_order['state'] == 'sale'">
-		    								<button id="order-confirm" class="header-btn">Confirm</button>
-				    						<button id="order-cancel" class="header-btn">cancel</button>
-				    						<button id="order-draft" style="display:none;" class="header-btn btn-active">Set to Draft</button>
-		    							</t>
-		    							<t t-if="c_order['state'] == 'cancel'">
-		    								<button id="order-confirm" class="header-btn">Confirm</button>
-				    						<button id="order-cancel" class="header-btn">cancel</button>
-				    						<button id="order-draft" class="header-btn btn-active">Set to Draft</button>
-		    							</t>
-		    							<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
-		    						</t>
-		    						<t t-else="">
-				    					<button id="order-confirm" class="header-btn btn-active">Confirm</button>
-				    					<button id="order-cancel" class="header-btn">cancel</button>
-				    					<button id="order-draft" style="display:none;" class="header-btn btn-active">Set to Draft</button>
-				    					<span id="order_id" style="display:none;">0</span>
-			    					</t> -->
 			    					<t t-foreach="line_group_key" t-as="line_key" >
 			    						<t t-foreach="line_group[line_key]" t-as="data">
 											<t t-if="(data.form_field_type)=='top_buttons'">
@@ -194,14 +170,26 @@
 																	<button t-att-id="btn.value" class="header-btn"><t t-esc="btn.name" /></button>
 																</t>
 															</t>
+															<t t-if="btn.value == 'invoice_validate'">
+																<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
+															</t>
 														</t>
 														<t t-if="c_order['state'] == 'done'">
-															<t t-if="(btn.value == 'order_invoice') or (btn.value == 'order_return')">
+															<t t-if="(btn.value == 'order_return')">
+																<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
+															</t>
+															
+															<t t-if="(btn.value == 'order_invoice') and (c_order['invoice_ids'] == '')">
 																<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
 															</t>
 														</t>
 														<t t-if="c_order['state'] == 'sale'">
 															<t t-if="(btn.value == 'order_invoice')">
+																<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
+															</t>
+														</t>
+														<t t-if="c_order['state'] == 'open'">
+															<t t-if="(btn.value == 'register_payment')">
 																<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
 															</t>
 														</t>
@@ -223,39 +211,19 @@
 											</t>
 										</t>
 									</t>
-												
+									<t t-if="c_order['id']">
+										<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
+									</t>
+									<t t-else="" >
+										<span id="order_id" style="display:none;">0</span>
+									</t>		
 			    					<span id="form_temp_id" style="display:none;"><t t-esc="form_temp_id" /></span>
 			    					<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
 			    					<span id="vendor_id" style="display:none;"><t t-esc="vendor_id" /></span>
+			    					<span id="invoice_ids" style="display:none;"><t t-esc="c_order['invoice_ids']" /></span>
 		    					</div>
 		    					<div style="float: right;">
 		    						<ul class="state-breadcrumb">
-		    							<!-- <t t-if="c_order['id']">
-		    								<t t-if="c_order['state'] == 'draft'">
-		    									<li><span id="open" class="active">Open</span></li>
-				    							<li><span id="inprogress">In Progress</span></li>
-				    							<li><span id="done">Done</span></li>
-				    							<li><span id="cancel" style="display:none">Cancelled</span></li>
-		    								</t>
-		    								<t t-if="c_order['state'] == 'sale'">
-		    									<li><span id="open" >Open</span></li>
-				    							<li><span id="inprogress">In Progress</span></li>
-				    							<li><span id="done" class="active">Done</span></li>
-				    							<li><span id="cancel" style="display:none">Cancelled</span></li>
-		    								</t>
-		    								<t t-if="c_order['state'] == 'cancel'">
-		    									<li><span id="open" >Open</span></li>
-				    							<li><span id="inprogress">In Progress</span></li>
-				    							<li><span id="done">Done</span></li>
-				    							<li><span id="cancel" style="display:block" class="active">Cancelled</span></li>
-		    								</t>
-		    							</t>
-		    							<t t-else="">
-			    							<li><span id="open" class="active">Open</span></li>
-			    							<li><span id="inprogress">In Progress</span></li>
-			    							<li><span id="done">Done</span></li>
-			    							<li><span id="cancel" style="display:none">Cancelled</span></li>
-		    							</t> -->
 		    							<t t-foreach="line_group_key" t-as="line_key" >
 			    							<t t-foreach="line_group[line_key]" t-as="data">
 												<t t-if="(data.form_field_type)=='statusbar'">
@@ -293,14 +261,28 @@
 												</t>
 											</t>
 		    							</t>
-		    							<!-- <li><span id="open" class="active">Open</span></li>
-			    						<li><span id="inprogress">In Progress</span></li>
-			    						<li><span id="done">Done</span></li>
-			    						<li><span id="cancel" style="display:none">Cancelled</span></li> -->
 		    						</ul>
 		    					</div>
-		    					
 		    				</div>
+		    			    <div>
+		    					<t t-foreach="line_group_key" t-as="line_key" >
+									<t t-foreach="line_group[line_key]" t-as="same_row">
+										<t t-if="(same_row.form_field_type)=='view_buttons'">
+											<t t-if="(c_order['invoice_count']) and (c_order['invoice_ids'] != '')">
+												<t t-foreach="sub_form_template[same_row.sub_template_id]" t-as="temp" >
+													<button t-attf-id="#{temp.id}" class="oe-view-btn invoice-action">
+														<i class="fa fa-fw o_button_icon fa-money" style="float: left;font-size: 30px;"></i>
+														<div class="oe-view-div">
+															<span class="oe-view-value"><t t-esc="c_order['invoice_count']" /></span>
+															<span class="oe-view-value">Invoice</span>
+														</div>
+													</button>
+												</t>
+											</t>
+										</t>
+									</t>
+								</t>
+		    				</div> 
 		    					<t t-foreach="line_group_key" t-as="line_key" >
 			    					<t t-set="first_col" t-value="line_group[line_key][0]" />
 			    					<tr>
@@ -351,7 +333,7 @@
 			    								</t>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
-			    							<t t-if="(first_col.form_field_type)=='selection'">
+			    							<t t-if="(first_col.form_field_type)=='many2one'">
 					    						<!-- <input class="selection-type" list="cars" onfocus="this.placeholder=''"
 					    						t-attf-placeholder="#{first_col.form_placeholder}" t-attf-id="#{first_col.form_fields}"/>
 					    						<img  t-att-src='widget.car_icon_url(1)' width="35" height="32" />
@@ -360,9 +342,22 @@
 													    <option t-att-value='car.name' /> 
 												    </t>
 												 </datalist> -->
-												<t t-if="(first_col.form_fields) == 'laundry_person'" >
+												 <select class="selection-type" t-attf-id="#{first_col.form_fields}">
+												 	<t t-foreach='first_col.form_template_model_fields' t-as='user'> 
+														<t t-if="c_order[first_col.form_fields] == user.display_name">
+													 		<option t-att-id='user.id' t-att-selected="true"><t t-esc="user.display_name" /></option>
+													 	</t>
+													 	<t t-else="">
+													 		<option t-att-id='user.id'><t t-esc="user.display_name" /></option>
+													 	</t>
+													</t>
+												</select>
+												<t t-if="(first_col.form_fields) == 'car_type_id'" >
+													<img  id="car-image" t-att-src='widget.car_icon_url(first_col.form_template_model_fields[0].id)' width="35" height="32" />
+												</t>
+												<!-- <t t-if="(first_col.form_fields) == 'laundry_person'" >
 													<select class="selection-type" t-attf-id="#{first_col.form_fields}">
-													 	<t t-foreach='widget.pos.res_users' t-as='user'> 
+													 	<t t-foreach='first_col.form_template_model_fields' t-as='user'> 
 													 		<t t-if="c_order[first_col.form_fields] == user.name">
 													 			<option t-att-id='user.id' t-att-selected="true"><t t-esc="user.name" /></option>
 													 		</t>
@@ -374,7 +369,7 @@
 												</t>
 												<t t-else="">
 													 <select class="selection-type" t-attf-id="#{first_col.form_fields}">
-													 	<t t-foreach='widget.pos.car_types' t-as='car'> 
+													 	<t t-foreach='first_col.form_template_model_fields' t-as='car'> 
 													 		<t t-if="c_order[first_col.form_fields] == car.name">
 													 			<option t-att-id='car.id' t-att-selected="true"><t t-esc="car.name" /></option>
 													 		</t>
@@ -383,8 +378,8 @@
 													 		</t>
 													 	</t>
 													 </select>
-													 <img  id="car-image" t-att-src='widget.car_icon_url(widget.pos.car_types[0].id)' width="35" height="32" />
-					    						</t>
+													 <img  id="car-image" t-att-src='widget.car_icon_url(first_col.form_template_model_fields[0].id)' width="35" height="32" />
+					    						</t> -->
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='date'">
 			    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
@@ -419,10 +414,25 @@
 					    								t-attf-value="#{c_order[same_row.form_fields]}" />
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
 					    							</t>
-					    							<t t-if="(same_row.form_field_type)=='selection'">
+					    							<t t-if="(same_row.form_field_type)=='many2one'">
+					    								<select class="selection-type" t-attf-id="#{same_row.form_fields}">
+															 <t t-foreach='same_row.form_template_model_fields' t-as='user'> 
+															 	<t t-if="c_order[same_row.form_fields] == user.display_name">
+															 		<option t-att-id='user.id' t-att-selected="true"><t t-esc="user.display_name" /></option>
+															 	</t>
+															 	<t t-else="">
+															 		<option t-att-id='user.id'><t t-esc="user.display_name" /></option>
+															 	</t>
+															 </t>
+														</select>
+														<t t-if="(same_row.form_fields) == 'car_type'" >
+															<img  id="car-image" t-att-src='widget.car_icon_url(same_row.form_template_model_fields[0].id)' width="35" height="32" />
+														</t>
+					    							</t>
+					    							<!-- <t t-if="(same_row.form_field_type)=='selection'">
 					    								<t t-if="(same_row.form_fields) == 'laundry_person'" >
 															<select class="selection-type" t-attf-id="#{same_row.form_fields}">
-															 	<t t-foreach='widget.pos.res_users' t-as='user'> 
+															 	<t t-foreach='same_row.form_template_model_fields' t-as='user'> 
 															 		<t t-if="c_order[same_row.form_fields] == user.name">
 															 			<option t-att-id='res_users.id' t-att-selected="true"><t t-esc="user.name" /></option>
 															 		</t>
@@ -434,7 +444,7 @@
 														</t>
 														<t t-else="">
 															 <select class="selection-type" t-attf-id="#{same_row.form_fields}">
-															 	<t t-foreach='widget.pos.car_types' t-as='car'> 
+															 	<t t-foreach='same_row.form_template_model_fields' t-as='car'> 
 															 		<t t-if="c_order[same_row.form_fields] == car.name">
 															 			<option t-att-id='car.id' t-att-selected="true"><t t-esc="car.name" /></option>
 															 		</t>
@@ -443,9 +453,9 @@
 															 		</t>
 															 	</t>
 															 </select>
-															 <img  id="car-image" t-att-src='widget.car_icon_url(widget.pos.car_types[0].id)' width="35" height="32" />
+															 <img  id="car-image" t-att-src='widget.car_icon_url(same_row.form_template_model_fields[0].id)' width="35" height="32" />
 							    						</t>
-					    							</t>
+					    							</t> -->
 					    							<t t-if="(same_row.form_field_type)=='date'">
 					    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
 				    										<div class="input-daterange input-group" id="datepicker">
@@ -510,7 +520,7 @@
 						    							<input type="number" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
 						    							t-attf-value="#{c_orderline[first_col.form_fields]}"  />
 						    						</t>
-						    						<t t-if="(first_col.form_field_type)=='selection'">
+						    						<!-- <t t-if="(first_col.form_field_type)=='selection'">
 						    							<t t-if="(first_col.form_fields) == 'product_id'">
 							    							<select class="drop-down-select" t-attf-id="#{first_col.form_fields}" style="width: 100%;">
 							    								<option></option>
@@ -520,6 +530,21 @@
 																 	</t>
 																 	<t t-else="" >
 																		<option t-att-id='prod.id'><t t-esc="prod.name" /></option>
+																	</t>
+																</t>
+															</select>
+														</t>
+						    						</t> -->
+						    						<t t-if="(first_col.form_field_type)=='many2one'">
+							    						<t t-if="(first_col.form_fields) == 'product_id'">
+							    							<select class="drop-down-select" t-attf-id="#{first_col.form_fields}" style="width: 100%;">
+							    								<option></option>
+																<t t-foreach='first_col.form_template_model_fields' t-as='prod'> 
+																	<t t-if="c_orderline[first_col.form_fields] == prod.display_name">
+																 		<option t-att-id='prod.id' t-att-selected="true"><t t-esc="prod.display_name" /></option>
+																 	</t>
+																 	<t t-else="" >
+																		<option t-att-id='prod.id'><t t-esc="prod.display_name" /></option>
 																	</t>
 																</t>
 															</select>
@@ -545,7 +570,7 @@
 						    									<input type="number" t-attf-id="#{same_row.form_fields}" t-attf-placeholder="#{same_row.form_placeholder}" 
 						    									t-attf-value="#{c_orderline[same_row.form_fields]}"  />
 						    								</t>
-						    								<t t-if="(same_row.form_field_type)=='selection'">
+						    								<!-- <t t-if="(same_row.form_field_type)=='selection'">
 						    									<t t-if="(same_row.form_fields) == 'washing_type'">
 							    									<select class="drop-down-select" t-attf-id="#{same_row.form_fields}" style="width: 100%;">
 							    										<option></option>
@@ -559,6 +584,19 @@
 																		 </t>
 																	</select>
 																</t>
+						    								</t> -->
+						    								<t t-if="(same_row.form_field_type)=='many2one'">
+						    									<select class="drop-down-select" t-attf-id="#{same_row.form_fields}" style="width: 100%;">
+							    									<option></option>
+																	<t t-foreach='same_row.form_template_model_fields' t-as='type'> 
+																		<t t-if="c_orderline[same_row.form_fields] == type.display_name">
+																			<option t-att-amt="type.amount" t-att-id='type.id' t-att-selected="true"><t t-esc="type.display_name" /></option>
+																		</t>
+																		<t t-else="">
+																		 	<option t-att-amt="type.amount" t-att-id='type.id'><t t-esc="type.display_name" /></option>
+																		</t>
+																	</t>
+																</select>
 						    								</t>
 						    								<t t-if="(same_row.form_field_type)=='label'">
 						    									<input type="text" t-attf-id="#{same_row.form_fields}" t-attf-placeholder="#{same_row.form_placeholder}" 
@@ -566,16 +604,16 @@
 						    								</t>
 						    								<t t-if="(same_row.form_field_type)=='many2many'">
 						    									 <select  class="detail chosen washing-work"  data-order="true" name="washing-work" t-attf-id="#{same_row.form_fields}" multiple="true" >
-											                    	<t t-foreach="widget.pos.washing_works" t-as="work">           									
+											                    	<t t-foreach="same_row.form_template_model_fields" t-as="work">           									
 											           					<t t-set="i" t-value="0"/>   
 											           						<t t-foreach="c_orderline[same_row.form_fields] || [] " t-as="mdata">
 																				<t t-if="(work.id ==  mdata)">	
 																					<t t-set="i" t-value="1"/> 												
-																					<option  selected="selected" t-att-amt="work.amount" t-att-value="work.id"><t t-esc="work.name"/></option>	
+																					<option  selected="selected" t-att-amt="work.amount" t-att-value="work.id"><t t-esc="work.display_name"/></option>	
 																				</t> 
 																			</t> 
 																		<t t-if="(i == 0)">  
-																			<option t-att-amt="work.amount" t-att-value="work.id"><t t-esc="work.name"/></option>	 
+																			<option t-att-amt="work.amount" t-att-value="work.id"><t t-esc="work.display_name"/></option>	 
 																		</t>
 																	</t>
 											                   </select> 
