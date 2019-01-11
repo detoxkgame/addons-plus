@@ -76,11 +76,13 @@ class ResPartner(models.Model):
 
     @api.multi
     def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id, vendor_id = 0, invoice_ids = []):
-        vendors = self.env['res.partner'].sudo().search(
-                                    [('supplier', '=', True),
-                                     ('category_id', 'in', [int(category_id)])])
         vendor_dashboard = self.env['hm.vendor.dashboard'].sudo().search(
                                         [('id', '=', int(dashboard_id))])
+        is_other = False
+
+        vendors = self.env['res.partner'].sudo().search(
+                            [('supplier', '=', True),
+                             ('category_id', 'in', [int(category_id)])])
         if is_form:
             sub_template = self.env['hm.sub.form.template.line'].sudo().search([('id', '=', int(sub_temp_id))])
             form_template = self.env['hm.form.template'].sudo().search(
@@ -180,13 +182,31 @@ class ResPartner(models.Model):
         line_tmp = 0
         line_model = ''
         if form_template.form_view == 'kanban':
-            for vendor in vendors:
-                result_datas.append({'id': vendor.id,
-                                     'name': vendor.name,
-                                     'city': vendor.city,
-                                     'country_id': vendor.country_id.name,
-                                     'email': vendor.email,
-                                     'phone': vendor.phone})
+            dash_categ_id = vendor_dashboard.vendor_category_id.ids
+            vendor_categ = self.env['res.partner.category'].sudo().search([
+                                                ('id', '=', int(category_id))])
+            if vendor_categ.name == 'Others':
+                is_other = True
+                dash_categ_id = vendor_dashboard.vendor_category_ids.ids
+            for categ in dash_categ_id:
+                vendor_categ = self.env['res.partner.category'].sudo().search([
+                                                ('id', '=', int(categ))])
+                vendors = self.env['res.partner'].sudo().search(
+                            [('supplier', '=', True),
+                             ('category_id', '=', categ)])
+                for vendor in vendors:
+                    order_data = {}
+                    count = 0
+                    for field in fields:
+                        if field_type[count] == 'many2one':
+                            order_data[field] = vendor[field].name
+                        else:
+                            order_data[field] = vendor[field]
+                        count = count + 1
+                    order_data['id'] = vendor['id']
+                    order_data['category_id'] = vendor_categ.id
+                    order_data['category_name'] = vendor_categ.name
+                    result_datas.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])
             for temp in sub_temp:
@@ -248,6 +268,7 @@ class ResPartner(models.Model):
                         count = count + 1
                     order_data['id'] = order['id']
                     order_data['state'] = order['state']
+                    order_data['name'] = order['name']
                     if form_template.form_model_id.model == 'laundry.order':
                         order_data['invoice_ids'] = order.sale_obj.invoice_ids.ids
                     if form_template.form_model_id.model == 'sale.order':
@@ -267,6 +288,7 @@ class ResPartner(models.Model):
                 order_data['id'] = ''
                 order_data['state'] = ''
                 order_data['invoice_ids'] = []
+                order_data['name'] = ''
                 current_order.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])
@@ -372,6 +394,10 @@ class ResPartner(models.Model):
                     data_lines = orders.order_lines
                 if form_template.form_model_id.model == 'account.invoice':
                     data_lines = orders.invoice_line_ids
+                if form_template.form_model_id.model == 'purchase.order':
+                    data_lines = orders.order_line
+                if form_template.form_model_id.model == 'stock.picking':
+                    data_lines = orders.move_ids_without_package
                 for oline in data_lines:
                     orderline_data = {}
                     count = 0
@@ -427,6 +453,7 @@ class ResPartner(models.Model):
                        'temp_order_lines': temp_order_lines,
                        'line_form_temp_id': line_tmp,
                        'line_model_name': line_model,
+                       'is_other': is_other
                        })
 
         return result
@@ -467,10 +494,11 @@ class ResPartner(models.Model):
         #partner_id = int(vendor_id)
         if order_id == '':
             order_id = 0
-        prod_temp = self.env['product.template'].sudo().search([
-                            ('id', '=', int(order_datas['product_id']))])
-        prod_prod = self.env['product.product'].sudo().search([
-                            ('product_tmpl_id', '=', prod_temp.id)])
+        if order_datas.get('product_id'):
+            prod_temp = self.env['product.template'].sudo().search([
+                                ('id', '=', int(order_datas['product_id']))])
+            prod_prod = self.env['product.product'].sudo().search([
+                                ('product_tmpl_id', '=', prod_temp.id)])
         datas = {}
         line_datas = []
         current_date = fields.Datetime.from_string(fields.Datetime.now())
@@ -491,14 +519,26 @@ class ResPartner(models.Model):
                         datas[line.form_field_id.name] = date
                 else:
                     if line.form_field_type != 'sub_form':
-                        datas[line.form_field_id.name] = order_datas[line.form_field_id.name]
+                        if line.form_field_type == 'many2one':
+                            if(order_datas[line.form_field_id.name] != ''):
+                                datas[line.form_field_id.name] = int(order_datas[line.form_field_id.name])
+                            else:
+                                datas[line.form_field_id.name] = order_datas[line.form_field_id.name]
+                        else:
+                            datas[line.form_field_id.name] = order_datas[line.form_field_id.name]
 
         """ Get OrderLine Details """
         for ldata in line_order_datas:
             l_datas = {}
             for line in oline_form_template_line:
                 if line.form_field_id:
-                    l_datas[line.form_field_id.name] = ldata[line.form_field_id.name]
+                    if line.form_field_type == 'many2one':
+                        if(ldata[line.form_field_id.name] != ''):
+                            l_datas[line.form_field_id.name] = int(ldata[line.form_field_id.name])
+                        else:
+                            l_datas[line.form_field_id.name] = ldata[line.form_field_id.name]
+                    else:
+                        l_datas[line.form_field_id.name] = ldata[line.form_field_id.name]
             line_datas.append(l_datas)
 
         if int(order_id) > 0:
@@ -519,10 +559,19 @@ class ResPartner(models.Model):
                                     })
             if int(line_form_temp_id) > 0:
                 for ldata in line_datas:
-                    ldata['laundry_obj'] = order.id
+                    if model_name == 'laundry.order':
+                        ldata['laundry_obj'] = order.id
+                    if model_name == 'stock.picking':
+                        prod = self.env['product.product'].sudo().search([
+                                    ('id', '=', int(ldata['product_id']))])
+                        ldata['name'] = prod.display_name
+                        ldata['product_uom'] = prod.uom_id.id
+                        ldata['location_id'] = order.location_id.id
+                        ldata['location_dest_id'] = order.location_dest_id.id
+                        ldata['picking_id'] = order.id
                     ldata['state'] = 'draft'
                     self.env[line_model_name].create(ldata)
-        if model_name == 'sale.order':
+        if model_name == 'sale.order' or model_name == 'stock.picking':
             order.action_confirm()
         if model_name == 'purchase.order':
             order.button_confirm()
@@ -575,6 +624,32 @@ class ResPartner(models.Model):
         order = self.env[model_name].search([('id', '=', int(order_id))])
 
         order.return_dress()
+
+        edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
+                            ('form_template_id', '=', int(form_temp_id)),
+                            ('name', '=', 'Edit')])
+        result = {'order_id': order.id,
+                  'edit_form_id': edit_form_id.id}
+
+        return result
+
+    @api.multi
+    def get_orderline_detail(self, order_id):
+        order = self.env['laundry.order'].search([('id', '=', int(order_id))])
+        datas = []
+        for line in order.order_lines:
+            datas.append({'id': line.id,
+                          'product_id': line.product_id.id,
+                          'product_name': line.product_id.display_name,
+                          'qty': line.qty
+                          })
+        return datas
+
+    @api.multi
+    def stock_validate(self, order_id, form_temp_id, model_name):
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+
+        order.button_validate()
 
         edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
                             ('form_template_id', '=', int(form_temp_id)),

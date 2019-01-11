@@ -130,6 +130,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var temp_order_lines = result[0]['temp_order_lines']
     			var line_form_temp_id = result[0]['line_form_temp_id']
     			var line_model_name = result[0]['line_model_name']
+    			var is_other = result[0]['is_other']
     			
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
@@ -141,7 +142,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 						line_group: line_group, line_group_key: line_group_key,
                 						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
                 						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-                						temp_order_lines: temp_order_lines});
+                						temp_order_lines: temp_order_lines, is_other: is_other});
                 var vendorlist = document.createElement('div');
                 vendorlist.innerHTML = vendor_html;
                 vendorlist = vendorlist.childNodes[1];
@@ -195,6 +196,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var temp_order_lines = result[0]['temp_order_lines']
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
+            			var is_other = result[0]['is_other']
 
             			
             			form_fields_records = template_lines;
@@ -210,7 +212,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     						line_group: line_group, line_group_key: line_group_key,
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
     						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-    						temp_order_lines: temp_order_lines});
+    						temp_order_lines: temp_order_lines, is_other: is_other});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -270,6 +272,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var temp_order_lines = result[0]['temp_order_lines']
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
+            			var is_other = result[0]['is_other']
             			//alert('dashboard_id'+dashboard_id);
             			var contents = el_node.find('.vendor-contents');
                         contents.innerHTML = "";
@@ -281,7 +284,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         						line_group: line_group, line_group_key: line_group_key,
                         						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
                         						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-                        						temp_order_lines: temp_order_lines});
+                        						temp_order_lines: temp_order_lines, is_other: is_other});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -329,6 +332,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var temp_order_lines = result[0]['temp_order_lines']
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
+            			var is_other = result[0]['is_other']
             			
             			form_fields_records = template_lines;
             			line_form_fields = temp_order_lines;
@@ -343,7 +347,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     						line_group: line_group, line_group_key: line_group_key, 
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
     						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-    						temp_order_lines: temp_order_lines});
+    						temp_order_lines: temp_order_lines, is_other: is_other});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -464,8 +468,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 });
                
                 /** Confirm Action */
-                contents.off('click','#order_confirm');
-                contents.on('click','#order_confirm',function(){
+                contents.off('click','#order_confirm, #action_confirm');
+                contents.on('click','#order_confirm, #action_confirm',function(){
                 	var order_datas = {}
                 	var line_order_datas = []
                 	var line_data = {}
@@ -510,7 +514,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			}
 	                			//console.log('value'+value);
 	                		}
-	                		if(form_fields_records[i].form_field_type == 'selection'){
+	                		if(form_fields_records[i].form_field_type == 'many2one'){
 	                			var value1 =  $(this).find('#'+form_fields_records[i].form_fields+' option:selected').val();
 	                			var value =  $(this).find('#'+form_fields_records[i].form_fields+' option:selected').attr("id");
 	                			order_datas[field] = value;
@@ -559,7 +563,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 		                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
 		                			}
 		                		}
-		                		if(line_form_fields[i].form_field_type == 'selection'){
+		                		if(line_form_fields[i].form_field_type == 'many2one'){
 		                			var value1 =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').val();
 		                			var value =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').attr("id");
 		                			line_data[field] = value;
@@ -586,8 +590,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 		}
                 		tr_count = tr_count + 1;
                 	});
-                	console.log('Order Datas'+ JSON.stringify(line_order_datas));
-                	console.log('error'+ error);
+                	//console.log('Order Datas'+ JSON.stringify(line_order_datas));
+                	//console.log('error'+ error);
                 	if(!error){
                 		console.log('inner')
 	                	self._rpc({
@@ -661,6 +665,23 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             		});
                 });
                 
+                /** Stock Validate */
+                contents.off('click','#button_validate');
+                contents.on('click','#button_validate',function(){
+                	var order_id = contents.find('#order_id').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
+                	var model_name = contents.find('#model_name').text();
+                	
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'stock_validate',
+            			args: [0, order_id, form_temp_id, model_name],
+            		}).then(function(result){
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
+                    	
+            		});
+                });
+                
                 /** Add Line Action */
                 contents.off('click','.add-line');
                 contents.on('click','.add-line',function(e){
@@ -668,7 +689,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	var error = false;
                 	$(this).closest('tr').each(function() {
                 		for(var i=0; i<line_form_fields.length; i++){
-	                		console.log('field'+ line_form_fields[i].form_fields)
+	                		//console.log('field'+ line_form_fields[i].form_fields)
 	                		var field = line_form_fields[i].form_fields;
 	                		var mandatory =line_form_fields[i].isMandatory;
 	                		
@@ -681,7 +702,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			}
 	                		}
 	                		if(line_form_fields[i].form_field_type == 'input_int'){
-	                			console.log('int')
+	                			//console.log('int')
 	                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
 	                			line_order_datas[field] = value;
 	                			if(!value && mandatory){
@@ -689,7 +710,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                				$(this).find('input#'+line_form_fields[i].form_fields).css({'border': '1px solid red'});
 	                			}
 	                		}
-	                		if(line_form_fields[i].form_field_type == 'selection'){
+	                		if(line_form_fields[i].form_field_type == 'many2one'){
 	                			var value1 =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').val();
 	                			var value =  $(this).find('#'+line_form_fields[i].form_fields+' option:selected').attr("id");
 	                			line_order_datas[field] = value;
@@ -763,7 +784,6 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 });
                 
                 /** Set the amount for Laundry */
-                //contents.off('click','.washing_type');
                 contents.on('change','#washing_type',function(e){
                 	var extra_amt = 0;
                 	var work_amt = $(this).closest('td').find("option:selected").attr('amt');
@@ -816,6 +836,37 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	var tamt = parseFloat(extra_amt) + parseFloat(work_amt);
                 	var total_amount = parseInt(qty) * tamt;
                 	$(this).closest('tr').find('#amount').val(total_amount);
+                });
+                
+                /** Collect OrderLine details for selected Laundry Order and set the datas to stock move */
+                contents.on('change','#laundry_order_id',function(e){
+                	var order_id = $(this).closest('td').find("option:selected").attr('id');
+                	//var model_name = contents.find('#model_name').text();
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'get_orderline_detail',
+            			args: [0, order_id],
+            		}).then(function(result){
+            			console.log('Lines:'+JSON.stringify(result));
+            			var new_row = $(".orderline-form-detail").find('tr').eq(1).clone(true);
+            			if(result.length >0){
+            				$('.orderline-form-detail tbody').replaceWith('<tbody></tbody>');
+            			}else{
+            				new_row.find("input[type='text']").each(function() {
+    	                		$(this).val('')
+    	    	    		});
+    	    	    		new_row.find("input[type='number']").each(function() {
+    	    	    			$(this).val('')
+    	    	    		});
+    	    	    		$('.orderline-form-detail tbody').replaceWith('<tbody>'+new_row.html()+'</tbody>');
+            			}
+                    	for(var i=0; i<result.length; i++){
+                    		new_row.find('#product_id').val(result[i]['product_name']);
+                    		new_row.find('#product_uom_qty').val(result[i]['qty']);
+                    		new_row.find('#quantity_done').val(result[i]['qty']);
+                    		$('.orderline-form-detail tbody').append(new_row);
+                    	}
+            		});
                 });
     		});
         	       	
@@ -885,6 +936,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var temp_order_lines = result[0]['temp_order_lines']
 			var line_form_temp_id = result[0]['line_form_temp_id']
 			var line_model_name = result[0]['line_model_name']
+			var is_other = result[0]['is_other']
 			
 			
 			var fcontents = el_node.find('.vendor-contents');
@@ -897,7 +949,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 				line_group: line_group, line_group_key: line_group_key, 
 				sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
 				//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-				temp_order_lines: temp_order_lines});
+				temp_order_lines: temp_order_lines, is_other: is_other});
             var vendorlist = document.createElement('div');
             vendorlist.innerHTML = vendor_html;
             vendorlist = vendorlist.childNodes[1];
