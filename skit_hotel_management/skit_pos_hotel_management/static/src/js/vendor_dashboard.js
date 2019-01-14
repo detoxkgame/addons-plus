@@ -131,6 +131,9 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var line_form_temp_id = result[0]['line_form_temp_id']
     			var line_model_name = result[0]['line_model_name']
     			var is_other = result[0]['is_other']
+    			var all_location = result[0]['all_location']
+    			var stock_move_datas = result[0]['stock_move_datas']
+    			var vendor_list = result[0]['vendor_list']
     			
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
@@ -142,7 +145,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 						line_group: line_group, line_group_key: line_group_key,
                 						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
                 						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-                						temp_order_lines: temp_order_lines, is_other: is_other});
+                						temp_order_lines: temp_order_lines, is_other: is_other,
+                						all_location: all_location, stock_move_datas: stock_move_datas, vendor_list: vendor_list});
                 var vendorlist = document.createElement('div');
                 vendorlist.innerHTML = vendor_html;
                 vendorlist = vendorlist.childNodes[1];
@@ -847,7 +851,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			method: 'get_orderline_detail',
             			args: [0, order_id],
             		}).then(function(result){
-            			console.log('Lines:'+JSON.stringify(result));
+            			//console.log('Lines:'+JSON.stringify(result));
             			var new_row = $(".orderline-form-detail").find('tr').eq(1).clone(true);
             			if(result.length >0){
             				$('.orderline-form-detail tbody').replaceWith('<tbody></tbody>');
@@ -861,12 +865,19 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     	    	    		$('.orderline-form-detail tbody').replaceWith('<tbody>'+new_row.html()+'</tbody>');
             			}
                     	for(var i=0; i<result.length; i++){
+                    		new_row.find('#product_id').attr('class', 'drop-down-select');
                     		new_row.find('#product_id').val(result[i]['product_name']);
                     		new_row.find('#product_uom_qty').val(result[i]['qty']);
                     		new_row.find('#quantity_done').val(result[i]['qty']);
                     		$('.orderline-form-detail tbody').append(new_row);
                     	}
             		});
+                });
+                
+                /** Get Laundry Stock Report for selected vendor */
+                contents.on('change','#laundry-vendor',function(e){
+                	var vendor_id = $(this).find("option:selected").attr('id');
+                	self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, false, 0, 0, vendor_id)
                 });
     		});
         	       	
@@ -937,6 +948,9 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var line_form_temp_id = result[0]['line_form_temp_id']
 			var line_model_name = result[0]['line_model_name']
 			var is_other = result[0]['is_other']
+			var all_location = result[0]['all_location']
+			var stock_move_datas = result[0]['stock_move_datas']
+			var vendor_list = result[0]['vendor_list']
 			
 			
 			var fcontents = el_node.find('.vendor-contents');
@@ -949,7 +963,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 				line_group: line_group, line_group_key: line_group_key, 
 				sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
 				//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-				temp_order_lines: temp_order_lines, is_other: is_other});
+				temp_order_lines: temp_order_lines, is_other: is_other,
+				all_location: all_location, stock_move_datas: stock_move_datas, vendor_list: vendor_list});
             var vendorlist = document.createElement('div');
             vendorlist.innerHTML = vendor_html;
             vendorlist = vendorlist.childNodes[1];
@@ -964,20 +979,29 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 				 	
 			});
             
+            var table = el_node.find('#vendor_order_list').DataTable({
+		        bSort: false,
+		        bFilter: false,
+		        bPaginate: true, 
+		        pageLength: 10,
+			});
+            
             /** Disabled the Order details for [order, done, cancel, return] state */
-            if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
-            		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return')){
-            	$('table.order-form-detail').each(function() {
-            		$(this).find("input").attr('disabled',true);
-            		$(this).find("select").attr('disabled',true);
-            	});
-            	$('table.orderline-form-detail tr').each(function() {
-            		$(this).find("input").attr('disabled',true);
-            		$(this).find("select").attr('disabled',true);
-            		$(this).find("select.chosen").attr('disabled',true).trigger("chosen:updated");
-            		$(this).find("span.add-line").css({'display':'none'});
-            		$(this).find("span.delete-line").css({'display':'none'});
-            	});
+            if(current_order.length > 0){
+	            if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
+	            		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return')){
+	            	$('table.order-form-detail').each(function() {
+	            		$(this).find("input").attr('disabled',true);
+	            		$(this).find("select").attr('disabled',true);
+	            	});
+	            	$('table.orderline-form-detail tr').each(function() {
+	            		$(this).find("input").attr('disabled',true);
+	            		$(this).find("select").attr('disabled',true);
+	            		$(this).find("select.chosen").attr('disabled',true).trigger("chosen:updated");
+	            		$(this).find("span.add-line").css({'display':'none'});
+	            		$(this).find("span.delete-line").css({'display':'none'});
+	            	});
+	            }
             }
            
 		});

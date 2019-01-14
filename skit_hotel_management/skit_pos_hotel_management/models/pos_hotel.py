@@ -181,6 +181,104 @@ class ResPartner(models.Model):
         #is_orderline = False
         line_tmp = 0
         line_model = ''
+        all_location = []
+        stock_move_datas = []
+        list_array = []
+        list_key_value = {}
+        vendor_list = []
+        if form_template.form_view == 'report':
+            for vendor in vendors:
+                vendor_list.append({'id': vendor.id,
+                                    'display_name': vendor.display_name})
+            stock_loc = self.env['stock.location'].sudo().search([
+                                ('islaundry', '=', True)], order='sequence')
+            for loc in stock_loc:
+                all_location.append({'id': loc.id,
+                                     'name': loc.display_name})
+            sql = "SELECT sp.laundry_order_id FROM stock_picking sp INNER JOIN laundry_order lo ON lo.id = sp.laundry_order_id"
+            if int(vendor_id) > 0:
+                sql +=  " WHERE lo.partner_id ="+str(vendor_id)+""
+            sql += " GROUP BY laundry_order_id"
+            laundryids = []
+            cr = self.env.cr
+            cr.execute(sql)
+            match_recs = cr.dictfetchall()
+            for lid in match_recs:
+                laundryids.append(lid.get('laundry_order_id'))
+
+            for laundryid in laundryids:
+                list_array = []
+                list_key_value = {}
+                laundry = self.env['laundry.order'].sudo().search([('id', '=', int(laundryid))])
+                stock_picking = self.env['stock.picking'].sudo().search([
+                                    ('laundry_order_id', '=', int(laundryid))])
+                stock_values = ','.join(str(v) for v in stock_picking.ids)
+                sql = "select name,product_id,sum(product_uom_qty) from stock_move where picking_id in ("+ stock_values +") and state != 'cancel' group by product_id,name"
+                cr = self.env.cr
+                cr.execute(sql)
+                match_move_recs = cr.dictfetchall()
+                for move in match_move_recs:
+                    move_array = []
+                    for loc in stock_loc:
+                        product = self.env['product.product'].sudo().search([('id', '=', move.get('product_id'))])
+                        laundry_line = self.env['laundry.order.line'].sudo().search([
+                                            ('laundry_obj', '=', laundry.id),
+                                            ('product_id', '=', product.id)])
+                        #stock_dest_move = self.env['stock.move'].sudo().search([('id', '=', move.id), ('location_dest_id', '=', loc.id)])
+                        sql = "select sum(product_uom_qty) as total,\
+                            ""((select COALESCE(SUM(product_uom_qty),0) from stock_move where picking_id in ("+ stock_values +") and state != 'cancel' and location_dest_id = "+str(loc.id)+" and product_id = "+str(product.id)+") - (\
+                            select COALESCE(SUM(product_uom_qty),0) from stock_move where picking_id in ("+ stock_values +") and state != 'cancel' and location_id = "+str(loc.id)+" and product_id = "+str(product.id)+")) as current_total\
+                            from stock_move where picking_id in ("+ stock_values +") and state != 'cancel'"
+                        cr = self.env.cr
+                        cr.execute(sql)
+                        match_current_recs = cr.dictfetchall()
+                        qty = match_current_recs[0]['current_total']
+                        if(qty < 0):
+                            qty = 0
+                        move_array.append({'laundry_id': laundry.id,
+                                           'laundry_name': laundry.name,
+                                           'product_qty': laundry_line.qty,
+                                           'product_id': product.id,
+                                           'product_name': product.name,
+                                           'qty': qty
+                                           })
+
+                    list_array.append(move_array)
+                    list_key_value = list_array
+                stock_move_datas.append(list_key_value)
+            #print(stock_move_datas)
+
+            #===================================================================
+            # stock_picking = self.env['stock.picking'].sudo().search([
+            #                                 ('laundry_order_id', '!=', None)])
+            # for pick in stock_picking:
+            #     list_array = []
+            #     list_key_value = {}
+            #     stock_move = self.env['stock.move'].sudo().search([
+            #                                 ('picking_id', '=', pick.id)])
+            #     for move in stock_move:
+            #         move_array = []
+            #         for loc in stock_loc:
+            #             stock_dest_move = self.env['stock.move'].sudo().search([('id', '=', move.id), ('location_dest_id', '=', loc.id)])
+            #             if stock_dest_move:
+            #                 move_array.append({'laundry_id': pick.laundry_order_id.id,
+            #                                          'laundry_name': pick.laundry_order_id.name,
+            #                                          'reference': move.reference,
+            #                                          'product_id': move.product_id.id,
+            #                                          'product_name': move.product_id.name,
+            #                                          'qty': stock_dest_move.product_uom_qty})
+            #             else:
+            #                 move_array.append({'laundry_id': pick.laundry_order_id.id,
+            #                                          'laundry_name': pick.laundry_order_id.name,
+            #                                          'reference': move.reference,
+            #                                          'product_id': move.product_id.id,
+            #                                          'product_name': move.product_id.name,
+            #                                          'qty': '0'})
+            #         list_array.append(move_array)
+            #         list_key_value = list_array
+            #     stock_move_datas.append(list_key_value)
+            #===================================================================
+        #print(stock_move_datas)
         if form_template.form_view == 'kanban':
             dash_categ_id = vendor_dashboard.vendor_category_id.ids
             vendor_categ = self.env['res.partner.category'].sudo().search([
@@ -453,7 +551,10 @@ class ResPartner(models.Model):
                        'temp_order_lines': temp_order_lines,
                        'line_form_temp_id': line_tmp,
                        'line_model_name': line_model,
-                       'is_other': is_other
+                       'is_other': is_other,
+                       'all_location': all_location,
+                       'stock_move_datas': stock_move_datas,
+                       'vendor_list': vendor_list
                        })
 
         return result
@@ -510,7 +611,7 @@ class ResPartner(models.Model):
                             order='sequence asc')
         """ Get Order Details """
         for line in form_template_line:
-            if line.form_field_id:
+            if line.form_field_id and line.form_field_type != 'view_buttons':
                 if line.form_field_id.ttype == 'date' or line.form_field_id.ttype == 'datetime':
                     if line.form_field_id.name == 'date_order' or line.form_field_id.name == 'order_date':
                         datas[line.form_field_id.name] = current_date

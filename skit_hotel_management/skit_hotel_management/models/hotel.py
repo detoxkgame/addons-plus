@@ -345,7 +345,8 @@ class FormTemplate(models.Model):
     form_view = fields.Selection([
                     ('form', _('Form')),
                     ('list', _('List')),
-                    ('kanban', _('Kanban'))], string="Form View",
+                    ('kanban', _('Kanban')),
+                    ('report', _('Report'))], string="Form View",
                                   default='')
     #===========================================================================
     # sub_form_template_ids = fields.One2many('hm.sub.form.template',
@@ -490,22 +491,6 @@ class FormTemplateLine(models.Model):
                     return {'domain': {'form_template_model_fields': [
                                                 ('model_id', '=', ir_model.id)]
                                 }}
-
- #==============================================================================
- #    @api.model
- #    def create(self, vals):
- #        """ render image size """
- #        res = super(FormTemplateLine, self).create(vals)
- #        return res
- # 
- #    @api.multi
- #    def write(self, vals):
- #        """ render image size """
- #        res = super(FormTemplateLine, self).write(vals)
- #        #self.write({'form_template_selection_fields': vals.get('form_template_selection_fields')})
- #        #select = self.env['hm_form_selection_item_hm_form_template_line_rel'].sudo().search([('id', '=', self.id)])
- #        return res
- #==============================================================================
 
 
 class FormTemplateSelectionItem(models.Model):
@@ -702,6 +687,14 @@ class InventoryMove(models.Model):
                                   copy=True)
     laundry_order_id = fields.Many2one('laundry.order', string="Laundry Order")
     # Invoice button
+
+
+class Location(models.Model):
+    _inherit = "stock.location"
+    _description = "Inventory Locations"
+
+    islaundry = fields.Boolean(string='Laundry')
+    sequence = fields.Integer(string='Sequence')
 
 
 class AccountInvoice(models.Model):

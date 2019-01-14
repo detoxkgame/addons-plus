@@ -26,7 +26,7 @@ odoo.define('skit_pos_hotel_management.pos_db', function (require) {
 	    },
 	    
 	    get_vendor_by_category: function(category_id){
-	    	console.log('category_id'+ category_id);
+	    	//console.log('category_id'+ category_id);
 	    	//console.log(JSON.stringify(this.vendor_by_category[category_id]));
 	        return this.vendor_by_category[category_id];
 	    },

@@ -23,6 +23,64 @@
     <t t-name="VendorListContent">
     	<div style="display: inline-block;width: 100%;height: 100%;overflow-y: auto;">
     		<h1 t-attf-style="text-align: left;border-bottom: 0.1px solid gray;color:#{color}"><t t-esc="form_name" /></h1>
+    		<!-- Report View -->
+    		<t t-if="form_view == 'report'">
+    			<div style="display: inline-block;width: 100%;padding: 5px;">
+    				<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(vendor_id > 0) ? 'drop-down-select' : 'drop-down-select placeholder' }"  
+    						id="laundry-vendor" style="border: 1px solid gray;width: 30%;float: left;padding: 10px;">
+						<option disabled="disabled" selected="selected" class="placeholder">Select Vendor...</option>
+						<option id='0' class="drop-down-select"></option>
+						<t t-foreach='vendor_list' t-as='vendor'> 
+							<t t-if="vendor_id == vendor.id">
+								<option t-att-id='vendor.id' t-att-selected="true" class="drop-down-select"><t t-esc="vendor.display_name" /></option>
+							</t>
+							<t t-else="">
+								<option t-att-id='vendor.id' class="drop-down-select"><t t-esc="vendor.display_name" /></option>
+							</t>
+						</t>
+					</select>
+    			</div>
+    			<table id="vendor_order_list" class="table stripe hover row-border order-column dataTable no-footer">
+    				<thead>
+    					<tr style="background-color: #875A7B;color: white;">
+    						<th>Order</th>
+    						<th>Product</th>
+    						<th>Product Qty</th>
+    						<t t-foreach="all_location" t-as="loc">
+    							<th><t t-esc="loc.name" /></th>
+    						</t> 
+    					</tr>
+    				</thead>
+    				<tbody>
+    					<t t-foreach="stock_move_datas" t-as="data">
+    						<t t-set="laundry_val" t-value="0"></t>
+	    					<t t-foreach="data" t-as="move">
+		    					<t t-set="laundry" t-value="0"></t>
+		    					<tr>
+		    						<t t-foreach="move" t-as="move_vals">
+		    							<t t-if="laundry == 0">
+		    								<t t-set="laundry" t-value="move_vals.laundry_id"></t>
+		    								<t t-if="laundry_val == move_vals.laundry_id">
+				    							<td style="border-color: rgb(251, 250, 250);"></td>
+				    						</t>
+				    						<t t-else="">
+				    							<td><t t-esc="move_vals.laundry_name" /></td>
+				    						</t>
+				    						<td><t t-esc="move_vals.product_name" /></td>
+				    						<td><t t-esc="move_vals.product_qty" /></td> 
+				    						<t t-set="laundry_val" t-value="move_vals.laundry_id"></t>
+			    						</t>
+			    						<t t-if="laundry == move_vals.laundry_id">
+											<t t-set="laundry" t-value="move_vals.laundry_id"></t>
+											<td><t t-esc="move_vals.qty" /></td>
+										</t>
+		    						</t>
+		    					</tr>
+	    					</t>
+    					</t>
+    				</tbody>
+    			</table>
+    		</t>
     		<!-- Kanban View -->
     		<t t-if="form_view == 'kanban'">
     			<t t-set="vcatg_id" t-value="0" />
@@ -679,9 +737,18 @@
 					<div>
 		                <img class="dash-icon" t-att-src='widget.dashboard_icon_url(dashboard.id)' alt="Dashboard logo"/>
 		            </div>
-					<h1 class="horizontal-text"><t t-esc="dashboard.vendor_category_id[1]" /></h1>	
-					<t t-if="widget.get_vendors(dashboard.vendor_category_id[0])" >
-						<h1 class="vendor-count"><t t-esc="(widget.get_vendors(dashboard.vendor_category_id[0])).length" /></h1>
+					<h1 class="horizontal-text"><t t-esc="dashboard.vendor_category_id[1]" /></h1>
+					<t t-if="dashboard.vendor_category_id[1] == 'Others'">
+						<t t-set="c_count" t-value="0" />
+						<t t-foreach="dashboard.vendor_category_ids" t-as="cid">
+							<t t-set="c_count" t-value="c_count + (widget.get_vendors(cid)).length" />
+						</t>
+						<h1 class="vendor-count"><t t-esc="c_count" /></h1>
+					</t>
+					<t t-else="">
+						<t t-if="widget.get_vendors(dashboard.vendor_category_id[0])" >
+							<h1 class="vendor-count"><t t-esc="(widget.get_vendors(dashboard.vendor_category_id[0])).length" /></h1>
+						</t>
 					</t>
 				</div>			
 				<div class="info" t-attf-style="background-color:#{dashboard.color};">

@@ -1539,6 +1539,19 @@
 	            </field>
 	        </field>
 	    </record>
+	    
+	    <!-- Inherit the Stock Location Form -->
+	    <record id="view_location_form_inherit_hotel" model="ir.ui.view">
+	        <field name="name">stock.location.form.inherit.hotel</field>
+	        <field name="model">stock.location</field>
+	        <field name="inherit_id" ref="stock.view_location_form"/>
+	        <field name="arch" type="xml">
+	            <field name="return_location" position="after">
+	                <field name="islaundry" />
+	                <field name="sequence" />
+	            </field>
+	        </field>
+	    </record>
 	        
 	    <!-- Form view of hotel management menu -->
 	   <!--  <record id="view_hotel_menu_form" model="ir.ui.view">
