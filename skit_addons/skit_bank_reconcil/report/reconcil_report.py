@@ -62,7 +62,8 @@ class SkitBankReconcilReport(models.AbstractModel):
         
         #Validated Payments not linked with a Bank Statement Line
         pay_move_line = self.env['account.move.line'].search([('account_id', '=', default_debit_acc_id),
-                                                              ('full_reconcile_id','=', False)])
+                                                              ('full_reconcile_id','=', False),
+                                                              ('statement_id', '=', False)])
         payment_lines=[]
         for pay in pay_move_line:
                 pay_dict = {}
