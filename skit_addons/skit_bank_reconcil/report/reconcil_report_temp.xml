@@ -22,7 +22,7 @@
 						<tbody>
 						<tr>
 							<td>
-							 	<span><h5><strong>Virtual GL Balance</strong></h5></span> 
+							 	<span><h6><strong>Virtual GL Balance</strong></h6></span> 
 							</td>
 							<td><span></span></td>
 							<td><span></span></td>
@@ -32,7 +32,7 @@
 						</tr>
 						<tr>
 							<td>
-								<span><h5><strong>Current balance of account</strong><t t-esc="gl_code"/></h5></span> 
+								<span><h6><strong>Current balance of account</strong><t t-esc="gl_code"/></h6></span> 
 							</td>
 							<td><span></span></td>
 							<td><span></span></td>
@@ -42,12 +42,12 @@
 						</tr>
 						<tr>
 							<td>
-								<span><h5><strong>Operations to Process:</strong></h5></span>
+								<span><h6><strong>Operations to Process:</strong></h6></span>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<span><h5><strong>Unreconciled Bank Statement Lines</strong></h5></span>
+								<span><h6><strong>Unreconciled Bank Statement Lines</strong></h6></span>
 							</td>
 						</tr> 
 						<t t-foreach="st_lines_left" t-as="st_line">								
@@ -69,7 +69,7 @@
 							</t>
 							<tr>
 								<td>
-									<span><h5><strong>Validated Payments not Linked with a Bank Statement Line</strong></h5></span>
+									<span><h6><strong>Validated Payments not Linked with a Bank Statement Line</strong></h6></span>
 								</td>
 							</tr>
 							<t t-foreach="payment_lines" t-as="pay">								
@@ -91,7 +91,7 @@
 							</t>
 							<tr>
 								<td>
-									<span><h5><strong>Last Bank Statement Ending Balance</strong></h5></span> 
+									<span><h6><strong>Last Bank Statement Ending Balance</strong></h6></span> 
 								</td>
 								<td></td>
 								<td></td>
@@ -101,7 +101,7 @@
 							</tr>
 							<tr>
 								<td>
-									<span><h5><strong>Unexplained Difference</strong></h5></span> 
+									<span><h6><strong>Unexplained Difference</strong></h6></span> 
 								</td>
 								<td></td>
 								<td></td>
