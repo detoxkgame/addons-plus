@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Skit Assets Management',
+    'name': 'Odoo12 Assets Management',
     'version': '1.1',
     'summary': 'Assets Management',
     'author' : 'Srikesh Infotech',
