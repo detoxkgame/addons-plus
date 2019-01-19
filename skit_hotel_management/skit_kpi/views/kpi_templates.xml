@@ -6,28 +6,16 @@
           		<script type="text/javascript" src="/skit_kpi/static/src/js/kpi.js"></script>  
           		<script type="text/javascript" src="/skit_kpi/static/src/js/jquery.dataTables.js"></script>			 
 				<script type="text/javascript" src="/skit_kpi/static/src/js/datatables.min.js" charset="UTF-8"></script>
-<!-- 				<script type="text/javascript" src="/skit_kpi/static/src/js/bootstrap-datepicker.js" charset="UTF-8"></script>
- --><!-- 				<script type="text/javascript" src="/skit_kpi/static/src/js/bootstrap-datepicker.js" charset="UTF-8"></script>
- -->				
-  <script type="text/javascript" src="/skit_kpi/static/src/js/bootstrap-datetimepicker.js" charset="UTF-8"></script> 
-
-
-<!-- <script type="text/javascript" src="/skit_kpi/static/src/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script> 
- -->
-
-
+				<script type="text/javascript" src="/skit_kpi/static/src/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+				<script type="text/javascript" src="/skit_kpi/static/src/js/bootstrap-datepicker.min.js" charset="UTF-8"></script>
+    		    
     		    <link rel="stylesheet" href="/skit_kpi/static/src/css/kpi.css"/> 
 			    <link rel="stylesheet" href="/skit_kpi/static/src/css/jquery.dataTables.css" />
 			    <link rel="stylesheet" href="/skit_kpi/static/src/css/datatables.min.css"/> 
-				<!-- <link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datepicker.css" />
+				<link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datepicker.css" />
 				<link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datepicker.min.css" />
 				<link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datepicker.standalone.css" />
-				<link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datepicker.standalone.min.css" /> --> 
-				<link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datetimepicker.min.css" />
- 				<!--  <link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap.css" /> -->
- 				  <link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datetimepicker.css" /> 
-			<!-- 	 <link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap.min.css" /> -->
-				 <!-- <link rel="stylesheet" href="/skit_kpi/static/src/css/reservation.css" />  -->
+				<link rel="stylesheet" href="/skit_kpi/static/src/css/bootstrap-datepicker.standalone.min.css" />
          </xpath>
         </template>    
     </data>

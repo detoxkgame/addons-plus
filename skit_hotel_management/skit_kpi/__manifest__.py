@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "category": "Report",
     "depends": [
-        'base_external_dbsource',
+        'base_external_dbsource', 'point_of_sale',
     ],
     "qweb": ['static/src/xml/pos.xml'],
     "data": [
