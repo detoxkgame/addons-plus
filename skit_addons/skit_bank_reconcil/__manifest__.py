@@ -9,6 +9,7 @@
     """,
     'category': 'Skit Bank Reconciliation Report',
     'website': 'www.srikeshinfotech.com',
+    'images': ['images/main_screenshot.png'],
     'depends': ['base', 'account'],
     'data': [
              'wizard/reconcil_report_wizard.xml',
