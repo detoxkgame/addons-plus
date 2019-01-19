@@ -44,7 +44,7 @@
     </record>
     
     <!--  Bank Reconciliation Menu  -->
-       <menuitem id="menu_action_bank_reconciliation" name="Bank Reconciliation" action="action_bank_reconciliation" parent="skit_account_reports.menu_finance_legal_statement"
+       <menuitem id="menu_action_bank_reconciliation" name="Bank Reconciliation" action="action_bank_reconciliation" parent="account.menu_finance_reports"
 			sequence="130" /> 
         
 </data>
