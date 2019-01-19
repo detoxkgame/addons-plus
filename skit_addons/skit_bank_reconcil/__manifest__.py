@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Skit Bank Reconciliation Report',
+    'name': 'Bank Reconciliation Report',
     'version': '1.0',
     'author': 'Srikesh Infotech',
     'description': """
             Bank Reconciliation Report
     """,
-    'category': 'Skit Bank Reconciliation Report',
-    'website': 'www.srikeshinfotech.com',
+    'category': 'Accounting',
+    'license': "AGPL-3",
+    'website': 'http://www.srikeshinfotech.com',
+    'price'  : 30,
+    'currency': 'EUR',    
     'images': ['images/main_screenshot.png'],
     'depends': ['base', 'account'],
     'data': [
