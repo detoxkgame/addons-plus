@@ -3,7 +3,7 @@
 	<data>
 		<template id="skit_hotel_management_assets" inherit_id="point_of_sale.assets">
 			<xpath expr="." position="inside">
-				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/hotel_management.js"></script>
+				<!-- <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/hotel_management.js"></script> -->
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/vendor_dashboard.js"></script> 
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/pos_model.js"></script> 
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/pos_db.js"></script>
@@ -16,6 +16,11 @@
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap-datepicker.min.js"></script>
 			    <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/chosen.jquery.min.js"></script>
 				<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script> -->
+				<!-- <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery.min.js"></script>
+				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/moment.min.js"></script>
+				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap.min.js"></script>
+				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap-datetimepicker.min.js"></script> -->
+				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/checkout.js"></script>
 				
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/hotel_management.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/jquery.dataTables.css"></link>
@@ -27,6 +32,8 @@
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datepicker.standalone.min.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/chosen.min.css"></link> 
 				<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" /> -->
+				<!-- <link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datetimepicker.min.css"></link> 
+				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap.min.css"></link>  -->
 			</xpath>
 		</template>
         <!-- <template id="hotel_management_inherit" inherit_id="web.minimal_layout">

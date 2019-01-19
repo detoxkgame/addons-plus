@@ -46,9 +46,9 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink" href="#">
+	          <a class="hexLink checkout" href="#">
 	            <img src="https://image.flaticon.com/icons/svg/227/227339.svg" alt="" />
-	            <h1>VENDOR</h1>
+	            <h1>CheckOut</h1>
 	            <p></p>
 	          </a>
 	        </div>

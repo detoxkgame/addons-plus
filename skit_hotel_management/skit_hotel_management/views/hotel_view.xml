@@ -1143,7 +1143,8 @@
             <field name="priority" eval="15"/>
             <field name="arch" type="xml">
                 <search string="Vendor Dashboard">
-                	<field name="vendor_category_id" />
+                	<field name="name" />
+                	<field name="dashboard_category" />
                 </search>
             </field>
         </record>
@@ -1158,8 +1159,10 @@
 	                	<field name="image" widget="image" class="oe_avatar"/>
 	                	<group>
 	                		<group>
+	                			<field name="name" />
 	                			<field name="vendor_category_id" />
 	                			<field name="vendor_category_ids" widget="many2many_tags" attrs="{'invisible': [('vendor_other_category','!=','other')]}"/>
+	                			<field name="dashboard_category" />
 	                		</group>
 	                		<group>
 	                			<field name="sequence" />
@@ -1199,7 +1202,8 @@
 	        <field name="arch" type="xml">
 	            <tree string="Vendor Dashboard">
 	                <field name="sequence" />
-	                <field name="vendor_category_id" />
+	                <field name="name" />
+	                <field name="dashboard_category" />
 	            </tree>
 	        </field>
 	    </record>

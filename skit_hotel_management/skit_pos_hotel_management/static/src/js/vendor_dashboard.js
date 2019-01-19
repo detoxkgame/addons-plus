@@ -78,6 +78,12 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         	/*$(this)
             .prev(".info").css({'display': 'none'});*/
         	$(this).siblings(".item").css({'display': 'block'});
+        	
+        	/** Trigger the first dashboard element */
+        	if ($(this).next().find(".info2").find('.vendor-contents').children().length <= 0 ) {
+        	     $(this).next().find(".info1").find( ".dashboard-element:first" ).trigger( "click" );
+        	}
+        	
         });
        
         /** Back Icon */
@@ -116,7 +122,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var line_group_key = result[0]['line_group_key']
     			var form_view = result[0]['form_view']
     			var form_name = result[0]['form_name']
-    			var color = result[0]['color']
+    			var text_color = result[0]['text_color']
     			var sub_form_template = result[0]['sub_form_template']
     			var current_order = result[0]['current_order']
     			var current_order_lines = result[0]['current_order_lines']
@@ -138,10 +144,10 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
                 var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-                						form_name: form_name, color:color, sub_form_template: sub_form_template, 
+                						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, 
                 						current_order: current_order, current_order_lines: current_order_lines,
                 						form_temp_id: form_temp_id, model_name: model_name, vendor_id: vendor_id,
-                						line_form_temp_id: line_form_temp_id, line_model_name: model_name,
+                						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
                 						line_group: line_group, line_group_key: line_group_key,
                 						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
                 						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
@@ -184,7 +190,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var line_group_key = result[0]['line_group_key']
             			var form_view = result[0]['form_view']
             			var form_name = result[0]['form_name']
-            			var color = result[0]['color']
+            			var text_color = result[0]['text_color']
             			var sub_form_template = result[0]['sub_form_template']
             			var products = result[0]['products']
             			var template_lines = result[0]['template_lines']
@@ -209,7 +215,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-    						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+    						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
     						template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
     						form_temp_id: form_temp_id, model_name: model_name,
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
@@ -262,7 +268,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var line_group_key = result[0]['line_group_key']
             			var form_view = result[0]['form_view']
             			var form_name = result[0]['form_name']
-            			var color = result[0]['color']
+            			var text_color = result[0]['text_color']
             			var sub_form_template = result[0]['sub_form_template']
             			var current_order = result[0]['current_order']
             			var current_order_lines = result[0]['current_order_lines']
@@ -281,7 +287,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var contents = el_node.find('.vendor-contents');
                         contents.innerHTML = "";
                         var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-                        						form_name: form_name, color:color, sub_form_template: sub_form_template, vendor_id: vendor_id,
+                        						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, vendor_id: vendor_id,
                         						current_order: current_order, current_order_lines: current_order_lines,
                         						form_temp_id: form_temp_id, model_name: model_name,
                         						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
@@ -320,7 +326,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var line_group_key = result[0]['line_group_key']
             			var form_view = result[0]['form_view']
             			var form_name = result[0]['form_name']
-            			var color = result[0]['color']
+            			var text_color = result[0]['text_color']
             			var sub_form_template = result[0]['sub_form_template']
             			var products = result[0]['products']
             			var template_lines = result[0]['template_lines']
@@ -344,7 +350,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-    						form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+    						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
     						template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
     						form_temp_id: form_temp_id, model_name: model_name,
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
@@ -397,11 +403,11 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	$(this).css({'display': 'none'});
                 	$(this).closest('td').find('.input-tag').css({'display': 'inline-block'});
                 });*/
-                contents.off('focus','.datepicker-input');
-                contents.on('focus','.datepicker-input',function(){
-                	$(this).datepicker({
+                contents.off('focus','.datepicker-input-time');
+                contents.on('focus','.datepicker-input-time',function(){
+                	$(this).datetimepicker({
             	   		//todayBtn: "linked"
-                		format: 'yyyy-mm-dd',
+                		format: 'yyyy-mm-dd HH:mm:ss',
             	   		todayHighlight: true
             	   	});
                 });
@@ -931,7 +937,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var line_group_key = result[0]['line_group_key']
 			var form_view = result[0]['form_view']
 			var form_name = result[0]['form_name']
-			var color = result[0]['color']
+			var text_color = result[0]['text_color']
 			var sub_form_template = result[0]['sub_form_template']
 			var products = result[0]['products']
 			var template_lines = result[0]['template_lines']
@@ -956,7 +962,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var fcontents = el_node.find('.vendor-contents');
         	fcontents.innerHTML = "";
         	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-				form_name: form_name, color:color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+				form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
 				template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
 				form_temp_id: form_temp_id, model_name: model_name,
 				line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,

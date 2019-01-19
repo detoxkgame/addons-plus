@@ -75,34 +75,57 @@ class ResPartner(models.Model):
     _inherit = 'hm.form.template'
 
     @api.multi
-    def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id, vendor_id = 0, invoice_ids = []):
+    def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id, vendor_id = 0, invoice_ids = [], is_pay=False):
         vendor_dashboard = self.env['hm.vendor.dashboard'].sudo().search(
                                         [('id', '=', int(dashboard_id))])
         is_other = False
 
-        vendors = self.env['res.partner'].sudo().search(
-                            [('supplier', '=', True),
-                             ('category_id', 'in', [int(category_id)])])
-        if is_form:
-            sub_template = self.env['hm.sub.form.template.line'].sudo().search([('id', '=', int(sub_temp_id))])
-            form_template = self.env['hm.form.template'].sudo().search(
-                            [('id', '=', sub_template.form_template_id.id)])
-            form_template_line = self.env['hm.form.template.line'].sudo().search(
-                            [('form_template_id', '=', form_template.id)],
-                            order='sequence asc')
-        else:
+        if is_pay:
             form_template = self.env['hm.form.template'].sudo().search(
                             [('vendor_dashboard_id', '=', int(dashboard_id)),
-                             ('vendor_dashboard_line_id', '=', int(line_id)),
                              ('form_view', '!=', 'form')])
             form_template_line = self.env['hm.form.template.line'].sudo().search(
-                            [('form_template_id', '=', form_template.id)],
-                            order='sequence asc')
-        if invoice_ids:
-            model_datas = self.env[form_template.form_model_id.model].search(
-                                                [('id', 'in', [invoice_ids])])
+                                [('form_template_id', '=', form_template.id)],
+                                order='sequence asc')
         else:
-            model_datas = self.env[form_template.form_model_id.model].search([])
+
+            vendors = self.env['res.partner'].sudo().search(
+                                [('supplier', '=', True),
+                                 ('category_id', 'in', [int(category_id)])])
+            vendor_categ = self.env['res.partner.category'].sudo().search([
+                                                    ('id', '=', int(category_id))])
+            if is_form:
+                sub_template = self.env['hm.sub.form.template.line'].sudo().search([('id', '=', int(sub_temp_id))])
+                form_template = self.env['hm.form.template'].sudo().search(
+                                [('id', '=', sub_template.form_template_id.id)])
+                form_template_line = self.env['hm.form.template.line'].sudo().search(
+                                [('form_template_id', '=', form_template.id)],
+                                order='sequence asc')
+            else:
+                form_template = self.env['hm.form.template'].sudo().search(
+                                [('vendor_dashboard_id', '=', int(dashboard_id)),
+                                 ('vendor_dashboard_line_id', '=', int(line_id)),
+                                 ('form_view', '!=', 'form')])
+                form_template_line = self.env['hm.form.template.line'].sudo().search(
+                                [('form_template_id', '=', form_template.id)],
+                                order='sequence asc')
+        if form_template.form_view == 'list':
+            if is_pay:
+                model_datas = self.env[form_template.form_model_id.model].search([])
+            else:
+                if invoice_ids:
+                    model_datas = self.env[form_template.form_model_id.model].search(
+                                                        [('id', 'in', [invoice_ids])])
+                else:
+                    if vendor_categ.name == 'Others':
+                        other_vendors = self.env['res.partner'].sudo().search(
+                                    [('supplier', '=', True),
+                                     ('category_id', 'in', vendor_dashboard.vendor_category_ids.ids)])
+                        model_datas = self.env[form_template.form_model_id.model].search(
+                                                    [('partner_id', 'in', other_vendors.ids)])
+                    else:
+                        model_datas = self.env[form_template.form_model_id.model].search(
+                                                        [('partner_id', 'in', vendors.ids)])
         line_group = {}
         temp_id = []
         key = 0
@@ -121,7 +144,12 @@ class ResPartner(models.Model):
                 sub_form_temp_ids.append(line.sub_template_id.id)
             selection_items = []
             if line.form_template_selection_fields:
-                for selection in line.form_template_selection_fields:
+                sql = "select hm_form_selection_item_id from hm_form_selection_item_hm_form_template_line_rel where hm_form_template_line_id = "+str(line.id)+""
+                cr = self.env.cr
+                cr.execute(sql)
+                match_selection_recs = cr.dictfetchall()
+                for rec in match_selection_recs:
+                    selection = self.env['hm.form.selection.item'].sudo().search([('id', '=', rec.get('hm_form_selection_item_id'))])
                     selection_items.append({'value': selection.value,
                                             'name': selection.name})
             many2one_list = []
@@ -150,7 +178,8 @@ class ResPartner(models.Model):
                      'sub_template_id': line.sub_template_id.id,
                      'ttype': line.form_field_id.ttype,
                      'form_template_selection_fields': selection_items,
-                     'form_template_model_fields': many2one_list
+                     'form_template_model_fields': many2one_list,
+                     'field_styles': line.field_styles
                                    }
             template_lines.append(datas)
             if count == 0:
@@ -197,7 +226,7 @@ class ResPartner(models.Model):
                                      'name': loc.display_name})
             sql = "SELECT sp.laundry_order_id FROM stock_picking sp INNER JOIN laundry_order lo ON lo.id = sp.laundry_order_id"
             if int(vendor_id) > 0:
-                sql +=  " WHERE lo.partner_id ="+str(vendor_id)+""
+                sql += " WHERE lo.partner_id ="+str(vendor_id)+""
             sql += " GROUP BY laundry_order_id"
             laundryids = []
             cr = self.env.cr
@@ -281,8 +310,7 @@ class ResPartner(models.Model):
         #print(stock_move_datas)
         if form_template.form_view == 'kanban':
             dash_categ_id = vendor_dashboard.vendor_category_id.ids
-            vendor_categ = self.env['res.partner.category'].sudo().search([
-                                                ('id', '=', int(category_id))])
+
             if vendor_categ.name == 'Others':
                 is_other = True
                 dash_categ_id = vendor_dashboard.vendor_category_ids.ids
@@ -458,7 +486,8 @@ class ResPartner(models.Model):
                                      'sub_template_id': line.sub_template_id.id,
                                      'ttype': line.form_field_id.ttype,
                                      'form_template_selection_fields': selection_items,
-                                     'form_template_model_fields': many2one_list
+                                     'form_template_model_fields': many2one_list,
+                                     'field_styles': line.field_styles
                                      }
                             temp_order_lines.append(datas)
                             if count == 0:
@@ -534,7 +563,7 @@ class ResPartner(models.Model):
                        'line_group_key': sorted(line_group.keys()),
                        'form_view': form_template.form_view,
                        'form_name': form_template.vendor_dashboard_line_id.dashboard_menu.name or form_template.name,
-                       'color': form_template.vendor_dashboard_id.color or vendor_dashboard.color,
+                       'text_color': form_template.vendor_dashboard_id.color or vendor_dashboard.color,
                        'result_datas': result_datas,
                        'sub_form_template': sub_form_template,
                        'template_lines': template_lines,
@@ -595,6 +624,8 @@ class ResPartner(models.Model):
         #partner_id = int(vendor_id)
         if order_id == '':
             order_id = 0
+        if line_form_temp_id == '':
+            line_form_temp_id = 0
         if order_datas.get('product_id'):
             prod_temp = self.env['product.template'].sudo().search([
                                 ('id', '=', int(order_datas['product_id']))])
@@ -759,3 +790,11 @@ class ResPartner(models.Model):
                   'edit_form_id': edit_form_id.id}
 
         return result
+
+    @api.multi
+    def get_accommodation(self):
+        vendor_dashboard = self.env['hm.vendor.dashboard'].sudo().search([
+                                    ('dashboard_category', '=', 'checkout')],
+                                        limit=1)
+        datas = self.get_vendor_list(0, vendor_dashboard.id, 0, False, 0, 0, 0, [], True)
+        return datas

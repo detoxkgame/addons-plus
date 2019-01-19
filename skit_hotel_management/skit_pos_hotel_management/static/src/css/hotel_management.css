@@ -223,7 +223,7 @@
 .drop-down-select:focus {
   border: 1px solid lightblue !important;
 }
-.placeholder { color: #aaa; } 
+.placeholder { color: #aaa !important; } 
 
 .selection-type{
 	display: inline-block;

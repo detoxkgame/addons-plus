@@ -233,7 +233,7 @@ class CurrencyExchange(models.Model):
 class VendorDashboard(models.Model):
 
     _name = 'hm.vendor.dashboard'
-    _rec_name = 'vendor_category_id'
+    #_rec_name = 'vendor_category_id'
 
     image = fields.Binary("Image", attachment=True,
                           help="This field holds the image used as avatar for \
@@ -265,12 +265,18 @@ class VendorDashboard(models.Model):
                                          string="Dashboard Line",
                                          copy=True)
     color = fields.Char(string='Color Index')
-    name = fields.Char()
+    name = fields.Char(string='Name')
+    dashboard_category = fields.Selection([
+                    ('vendor_dashboard', _('Vendor Dashboard')),
+                    ('reservation', _('Reservation')),
+                    ('checkout', _('CheckOut'))], string="Dashboard Category",
+                                  default='')
 
     @api.onchange('vendor_category_id')
     def onchange_vendor_category_id(self):
         partner_category = self.env['res.partner.category'].search([
                          ('id', '=', self.vendor_category_id.id)])
+        self.name = partner_category.name
         if partner_category and partner_category.name == 'Others':
             self.vendor_other_category = 'other'
         else:
@@ -617,6 +623,8 @@ class PosOrderLine(models.Model):
     pax = fields.Integer(string="Pax")
     tariff_id = fields.Many2one('product.pricelist', string="Tariff Plan")
     user_id = fields.Many2one('res.users', string="Users")
+    partner_id = fields.Many2one('res.partner', related="order_id.partner_id",
+                                 string="Order Partner")
 
 
 class SaleOrder(models.Model):

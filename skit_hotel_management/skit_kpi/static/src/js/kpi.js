@@ -163,11 +163,14 @@ var KPIReportScreenWidget = screens.ScreenWidget.extend({
     	var self = this;
    	 	var histories = result;
    	 	
-	   	 $(document).on('focus', '#sandbox-container .input-daterange',function(){
-	         $(this).datepicker({
+	   /*	 $(document).on('focus', '#sandbox-container .input-daterange',function(){
+	   		 alert('fhf');
+	         $(this).datetimepicker({
 	        	 todayHighlight: true,
 	         })
-	     });
+	     });*/
+	   	 
+	   	$('.rdate_from').click(function(){alert('fhgfh');});
 	   	var contents = this.$el[0].querySelector('.dl_otable');
 	   	if(contents!=null)
 		{	

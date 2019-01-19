@@ -15,14 +15,21 @@
 				<div class="dl-col-lg-9 dl-col-md-9 dl-col-sm-9 dl-col-xs-9 bhoechie-tab customer-log-table-size customer_log-orderwidth" t-attf-id="kpi-#{count}">	
 					<div class="bhoechie-tab-content active kpi_reports" t-attf-id="#{kpi[0][0].category}">	
 						<div class="span5 col-md-5 date-picker" id="sandbox-container">
-							<div class="input-daterange input-group" id="datepicker">
+							<!-- <div class="input-daterange input-group" id="datepicker">
 								<span class="input-group-addon datepicker-span">From</span>
 								<input type="text" class="input-sm form-control date_from datepicker-input" name="start" t-attf-id="from-#{count}" />
 								<span class="input-group-addon datepicker-span">To</span>
 								<input type="text" class="input-sm form-control date_to datepicker-input" name="end" t-attf-id="to-#{count}" />
 								<input type="hidden" t-attf-id="start-#{count}"/>
 								<input type="hidden" t-attf-id="end-#{count}"/>
-							</div>
+							</div> -->
+							<div id="datetimepicker1" class="input-append date">
+    <input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+    <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+      </i>
+    </span>
+  </div>
 						</div>
 						<div><br></br></div>
 						<div class="kpi_report" t-attf-id="kpi_report#{count}">

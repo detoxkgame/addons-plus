@@ -10,6 +10,7 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     events: _.extend({}, PopupWidget.prototype.events, {	        
         'click .hotel': 'show_hotel',	
         'click .checkin': 'show_checkin',
+        'click .checkout': 'show_checkout',
         'click .roomstatus': 'show_roomstatus',
         'click .night_audit': 'show_night_audit',
         'click .reservation': 'show_reservationscreen',
@@ -32,6 +33,9 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     
     show_checkin:function(){
     	$('.kpi-report-button').trigger("click");
+    },
+    show_checkin:function(){
+    	this.gui.show_screen('vendor_payment');
     },
     init: function(parent, options) {
         this._super(parent, options);

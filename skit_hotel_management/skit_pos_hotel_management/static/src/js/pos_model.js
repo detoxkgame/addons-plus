@@ -21,6 +21,7 @@ odoo.define('skit_pos_hotel_management.pos_model',function(require){
 	            		    model:  'hm.vendor.dashboard',
 	            	        fields: ['vendor_category_id', 'sequence','vendor_category_ids', 'color', 'name'],
 	            	        order:  _.map(['sequence','name'], function (name) { return {name: name}; }),
+	            	        domain: [['dashboard_category','=','vendor_dashboard']],
 	            	        loaded: function(self,vendor_dashboard){
 	            	        	 self.vendor_dashboard = vendor_dashboard;
 	            	        },

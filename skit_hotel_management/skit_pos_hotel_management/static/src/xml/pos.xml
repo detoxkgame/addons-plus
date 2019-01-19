@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-	<t t-name="HotelManagementWidget">
+<!-- ===== Vendor Dashboard ===== -->
+	<!-- <t t-name="HotelManagementWidget">
         <div class='product-list-container'>
             <div class="product-list-scroller touch-scrollable">
                 <div class="hotel">
@@ -18,11 +19,11 @@
        		<input type="date" name="my_date" />
         	<span class="vendor-dash-button">Vendor Dashboard</span>
         </div>
-    </t>
+    </t> -->
     
     <t t-name="VendorListContent">
     	<div style="display: inline-block;width: 100%;height: 100%;overflow-y: auto;">
-    		<h1 t-attf-style="text-align: left;border-bottom: 0.1px solid gray;color:#{color}"><t t-esc="form_name" /></h1>
+    		<h1 t-attf-style="text-align: left;border-bottom: 0.1px solid gray;color:#{text_color}"><t t-esc="form_name" /></h1>
     		<!-- Report View -->
     		<t t-if="form_view == 'report'">
     			<div style="display: inline-block;width: 100%;padding: 5px;">
@@ -87,7 +88,7 @@
 		    	<t t-foreach="result_datas" t-as="vendor" >
 		    		<t t-if="(is_other) and (vcatg_id != vendor.category_id)">
 			    		<div style="display: inline-block;width: 100%;">
-			    			<span t-attf-style="float: left;color:#{color}"><t t-esc="vendor.category_name" /></span>
+			    			<span t-attf-style="float: left;color:#{text_color}"><t t-esc="vendor.category_name" /></span>
 			    		</div>
 		    		</t>
 					<div class="vendor-tag" >
@@ -459,11 +460,12 @@
 			    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
 				    								<div class="input-daterange input-group" id="datepicker">
 					    								<i class="fa fa-calendar icon"></i>
-					    								<input type="text" class="input-sm form-control datepicker-input"  t-attf-placeholder="#{first_col.form_placeholder}" 
+					    								<input type="text" class="datepicker-input-time"  t-attf-placeholder="#{first_col.form_placeholder}" 
 					    								t-attf-id="#{first_col.form_fields}" t-attf-value="#{c_order[first_col.form_fields]}"
 					    								/>
 				    								</div>
-			    								</div>
+			    								</div> 
+			    								
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
 			    						</td>
@@ -534,8 +536,8 @@
 					    							<t t-if="(same_row.form_field_type)=='date'">
 					    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
 				    										<div class="input-daterange input-group" id="datepicker">
-							    								<i class="fa fa-calendar icon" style="margin-right: 29.5%;"></i>
-							    								<input type="text" class="input-sm form-control datepicker-input" t-attf-placeholder="#{same_row.form_placeholder}" 
+							    								<i class="fa fa-calendar icon" style="margin-right: 31%;"></i>
+							    								<input type="text" class="datepicker-input-time" t-attf-placeholder="#{same_row.form_placeholder}" 
 							    								t-attf-id="#{same_row.form_fields}" t-attf-value="#{c_order[same_row.form_fields]}"
 							    								/>
 						    								</div>
@@ -820,14 +822,14 @@
 		</div>  -->
     </t>
     
-    <t t-name="VendorCategoryWidget">
+    <!-- <t t-name="VendorCategoryWidget">
         <div class='vendor-category-container'>
             <div class="vendor-category-scroller touch-scrollable">
                 <div class="vendor-category">
                 </div>
             </div>
         </div>
-    </t>
+    </t> -->
     
     <t t-name="VendorDashboardScreenWidget">
     	<div class="dashboard-screen screen">
@@ -841,171 +843,100 @@
              </div>
     	</div>
     </t>
-    
-    <t t-name="VendorDashboardScreenWidget1234">
-       <div class="dashboard-screen screen">
-       		<span> Vendor Dashboard </span>
-        </div>
-       
-        <!-- <section>
-<div class="item">item1</div>
+ 
+<!-- ===== CheckOut ===== -->
+	<t t-name="PaymentListContent">
+	<div style="display: inline-block;width: 100%;height: 100%;overflow-y: auto;">
+	<t t-if="form_view == 'list'">
+		<table id="vendor_order_list" class="table stripe hover row-border order-column dataTable no-footer">
+	    	<thead>
+	    		<t t-set="head_count" t-value="1" />
+	    		<t t-foreach="line_group_key" t-as="line_key" >
+	    			<t t-if="head_count == 1" >
+			    		<tr style="background-color: #875A7B;color: white;">
+							<t t-foreach="line_group[line_key]" t-as="label">
+						    	<t t-if="(label.form_field_type)=='sub_form'">
+						    		<t t-foreach="sub_form_template[label.sub_template_id]" t-as="temp" >
+						    			<th><t t-esc="temp.name" /></th>
+						    		</t>
+						    	</t>
+						    	<t t-else="" >
+						    		<th><t t-esc="label.form_label" /></th>
+						    	</t>
+						    </t>
+					    </tr>
+					    <t t-set="head_count" t-value="head_count + 1" />
+				    </t>
+			    </t>
+	    	</thead>
+	    	<tbody>
+	    		<t t-set="count" t-value="1" />
+	    				<t t-foreach="result_datas" t-as="order" >
+		    				<t t-foreach="line_group_key" t-as="line_key" >
+		    					<t t-set="first_col" t-value="line_group[line_key][0]" />
+		    					<tr>
+		    						<t t-if="(first_col.form_field_type)=='sub_form'">
+			    						<t t-foreach="sub_form_template[first_col.sub_template_id]" t-as="temp" >
+				    						<td>
+				    							<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" class="edit-datatable" ><img t-att-src='widget.sub_template_line_icon_url(temp.id)' width="20" height="17" /></span>
+				    						</td>
+			    						</t>
+			    					</t>
+			    					<t t-else="" >
+			    						<td>
+			    							<t t-if="(first_col.form_field_type)=='label'">
+			    								<span><t t-esc="order[first_col.form_fields]" /></span>
+			    							</t>
+			    						</td>
+		    						</t>
+		    						<t t-foreach="line_group[line_key]" t-as="same_row">
+		    							<t t-if="same_row.sameline">
+		    								<td>
+				    							<t t-if="(same_row.form_field_type)=='label'">
+				    								<span><t t-esc="order[same_row.form_fields]" /></span>
+				    							</t>
+				    							<t t-if="(same_row.form_field_type)=='button'">
+				    								<span t-attf-style="#{same_row.field_styles}" t-attf-class="#{same_row.form_label}"><t t-esc="same_row.form_label" /></span>
+				    							</t>
+				    						</td>
+		    							</t>
+		    						</t>
+		    					</tr>
+		    				</t>
+		    			<t t-set="count" t-value="count + 1" />
+	    				</t>
+	    			</tbody>
+	    		</table>
+	</t>
+	</div>
+	</t>
 
-<div class="info">info</div>
-
-<div class="item">item2</div>
-
-<div class="info">info</div>
-<div class="item">item3</div>
-
-<div class="info">info</div>
-<div class="item">item4</div>
-
-<div class="info">info</div>
-</section> -->
-<!--       <div>   
-<ul id='accordion'>
-  <li class='list active'>
-  	 <div class='slide' style="width:1440px;height:1080px;">
-  		<span>dffgdgdgdgd</span>
-  	</div> 
-   <img src='http://t.wallpaperweb.org/wallpaper/nature/1440x1080/01319_glaciercanyon_1440x1080.jpg' class='slide' /> 
-  <h1 class='vertical-text'>Header</h1>
-  </li>
-  <li class='list'>
-   <div class='slide blur-filter' style="width:1440px;height:1080px;">
-  		<span>dsffffff</span>
-  	</div> 
-   <img src='http://t.wallpaperweb.org/wallpaper/nature/1440x1080/Punch_Bowl_Falls_Eagle_Creek_Wilderness_Area_Columbia_River_GorgeOregon_1440x1080.jpg' class='slide blur-filter'/> 
-  <h1 class='vertical-text'>Header2</h1>
-  </li>
-  <li class='list'>
-   <div class='slide blur-filter' style="width:1440px;height:1080px;">
-  		<span>jjjjjjj</span>
-  	</div> 
-   <img src='http://img1.mxstatic.com/wallpapers/3e458b261af3b86381a26f48b0367db4_large.jpeg' class='slide blur-filter'/>
-  <h1 class='vertical-text'>Header3</h1> 
-  </li>
-  <li class='list'>
-   <div class='slide blur-filter' style="width:1440px;height:1080px;">
-  		<span>mmmmmmm</span>
-  	</div> 
-   <img src='http://t.wallpaperweb.org/wallpaper/abstract/1440x1080/01355_smoke_1440x1080.jpg' class='slide blur-filter'/> 
-  <h1 class='vertical-text'>Header4</h1>
-  </li>
-  <li class='list'>
-   <div class='slide blur-filter' style="width:1440px;height:1080px;">
-  		<span>vbnvbnvn</span>
-  	</div> 
-   <img src='http://wallpoper.com/images/00/42/82/71/cityscapes-architecture_00428271.jpg' class='slide blur-filter'/> 
-  <h1 class='vertical-text'>Header5</h1></li>
-  <li class='list'>
-   	<div class='slide blur-filter' style="width:1440px;height:1080px;">
-  		<span>xxxxcxxxx</span>
-  	</div> 
-   <img src='http://www.dragonflyanimation.com/downloads/images/wallpaper/03-Dfly-Lambo-4x3-1440x1080.jpg' class='slide blur-filter'/> 
-  <h1 class='vertical-text'>Header6</h1>
-  </li>
-</ul>
-</div> -->
-         <div class="accordion">
-
-	<section id="acc1">
-		<h2><a href="#acc1">Title One</a></h2>
-		<p>This content appears on page 1.</p>
-	</section>
-	
-	<section id="acc2">
-		<h2><a href="#acc2">Title Two</a></h2>
-		<p>This content appears on page 2.</p>
-	</section>
-	
-	<section id="acc3">
-		<h2><a href="#acc3">Title Three</a></h2>
-		<p>This content appears on page 3.</p>
-	</section>
-	
-	<section id="acc4">
-		<h2><a href="#acc4">Title Four</a></h2>
-		<p>This content appears on page 4.</p>
-	</section>
-	
-	<section id="acc5">
-		<h2><a href="#acc5">Title Five</a></h2>
-		<p>This content appears on page 5.</p>
-	</section>
-	<section id="acc6">
-		<h2><a href="#acc6">Title Six</a></h2>
-		<p>This content appears on page 6.</p>
-	</section>
-
-</div> 
-        <!-- <div class="container">
-    <ul class="accordion">
-      <li class="tabs">
-        <div class="social-links twitter-icon">
-          <a href="https://twitter.com/renettarenula">Twitter</a>
+	<t t-name="VendorPaymentScreenWidget">
+    	<div class="vendor-pay-screen clientlist-screen screen">
+            <div class="screen-content kpireport-screen-content">
+                <section class="top-content">   
+	                <span class='button back'>
+	                	<i class='fa fa-angle-double-left'></i>
+	                    Back
+	                </span> 
+	                <!-- <span class='button product'>
+	                	<i class='fa fa-angle-double-left'></i>
+	                    Product
+	                </span> -->
+	                <span><p class="dltitle" style="margin-top: 2%;"> Accommodation </p></span>
+                </section>
+                <section class="full-content">
+                    <div class='window' style="overflow:auto">
+                        <section class='subwindow'>  
+							<div class="container">
+								<div class="vendor-payment">
+								</div>
+							</div>                 	
+                        </section>
+                    </div>
+                </section>
+            </div>
         </div>
-        <div class="paragraph">
-          <h1>Twitter</h1>
-          <p>My thoughts in 140 characters or less. Sometimes, I do not know how to correctly use Twitter.</p>
-        </div>
-      </li>
-      <li class="tabs">
-        <div class="social-links facebook-icon">
-          <a href="https://facebook.com">Facebook</a>
-        </div>
-        <div class="paragraph">
-          <h1>Facebook</h1>
-          <p>Where I get to stalk my friends and let them stalk me. A place to get people to stroke your ego.</p>
-        </div>
-      </li>
-      <li class="tabs">
-        <div class="social-links linkedin-icon">
-           <a href="https://my.linkedin.com/pub/aysha-anggraini/49/a82/a05/">LinkedIn</a>
-        </div>
-        <div class="paragraph">
-          <h1>LinkedIn</h1>
-          <p>I act totally professional on this one. It is what the recruiters see, you see.</p>
-        </div>
-      </li>
-      <li class="tabs">
-        <div class="social-links insta-icon">
-          <a href="http://instagram.com/renettarenula">Instagram</a>
-        </div>
-        <div class="paragraph">
-          <h1>Instagram</h1>
-          <p>Where I post my duckface pictures. Occasionally, I would post pictures of my food and my cats.</p>
-        </div>
-      </li>
-      <li class="tabs">
-        <div class="social-links youtube-icon">
-          <a href="https://youtube.com">Youtube</a>
-        </div>
-        <div class="paragraph">
-          <h1>YouTube</h1>
-          <p>Just kidding! I do not have a YouTube account. I'm not too fond of the camera.</p>
-        </div>
-      </li>
-      <li class="tabs">
-        <div class="social-links tumblr-icon">
-          <a href="https://renettarenula.tumblr.com/">Tumblr</a>
-        </div>
-        <div class="paragraph">
-          <h1>Tumblr</h1>
-          <p>I have a tumblr but I don't really use it. I still prefer WordPress. I'm quite old-fashioned.</p>
-        </div>
-      </li>
-      <li class="tabs">
-        <div class="social-links dribbble-icon">
-          <a href="http://dribbble.com">Dribbble</a>
-        </div>
-        <div class="paragraph">
-          <h1>Dribbble</h1>
-          <p>I do not have a Dribbble account. Would any of you be so kind and send me an invite? </p>
-        </div>
-      </li>
-    </ul>
-  </div> -->
-    </t>
+	</t>
 	
 </templates>
