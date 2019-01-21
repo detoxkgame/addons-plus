@@ -6,7 +6,7 @@
     'author': 'Srikesh Infotech',
     'license': "AGPL-3",
     'website': 'http://www.srikeshinfotech.com',
-    'price': 125,
+    'price': 0,
     'currency': 'EUR',
     'description': """
             This module helps to generate all Accounting Reports in PDF, Assets Managements and Bank Reconciliation report
