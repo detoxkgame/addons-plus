@@ -34,7 +34,7 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     show_checkin:function(){
     	$('.kpi-report-button').trigger("click");
     },
-    show_checkin:function(){
+    show_checkout:function(){
     	this.gui.show_screen('vendor_payment');
     },
     init: function(parent, options) {
