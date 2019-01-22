@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates	id="template"	xml:space="preserve">
+   
+    <t t-name="load_rows">
+			    	<t t-set="lenkey" t-value="len_line_group" />
+			    		<!-- <t t-esc="lenkey"/> -->
+			    	<t t-if="sub_line_group_key">
+			    		<t t-esc="form_template" />
+			    		<div id="subformtemplate">
+			    		
+			    		<t t-foreach="['htmlheader','htmlbody','htmlfooter']"	t-as="content">
+			    			<div t-attf-class="sub#{content} #{endrow}" t-attf-style="#{endrowstyle}">
+			    			<t t-set="rowcount" t-value="0"/>
+			    			 <t	t-foreach="sub_line_group_key"	t-as="key">
+				    			 <t	t-set="first_col" t-value="sub_line_group[key][0]" />
+				    			 <t t-if="(first_col.field_group)==content">	    			 
+					    			 <t	t-set="divclass" t-value="first_col.field_group" />
+					    			 <t t-set="endrow"	 t-value="''" />
+					    			 <t	t-set="endrowstyle"	t-value="''" />
+					    			 
+					    			 <t t-if="(first_col.form_field_type)=='empty_line'">
+						    			 <t	t-set="endrow"	t-value="'empty_line'" />
+						    			 <t	t-set="endrowstyle"	t-value="first_col.style" />
+						    		</t> 
+						    		<t t-else="">
+						    			 <t	t-set="endrow"	t-value="''" />
+						    			 <t	t-set="endrowstyle"	t-value="''" />
+						    		</t>
+						    		<!-- <t t-if="(first_col.form_field_type)=='sub_form'">
+								    	<div t-attf-class="#{content} #{endrow}" t-attf-style="#{endrowstyle}"><t t-call="load_rows" />
+								    	</div>				    						
+							    	</t> --> 
+							   <!--  	<t t-else=""> -->		    					
+							    						
+						    		
+								    			<table class="subrows" t-attf-id ="#{rowcount}">		    			   				    			 
+									    				 <tr>
+										    					<!-- First Column -->
+										    					<td class="form-td">
+										    						<t t-if="(first_col.form_field_type)=='button'">			    					  
+										    							<Button	t-attf-ftype="#{first_col.form_field_type}"
+																				t-attf-id="#{first_col.form_label}"
+																				t-attf-style="#{first_col.style}">
+																				<t t-esc="first_col.form_label" />
+																		</Button>
+										    						</t>
+										    						<t	t-set="display_input_box" t-value="''" />
+										    					 	<t t-if="(first_col.form_field_type)=='input_intchar'">
+										    					 	
+											    					 	<t	t-if="(first_col.form_fields)=='address' or (first_col.form_fields)=='location'">
+												    					 	<span>
+												    					 		<img t-attf-field="#{first_col.form_fields}"	
+												    					 			 t-attf-class=" small-icon usericon locationicon"
+												    					 			 t-attf-name="#{first_col.form_fields}"
+																					 src="/skit_pos_hotel_reservation/static/src/img/location.png" /> 
+																			</span>
+												    					 	<t	t-set="display_input_box" t-value="'hide'" />
+											    					 	</t>
+											    					 	
+											    					 	<t t-if="(first_col.form_fields)=='email'">
+												    					 	<span> <img	t-attf-field="#{first_col.form_fields}"	t-attf-class=" small-icon usericon"
+																						src="/skit_pos_hotel_reservation/static/src/img/email.png" />
+																			</span>
+												    					 	<t t-set="display_input_box" t-value="'hide'" />
+											    					 	</t>
+											    					 				    					 	
+											    						<div class='inputfield input-group' t-attf-style="#{first_col.style}">		  		
+												    							<input type="text"	t-attf-id="#{first_col.form_fields}" t-attf-class="#{display_input_box}"
+																					   t-attf-ftype="#{first_col.form_field_type}"
+																					   t-attf-ismandatory="#{first_col.isMandatory}"
+																					   t-attf-name="#{first_col.form_fields}"
+																					   t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																					   onfocus="this.placeholder=''" />
+											    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    					   </t>			    									
+										    							
+											    				 	<t t-if="(first_col.form_field_type)=='header_label'">
+											    						<span  t-attf-style="#{first_col.style}" t-attf-ftype="#{first_col.form_field_type}">
+											    							   <t t-esc="first_col.form_label" />
+											    						</span>
+											    					 </t>
+											    					 
+											    					 <t t-if="(first_col.form_field_type)=='input_char'">
+												    						<div  class='inputfield input-group'  t-attf-style="#{first_col.style}">		  		
+													    							<input	type="text"	t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																							onfocus="this.placeholder=''"
+																							t-attf-ismandatory="#{first_col.isMandatory}"
+																							t-attf-name="#{first_col.form_fields}"
+																							t-attf-ftype="#{first_col.form_field_type}" />
+															    					<span class="hide"><t t-esc="first_col.form_fields" /></span>
+												    						</div>
+											    					 </t>
+											    					 
+										    						 <t t-if="(first_col.form_field_type)=='many2one'">
+												    					  <div class='inputfield input-group'	t-attf-style="#{first_col.style}">	
+													    						<select	t-attf-id="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}"  t-attf-name="#{first_col.form_fields}" t-attf-ftype="#{first_col.form_field_type}">
+																					<option> </option>																
+																					<t t-foreach="first_col.many2one_list"	t-as="many2onelist">
+																							<option t-attf-value="#{many2onelist.id}" t-attf-id="#{many2onelist.id}"><t t-esc="many2onelist.display_name" /></option>
+																					</t>																
+																				</select>
+												    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+												    					 </div>
+										    						 </t>			    						
+										    						
+										    						<t t-if="(first_col.form_field_type)=='one2many'">
+											    						<div class='inputfield input-group'	t-attf-style="#{first_col.style}">	
+												    						<select	t-attf-id="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}"  t-attf-name="#{first_col.form_fields}" t-attf-ftype="#{first_col.form_field_type}">
+																				<option> </option>
+																				<t  t-foreach="first_col.one2many_list"	t-as="one2many_list">
+																					<option t-attf-value="#{one2many_list.id}" t-attf-id="#{one2many_list.id}"><t t-esc="one2many_list.name" /></option>
+																				</t>
+																			</select>
+											    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    						</t>
+										    					
+										    						<t t-if="(first_col.form_field_type)=='selection'">
+											    						<div class='inputfield input-group'	t-attf-style="#{first_col.style}">		  		
+												    							<input	type="text"	t-attf-id="#{first_col.form_fields}"
+												    									t-attf-name="#{first_col.form_fields}"
+												    									t-attf-ismandatory="#{first_col.isMandatory}"
+												    							        t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																						onfocus="this.placeholder=''"
+																						t-attf-ftype="#{first_col.form_field_type}" />
+											    								<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    						</t>
+										    						
+										    						<t t-if="(first_col.form_field_type)=='input_int'">
+											    						<t t-if="(first_col.form_fields)=='mobile'">
+												    					 	<span> 
+												    					 		<img
+																				t-attf-field="#{first_col.form_fields}"
+																				t-attf-class="small-icon usericon"
+																				src="/skit_pos_hotel_reservation/static/src/img/phone.png" /> 
+																		    </span>
+																				<t t-set="display_input_box" t-value="'hide'" />
+											    					 	</t>
+											    						<div  class='inputfield input-group' t-attf-style="#{first_col.style}">		  		
+												    							<input	type="text"	t-attf-id="#{first_col.form_fields}"
+												    									t-attf-name="#{first_col.form_fields}"
+												    									t-attf-ismandatory="#{first_col.isMandatory}"
+																						t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																						onfocus="this.placeholder=''"
+																						t-attf-class="#{display_input_box}"
+																						t-attf-ftype="#{first_col.form_field_type}" />
+											    								<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    						</t>
+										    						
+										    						<t t-if="(first_col.form_field_type)=='image'">
+											    						<img t-attf-field="#{first_col.form_fields}"	class="usericon"
+																			 src="/skit_pos_hotel_reservation/static/src/img/usericon.jpg" />
+										    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+										    						</t>
+										    						<t t-if="(first_col.form_field_type)=='date'">
+												    						<div  class='inputfield input-group date showdatetimepicker' t-attf-style="#{first_col.style}">
+																	  				  <span class="input-group-addon">
+																	                        <i	class="arrow-down ricon fa fa-arrow-down fa-3x"	aria-hidden="true"></i>
+																	                    </span>
+																                    <input	type='text'	class="form-control"
+																							t-attf-ftype="#{first_col.form_field_type}"
+																							t-attf-ismandatory="#{first_col.isMandatory}"
+																							t-attf-name="#{first_col.form_fields}"
+																							t-attf-id="#{first_col.form_fields}"
+																							t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }" />
+																                     <span class="input-group-addon">
+																                        <i	class=" ricon fa fa-calendar fa-3x"	aria-hidden="true"></i>
+																                    </span>
+																           </div>
+												    					   <span class="hide"><t t-esc="first_col.form_fields" /></span>
+												    				</t>
+										    							
+										    				</td>
+										    				<t	t-foreach="sub_line_group[key]"	t-as="same_row">
+											    					<t t-if="same_row.sameline">
+												    						<td class="form-td">			    								
+												    								<t t-if="(same_row.form_field_type)=='button'">
+												    									<Button	t-attf-ftype="#{same_row.form_field_type}"
+																								t-attf-id="#{same_row.form_label}"
+																								t-attf-style="#{same_row.style}">
+																							<t t-esc="same_row.form_label" />
+																						</Button>
+												    								</t>
+														    							<t t-if="(same_row.form_field_type)=='header_label'">
+														    								<span	t-attf-ftype="#{same_row.form_field_type}"
+																									t-attf-style="#{same_row.style}">
+																									<t t-esc="same_row.form_label" />
+																							</span>
+														    							</t>
+														    							
+														    							<t	t-if="(same_row.form_field_type)=='input_char' or (same_row.form_field_type)=='input_intchar'">
+														    							<t	t-if="(same_row.form_fields)=='address' or (same_row.form_fields)=='location'">
+																    					 	<span> <img	t-attf-field="#{same_row.form_fields}"
+																										t-attf-class="#{same_row.form_fields} small-icon usericon locationicon"
+																										src="/skit_pos_hotel_reservation/static/src/img/location.png" />
+																							</span>
+																							<t	t-set="display_input_box" t-value="'hide'" />
+																    					 	</t>
+																    					 	<t t-if="(same_row.form_fields)=='email'">
+																    					 	<span> <img	t-attf-field="#{same_row.form_fields}"
+																										t-attf-class="small-icon usericon emailicon"
+																										src="/skit_pos_hotel_reservation/static/src/img/email.png" /> </span>
+																										<t	t-set="display_input_box" t-value="'hide'" />
+																    					 	</t>
+														    							<div class='inputfield input-group'	t-attf-style="#{same_row.style}">		
+														    								<input	type="text"	t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholder : '' }"
+																									t-attf-class="#{display_input_box}"
+																									t-attf-ismandatory="#{same_row.isMandatory}"
+																									t-attf-id="#{same_row.form_fields}"
+																									t-attf-name="#{same_row.form_fields}"
+																									onfocus="this.placeholder=''"
+																									t-attf-ftype="#{same_row.form_field_type}" />
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    								</div>
+														    							</t>
+														    							
+														    							<t t-if="(same_row.form_field_type)=='input_int'">
+														    							<t t-if="(same_row.form_fields)=='mobile'">
+																    					 	<span> <img	t-attf-field="#{same_row.form_fields}"
+																										t-attf-class="#{same_row.form_fields} small-icon usericon phoneicon "
+																										src="/skit_pos_hotel_reservation/static/src/img/phone.png" />
+																									
+																							</span>
+																							<t	t-set="display_input_box" t-value="'hide'" />
+																    					 </t>
+														    							<div class='inputfield input-group'	t-attf-style="#{same_row.style}">
+														    							<t	t-if="(same_row.form_fields)=='adult' or (same_row.form_fields)=='child'">
+														    								<span class="input-grofup-addon">
+													                      				    	<i	class="arrow ricon fa fa-users fa-3x" aria-hidden="true"></i>
+													                    					</span>
+														    							</t>					    								
+														    								<input	type="text"	t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholder : '' }"
+																									t-attf-class="#{display_input_box}"
+																									t-attf-ismandatory="#{same_row.isMandatory}"
+																									t-attf-name="#{same_row.form_fields}"
+																									t-attf-id="#{same_row.form_fields}"
+																									onfocus="this.placeholder=''"
+																									t-attf-ftype="#{same_row.form_field_type}" />
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    								</div>
+														    							</t>
+														    							<t t-if="(same_row.form_field_type)=='selection'">
+														    							<div class='inputfield input-group'	t-attf-style="#{same_row.style}">		
+														    								<input	type="text"	t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholder : '' }"
+																									t-attf-id="#{same_row.form_fields}"
+																									t-attf-ismandatory="#{same_row.isMandatory}"
+																									t-attf-name="#{same_row.form_fields}"
+																									onfocus="this.placeholder=''"
+																									t-attf-ftype="#{same_row.form_field_type}" />
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    								</div>
+														    							</t>
+														    							
+														    							<t t-if="(same_row.form_field_type)=='date'">					    								
+														    								<div class='inputfield input-group date showdatetimepicker'	t-attf-style="#{same_row.style}">
+																				  				  <span class="input-group-addon">
+																				  				  <t t-if="same_row.form_fields =='checkout_date'">
+																				  				  	<i	class="arrow-up ricon fa fa-arrow-down fa-3x"	aria-hidden="true"></i>
+																				  				  </t>
+																				  				  <t t-else="">
+																				  				  	<i	class="arrow-down ricon fa fa-arrow-down fa-3x"	aria-hidden="true"></i>
+																				  				  </t>
+																				                        
+																				                    </span>
+																				                    <input	type='text'	class="form-control" t-attf-ftype="#{same_row.form_field_type}"
+																											t-attf-id="#{same_row.form_fields}" t-attf-name="#{same_row.form_fields}"
+																											t-attf-ismandatory="#{same_row.isMandatory}" 
+																											t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholde:''}" />
+																				                     <span class="input-group-addon">
+																				                        <i	class=" ricon fa fa-calendar fa-3x"	aria-hidden="true"></i>
+																				                    </span>
+																		               		</div>
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    							</t>
+														    						</td>
+											    							</t> 
+										    						</t> 
+										          				</tr>	    				
+							    					 </table>						    			   
+					    			<t t-set="rowcount" t-value="rowcount+1"/>
+				    		  </t>
+			    		</t> </div>
+			 		
+			 		 </t>			 		 
+				 
+			  </div>
+		 </t>	    		
+			
+    </t>
+    
+    <t t-name="ReservationFormContent">
+	   		 <div>		    	
+			    		<t t-set="lenkey" t-value="len_line_group" />
+			    		<t t-if="line_group_key">			    		
+			    		<t t-foreach="['htmlheader','htmlbody','htmlfooter']"	t-as="content">
+			    		<div t-attf-class="#{content}">
+			    			 <t	t-foreach="line_group_key"	t-as="key">
+			    			 
+			    				 <t t-set="no_of_td" t-value="100/lenkey[key]"/>
+				    			 <t	t-set="first_col" t-value="line_group[key][0]" />
+				    			 <t t-if="(first_col.field_group)==content">	    			 
+					    			 <t	t-set="divclass" t-value="first_col.field_group" />
+					    			 <t t-set="endrow"	 t-value="''" />
+					    			 <t	t-set="endrowstyle"	t-value="''" />
+					    			 
+					    			 <t t-if="(first_col.form_field_type)=='empty_line'">
+						    			 <t	t-set="endrow"	t-value="'empty_line'" />
+						    			 <t	t-set="endrowstyle"	t-value="first_col.style" />
+						    		</t> 
+						    		<t t-else="">
+						    			 <t	t-set="endrow"	t-value="''" />
+						    			 <t	t-set="endrowstyle"	t-value="''" />
+						    		</t>
+						    		<t t-if="(first_col.form_field_type)=='sub_form'">
+								    					<div t-attf-class="#{content} #{endrow}" t-attf-style="#{first_col.style}"><t t-call="load_rows" />
+								    	</div>			    						
+							    	</t> 
+							    	<t t-else="">		    					
+							    						
+						    			
+								    			<table class="headerrows" >			    			   				    			 
+									    				 <tr>
+										    					<!-- First Column -->
+										    					<td class="form-td" t-attf-style="width:#{no_of_td}%!important">
+										    						<t t-if="(first_col.form_field_type)=='button'">			    					  
+										    							<Button	t-attf-ftype="#{first_col.form_field_type}"
+																				t-attf-id="#{first_col.form_label}"
+																				t-attf-style="#{first_col.style}">
+																				<t t-esc="first_col.form_label" />
+																		</Button>
+										    						</t>
+										    						<t	t-set="display_input_box" t-value="''" />
+										    					 	<t t-if="(first_col.form_field_type)=='input_intchar'">
+										    					 	
+											    					 	<t	t-if="(first_col.form_fields)=='address' or (first_col.form_fields)=='location'">
+												    					 	<span>
+												    					 		<img t-attf-field="#{first_col.form_fields}"	t-attf-class=" small-icon usericon locationicon"
+																					 src="/skit_pos_hotel_reservation/static/src/img/location.png" /> 
+																			</span>
+												    					 	<t	t-set="display_input_box" t-value="'hide'" />
+											    					 	</t>
+											    					 	
+											    					 	<t t-if="(first_col.form_fields)=='email'">
+												    					 	<span> <img	t-attf-field="#{first_col.form_fields}"	t-attf-class=" small-icon usericon"
+																						src="/skit_pos_hotel_reservation/static/src/img/email.png" />
+																			</span>
+												    					 	<t t-set="display_input_box" t-value="'hide'" />
+											    					 	</t>
+											    					 				    					 	
+											    						<div class='inputfield input-group' t-attf-style="#{first_col.style}">		  		
+												    							<input type="text"	t-attf-id="#{first_col.form_fields}" t-attf-class="#{display_input_box}"
+																					   t-attf-ftype="#{first_col.form_field_type}"
+																					   t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" 
+																					   t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																					   onfocus="this.placeholder=''" />
+											    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    					   </t>			    									
+										    							
+											    				 	<t t-if="(first_col.form_field_type)=='header_label'">
+											    						<span  t-attf-style="#{first_col.style}" t-attf-ftype="#{first_col.form_field_type}">
+											    							   <t t-esc="first_col.form_label" />
+											    						</span>
+											    					 </t>
+											    					 
+											    					 <t t-if="(first_col.form_field_type)=='input_char'">
+												    						<div  class='inputfield input-group'  t-attf-style="#{first_col.style}">		  		
+													    							<input	type="text"	t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																							onfocus="this.placeholder=''" t-attf-ismandatory="#{first_col.isMandatory}" 
+																							 t-attf-name="#{first_col.form_fields}"
+																							t-attf-ftype="#{first_col.form_field_type}" />
+															    					<span class="hide"><t t-esc="first_col.form_fields" /></span>
+												    						</div>
+											    					 </t>
+											    					 
+										    						 <t t-if="(first_col.form_field_type)=='many2one'">
+												    					  <div class='inputfield input-group' t-attf-style="#{first_col.style}">	
+													    						<select	t-attf-id="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}"  t-attf-name="#{first_col.form_fields}" t-attf-ftype="#{first_col.form_field_type}">
+																					<option> </option>																
+																					<t t-foreach="first_col.many2one_list"	t-as="many2onelist">
+																							<option  t-attf-id="#{many2onelist.id}"  t-attf-value="#{many2onelist.id}"><t t-esc="many2onelist.display_name" /></option>
+																					</t>																
+																				</select>
+												    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+												    					 </div>
+										    						 </t>			    						
+										    						
+										    						<t t-if="(first_col.form_field_type)=='one2many'">
+											    						<div class='inputfield input-group'	t-attf-style="#{first_col.style}">	
+												    						<select	t-attf-id="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}"   t-attf-name="#{first_col.form_fields}" t-attf-ftype="#{first_col.form_field_type}">
+																				<option> </option>
+																				<t  t-foreach="first_col.one2many_list"	t-as="one2many_list">
+																					<option t-attf-value="#{one2many_list.id}" t-attf-id="#{one2many_list.id}"><t t-esc="one2many_list.name" /></option>
+																				</t>
+																			</select>
+											    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    						</t>
+										    					
+										    						<t t-if="(first_col.form_field_type)=='selection'">
+											    						<div class='inputfield input-group'	t-attf-style="#{first_col.style}">		  		
+												    							<input	type="text"	t-attf-id="#{first_col.form_fields}"
+												    							        t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+												    							         t-attf-name="#{first_col.form_fields}"
+																						onfocus="this.placeholder=''" t-attf-ismandatory="#{first_col.isMandatory}" 
+																						t-attf-ftype="#{first_col.form_field_type}" />
+											    								<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    						</t>
+										    						
+										    						<t t-if="(first_col.form_field_type)=='input_int'">
+											    						<t t-if="(first_col.form_fields)=='mobile'">
+												    					 	<span> 
+												    					 		<img
+																				t-attf-field="#{first_col.form_fields}"
+																				t-attf-class="small-icon usericon"
+																				src="/skit_pos_hotel_reservation/static/src/img/phone.png" /> 
+																		    </span>
+																				<t t-set="display_input_box" t-value="'hide'" />
+											    					 	</t>
+											    						<div  class='inputfield input-group' t-attf-style="#{first_col.style}">		  		
+												    							<input	type="text"	t-attf-id="#{first_col.form_fields}"
+																						t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }"
+																						onfocus="this.placeholder=''" t-attf-ismandatory="#{first_col.isMandatory}" 
+																						 t-attf-name="#{first_col.form_fields}"
+																						t-attf-class="#{display_input_box}"
+																						t-attf-ftype="#{first_col.form_field_type}" />
+											    								<span class="hide"><t t-esc="first_col.form_fields" /></span>
+											    						</div>
+										    						</t>
+										    						
+										    						<t t-if="(first_col.form_field_type)=='image'">
+											    						<img t-attf-field="#{first_col.form_fields}"	class="usericon"
+																			 src="/skit_pos_hotel_reservation/static/src/img/usericon.jpg" />
+										    							<span class="hide"><t t-esc="first_col.form_fields" /></span>
+										    						</t>
+										    						<t t-if="(first_col.form_field_type)=='date'">
+												    						<div  class='inputfield input-group date showdatetimepicker' t-attf-style="#{first_col.style}">
+																	  				  <span class="input-group-addon">
+																	                        <i	class="arrow-down ricon fa fa-arrow-down fa-3x"	aria-hidden="true"></i>
+																	                    </span>
+																                    <input	type='text'	class="form-control"
+																							t-attf-ftype="#{first_col.form_field_type}"
+																							t-attf-id="#{first_col.form_fields}"
+																							 t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" 
+																							t-attf-placeholder="#{first_col.form_placeholder ? first_col.form_placeholder : '' }" />
+																                     <span class="input-group-addon">
+																                        <i	class=" ricon fa fa-calendar fa-3x"	aria-hidden="true"></i>
+																                    </span>
+																           </div>
+												    					   <span class="hide"><t t-esc="first_col.form_fields" /></span>
+												    				</t>
+										    							
+										    				</td>
+										    				<t	t-foreach="line_group[key]"	t-as="same_row">
+											    					<t t-if="same_row.sameline">
+												    						<td class="form-td" t-attf-style="width:#{no_of_td}%!important">			    								
+												    								<t t-if="(same_row.form_field_type)=='button'">
+												    									<Button	t-attf-ftype="#{same_row.form_field_type}"
+																								t-attf-id="#{same_row.form_label}"
+																								t-attf-style="#{same_row.style}">
+																							<t t-esc="same_row.form_label" />
+																						</Button>
+												    								</t>
+														    							<t t-if="(same_row.form_field_type)=='header_label'">
+														    								<span	t-attf-ftype="#{same_row.form_field_type}"
+																									t-attf-style="#{same_row.style}">
+																									<t t-esc="same_row.form_label" />
+																							</span>
+														    							</t>
+														    							
+														    							<t	t-if="(same_row.form_field_type)=='input_char' or (same_row.form_field_type)=='input_intchar'">
+														    							<t	t-if="(same_row.form_fields)=='address' or (same_row.form_fields)=='location'">
+																    					 	<span> <img	t-attf-field="#{same_row.form_fields}"
+																										t-attf-class="#{same_row.form_fields} small-icon usericon locationicon"
+																										src="/skit_pos_hotel_reservation/static/src/img/location.png" />
+																							</span>
+																							<t	t-set="display_input_box" t-value="'hide'" />
+																    					 	</t>
+																    					 	<t t-if="(same_row.form_fields)=='email'">
+																    					 	<span> <img	t-attf-field="#{same_row.form_fields}"
+																										t-attf-class="small-icon usericon emailicon"
+																										src="/skit_pos_hotel_reservation/static/src/img/email.png" /> </span>
+																										<t	t-set="display_input_box" t-value="'hide'" />
+																    					 	</t>
+														    							<div class='inputfield input-group'	t-attf-style="#{same_row.style}">		
+														    								<input	type="text"	t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholder : '' }"
+																									t-attf-class="#{display_input_box}"
+																									t-attf-id="#{same_row.form_fields}"
+																									t-attf-name="#{same_row.form_fields}"
+																									onfocus="this.placeholder=''" t-attf-ismandatory="#{same_row.isMandatory}" 
+																									t-attf-ftype="#{same_row.form_field_type}" />
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    								</div>
+														    							</t>
+														    							
+														    							<t t-if="(same_row.form_field_type)=='input_int'">
+														    							<t t-if="(same_row.form_fields)=='mobile'">
+																    					 	<span> <img	t-attf-field="#{same_row.form_fields}"
+																										t-attf-class="#{same_row.form_fields} small-icon usericon phoneicon "
+																										src="/skit_pos_hotel_reservation/static/src/img/phone.png" />
+																									
+																							</span>
+																							<t	t-set="display_input_box" t-value="'hide'" />
+																    					 </t>
+														    							<div class='inputfield input-group'	t-attf-style="#{same_row.style}">
+														    							<t	t-if="(same_row.form_fields)=='adult' or (same_row.form_fields)=='child'">
+														    								<span class="input-grofup-addon">
+													                      				    	<i	class="arrow ricon fa fa-users fa-3x" aria-hidden="true"></i>
+													                    					</span>
+														    							</t>					    								
+														    								<input	type="text"	t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholder : '' }"
+																									t-attf-class="#{display_input_box}"
+																									t-attf-id="#{same_row.form_fields}"
+																									onfocus="this.placeholder=''"
+																									t-attf-ismandatory="#{same_row.isMandatory}" 
+																									t-attf-name="#{same_row.form_fields}"
+																									t-attf-ftype="#{same_row.form_field_type}" />
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    								</div>
+														    							</t>
+														    							<t t-if="(same_row.form_field_type)=='selection'">
+														    							<div class='inputfield input-group'	t-attf-style="#{same_row.style}">		
+														    								<input	type="text"	t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholder : '' }"
+																									t-attf-id="#{same_row.form_fields}"
+																									onfocus="this.placeholder=''"
+																									t-attf-ismandatory="#{same_row.isMandatory}" 
+																									t-attf-name="#{same_row.form_fields}"
+																									t-attf-ftype="#{same_row.form_field_type}" />
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    								</div>
+														    							</t>
+														    							
+														    							<t t-if="(same_row.form_field_type)=='date'">					    								
+														    								<div class='inputfield input-group date showdatetimepicker'	t-attf-style="#{same_row.style}">
+																				  				  <span class="input-group-addon">
+																				  				  <t t-if="same_row.form_fields =='checkout_date'">
+																				  				  	<i	class="arrow-up ricon fa fa-arrow-down fa-3x"	aria-hidden="true"></i>
+																				  				  </t>
+																				  				  <t t-else="">
+																				  				  	<i	class="arrow-down ricon fa fa-arrow-down fa-3x"	aria-hidden="true"></i>
+																				  				  </t>
+																				                        
+																				                    </span>
+																				                    <input	type='text'	class="form-control" t-attf-ftype="#{same_row.form_field_type}"
+																											t-attf-id="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" 
+																											t-attf-name="#{same_row.form_fields}"
+																											t-attf-placeholder="#{same_row.form_placeholder ? same_row.form_placeholde:''}" />
+																				                     <span class="input-group-addon">
+																				                        <i	class=" ricon fa fa-calendar fa-3x"	aria-hidden="true"></i>
+																				                    </span>
+																		               		</div>
+														    								<span class="hide"><t t-esc="same_row.form_fields" /></span>
+														    							</t>
+														    						</td>
+											    							</t> 
+										    						</t> 
+										          				</tr>	    				
+							    					 </table>
+					    				 	</t>
+				    		 		 </t>
+			    				</t>
+			    		</div> 
+			 		</t>
+			  </t>	    		
+	   </div>
+	   
+    </t>
+    
+    <t t-name="ReservationWidget2">
+	  <div class="roomstatusreport clientlist-screen screen">
+            <div class="screen-content roomstatusreport-screen-content"	style="width: 78%;height: 96%;  max-width: 1062px !important;">
+                <section class="top-content">   
+                <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Back
+                </span> 
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section	class='reservationwindow subwindow'>  
+                             <p class="dltitle">  </p>
+                             <div class="container">
+									<div class="row">									
+										 <div>
+											  <div class="table-reservation table-responsive">									  
+											  		<span class="reservation_contents"/>						                
+											  </div>  
+		  								</div>
+					 				</div>
+								</div> 								                	
+						</section>
+					</div>
+				</section>
+			</div>
+		</div> 
+    </t>
+</templates>
