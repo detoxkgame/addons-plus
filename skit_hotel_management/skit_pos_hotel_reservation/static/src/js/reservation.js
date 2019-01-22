@@ -232,14 +232,16 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
 	     		            var client = self.pos.db.get_partner_by_id(result);
 	     					order.set_client(client);
 	     					order.set_to_invoice(true);
-	     					self.pos.push_order(order,{timeout:30000, to_invoice:true}).then(function(){
-	     						alert('PUSH completed');
+	     					self.pos.push_order(order,{to_invoice:true}).then(function(){
+	     					//	alert('PUSH completed');
 	     						self.pos.gui.show_popup('alert',{
 				                     'title': _t('Success'),
 				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
 				                 });
+	     						 self.pos.get_order().finalize();
+	     						self.pos.gui.show_screen('reservation2');
 	     						//self.pos.db.remove_unpaid_order(this);
-	     						self.show();
+	     						//self.show();
 	     						
 	     					});	     					
 	     					     
@@ -298,11 +300,11 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
              				
              				
              			});
-         				var text = $(this).find('input#customer_count').val();
-         				$(this).find('input#customer_count').addClass('hide');
-         				$(this).closest('div').find('input#customer_count').next("span").text(text);
-         				$(this).closest('div').find('input#customer_count').next("span").removeClass('hide');
-         				$(this).closest('div').find('input#customer_count').next("span").addClass('customtext');
+         				var text = $(this).find('input#guest_name').val();
+         				$(this).find('input#guest_name').addClass('hide');
+         				$(this).closest('div').find('input#guest_name').next("span").text(text);
+         				$(this).closest('div').find('input#guest_name').next("span").removeClass('hide');
+         				$(this).closest('div').find('input#guest_name').next("span").addClass('customtext');
          				
          			}
      				return false;
