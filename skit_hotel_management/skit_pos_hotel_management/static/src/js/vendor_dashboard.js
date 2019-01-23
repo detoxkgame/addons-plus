@@ -667,7 +667,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	
                 	self._rpc({
             			model: 'hm.form.template',
-            			method: 'return_order',
+            			method: 'return_dress',
             			args: [0, order_id, form_temp_id, model_name],
             		}).then(function(result){
             			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)

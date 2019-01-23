@@ -449,6 +449,19 @@
 	text-overflow: ellipsis;
 	vertical-align: top;
 }
+.multi-pay{
+	float: left;
+	color: white;
+	margin-left: 40%;
+	padding: 10px !important;
+	background-color: #49A6C8 !important;
+	border: #49A6C8 !important;
+}
+.back-btn{
+	float: left;
+	background: #147FD0 !important;
+	color: white;
+}
 		
 /* h1 {
   color: white;

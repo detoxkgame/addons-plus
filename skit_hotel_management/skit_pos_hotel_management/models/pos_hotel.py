@@ -76,17 +76,26 @@ class ResPartner(models.Model):
 
     @api.multi
     def get_vendor_list(self, category_id, dashboard_id, line_id, is_form, sub_temp_id, order_id, vendor_id = 0, invoice_ids = [], is_pay=False):
+        """ is_pay: Create a Payment """
         vendor_dashboard = self.env['hm.vendor.dashboard'].sudo().search(
                                         [('id', '=', int(dashboard_id))])
         is_other = False
 
         if is_pay:
-            form_template = self.env['hm.form.template'].sudo().search(
-                            [('vendor_dashboard_id', '=', int(dashboard_id)),
-                             ('form_view', '!=', 'form')])
-            form_template_line = self.env['hm.form.template.line'].sudo().search(
-                                [('form_template_id', '=', form_template.id)],
-                                order='sequence asc')
+            if int(sub_temp_id):
+                sub_template = self.env['hm.sub.form.template.line'].sudo().search([('id', '=', int(sub_temp_id))])
+                form_template = self.env['hm.form.template'].sudo().search(
+                                [('id', '=', sub_template.form_template_id.id)])
+                form_template_line = self.env['hm.form.template.line'].sudo().search(
+                                    [('form_template_id', '=', form_template.id)],
+                                    order='sequence asc')
+            else:
+                form_template = self.env['hm.form.template'].sudo().search(
+                                [('vendor_dashboard_id', '=', int(dashboard_id)),
+                                 ('form_view', '!=', 'form')])
+                form_template_line = self.env['hm.form.template.line'].sudo().search(
+                                    [('form_template_id', '=', form_template.id)],
+                                    order='sequence asc')
         else:
 
             vendors = self.env['res.partner'].sudo().search(
@@ -111,7 +120,12 @@ class ResPartner(models.Model):
                                 order='sequence asc')
         if form_template.form_view == 'list':
             if is_pay:
-                model_datas = self.env[form_template.form_model_id.model].search([])
+                if form_template.form_model_id.model == 'account.invoice':
+                    pos_order_line = self.env['pos.order.line'].sudo().search([('id', '=', int(order_id))])
+                    pos_order = self.env['pos.order'].sudo().search([('id', '=', pos_order_line.order_id.id)])
+                    model_datas = self.env[form_template.form_model_id.model].search([('id', '=', pos_order.invoice_id.id)])
+                else:
+                    model_datas = self.env[form_template.form_model_id.model].search([])
             else:
                 if invoice_ids:
                     model_datas = self.env[form_template.form_model_id.model].search(
@@ -140,7 +154,7 @@ class ResPartner(models.Model):
             if line.form_field_id:
                 fields.append(line.form_field_id.name)
                 field_type.append(line.form_field_id.ttype)
-            if line.form_field_type == 'sub_form' or line.form_field_type == 'view_buttons':
+            if line.form_field_type == 'sub_form' or line.form_field_type == 'view_buttons' or line.form_field_type == 'button':
                 sub_form_temp_ids.append(line.sub_template_id.id)
             selection_items = []
             if line.form_template_selection_fields:
@@ -359,6 +373,23 @@ class ResPartner(models.Model):
                         order_data[field] = data[field]
                     count = count + 1
                 order_data['id'] = data['id']
+                if form_template.form_model_id.model == 'account.invoice' and is_pay:
+                    order_data['order_id'] = pos_order.id
+                    order_data['cust_id'] = data.partner_id.id
+                    paid_amount1 = 0
+                    paid_amount2 = 0
+                    if pos_order.statement_ids:
+                        paid_amount1 = sum([x.amount for x in pos_order.statement_ids if not x.journal_id.is_pay_later])
+                    account_payment = self.env['account.payment'].sudo().search(
+                                           [('invoice_ids', 'in', data.id)])
+                    if account_payment:
+                        paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
+                    paid_amount = paid_amount1 + paid_amount2
+                    diff = (data.amount_total - paid_amount)
+                    amt = round(diff, 2)
+                    if diff == 0:
+                        amt = 0
+                    order_data['residual'] = amt
                 result_datas.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])
@@ -647,7 +678,7 @@ class ResPartner(models.Model):
                     if line.form_field_id.name == 'date_order' or line.form_field_id.name == 'order_date':
                         datas[line.form_field_id.name] = current_date
                     else:
-                        date = datetime.strptime(order_datas[line.form_field_id.name], '%Y-%m-%d').date()
+                        date = datetime.strptime(order_datas[line.form_field_id.name], '%Y-%m-%d %H:%M:%S')
                         datas[line.form_field_id.name] = date
                 else:
                     if line.form_field_type != 'sub_form':
@@ -797,4 +828,5 @@ class ResPartner(models.Model):
                                     ('dashboard_category', '=', 'checkout')],
                                         limit=1)
         datas = self.get_vendor_list(0, vendor_dashboard.id, 0, False, 0, 0, 0, [], True)
+        datas[0]['dashboard_id'] = vendor_dashboard.id
         return datas
