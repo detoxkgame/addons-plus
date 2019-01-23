@@ -44,5 +44,21 @@
             name="skit_account_reports.report_partnerledger"
             file="skit_account_reports.report_partnerledger"
             />
+            <report 
+            id="action_report_journal"
+            model="account.common.journal.report"
+            string="Journals Audit"
+            report_type="qweb-pdf"
+            name="skit_account_reports.report_journal"
+            file="skit_account_reports.report_journal"
+            />
+            <report
+            id="action_report_account_tax"
+            model="account.tax.report"
+            string="Tax Report"
+            report_type="qweb-pdf"
+            name="skit_account_reports.report_tax"
+            file="skit_account_reports.report_tax"
+            />
     </data>
 </odoo>
