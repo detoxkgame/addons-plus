@@ -190,16 +190,24 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
         	        
         	        // Handle click on checkbox to set state of "Select all" control
         	        $('#vendor_order_list tbody').on('change', 'input[type="checkbox"]', function(){
-        	        	contents.find('.multi-pay').css({'display':'block'});
+        	        	
         	           // If checkbox is not checked
         	           if(!this.checked){
         	              var el = $('.data-select-all').get(0);
         	              // If "Select all" control is checked and has 'indeterminate' property
         	              if(el && el.checked && ('indeterminate' in el)){
+        	            	  contents.find('.multi-pay').css({'display':'none'});
         	                 // Set visual state of "Select all" control 
         	                 // as 'indeterminate'
         	                 el.indeterminate = true;
         	              }
+        	           }
+        	           var $checkboxes = table.$('input[type="checkbox"]');
+        	           var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+        	           if(countCheckedCheckboxes > 0){
+        	        	   contents.find('.multi-pay').css({'display':'block'});
+        	           }else{
+        	        	   contents.find('.multi-pay').css({'display':'none'});
         	           }
         	        });
         			
