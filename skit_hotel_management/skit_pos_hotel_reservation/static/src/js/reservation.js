@@ -49,46 +49,8 @@ models.PosModel = models.PosModel.extend({
 
 });
 
-//var exports =require('point_of_sale.DB');
-/*var ReservationWidget = screens.ScreenWidget.extend({
-	template: 'ReservationWidget',
-	events: _.extend({}, PopupWidget.prototype.events, {
-        'change .showdatetimepicker': 'change_date',
-        'change .showdatetimepicker': 'change_date',
 
-    }),
-    
-    init: function(parent, options){
-        this._super(parent, options);
-    },
-    
-  //  auto_back: true,
-    show: function(){
-        var self = this;
-        this._super();      
-        this.renderElement();
-        this.old_client = this.pos.get_order().get_client();
-        var order = self.pos.get_order();
-    	var partner = order.get_client();
-    	
-    	$('.showdatetimepicker').datetimepicker({
-	   		//todayBtn: "linked"
-	   		todayHighlight: true,
-	   		ampm: true,
-	   		format: 'D dd-M-yy hh:mm:ss',
-	   		//format : 'D M yy hh:mm A',
-	   		
-	   	});
-    	
-    	this.$('.back').click(function(){
-        	 self.gui.show_screen('firstpage');
-        });     	
-    },
-});
-gui.define_screen({name:'reservation', widget: ReservationWidget});*/
-
-
-/* Set flag for Renewal */
+/* Order */
 var _super_order = models.Order.prototype;
 models.Order = models.Order.extend({
     initialize: function() {
@@ -106,7 +68,7 @@ models.Order = models.Order.extend({
         _super_order.init_from_JSON.apply(this,arguments);
         this.reservation_details = json.reservation_details;
     },
-    /* ---- Renewal  --- */
+    /* ---- reservation_details  --- */
     set_reservation_details: function(reservation_details) {
         this.reservation_details = reservation_details;
         this.trigger('change');
@@ -130,8 +92,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
     change_date:function(){
     	
     },
-   // change_date({})
-  //  auto_back: true,
+  
     show: function(){
         var self = this;
         this.chrome.widget.order_selector.hide();
@@ -140,10 +101,8 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
         
         this.old_client = this.pos.get_order().get_client();
         var order = self.pos.get_order();
-    	var partner = order.get_client();
-    	
-        // alert('contents:'+contents)
-    	// contents.on('click','.back-btn',function(){
+    	var partner = order.get_client();   	
+       
          	self._rpc({
      			model: 'hm.form.template',
      			method: 'get_reservationform',
@@ -160,8 +119,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      			var lensub_line_group = result[0]['lensub_line_group'];
      			
      			self.render_list(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group,lensub_line_group);
-     			self.$('#CHECKIN').click(function(){
-     			});  
+     			  
      			self.$("select").keydown(function(){
     				var ftype = $(this).attr('ftype');
     				$(this).removeClass('warning');    				
@@ -193,7 +151,6 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      					});
      			   });
      			  self.$('#VIEWBILL').click(function(e){
-     				//alert('dfs');
      				self.$('.rows').each(function(){
      					 var x = $(":input").serializeArray();
      					  $.each(x, function(i, field){
@@ -204,8 +161,23 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      				return false;
      			  });
      			  self.$('#Checkin').click(function(){
-     				// self.$('#Reserve').click();
-     				 $('#Reserve').trigger("click");
+     				$('#Reserve').trigger("click");
+     				var isProceed =true;
+         			self.$('input[ismandatory="true"]').each(function(index, element) {
+        						if (!$(this).val().length > 0) {										
+        							if(!(typeof attr !== typeof undefined)){
+        								$(this).addClass('warning');
+        								$(this).removeClass('hide');
+        								isProceed = false;
+        							}else{
+        								$(this).removeClass('warning');
+        							}										
+        						}
+        						else{
+        							$(this).removeClass('warning');
+        						}
+        			});
+         			if(isProceed){
      				 var post={};
      				 var order_line =[];
      				 var order_row_line_array =[];
@@ -255,19 +227,14 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
  							order.add_product(product, {price: product.price});
      		    	}); var cashregister=self.pos.cashregisters[0];
      				
- 		           for (i = 0; i < self.pos.cashregisters.length; i++) {
- 		        	   console.log('jj'+JSON.stringify(self.pos.cashregisters[i]));
- 		        	  console.log('jj'+JSON.stringify(self.pos.cashregisters[i].journal['is_pay_later']));
+ 		           for (i = 0; i < self.pos.cashregisters.length; i++) { 		        	  
  		        	  var is_paylater = self.pos.cashregisters[i].journal['is_pay_later'];
  		        	   if(is_paylater){
- 		        		  console.log('if');
  		        		  cashregister=self.pos.cashregisters[i];
  		        	   }
  		        	   }
- 		           console.log('cashregister'+JSON.stringify(cashregister));
  		          var newPaymentline = new models.Paymentline({},{order: order, cashregister:cashregister, pos: self.pos});
 		            newPaymentline.set_amount( order.get_due());
-		            console.log('pp'+JSON.stringify(newPaymentline));
      				self._rpc({
      	     			model: 'res.partner',
      	     			method:'createpartner',
@@ -275,23 +242,15 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      	     		}).then(function(result){
      	     			if(result){     	     		
      					
-    					
      		            order.paymentlines.add(newPaymentline);
-     		            order.set_reservation_details(post);
-     		            /*var def  = new $.Deferred();
-     		             var count = self.pos.db.add_partners(result['partner_details']);
-     		            def.resolve();
-     		             console.log('updated_count::'+count);*/
+     		            order.set_reservation_details(post);     		          
      		            self.pos.load_new_partner_id(result['id']).then(function(){
      		            	 var client = self.pos.db.get_partner_by_id(result['id']);
-         		           //  post['partner_id'] = result['id'];
          		             post['order_line']=order_row_line_array; 
     	     				 order.set_client(client);
     	     				console.log('client::'+JSON.stringify(client));
     	     				self.pos.push_order(order,{to_invoice:true}).then(function(){
-         						//alert('PUSH completed');
     	     					self.pos.get_order().finalize();
-         						
          						 
          						self.pos.gui.show_screen('reservation2');});
     	     				self.pos.gui.show_popup('alert',{
@@ -299,33 +258,11 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
 			                     'body': _t('Thanks for Booking. Your Reservation is booked'),
 			                 });
      		            });
-     		           //  console.log('es::'+JSON.stringify(result['id']));
-     		            //console.log('clientres::'+JSON.stringify(result['partner_details']));
-     		            
-     		          /*  self.pos.load_new_partners().then(function(){
-	     		            // partners may have changed in the backend
-	     		            var client = self.pos.db.get_partner_by_id(result);
-	     					order.set_client(client);
-	     					order.set_to_invoice(true);
-	     					self.pos.push_order(order,{to_invoice:true}).then(function(){
-	     						alert('PUSH completed');
-	     						self.pos.gui.show_popup('alert',{
-				                     'title': _t('Success'),
-				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
-				                 });
-	     						 self.pos.get_order().finalize();
-	     						self.pos.gui.show_screen('reservation2');
-	     						//self.pos.db.remove_unpaid_order(this);
-	     						//self.show();
-	     						
-	     					});	     					
-	     					     
-	     		        });*/
-
+     		          
      	     			}
      	     			
      	     		});
-
+         			}
      					return false;
      			  });
      			  self.$('#Reserve').click(function(){
@@ -376,7 +313,6 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
              				
              			});
          				var text =$('div.table-reservation table.headerrows').find('input#guest_name').val();
-         				//alert(text);
          				$('div.table-reservation table.headerrows').find('input#guest_name').addClass('hide');
          				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").text(text);
          				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").removeClass('hide');
