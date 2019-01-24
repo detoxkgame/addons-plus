@@ -3,16 +3,18 @@
 <templates	id="template"	xml:space="preserve">
    
     <t t-name="load_rows">
-			    	<t t-set="lenkey" t-value="len_line_group" />
-			    		<!-- <t t-esc="lenkey"/> -->
+			    	<t t-set="sublenkey" t-value="lensub_line_group" />
+			    		 <!-- <t t-esc="sublenkey"/>  -->
 			    	<t t-if="sub_line_group_key">
-			    		<t t-esc="form_template" />
-			    		<div id="subformtemplate">
+<!-- 			    		<t t-esc="form_template" />
+ -->			    		<div id="subformtemplate">
 			    		
 			    		<t t-foreach="['htmlheader','htmlbody','htmlfooter']"	t-as="content">
 			    			<div t-attf-class="sub#{content} #{endrow}" t-attf-style="#{endrowstyle}">
 			    			<t t-set="rowcount" t-value="0"/>
 			    			 <t	t-foreach="sub_line_group_key"	t-as="key">
+			    			 <t t-set="sno_of_td" t-value="100/sublenkey[key]"/>
+			    			
 				    			 <t	t-set="first_col" t-value="sub_line_group[key][0]" />
 				    			 <t t-if="(first_col.field_group)==content">	    			 
 					    			 <t	t-set="divclass" t-value="first_col.field_group" />
@@ -37,7 +39,7 @@
 								    			<table class="subrows" t-attf-id ="#{rowcount}">		    			   				    			 
 									    				 <tr>
 										    					<!-- First Column -->
-										    					<td class="form-td">
+										    					<td class="form-td" t-attf-style="width:#{sno_of_td}%!important">
 										    						<t t-if="(first_col.form_field_type)=='button'">			    					  
 										    							<Button	t-attf-ftype="#{first_col.form_field_type}"
 																				t-attf-id="#{first_col.form_label}"
@@ -177,7 +179,7 @@
 										    				</td>
 										    				<t	t-foreach="sub_line_group[key]"	t-as="same_row">
 											    					<t t-if="same_row.sameline">
-												    						<td class="form-td">			    								
+												    						<td class="form-td" t-attf-style="width:#{sno_of_td}%!important">			    								
 												    								<t t-if="(same_row.form_field_type)=='button'">
 												    									<Button	t-attf-ftype="#{same_row.form_field_type}"
 																								t-attf-id="#{same_row.form_label}"
@@ -571,6 +573,110 @@
 	   
     </t>
     
+    <t t-name="ReservationWidget3">
+    <div class="reservationpage clientlist-screen screen">
+     <section class="htlfndr-slider-section"> <div class="owl-carousel owl-theme" style="opacity: 1; display: block;">
+      <div class="owl-wrapper-outer">
+      <div class="owl-wrapper" style="left: 0px; display: block; transition: all 1000ms ease 0s; transform: translate3d(0px, 0px, 0px);">
+      <div class="owl-item" style="height:370px%"> 
+      <div class="htlfndr-slide-wrapper"> 
+      <img src="/skit_pos_hotel_reservation/static/src/img/img1.jpg" alt="img-1" style="width: 100%;"/>
+        <!-- <div class="htlfndr-slide-data container">
+        <div class="htlfndr-slide-rating-stars"> 
+        <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
+         <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> 
+         <i class="fa fa-star-o"></i> 
+         
+         </div> 
+         <h1 class="htlfndr-slider-title">find your perfect hotel</h1>
+          <div class="htlfndr-slider-under-title-line"></div> 
+          </div>   -->
+          </div>
+          </div>
+         <!--  <div class="owl-item" style="width: 1349px;">
+          
+          <div class="htlfndr-slide-wrapper">
+           <img src="/skit_pos_hotel_reservation/static/src/img/img1.jpg" alt="img-2"/> 
+           <div class="htlfndr-slide-data container"> 
+           <div class="htlfndr-slide-rating-stars"> <i class="fa fa-star-o htlfndr-star-color"></i>
+            <i class="fa fa-star-o htlfndr-star-color"></i> <i class="fa fa-star-o htlfndr-star-color"></i>
+             <i class="fa fa-star-o htlfndr-star-color"></i> 
+             <i class="fa fa-star-o"></i> </div> <h1 class="htlfndr-slider-title">find your perfect hotel</h1>
+              <div class="htlfndr-slider-under-title-line"></div> </div> </div></div> -->
+             <!--  <div class="owl-item" style="width: 1349px;"><div class="htlfndr-slide-wrapper"> 
+              <img src="/skit_pos_hotel_reservation/static/src/img/booking.jpg" alt="img-3"/> 
+              <div class="htlfndr-slide-data container"> 
+              <div class="htlfndr-slide-rating-stars"> <i class="fa fa-star-o htlfndr-star-color"></i> 
+              <i class="fa fa-star-o htlfndr-star-color"></i> <i class="fa fa-star-o htlfndr-star-color"></i>
+               <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div>
+                <h1 class="htlfndr-slider-title">find your perfect hotel</h1> <div class="htlfndr-slider-under-title-line"></div>
+                 </div> </div></div> --></div>   
+                  <div class="htlfndr-form-in-slider htlfndr-search-form-inline" style="background-color: rgba(38,36,36,0.74);
+    bottom: -35vh;
+    padding-bottom: 1rem;
+    position: absolute;
+    z-index: 20;
+    width: 100%;
+    height: auto;
+    overflow: auto;
+}"> <div class="container"> <h5>Where are you going?</h5>
+ <form >
+  <div class="container" style="height:50% !important">
+                   <div class="table-reservation table-responsive" style=" border: none;">									  
+											  		<span class="reservation_contents"/>						                
+											  </div> 
+											  </div>
+											  </form>
+											  </div></div>
+											 <!--  <form >
+  First name:<br>
+  <input type="text" name="firstname" value="Mickey"/>
+  </br>
+  Last name:<br></br>
+  <input type="text" name="lastname" value="Mouse"/>
+  <br></br>
+  <input type="submit" value="Submit"/>
+</form> 
+											   -->
+											  </div>
+											  </div></section>
+
+     </div>
+    </t>
+    <t t-name="ReservationWidget4">
+	  <div class="reservationpage clientlist-screen screen">
+            <div class="screden-content roomstatusreport-screen-content"	style=" border: none; width: 78%;height: 96%;  max-width: 1062px !important;">
+                <section class="tdop-content">   
+                <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Back
+                </span> 
+                </section>
+                <section class="">
+                    <div class='window' style="height:100%; overflow: auto;">
+                        <section	class='reservationwindow subwindow' style=" overflow: auto;">  
+                             <p class="dltitle"> 
+                             <div class="g" style="height:370px%">
+                             <img src="/skit_pos_hotel_reservation/static/src/img/booking.jpg"/>
+                             </div>
+                             
+                              </p>
+                             <div class="container" style="height:50% !important">
+									<div class="row">									
+										 <div>
+											  <div class="table-reservation table-responsive" style=" border: none;">									  
+											  		<span class="reservation_contents"/>						                
+											  </div>  
+		  								</div>
+					 				</div>
+								</div> 								                	
+						</section>
+					</div>
+				</section>
+			</div>
+		</div> 
+    </t>
+    
     <t t-name="ReservationWidget2">
 	  <div class="roomstatusreport clientlist-screen screen">
             <div class="screen-content roomstatusreport-screen-content"	style="width: 78%;height: 96%;  max-width: 1062px !important;">
@@ -599,4 +705,5 @@
 			</div>
 		</div> 
     </t>
+    
 </templates>

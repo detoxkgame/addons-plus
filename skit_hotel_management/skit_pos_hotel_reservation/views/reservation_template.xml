@@ -4,6 +4,9 @@
     <template id="assets" inherit_id="point_of_sale.assets">
           <xpath expr="." position="inside">
     			<script type="text/javascript" src="/skit_pos_hotel_reservation/static/src/js/reservation.js"></script>   
+    			<script type="text/javascript" src="/skit_pos_hotel_reservation/static/src/js/bootstrap-datetimepicker.js" charset="UTF-8"></script> 
+    			<link rel="stylesheet" href="/skit_pos_hotel_reservation/static/src/css/bootstrap-datetimepicker.min.css" />
+    			<link rel="stylesheet" href="/skit_pos_hotel_reservation/static/src/css/bootstrap-datetimepicker.css" />
     			<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_reservation/static/src/css/reservation.css"></link>
           </xpath>
     </template>

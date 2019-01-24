@@ -12,6 +12,43 @@ var PopupWidget = require('point_of_sale.popups');
 var rpc = require('web.rpc');
 var PosDB = require('point_of_sale.DB');
 
+var _super_posmodel = models.PosModel.prototype;
+models.PosModel = models.PosModel.extend({
+
+	initialize : function(session, attributes) {
+		var account_model = _.find(this.models, function(model) {
+			return model.model === 'account.journal';
+		});
+		account_model.fields.push('is_pay_later');
+
+		return _super_posmodel.initialize.call(this, session, attributes);
+	},
+	
+	load_new_partner_id: function(id){
+        var self = this;
+        var def  = new $.Deferred();
+        var fields = _.find(this.models,function(model){ return model.model === 'res.partner'; }).fields;
+        var domain = [['customer','=',true],['id','=',id]];
+        rpc.query({
+                model: 'res.partner',
+                method: 'search_read',
+                args: [domain, fields],
+            }, {
+                timeout: 3000,
+                shadow: true,
+            })
+            .then(function(partners){
+                if (self.db.add_partners(partners)) {   // check if the partners we got were real updates
+                    def.resolve();
+                } else {
+                    def.reject();
+                }
+            }, function(type,err){ def.reject(); });
+        return def;
+    },
+
+});
+
 //var exports =require('point_of_sale.DB');
 /*var ReservationWidget = screens.ScreenWidget.extend({
 	template: 'ReservationWidget',
@@ -91,14 +128,16 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
         this._super(parent, options);
     },
     change_date:function(){
-    	console.log('dfgdg');
+    	
     },
    // change_date({})
   //  auto_back: true,
     show: function(){
         var self = this;
+        this.chrome.widget.order_selector.hide();
         this._super();      
         this.renderElement();
+        
         this.old_client = this.pos.get_order().get_client();
         var order = self.pos.get_order();
     	var partner = order.get_client();
@@ -118,7 +157,9 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      			var sub_line_group = result[0]['sub_line_group']
      			var sub_line_group_key = result[0]['sub_line_group_key']
      			var len_line_group = result[0]['len_line_group'];
-     			self.render_list(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group);
+     			var lensub_line_group = result[0]['lensub_line_group'];
+     			
+     			self.render_list(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group,lensub_line_group);
      			self.$('#CHECKIN').click(function(){
      			});  
      			self.$("select").keydown(function(){
@@ -128,7 +169,6 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      		    self.$("input").keydown(function(){
     				var ftype = $(this).attr('ftype');
     				$(this).removeClass('warning');
-     				console.log(ftype)
      				if(ftype=='input_int'){
      					
      				}
@@ -147,17 +187,15 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      				var tr = document.createElement("tr");
      				self.$('.rows').each(function(){
      						var x = $(":input").serializeArray();
-     					 	console.log('x:::'+x);
 	     					 $.each(x, function(i, field){
 	     	     			    	console.log(field.name + ":" + field.value + " ");
 	     	     			  });
      					});
      			   });
      			  self.$('#VIEWBILL').click(function(e){
-     				alert('dfs');
+     				//alert('dfs');
      				self.$('.rows').each(function(){
      					 var x = $(":input").serializeArray();
-     					console.log('x:::'+x);
      					  $.each(x, function(i, field){
      	     			    	console.log(field.name + ":" + field.value + " ");
      	     			    });
@@ -211,29 +249,61 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      					order_row_line_array.push(order_line_array);
      					
      				});
-     				
+     				_.every(product_array, function(line){	
+ 						var product =  self.pos.db.get_product_by_id(line);
+ 						if(product!=undefined)
+ 							order.add_product(product, {price: product.price});
+     		    	});
+     				var newPaymentline = new models.Paymentline({},{order: order, cashregister:self.pos.cashregisters[0], pos: self.pos});
+ 		            newPaymentline.set_amount( order.get_due());
+ 		           for (i = 0; i < self.pos.cashregisters.length; i++) {
+ 		        	   console.log('jj'+JSON.stringify(self.pos.cashregisters[i]));
+ 		              /*if (this.pos.cashregisters[i].journal_id[0] === id){
+ 		                  cashregister = this.pos.cashregisters[i];
+ 		                  break;
+ 		              }*/
+ 		          }
      				self._rpc({
      	     			model: 'res.partner',
      	     			method:'createpartner',
      	     			args: [0, post],
      	     		}).then(function(result){
      	     			if(result){     	     		
-     					post['order_line']=order_row_line_array; 
-     					_.every(product_array, function(line){	
-     						var product =  self.pos.db.get_product_by_id(line);
-     						order.add_product(product, {price: product.price});
-         		    	});
-     					var newPaymentline = new models.Paymentline({},{order: order, cashregister:self.pos.cashregisters[0], pos: self.pos});
-     		            newPaymentline.set_amount( order.get_due());
+     					
+    					
      		            order.paymentlines.add(newPaymentline);
      		            order.set_reservation_details(post);
-     		            self.pos.load_new_partners().then(function(){
+     		            /*var def  = new $.Deferred();
+     		             var count = self.pos.db.add_partners(result['partner_details']);
+     		            def.resolve();
+     		             console.log('updated_count::'+count);*/
+     		            self.pos.load_new_partner_id(result['id']).then(function(){
+     		            	 var client = self.pos.db.get_partner_by_id(result['id']);
+         		           //  post['partner_id'] = result['id'];
+         		             post['order_line']=order_row_line_array; 
+    	     				 order.set_client(client);
+    	     				console.log('client::'+JSON.stringify(client));
+    	     				self.pos.push_order(order,{to_invoice:true}).then(function(){
+         						//alert('PUSH completed');
+    	     					self.pos.get_order().finalize();
+         						
+         						 
+         						self.pos.gui.show_screen('reservation2');});
+    	     				self.pos.gui.show_popup('alert',{
+			                     'title': _t('Success'),
+			                     'body': _t('Thanks for Booking. Your Reservation is booked'),
+			                 });
+     		            });
+     		           //  console.log('es::'+JSON.stringify(result['id']));
+     		            //console.log('clientres::'+JSON.stringify(result['partner_details']));
+     		            
+     		          /*  self.pos.load_new_partners().then(function(){
 	     		            // partners may have changed in the backend
 	     		            var client = self.pos.db.get_partner_by_id(result);
 	     					order.set_client(client);
 	     					order.set_to_invoice(true);
 	     					self.pos.push_order(order,{to_invoice:true}).then(function(){
-	     					//	alert('PUSH completed');
+	     						alert('PUSH completed');
 	     						self.pos.gui.show_popup('alert',{
 				                     'title': _t('Success'),
 				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
@@ -245,7 +315,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
 	     						
 	     					});	     					
 	     					     
-	     		        });
+	     		        });*/
 
      	     			}
      	     			
@@ -300,26 +370,27 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
              				
              				
              			});
-         				var text = $(this).find('input#guest_name').val();
-         				$(this).find('input#guest_name').addClass('hide');
-         				$(this).closest('div').find('input#guest_name').next("span").text(text);
-         				$(this).closest('div').find('input#guest_name').next("span").removeClass('hide');
-         				$(this).closest('div').find('input#guest_name').next("span").addClass('customtext');
+         				var text =$('div.table-reservation table.headerrows').find('input#guest_name').val();
+         				alert(text);
+         				$('div.table-reservation table.headerrows').find('input#guest_name').addClass('hide');
+         				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").text(text);
+         				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").removeClass('hide');
+         				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").addClass('customtext');
          				
          			}
      				return false;
      			});
      			
      			self.$('#addroom').click(function(){
-     				alert('clcik');
+     				//alert('clcik');
      				var row = $(this).parents('table');
      				var sd = row.clone(true);
      				var rowid=sd.attr('id');
-     				console.log('ppprowid:'+rowid);
      				var rowid =  parseInt(rowid)+1;
      				sd.attr('id',rowid);
-     				
-     				console.log(row.innerHTML);
+     				sd.find('input').each(function(index, element) {
+     					$(this).val('');
+     				});
      				$(this).parents('table').after(sd);
      				return false;
      				
@@ -340,8 +411,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      	   			    var out_date =self.$('.showdatetimepicker').find('#checkout_date').val();
      	   			    var in_date =self.$('.showdatetimepicker').find('#checkin_date').val();
      	   			    
-	     	   			console.log('out_date'+out_date);    
-	     	   			console.log('in_date'+in_date);	     	   		
+	     	   			     	   		
 		     	   		var one_day=1000*60*60*24;    // Convert both dates to milliseconds
 		     	   		var date1 = new Date(in_date);
 		     	   		var date2 = new Date(out_date);
@@ -357,7 +427,6 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
 			     	    	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
 			     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 			     	    	var no_of_n =self.$('#no_of_nights').val();
-			     	    	console.log('numberOfNights::'+numberOfNights);
 			     	    	if(numberOfNights!=undefined && numberOfNights!='NaN')
 			     	    	{
 			     	    		self.$('#no_night').val(numberOfNights);
@@ -387,11 +456,11 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
         this.setValue(this._parseClient(value));
     },
     
-    render_list: function(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group){
+    render_list: function(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group,lensub_line_group){
         var contents = this.$el[0].querySelector('.reservation_contents');
         contents.innerHTML = "";
         var vendor_html = QWeb.render('ReservationFormContent',{widget: self, form_view: form_view,                 						
-				line_group: line_group, line_group_key: line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group});
+				line_group: line_group, line_group_key: line_group_key,sub_form_template:sub_form_template,sub_line_group:sub_line_group,sub_line_group_key:sub_line_group_key,len_line_group,lensub_line_group:lensub_line_group});
         var dashboardline = document.createElement('div');
         dashboardline.innerHTML = vendor_html;
         dashboardline = dashboardline.childNodes[1];

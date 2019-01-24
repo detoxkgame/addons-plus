@@ -19,6 +19,7 @@ class FormTemplate(models.Model):
         
         line_group = {}
         len_line_group={}
+        lensub_line_group ={}
         temp_id = []
         key = 0
         count = 0
@@ -189,11 +190,13 @@ class FormTemplate(models.Model):
                                 if line.sameline:
                                         sub_temp_id.append(datas)
                                         sub_line_group[sub_key] = sub_temp_id
+                                        lensub_line_group[sub_key] = len(sub_temp_id)
                                 else:
                                     sub_key = line.sequence
                                     sub_temp_id = []
                                     sub_temp_id.append(datas)
                                     sub_line_group[sub_key] = sub_temp_id
+                                    lensub_line_group[sub_key] = len(sub_temp_id)
                             count = count+1
                 sub_form_template[temp.id] = temp_array
                 
@@ -211,6 +214,7 @@ class FormTemplate(models.Model):
                        'form_view': form_template.form_view,
                        'form_template':form_template,
                        'len_line_group':len_line_group,
+                       'lensub_line_group':lensub_line_group,
                         'sub_form_template': sub_form_template,
                         'sub_line_group': sub_line_group,
                        'sub_line_group_key': sorted(sub_line_group.keys()),
@@ -235,9 +239,25 @@ class PosOrder(models.Model):
             print (pos_order)
             if pos_order.get('reservation_details'):
                 #post = pos_order.get('reservation_details')
-                post_order_line_details = pos_order.get('reservation_details')
-                del post_order_line_details['order_line']
-                orders.update(post_order_line_details)
+                post_order_details = pos_order.get('reservation_details')
+                #===============================================================
+                # if post_order_details['order_line']:
+                #     for line in post_order_details['order_line']:                    
+                #         if line.get('product_id') ==orders.mapped('lines').mapped('product_id').id:
+                #             
+                #         
+                #     
+                #===============================================================
+                
+                
+                del post_order_details['order_line']
+                
+                orders.update(post_order_details)
+                if orders.statement_ids:
+                    for stmt in orders.statement_ids:
+                        stmt.update({'journal_id':13})
+                
+                
         return orders
         
     @api.multi   
@@ -431,13 +451,29 @@ class ResPartner(models.Model):
                                                 ],limit=1)
            
         if is_customer_exist:
-            partner_id = is_customer_exist.id
+            partner_id = is_customer_exist
         else:
             customer_details_array ={'name':post.get('guest_name'),
                                          'mobile':post.get('mobile'),
                                          'email':post.get('email'),                                        
                     }
             created_customer = partner.create(customer_details_array)
-            partner_id = created_customer.id
-        return partner_id
-       # return {'id':partner_id.id,'partner_details':partner_id}
+            partner_id = created_customer
+        val={'id':partner_id.id,
+                'name': partner_id.name,
+                'street': partner_id.street,
+                'city': partner_id.city,
+                'state_id': partner_id.state_id,
+                'country_id': partner_id.country_id,
+                'vat': partner_id.vat,
+                'phone': partner_id.phone,
+                'zip': partner_id.zip,
+                'mobile': partner_id.mobile,
+                'email': partner_id.email,
+                'barcode': partner_id.barcode,
+                'write_date': partner_id.write_date,
+               # 'property_account_position_id': partner_id.property_account_position_id,
+               # 'property_product_pricelist' : partner_id.property_product_pricelist,
+                }
+        # return partner_id
+        return {'id':partner_id.id, 'partner_details':val}
