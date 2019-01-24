@@ -1272,7 +1272,7 @@
 		                                <field name="sameline" />
 		                                <field name="isMandatory" />
 		                                <field name="form_template_selection_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('selection','statusbar','top_buttons'))]}"></field>
-		                               	<field name="form_template_model_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('many2one', 'many2many'))]}"></field>
+		                               	<field name="form_template_model_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('many2one', 'many2many','one2many'))]}"></field>
 		                               
 		                                
 		                                <field name="form_template_id" invisible="1"/>       

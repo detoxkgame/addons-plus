@@ -46,6 +46,7 @@ class HotelRoomBlock(models.Model):
 class GuestIDProof(models.Model):
 
     _name = "hm.guest.id.proof"
+    _rec_name = "proof_type"
     _description = "Guest ID Proof"
 
     proof_type = fields.Char(string="Proof Type")
@@ -607,6 +608,7 @@ class PosOrder(models.Model):
     location = fields.Char(string="Location")
     capacity = fields.Integer(string="Person")
     car_type_id = fields.Many2one('hm.car.type', string="Car Type")
+    no_night = fields.Integer(string="No of Night")
 
 
 class PosOrderLine(models.Model):
@@ -625,6 +627,8 @@ class PosOrderLine(models.Model):
     user_id = fields.Many2one('res.users', string="Users")
     partner_id = fields.Many2one('res.partner', related="order_id.partner_id",
                                  string="Order Partner")
+    adult = fields.Integer('Adult')
+    child = fields.Integer('Child')
 
 
 class SaleOrder(models.Model):

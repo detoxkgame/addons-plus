@@ -20,6 +20,7 @@
             'security/ir.model.access.csv',
             'views/hotel_view.xml',
             'views/pos_config.xml',
+             'views/pos_order_view.xml',
             
     ],
     'qweb': ['static/src/xml/pos_screen.xml'],
