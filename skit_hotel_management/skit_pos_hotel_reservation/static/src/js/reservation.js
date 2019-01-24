@@ -253,16 +253,21 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
  						var product =  self.pos.db.get_product_by_id(line);
  						if(product!=undefined)
  							order.add_product(product, {price: product.price});
-     		    	});
-     				var newPaymentline = new models.Paymentline({},{order: order, cashregister:self.pos.cashregisters[0], pos: self.pos});
- 		            newPaymentline.set_amount( order.get_due());
+     		    	}); var cashregister=self.pos.cashregisters[0];
+     				
  		           for (i = 0; i < self.pos.cashregisters.length; i++) {
  		        	   console.log('jj'+JSON.stringify(self.pos.cashregisters[i]));
- 		              /*if (this.pos.cashregisters[i].journal_id[0] === id){
- 		                  cashregister = this.pos.cashregisters[i];
- 		                  break;
- 		              }*/
- 		          }
+ 		        	  console.log('jj'+JSON.stringify(self.pos.cashregisters[i].journal['is_pay_later']));
+ 		        	  var is_paylater = self.pos.cashregisters[i].journal['is_pay_later'];
+ 		        	   if(is_paylater){
+ 		        		  console.log('if');
+ 		        		  cashregister=self.pos.cashregisters[i];
+ 		        	   }
+ 		        	   }
+ 		           console.log('cashregister'+JSON.stringify(cashregister));
+ 		          var newPaymentline = new models.Paymentline({},{order: order, cashregister:cashregister, pos: self.pos});
+		            newPaymentline.set_amount( order.get_due());
+		            console.log('pp'+JSON.stringify(newPaymentline));
      				self._rpc({
      	     			model: 'res.partner',
      	     			method:'createpartner',
@@ -371,7 +376,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
              				
              			});
          				var text =$('div.table-reservation table.headerrows').find('input#guest_name').val();
-         				alert(text);
+         				//alert(text);
          				$('div.table-reservation table.headerrows').find('input#guest_name').addClass('hide');
          				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").text(text);
          				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").removeClass('hide');
@@ -426,6 +431,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
 				     	   	}
 			     	    	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
 			     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+			     	    	//alert('f'+numberOfNights);
 			     	    	var no_of_n =self.$('#no_of_nights').val();
 			     	    	if(numberOfNights!=undefined && numberOfNights!='NaN')
 			     	    	{

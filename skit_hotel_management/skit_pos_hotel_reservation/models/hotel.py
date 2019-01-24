@@ -254,9 +254,11 @@ class PosOrder(models.Model):
                 del post_order_details['order_line']
                 
                 orders.update(post_order_details)
-                if orders.statement_ids:
-                    for stmt in orders.statement_ids:
-                        stmt.update({'journal_id':13})
+                #===============================================================
+                # if orders.statement_ids:
+                #     for stmt in orders.statement_ids:
+                #         stmt.update({'journal_id':13})
+                #===============================================================
                 
                 
         return orders
