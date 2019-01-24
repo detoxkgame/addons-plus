@@ -146,6 +146,7 @@ class FormTemplate(models.Model):
                                     records_model_fields = self.env['ir.model.fields'].search(
                                         [('id', 'in', line.form_template_model_fields.ids)])
                                     for rec in records:
+                                        arr = {}
                                         if check_room_category_product :
                                             if  rec.product_tmpl_id.categ_id.id==room_category.id:
                                                                                             
@@ -158,7 +159,7 @@ class FormTemplate(models.Model):
                                                 arr[str(field_name)] = rec[field_name]
                                         if (len(arr)>0):
                                             many2one_list.append(arr)
-                                        arr = {}
+                                        
                             line_tmp = line.form_template_id.id
                             line_model = line.form_template_id.form_model_id.model
                             datas = {'id': line.id,
