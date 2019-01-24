@@ -613,19 +613,19 @@
 														</t>
 						    						</t> -->
 						    						<t t-if="(first_col.form_field_type)=='many2one'">
-							    						<t t-if="(first_col.form_fields) == 'product_id'">
-							    							<select onchange="this.className='drop-down-select'" class="drop-down-select placeholder" t-attf-id="#{first_col.form_fields}" style="width: 100%;">
-							    								<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="first_col.form_placeholder" /></option>
-																<t t-foreach='first_col.form_template_model_fields' t-as='prod'> 
-																	<t t-if="c_orderline[first_col.form_fields] == prod.display_name">
-																 		<option t-att-id='prod.id' t-att-selected="true" style="color: black;"><t t-esc="prod.display_name" /></option>
-																 	</t>
-																 	<t t-else="" >
-																		<option t-att-id='prod.id' style="color: black;"><t t-esc="prod.display_name" /></option>
-																	</t>
+							    						<!-- <t t-if="(first_col.form_fields) == 'product_id'"> -->
+							    						<select onchange="this.className='drop-down-select'" class="drop-down-select placeholder" t-attf-id="#{first_col.form_fields}" style="width: 100%;">
+							    							<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="first_col.form_placeholder" /></option>
+															<t t-foreach='first_col.form_template_model_fields' t-as='prod'> 
+																<t t-if="c_orderline[first_col.form_fields] == prod.display_name">
+																 	<option t-att-id='prod.id' t-att-amt="prod.amount" t-att-selected="true" style="color: black;"><t t-esc="prod.display_name" /></option>
+																 </t>
+																 <t t-else="" >
+																	<option t-att-id='prod.id' t-att-amt="prod.amount" style="color: black;"><t t-esc="prod.display_name" /></option>
 																</t>
-															</select>
-														</t>
+															</t>
+														</select>
+														<!-- </t> -->
 						    						</t>
 						    						<t t-if="(first_col.form_field_type)=='label'">
 						    							<input type="text" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 

@@ -80,7 +80,6 @@ class ResPartner(models.Model):
         vendor_dashboard = self.env['hm.vendor.dashboard'].sudo().search(
                                         [('id', '=', int(dashboard_id))])
         is_other = False
-
         if is_pay:
             if int(sub_temp_id):
                 sub_template = self.env['hm.sub.form.template.line'].sudo().search([('id', '=', int(sub_temp_id))])
@@ -500,6 +499,9 @@ class ResPartner(models.Model):
                                         for fields_rec in records_model_fields:
                                             field_name = fields_rec.name
                                             arr[str(field_name)] = rec[field_name]
+                                        if line.form_field_id.relation == 'product.product':
+                                            prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
+                                            arr['amount'] = prod_tmpl.list_price
                                         many2one_list.append(arr)
                             line_tmp = line.form_template_id.id
                             line_model = line.form_template_id.form_model_id.model
@@ -702,6 +704,9 @@ class ResPartner(models.Model):
                             l_datas[line.form_field_id.name] = ldata[line.form_field_id.name]
                     else:
                         l_datas[line.form_field_id.name] = ldata[line.form_field_id.name]
+            if line_model_name == 'purchase.order.line':
+                l_datas['date_planned'] = current_date
+                l_datas['product_uom'] = 1
             line_datas.append(l_datas)
 
         if int(order_id) > 0:
@@ -733,6 +738,7 @@ class ResPartner(models.Model):
                         ldata['location_dest_id'] = order.location_dest_id.id
                         ldata['picking_id'] = order.id
                     ldata['state'] = 'draft'
+                    ldata['order_id'] = order.id
                     self.env[line_model_name].create(ldata)
         if model_name == 'sale.order' or model_name == 'stock.picking':
             order.action_confirm()

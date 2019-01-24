@@ -793,6 +793,35 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	$(this).closest('tr').remove();
                 });
                 
+                /** Set amount for purchase order */
+                contents.on('change','#product_id',function(e){
+                	var prod_amt = $(this).closest('td').find("option:selected").attr('amt');
+                	if(prod_amt == undefined || prod_amt == ''){
+                		prod_amt = 0;
+                	}
+                	var qty = $(this).closest('tr').find('input#product_qty').val();
+                	if(qty == '' || qty == undefined){
+                		qty = 1;
+                		$(this).closest('tr').find('#product_qty').val(qty);
+                	}
+                	var sub_total = parseFloat(prod_amt) * parseInt(qty)
+                	$(this).closest('tr').find('#price_unit').val(prod_amt);
+                	$(this).closest('tr').find('#price_subtotal').val(sub_total);
+                });
+                contents.on('blur change keydown keyup paste input','#product_qty',function(e){
+                	var prod_amt = $(this).closest('tr').find("#product_id option:selected").attr('amt');
+                	if(prod_amt == undefined || prod_amt == ''){
+                		prod_amt = 0;
+                	}
+                	var qty = $(this).closest('tr').find('input#product_qty').val();
+                	if(qty == '' || qty == undefined){
+                		qty = 1;
+                	}
+                	var sub_total = parseFloat(prod_amt) * parseInt(qty)
+                	$(this).closest('tr').find('#price_unit').val(prod_amt);
+                	$(this).closest('tr').find('#price_subtotal').val(sub_total);
+                });
+                
                 /** Set the amount for Laundry */
                 contents.on('change','#washing_type',function(e){
                 	var extra_amt = 0;
