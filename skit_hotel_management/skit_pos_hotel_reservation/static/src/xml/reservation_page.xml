@@ -40,14 +40,20 @@
 									    				 <tr>
 										    					<!-- First Column -->
 										    					<td class="form-td" t-attf-style="width:#{sno_of_td}%!important">
-										    						<t t-if="(first_col.form_field_type)=='button'">			    					  
+										    						<t t-if="(first_col.form_field_type)=='button'">
+										    						<t t-set="btnclass" t-value="'button'"/>		
+										    						 <t t-if="(first_col.form_label)=='Checkin' or (first_col.form_label)=='Reserve' ">
+										    							<t t-set="btnclass" t-value="'booking'"/>		
+										    						 </t> 										    							    					  
 										    							<Button	t-attf-ftype="#{first_col.form_field_type}"
+										    									t-attf-class="#{btnclass}"
 																				t-attf-id="#{first_col.form_label}"
 																				t-attf-style="#{first_col.style}">
 																				<t t-esc="first_col.form_label" />
+																				<t t-esc="btnclass" />
 																		</Button>
 										    						</t>
-										    						<t	t-set="display_input_box" t-value="''" />
+										    						<t t-set="display_input_box" t-value="''" />
 										    					 	<t t-if="(first_col.form_field_type)=='input_intchar'">
 										    					 	
 											    					 	<t	t-if="(first_col.form_fields)=='address' or (first_col.form_fields)=='location'">
@@ -181,8 +187,13 @@
 											    					<t t-if="same_row.sameline">
 												    						<td class="form-td" t-attf-style="width:#{sno_of_td}%!important">			    								
 												    								<t t-if="(same_row.form_field_type)=='button'">
-												    									<Button	t-attf-ftype="#{same_row.form_field_type}"
+												    								<t t-set="btnclass" t-value="'button'"/>		
+															    						<!-- <t t-if="#{same_row.form_label}=='Checkin' or #{same_row.form_label}=='Reserve'">
+															    							<t t-set="btnclass" t-value="booking"/>		
+															    						</t> --><!--  -->
+																	    				<Button	t-attf-ftype="#{same_row.form_field_type}"
 																								t-attf-id="#{same_row.form_label}"
+																								t-attf-class="#{btnclass}"
 																								t-attf-style="#{same_row.style}">
 																							<t t-esc="same_row.form_label" />
 																						</Button>
@@ -328,8 +339,13 @@
 									    				 <tr>
 										    					<!-- First Column -->
 										    					<td class="form-td" t-attf-style="width:#{no_of_td}%!important">
-										    						<t t-if="(first_col.form_field_type)=='button'">			    					  
+										    						<t t-if="(first_col.form_field_type)=='button'">	
+										    						<t t-set="btnclass" t-value="'button'"/>		
+										    						 <t t-if="(first_col.form_label)=='Checkin' or (first_col.form_label)=='Reserve' ">
+										    							<t t-set="btnclass" t-value="'booking'"/>		
+										    						 </t>		    					  
 										    							<Button	t-attf-ftype="#{first_col.form_field_type}"
+										    									t-attf-class="#{btnclass}"
 																				t-attf-id="#{first_col.form_label}"
 																				t-attf-style="#{first_col.style}">
 																				<t t-esc="first_col.form_label" />
@@ -462,7 +478,11 @@
 											    					<t t-if="same_row.sameline">
 												    						<td class="form-td" t-attf-style="width:#{no_of_td}%!important">			    								
 												    								<t t-if="(same_row.form_field_type)=='button'">
+												    								<t t-if="(same_row.form_label)=='Checkin' or (same_row.form_label)=='Reserve' ">
+										    												<t t-set="btnclass" t-value="'booking'"/>		
+										    									    </t>
 												    									<Button	t-attf-ftype="#{same_row.form_field_type}"
+												    											t-attf-class="#{btnclass}"
 																								t-attf-id="#{same_row.form_label}"
 																								t-attf-style="#{same_row.style}">
 																							<t t-esc="same_row.form_label" />
@@ -687,7 +707,7 @@
                 </span> 
                 </section>
                 <section class="full-content">
-                    <div class='window'>
+                    <div class='window' style="overflow: auto;">
                         <section	class='reservationwindow subwindow'>  
                              <p class="dltitle">  </p>
                              <div class="container">

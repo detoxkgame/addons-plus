@@ -118,8 +118,8 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      			var len_line_group = result[0]['len_line_group'];
      			var lensub_line_group = result[0]['lensub_line_group'];
      			
-     			self.render_list(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group,lensub_line_group);
-     			  
+     			var contents = self.render_list(form_view,line_group,line_group_key,sub_form_template,sub_line_group,sub_line_group_key,len_line_group,lensub_line_group);
+     			
      			self.$("select").keydown(function(){
     				var ftype = $(this).attr('ftype');
     				$(this).removeClass('warning');    				
@@ -162,6 +162,8 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      			  });
      			  self.$('#Checkin').click(function(){
      				$('#Reserve').trigger("click");
+     				
+     				/*
      				var isProceed =true;
          			self.$('input[ismandatory="true"]').each(function(index, element) {
         						if (!$(this).val().length > 0) {										
@@ -246,27 +248,37 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
      		            order.set_reservation_details(post);     		          
      		            self.pos.load_new_partner_id(result['id']).then(function(){
      		            	 var client = self.pos.db.get_partner_by_id(result['id']);
-         		             post['order_line']=order_row_line_array; 
+         		             post['order_line']=order_row_line_array;
+         		             post['reservation_status']='checkin';
     	     				 order.set_client(client);
     	     				console.log('client::'+JSON.stringify(client));
     	     				self.pos.push_order(order,{to_invoice:true}).then(function(){
-    	     					self.pos.get_order().finalize();
-         						 
-         						self.pos.gui.show_screen('reservation2');});
-    	     				self.pos.gui.show_popup('alert',{
-			                     'title': _t('Success'),
-			                     'body': _t('Thanks for Booking. Your Reservation is booked'),
-			                 });
+    	     					self.pos.get_order().finalize();         						 
+         						self.pos.gui.show_screen('reservation2');
+         						self.pos.gui.show_popup('alert',{
+				                     'title': _t('Success'),
+				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
+				                 });
+         						
+    	     				});
+	    	     				
      		            });
      		          
      	     			}
      	     			
      	     		});
          			}
-     					return false;
+     					return false;*/
      			  });
-     			  self.$('#Reserve').click(function(){
+     			  self.$('.booking').click(function(){
      				var isProceed =true;
+     				var id = $(this).attr('id');
+     			//	alert('id'+id);
+     				var order_status="checkin";
+     				if (id=='Reserve'){
+     					 order_status="reserved";
+     				}
+     				
          			self.$('input[ismandatory="true"]').each(function(index, element) {
         						if (!$(this).val().length > 0) {										
         							if(!(typeof attr !== typeof undefined)){
@@ -318,10 +330,100 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
          				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").removeClass('hide');
          				$('div.table-reservation table.headerrows').closest('div').find('input#guest_name').next("span").addClass('customtext');
          				
+         				 var post={};
+         				 var order_line =[];
+         				 var order_row_line_array =[];
+         				 var customer_array =[];
+         				$('div.table-reservation table.headerrows').each(function() {	
+         					$(this).find('input').each(function(index, element) {    						
+         						if($(this).attr('ftype')=='date'){
+         							var value = element.value;
+         							var datestring = value.split(" ");     						
+         							var sd = datestring[2]+' '+datestring[3];  
+         							var momentObj = moment(sd, ["h:mm A"]);
+         							var date = datestring[1]+' '+momentObj.format("HH:mm");      							
+         							var dateTime = new Date(date);
+         							dateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");     							
+         							post[element.name]=dateTime;
+         						}
+         						else{
+         							post[element.name]=element.value;
+         						}
+                 			});
+         					$(this).find('select').each(function(index, element) {     						
+         						post[element.name]=element.value;
+                 			});
+         				});
+         				var rowCount = $('div#subformtemplate table').length;
+         				var i=0;
+         				var product_array=[];
+         				$('div#subformtemplate table.subrows').each(function() {	
+         					var order_line_array ={};
+         					
+         					$(this).find('input').each(function(index, element) {
+         						order_line_array[element.name]=element.value;     						
+                 			});
+         					$(this).find('select').each(function(index, element) {
+         						order_line_array[element.name]=element.value;
+         						if(element.name =='product_id'){
+         							product_array.push(element.value);
+         						}
+         						
+                 			});     					
+         					order_row_line_array.push(order_line_array);
+         					
+         				});
+         				_.every(product_array, function(line){	
+     						var product =  self.pos.db.get_product_by_id(line);
+     						if(product!=undefined)
+     							order.add_product(product, {price: product.price});
+         		    	}); var cashregister=self.pos.cashregisters[0];
+         				
+     		           for (i = 0; i < self.pos.cashregisters.length; i++) { 		        	  
+     		        	  var is_paylater = self.pos.cashregisters[i].journal['is_pay_later'];
+     		        	   if(is_paylater){
+     		        		  cashregister=self.pos.cashregisters[i];
+     		        	   }
+     		        	   }
+     		          var newPaymentline = new models.Paymentline({},{order: order, cashregister:cashregister, pos: self.pos});
+    		            newPaymentline.set_amount( order.get_due());
+         				self._rpc({
+         	     			model: 'res.partner',
+         	     			method:'createpartner',
+         	     			args: [0, post],
+         	     		}).then(function(result){
+         	     			if(result){     	     		
+         		            order.paymentlines.add(newPaymentline);
+         		            post['reservation_status']=order_status;
+         		           // alert(''+post['reservation_status']);
+         		            order.set_reservation_details(post);     		          
+         		            self.pos.load_new_partner_id(result['id']).then(function(){
+         		            	 var client = self.pos.db.get_partner_by_id(result['id']);
+             		             post['order_line']=order_row_line_array;
+             		            
+        	     				 order.set_client(client);
+        	     				console.log('client::'+JSON.stringify(client));
+        	     				self.pos.push_order(order,{to_invoice:true}).then(function(){
+        	     					self.pos.get_order().finalize();         						 
+             						self.pos.gui.show_screen('reservation2');
+             						self.pos.gui.show_popup('alert',{
+    				                     'title': _t('Success'),
+    				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
+    				                 });
+             						
+        	     				});
+    	    	     				
+         		            });
+         		          
+         	     			}
+         	     			
+         	     		});
+         			
          			}
      				return false;
      			});
      			
+     			  
      			self.$('#addroom').click(function(){
      				//alert('clcik');
      				var row = $(this).parents('table');
@@ -407,6 +509,7 @@ var ReservationWidget2 = screens.ScreenWidget.extend({
         dashboardline.innerHTML = vendor_html;
         dashboardline = dashboardline.childNodes[1];
         contents.appendChild(dashboardline);
+        return contents;
     },
 });
 gui.define_screen({name:'reservation2', widget: ReservationWidget2});
