@@ -734,12 +734,27 @@ class AccountPayment(models.Model):
     id_proof_no = fields.Char(string="ID No")
     remark = fields.Text(string="Remark")
 
+
 class POSorder(models.Model):
     _inherit = 'pos.order'
-    
+
+    reservation_status = fields.Selection(
+        [
+         ('reserved', 'Reserved'),
+         ('noshow', 'No show'), 
+         ('checkin', 'CheckIn'),
+         ('checkout', 'CheckOut'),
+         ('cancel', 'Cancelled'),
+         ('done', 'Posted')],
+        'Reservation Status',  copy=False, default='reserved')
+
     state = fields.Selection(
-        [('draft', 'New'),('reserved', 'Reserved'),('noshow', 'No show'), ('checkin', 'CheckIn'),('checkout', 'CheckOut'),('cancel', 'Cancelled'), ('paid', 'Paid'), ('done', 'Posted'), ('invoiced', 'Invoiced')],
+        [('draft', 'New'),
+          ('cancel', 'Cancelled'),
+          ('paid', 'Paid'),
+          ('done', 'Posted'),
+          ('invoiced', 'Invoiced')],
         'Status',  copy=False, default='draft')
-    
-    
+     
+     
     

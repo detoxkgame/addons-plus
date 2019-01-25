@@ -2,19 +2,37 @@
 <odoo>
 
     <record id="skit_view_pos_pos_form" model="ir.ui.view">
-        <field name="name">pos.order.form.view.inherit</field>
-        <field name="model">pos.order</field>
-        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"></field>
-        <field name="arch" type="xml">
-            <xpath expr="//group[@name='order_fields']" position="inside">
-              <!--   <field name="table_id"/>
-                <field name="customer_count"/> -->
-                 <field name="checkin_date"/>
-				 <field name="checkout_date"/>
-				 <field name="guest_proof_id"  />				
-				 <field name="id_proof_no" string="Proof Id No"/>
-            </xpath>
-        </field>
-    </record>
+		<field name="name">pos.order.form.view.inherit</field>
+		<field name="model">pos.order</field>
+		<field name="inherit_id" ref="point_of_sale.view_pos_pos_form"></field>
+		<field name="arch" type="xml">
+				<xpath expr="//field[@name='state']" position="replace">
+						<field name="state" />
+				</xpath>
+				<xpath expr="//field[@name='state']" position="after">
+						<field name="reservation_status" widget="statusbar" />
+				</xpath>
+				<xpath expr="//group[@name='order_fields']" position="inside">
+						<!-- <field name="table_id"/>
+								<field name="customer_count"/> -->
+						<field name="checkin_date" />
+						<field name="checkout_date" />
+						<field name="guest_proof_id" />
+						<field name="id_proof_no" string="Proof Id No" />
+				</xpath>
+		</field>
+	</record>
+    
+     <record id="skit_view_pos_order_tree" model="ir.ui.view">
+		<field name="name">pos.order.tree</field>
+		<field name="model">pos.order</field>
+		<field name="inherit_id" ref="point_of_sale.view_pos_order_tree"></field>
+		<field name="arch" type="xml">
+				<field name="name" />
+				<xpath expr="//field[@name='state']" position="after">
+						<field name="reservation_status" />
+				</xpath>
+		</field>
+	</record>
 
 </odoo>
