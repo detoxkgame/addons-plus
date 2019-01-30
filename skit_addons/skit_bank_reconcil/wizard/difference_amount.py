@@ -17,7 +17,6 @@ class account_journal(models.Model):
        
     @api.multi
     def print_report(self):
-        print ("test")
         return {
             'type': 'ir.actions.act_window',
             'name':'Bank Reconciliation',

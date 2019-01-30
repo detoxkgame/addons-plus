@@ -71,7 +71,6 @@ class SkitBankReconcilReport(models.AbstractModel):
                         AND not exists (select 1 from account_move am join account_move_line aml on aml.move_id = am.id where aml.statement_line_id  = stl.id) \
                         AND company_id= """+company_id
                     
-#         pararms = (journal.id,self.env.user.company_id.id,)
         list=[]
         list.append({'journal_id':journal.id,'company_id' :self.env.user.company_id.id,})
         if date_from:
@@ -84,7 +83,6 @@ class SkitBankReconcilReport(models.AbstractModel):
             list.append(date_to)
         sql_query += """ ORDER BY stl.id"""
         self.env.cr.execute(sql_query, [],)
-        print(sql_query)
         st_lines_left = self.env['account.bank.statement.line'].browse([line.get('id') for line in self.env.cr.dictfetchall()])
         
         #Validated Payments not linked with a Bank Statement Line
