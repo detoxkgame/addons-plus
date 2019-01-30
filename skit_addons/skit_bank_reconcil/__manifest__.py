@@ -5,7 +5,7 @@
     'version': '1.0',
     'author': 'Srikesh Infotech',
     'description': """
-            Bank Reconciliation Report
+            This Module helps to generate Bank Reconciliation report.
     """,
     'category': 'Accounting',
     'license': "AGPL-3",
@@ -18,7 +18,8 @@
              'wizard/reconcil_report_wizard.xml',
              'report/reconcil_report_temp.xml',
              'report/reconcil_report.xml',
-             'wizard/difference_amount.xml'
+             'wizard/difference_amount.xml',
+             'views/popup_template.xml'
             ],
     'auto_install': False,
     'application': True,

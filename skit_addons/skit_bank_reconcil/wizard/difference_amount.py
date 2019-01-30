@@ -17,13 +17,14 @@ class account_journal(models.Model):
        
     @api.multi
     def print_report(self):
-        
+        print ("test")
         return {
             'type': 'ir.actions.act_window',
+            'name':'Bank Reconciliation',
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'bank.reconcil.rep',
-            'view_id': self.env.ref('skit_bank_reconcil.view_bank_reconciliation_diff').id,
+            'view_id': self.env.ref('skit_bank_reconcil.view_bank_reconciliation').id,
             'context': {'default_journal_id': self.id,
                         },
             'create': False,

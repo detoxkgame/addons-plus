@@ -8,7 +8,8 @@
 			<t t-call="web.internal_layout">
 				<div class="page">
 				<div align="center"> 
-		        <h3>Bank Reconciliation Report</h3>
+		        <h4>Bank Reconciliation Report</h4>
+		         <h5>As of  <span  t-esc="data['date_to']"/></h5>
 				</div>
 					<table class="table table-condensed">
 						 <thead>
