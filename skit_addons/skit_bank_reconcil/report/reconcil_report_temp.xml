@@ -33,7 +33,7 @@
 						</tr>
 						<tr>
 							<td>
-								<span><h6><strong>Current balance of account</strong><t t-esc="gl_code"/></h6></span> 
+								<span><h6><strong>Current balance of account </strong><t t-esc="gl_code"/></h6></span> 
 							</td>
 							<td><span></span></td>
 							<td><span></span></td>
