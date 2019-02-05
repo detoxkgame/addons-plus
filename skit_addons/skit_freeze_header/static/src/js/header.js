@@ -20,7 +20,7 @@ odoo.define('skit_freeze_header.header', function (require) {
 		
 		/*******Start code for _renderHeader********/
 		_renderHeader: function (isGrouped) {
-			var $thead = this._super.apply(this,isGrouped);
+			var $thead = this._super.call(this,isGrouped);
 			var $tr = $thead.find("tr");
 			if(this.addTrashIcon){
 				$tr.append("<th class='o_list_record_delete'>"  + "</th>");
@@ -32,7 +32,7 @@ odoo.define('skit_freeze_header.header', function (require) {
 	    
 	    /*********Start code for _renderFooter********/
 	    _renderFooter: function (isGrouped) {
-	    	var $tfoot = this._super.apply(this,isGrouped);
+	    	var $tfoot = this._super.call(this,isGrouped);
 	 		var $tr = $tfoot.find("tr");
 	 		if(this.addTrashIcon){
 	 			$tr.append('<td></td>');
