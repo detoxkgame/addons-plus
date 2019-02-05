@@ -15,6 +15,21 @@ var PopupWidget = require('point_of_sale.popups');
 var round_di = utils.round_decimals;
 var PaymentScreenWidget = screens.PaymentScreenWidget;
 
+/**Load is pay later field for account journal **/
+var _super_posmodel = models.PosModel.prototype;
+models.PosModel = models.PosModel.extend({
+
+	initialize : function(session, attributes) {
+		var account_model = _.find(this.models, function(model) {
+			return model.model === 'account.journal';
+		});
+		account_model.fields.push('is_pay_later');
+
+		return _super_posmodel.initialize.call(this, session, attributes);
+	},
+
+});
+
 var _super = models.Order.prototype;
 models.Order = models.Order.extend({
 	initialize: function(attributes,options){
@@ -27,17 +42,7 @@ models.Order = models.Order.extend({
 		 this.p_order_type = 'POS';
 		 this.save_to_db();
 	},
-	export_as_JSON: function() {
-        var json = _super.export_as_JSON.apply(this,arguments);
-        json.is_reverse_product = this.is_reverse_product;
-        json.reverse_order_id = this.reverse_order_id;
-        return json;
-    },
-    init_from_JSON: function(json) {
-        _super.init_from_JSON.apply(this,arguments);
-        this.is_reverse_product = json.is_reverse_product;
-        this.reverse_order_id = json.reverse_order_id;
-    },
+    
 	/* ---- Pending Invoice  --- */
     set_is_pending: function(is_pending) {
         this.is_pending = is_pending;
@@ -77,11 +82,14 @@ models.Order = models.Order.extend({
     /* Journal */
     set_is_pay_later: function(pay_later) {
         this.assert_editable();
-        this.pay_later = pay_later;
+        var self =this;
+        this.is_pay_later = pay_later;
+        self.is_pay_later = pay_later;
     },
-    is_pay_later: function(){
-        return this.is_pay_later;
-    },
+    get_is_pay_later: function(){
+    	var self = this;
+		return self.is_pay_later;
+	},
     get_change: function(paymentline) {
     	_super.get_change.apply(this,arguments);
     	if (!paymentline) {
@@ -127,6 +135,12 @@ models.Order = models.Order.extend({
         }
 
     	return round_pr(Math.max(0,due), this.pos.currency.rounding);
+    },
+    export_as_JSON: function() {
+    	var self =this;
+        var json = _super.export_as_JSON.apply(this,arguments);
+        json.is_pay_later =self.get_is_pay_later();
+        return json;
     },
   });
 
@@ -411,11 +425,20 @@ PaymentScreenWidget.include({
     order_is_valid: function(force_validation) {
     	var self =this;
     	var order = self.pos.get_order();
-    	this._super();	    	
+    	var is_order_valid = this._super();
+    	/**If entered 0.0 in payment line allows to validate the order.
+    	 * While call super - check the condition- is_order_valid is true***/
+    	if(is_order_valid){	    	
         var plines = order.get_paymentlines();
         for (var i = 0; i < plines.length; i++) {
         	var payment_name = plines[i].name;
-        	var client = order.get_client();
+        	/**Check the customer for order only if pay later journal is used.**/
+        	var line_cashregister = plines[i].cashregister;
+        	var is_paylaterline = line_cashregister.journal.is_pay_later;
+        	if(is_paylaterline && plines[i].get_amount() > 0)
+        	{ 	order.set_is_pay_later(true);
+        	    order.set_to_invoice(true); // by default set create invoice for order is true if pay later journal is added in order.
+        		var client = order.get_client();
         		if(!client){
         			this.gui.show_popup('confirm',{
         				'title': _t('Please select the Customer'),
@@ -426,6 +449,7 @@ PaymentScreenWidget.include({
         			});
         			return false;
         		}
+        	}
             if (plines[i].get_type() === 'bank' && plines[i].get_amount() < 0) {
                 this.gui.show_popup('error',{
                     'message': _t('Negative Bank Payment'),
@@ -435,6 +459,7 @@ PaymentScreenWidget.include({
             }
         }
         return true;
+     }
     },
 });
 });
