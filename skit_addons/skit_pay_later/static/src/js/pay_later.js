@@ -25,7 +25,6 @@ models.Order = models.Order.extend({
 		 this.p_invoice_amt = 0;
 		 this.p_porder_id = 0;
 		 this.p_order_type = 'POS';
-		 this.is_hm_pending = false;
 		 this.save_to_db();
 	},
 	export_as_JSON: function() {
@@ -74,14 +73,6 @@ models.Order = models.Order.extend({
     },
     get_pending_order_type: function(){
         return this.p_order_type;
-    },
-    /* For Hotel Management */
-    set_is_hm_pending: function(is_hm_pending) {
-        this.is_hm_pending = is_hm_pending;
-        this.trigger('change');
-    },
-    get_hm_pending: function(){
-        return this.is_hm_pending;
     },
     /* Journal */
     set_is_pay_later: function(pay_later) {
@@ -154,12 +145,7 @@ screens.PaymentScreenWidget.include({
     	var order = this.pos.get_order();
     	if(order.get_pending()){
     		order.set_is_pending(false);
-    		if(order.get_hm_pending() == true){
-    			order.set_is_hm_pending(false);
-        		this.gui.show_screen('vendor_payment');
-        	}else{
-        		this.gui.show_screen('paylater');
-        	}
+    		this.gui.show_screen('paylater');
     	}
     },
     order_changes: function(){
@@ -225,12 +211,7 @@ screens.PaymentScreenWidget.include({
 	    		self.chrome.do_action('point_of_sale.pos_invoice_report',{additional_context:{ 
                     active_ids:[porder_id],
                 }}).done(function () {
-                	if(order.get_hm_pending() == true){
-                		order.set_is_hm_pending(false);
-                		self.gui.show_screen('vendor_payment');
-                	}else{
-                		$('.paylater').trigger('click');
-                	}
+                	$('.paylater').trigger('click');
                 });
         },function(err,event){
             event.preventDefault();
