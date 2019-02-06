@@ -7,7 +7,8 @@
             <field name="standard_price">0</field>
             <field name="list_price">0</field>
             <field name="type">service</field>
-            <field name="available_in_pos">True</field>            
+            <field name="available_in_pos">True</field>      
+            <field name="is_step_discount_product">True</field>      
             <field name="description">Step Discount sample product.</field>
             <field name="taxes_id" eval='[(5,)]'/>  <!-- no taxes -->
             <field name="supplier_taxes_id" eval='[(5,)]'/>  <!-- no taxes -->

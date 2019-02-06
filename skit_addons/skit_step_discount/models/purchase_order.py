@@ -2,42 +2,6 @@
 from odoo import models, fields, api
 
 
-class PosOrderLine(models.Model):
-    _inherit = "pos.order.line"
-
-    step_discount_line = fields.Many2many(
-            'skit.step.discount',
-            string='Step Discount')
-    actual_price = fields.Float(compute='_compute_amount_line_all',
-                                digits=0,
-                                string='Actual Price')
-
-    @api.depends('price_unit', 'tax_ids', 'qty', 'discount', 'product_id')
-    def _compute_amount_line_all(self):
-        for line in self:
-            fpos = line.order_id.fiscal_position_id
-            tax_ids_after_fiscal_position = fpos.map_tax(line.tax_ids, line.product_id, line.order_id.partner_id) if fpos else line.tax_ids
-            tax_ids_after_fp = tax_ids_after_fiscal_position
-            price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-            if line.step_discount_line and 'Step Discount' not in line.product_id.name:
-                taxes = tax_ids_after_fp.skit_compute_all(price,
-                                                          line.step_discount_line,
-                                                          line.order_id.pricelist_id.currency_id,
-                                                          line.qty, product=line.product_id, 
-                                                          partner=line.order_id.partner_id)
-            else:
-                taxes = tax_ids_after_fp.compute_all(price,
-                                                     line.order_id.pricelist_id.currency_id,
-                                                     line.qty, product=line.product_id,
-                                                     partner=line.order_id.partner_id)
-            actual_price = (line.price_unit * line.qty)
-            line.update({
-                'price_subtotal_incl': taxes['total_included'],
-                'price_subtotal': taxes['total_excluded'],
-                'actual_price': actual_price,
-            })
-
-
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 

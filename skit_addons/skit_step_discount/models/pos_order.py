@@ -21,6 +21,7 @@ class PosOrder(models.Model):
             step_discounts = [disc.get('id')
                               for disc in pos_order.get('step_discount_arr')
                               ]
+            step_discounts = list(map(int, step_discounts))
             for line in order.lines:
                 if 'Step Discount' not in line.product_id.name:
                     line.update({
@@ -80,27 +81,29 @@ class PosOrder(models.Model):
 
     @api.onchange('statement_ids', 'lines', 'lines')
     def _onchange_amount_all(self):
-        super(PosOrder, self)._onchange_amount_all() 
+        super(PosOrder, self)._onchange_amount_all()
         for order in self:
             currency = order.pricelist_id.currency_id
             order.amount_paid = sum(payment.amount for payment in order.statement_ids)
             order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in order.statement_ids)
             order.amount_tax = currency.round(sum(self._amount_line_tax(line, order.fiscal_position_id) for line in order.lines))
-            amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines if 'Step Discount' not in line.product_id.name))
+            amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines))
+            if 'is_step_discount_product' in self.env['product.template']._fields:
+                amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines if line.product_id.is_step_discount_product==False))
             original_total = order.amount_tax + amount_untaxed
             total_credit_amt = 0
             if 'credit_card_charge_amount' in self.env['account.bank.statement.line']._fields:
                 credit_charge = 0
                 credit_card_charge_value = 0
                 for statement_ids in order.statement_ids:
-                        if(statement_ids.journal_id.code == 'cc' or statement_ids.journal_id.code == 'CC' or ('Credit Card')in statement_ids.journal_id.name):
+                        if statement_ids.journal_id.credit_card_charge > 0:
                             credit_charge = statement_ids.credit_card_charge_amount
                             credit_card_charge_value = currency.round(credit_charge)
-                            total_credit_amt+= credit_card_charge_value
+                            total_credit_amt += credit_card_charge_value
                 order.credit_card_charges = total_credit_amt
             order.amount_total = original_total+total_credit_amt
- 
-    
+
+
 class PosOrderLine(models.Model):
     _inherit = "pos.order.line"
 
@@ -119,7 +122,7 @@ class PosOrderLine(models.Model):
             tax_ids_after_fiscal_position = fpos.map_tax(line.tax_ids, line.product_id, line.order_id.partner_id) if fpos else line.tax_ids
             tax_ids_after_fp = tax_ids_after_fiscal_position
             price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
-            if line.step_discount_line and 'Step Discount' not in line.product_id.name:
+            if line.step_discount_line and line.product_id.is_step_discount_product==False:
                 taxes = tax_ids_after_fp.skit_compute_all(price,
                                                           line.step_discount_line,
                                                           line.order_id.pricelist_id.currency_id,

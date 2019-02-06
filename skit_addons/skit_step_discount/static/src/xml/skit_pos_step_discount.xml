@@ -9,85 +9,79 @@
 		    </div> 
 	    </t> 
     
-	    <t t-name="StepDiscountButtonPopupWidget">
+		<t t-name="StepDiscountButtonPopupWidget">
 	        <div class="modal-dialog clientlist-screen">
 	            <div class="popup popup-text" style="width:560px;">  
-	            	<p class="title" style="background:#6EC89B;"><t t-esc=" widget.options.title || '' "/></p>          
-	            		<div class='packlot-lines'>
-	            			<table class='client-list' id="additional_discounts" style="line-height:60px;background: #e6e6e6">                	
+	            	<p class="title" style="background:#6EC89B;"><t t-esc=" widget.options.title || '' " /></p>          
+	            		<div class='packlot-lines' id='stepdiscountdiv'>
+	            			<span class="selectedstepdiscount"></span>
+	            			<table class='client-list stepdiscounttablelist' id="additional_discounts" style="line-height:60px;background: #e6e6e6">                	
 		                		<tbody>
-		                			<tr>
+		                		<tr class="hide">
 			                			<td>
-									       <t>
+									       <span class="label">
 										      Discount 1:
-										   </t>
+										   </span>
 								        </td>
 								    	<td>
 								            <div name="step_discount_dropdown">
-								            	<select name='step_discount' id="select1" class="step_discount_input">
+								            	<select name='step_discount' class="step_discount_input">
 							                        <option value=''></option>
 							                        <t t-if='widget.pos.step_discount.length > 0'>
-								                        <t t-foreach='widget.pos.step_discount' t-as='step_discount'>
-									                       <option t-att-value='step_discount.name'> 
-										                          <t t-esc='step_discount.name'/>										                                									                                    
-									                       </option>
-									                       							                                	
+								                        <t t-foreach='widget.pos.step_discount'	t-as='step_discount'>
+									                       <option t-att-id='step_discount.id'	t-att-value='step_discount.discount_percentage' > 
+										                          <t t-esc='step_discount.name' />										                                									                                    
+									                       </option>							                                	
 								                         </t>
 							                        </t>	                            
 							                	</select>
 						                	</div>
 								        </td>
 		                			</tr>
-		                			<tr style="background: #e6e6e6">
-					                	<td>
-									        <t>
-										        Discount 2:
-										    </t>
-									    </td>
-								        <td>
+		                		 	<t t-set="i" t-value="1" />             
+		                			<t t-set="linecount" t-value="widget.options.selected_step_discount"></t>
+	               					<t t-if="linecount !=undefined">
+	               					 <t t-foreach="widget.options.selected_step_discount" t-as="event_line">   
+		                			<tr>
+			                			<td>
+									       <span class="label">
+										      Discount <t t-esc="i"/>:
+										   </span>
+								        </td>
+								    	<td>
 								            <div name="step_discount_dropdown">
-								            	<select name='step_discount' id="select2" class="step_discount_input">
-		
-							                         <option value=''></option>
-							                         <t t-if='widget.pos.step_discount.length > 0'>
-								                          <t t-foreach='widget.pos.step_discount' t-as='step_discount'>
-									                           <option t-att-value='step_discount.name'> 
-										                           <t t-esc='step_discount.name'/>										                                									                                    
-									                           </option>							                                	
-								                          </t>
-							                          </t>	                          
+								            	<select name='step_discount' t-attf-id="select#{i}" class="step_discount_input">
+							                        <option value=''></option>
+							                        <t t-if='widget.pos.step_discount.length > 0'>
+								                        <t t-foreach='widget.pos.step_discount'	t-as='step_discount'>
+								                        <t t-if="event_line.id == step_discount.id">
+									                       <option	 t-att-id='step_discount.id' t-att-selected="true" t-att-value='step_discount.discount_percentage' > 
+										                          <t t-esc='step_discount.name' />										                                									                                    
+									                       </option>
+									                       </t>
+														<t t-else="">
+														<option	t-att-id='step_discount.id'  t-att-value='step_discount.discount_percentage' > 
+										                         <t t-esc='step_discount.name' />										                                									                                    
+									                       </option>
+									                       </t>						                                	
+								                         </t>
+							                        </t>	                            
 							                	</select>
 						                	</div>
 								        </td>
-			                	    </tr>
-			                		<tr>
-				                		<td>
-								        	<t>
-									           Discount 3:
-									        </t>
-								        </td>
+								        
 								        <td>
-								        	<div name="step_discount_dropdown">
-								            	<select name='step_discount' id="select3" class="step_discount_input">
-							                         <option value=''></option>
-							                         <t t-if='widget.pos.step_discount.length > 0'>
-								                          <t t-foreach='widget.pos.step_discount' t-as='step_discount'>
-									                           <option t-att-value='step_discount.name'> 
-										                            <t t-esc='step_discount.name'/>										                                									                                    
-									                           </option>							                                	
-								                          </t>
-							                          </t>	                            
-							                	</select>
-						                 	</div>
-								         </td>
-								         <td>
+								        <t t-if="i==3">
 								         	<div class="add_discounts" id="add_discounts">
 									            <span class="order-button square neworder-button">
-									                <i class='fa fa-plus' id="fa-plus"/>
+									                <i class='fa fa-plus' id="fa-plus" />
 									            </span>	
-								            </div>					           
+								            </div>
+								         </t>					           
 								    	</td>
-			                		</tr>			                				                				                		 
+		                			</tr>
+		                			<t t-set="i" t-value="i+1" />	
+		                			</t></t>		                					                				                				                		 
 			                	</tbody> 		                
 		                	</table>
 	                 	</div>                            

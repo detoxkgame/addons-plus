@@ -1,4 +1,8 @@
 /** POS Order Step Discount Components Style**/
+
+.pos .hide{
+	display:none !important;
+}
 .pos .order .orderline.step_discount {
 	background: #e8fbf6;
 	width: 100%;
