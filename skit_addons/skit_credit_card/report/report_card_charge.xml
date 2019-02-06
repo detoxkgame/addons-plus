@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<data>
+				<template id="credit_inv_reports" inherit_id="account.report_invoice_document">
+						<xpath expr="//div[@id='total']" position="before">
+ 								<t t-if="o.credit_card_charges!=0">
+										<table class="credit-card table ">
+												<tr class="text-right text-right">
+														<td class="text-right col-xs-8"></td>
+														<td class="text-right col-xs-8"></td>
+														<td class="text-right col-xs-8"></td>
+														<td class="text-right col-xs-8"></td>
+														<td class="text-right col-xs-8"></td>
+														<td class="text-right col-xs-8"></td>
+														<td class="text-right col-xs-8">
+																<strong>Card Charge</strong>
+														</td>
+														<td class="text-right">
+																<span t-field="o.credit_card_charges"
+																		t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+														</td>
+												</tr>
+										</table>
+								</t>								
+						</xpath>
+				</template>
+		</data>
+</odoo>
