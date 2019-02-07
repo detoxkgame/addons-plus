@@ -436,8 +436,7 @@ PaymentScreenWidget.include({
         	var line_cashregister = plines[i].cashregister;
         	var is_paylaterline = line_cashregister.journal.is_pay_later;
         	if(is_paylaterline && plines[i].get_amount() > 0)
-        	{ 	order.set_is_pay_later(true);
-        	    order.set_to_invoice(true); // by default set create invoice for order is true if pay later journal is added in order.
+        	{ 	
         		var client = order.get_client();
         		if(!client){
         			this.gui.show_popup('confirm',{
@@ -448,6 +447,9 @@ PaymentScreenWidget.include({
         				},
         			});
         			return false;
+        		}else{
+        			order.set_is_pay_later(true);
+            	    order.set_to_invoice(true); // by default set create invoice for order is true if pay later journal is added in order.
         		}
         	}
             if (plines[i].get_type() === 'bank' && plines[i].get_amount() < 0) {
