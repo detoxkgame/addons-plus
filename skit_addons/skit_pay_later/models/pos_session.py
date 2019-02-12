@@ -1,4 +1,4 @@
-from odoo import api, models, _
+from odoo import api, models, SUPERUSER_ID, _
 from odoo.exceptions import UserError
 
 
@@ -56,3 +56,45 @@ class Skit_PosSession(models.Model):
                 'params': {'menu_id': self.env.ref(
                                 'point_of_sale.menu_point_root').id},
             }
+
+    @api.model
+    def create(self, values):
+        res = super(Skit_PosSession, self).create(values)
+        statements = []
+        ctx = dict(self.env.context, company_id=res.config_id.company_id.id)
+        ABS = self.env['account.bank.statement']
+        uid = SUPERUSER_ID if self.env.user.has_group('point_of_sale.group_pos_user') else self.env.user.id
+        journal_ids = self.env['account.journal'].search([('id','in',res.config_id.journal_ids.ids), ('is_pay_later', '=', True)])
+        for journal in journal_ids:
+            # set the journal_id which should be used by
+            # account.bank.statement to set the opening balance of the
+            # newly created bank statement
+            ctx['journal_id'] = journal.id if res.config_id.cash_control and journal.type == 'cash' else False
+            st_values = {
+                'journal_id': journal.id,
+                'user_id': self.env.user.id,
+                'name': res.name
+            }
+
+            statements.append(ABS.with_context(ctx).sudo(uid).create(st_values).id)
+        journal_ids = self.env['account.journal'].search([('id','in',res.config_id.journal_ids.ids), ('is_pay_later', '=', False)])
+        for journal in journal_ids:
+            # set the journal_id which should be used by
+            # account.bank.statement to set the opening balance of the
+            # newly created bank statement
+            ctx['journal_id'] = journal.id if res.config_id.cash_control and journal.type == 'cash' else False
+            st_values = {
+                'journal_id': journal.id,
+                'user_id': self.env.user.id,
+                'name': res.name
+            }
+
+            statements.append(ABS.with_context(ctx).sudo(uid).create(st_values).id)
+
+        values.update({
+            'statement_ids': [(6, 0, statements)],
+        })
+        res.write(values)
+
+        return res
+
