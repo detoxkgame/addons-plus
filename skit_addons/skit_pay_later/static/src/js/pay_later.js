@@ -225,9 +225,11 @@ screens.PaymentScreenWidget.include({
 	    		self.chrome.do_action('point_of_sale.pos_invoice_report',{additional_context:{ 
                     active_ids:[porder_id],
                 }}).done(function () {
+                	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
                 	$('.paylater').trigger('click');
                 });
         },function(err,event){
+        	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
             event.preventDefault();
             var err_msg = 'Please check the Internet Connection.';
             if(err.data.message)
@@ -255,6 +257,7 @@ screens.PaymentScreenWidget.include({
         		}
 	    		else{
 	    			if(this.pending_is_valid()){
+	    				$('.next').css("pointer-events", "none");// restrict to click once again.
 		    			this.click_pending();
 		    			order.set_is_pending(false);
 		    		}
