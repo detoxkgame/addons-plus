@@ -20,6 +20,7 @@ class PLReport(models.Model):
                               currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', string='Currency')
     account_id = fields.Many2one('account.account', string='Account')
+    analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account', groups="analytic.group_analytic_accounting")
     move_id = fields.Many2one('account.move', string='Journal Entry')
     payment_id = fields.Many2one('account.payment',
                                  string="Payment")
@@ -48,7 +49,7 @@ class PLReport(models.Model):
                     subquery = " select '"+(" "+report.name if report.name == "Income" else report.name)+"' as report_name, ml.user_type_id, \
                     ml.invoice_id,ml.journal_id,ml.payment_id,ml.quantity,\
                     ml.company_id,m.currency_id,ml.id as id, ml.move_id, ml.name, \
-                    ml.date, ml.product_id,ml.partner_id,ml.account_id, \
+                    ml.date, ml.product_id,ml.partner_id,ml.account_id, ml.analytic_account_id, \
                     COALESCE((credit), 0) as credit, ((COALESCE((debit),0) - COALESCE((credit), 0)) * "+str(report.sign)+") as balance, COALESCE((debit), 0) as debit \
                     from account_move m \
                     inner join account_move_line ml on m.id = ml.move_id \
@@ -56,7 +57,7 @@ class PLReport(models.Model):
                 else: 
                     subquery = " SELECT '"+(" "+report.name if report.name == "Income" else report.name)+"' as report_name,0 as user_type_id,0 as invoice_id,0 as journal_id, \
                     0 as payment_id,0 as quantity,0 as company_id,0 as currency_id,0 as id,0 as move_id,null as name,null as date,0 as product_id, \
-                    0 as partner_id,0 as account_id,0 as credit,0 as balance,0 as debit"
+                    0 as partner_id,0 as account_id,0 as analytic_account_id,0 as credit,0 as balance,0 as debit"
 
                 query = query + (subquery)
 
@@ -78,7 +79,7 @@ class PLReport(models.Model):
                     subquery = " select '"+(" "+report.name if report.name == "Income" else report.name)+"' as report_name, ml.user_type_id,\
                     ml.invoice_id,ml.journal_id,ml.payment_id,ml.quantity,\
                     ml.company_id,m.currency_id,ml.id as id, ml.move_id, ml.name,\
-                    ml.date, ml.product_id,ml.partner_id,ml.account_id, \
+                    ml.date, ml.product_id,ml.partner_id,ml.account_id, ml.analytic_account_id, \
                     COALESCE((credit), 0) as credit, ((COALESCE((debit),0) - COALESCE((credit), 0)) * "+str(report.sign)+") as balance, COALESCE((debit), 0) as debit \
                     from account_move m \
                     inner join account_move_line ml on m.id = ml.move_id \
@@ -86,7 +87,7 @@ class PLReport(models.Model):
                 else: 
                     subquery = " SELECT '"+(" "+report.name if report.name == "Income" else report.name)+"' as report_name,0 as user_type_id,0 as invoice_id,0 as journal_id, \
                     0 as payment_id,0 as quantity,0 as company_id,0 as currency_id,0 as id,0 as move_id,null as name,null as date,0 as product_id, \
-                    0 as partner_id,0 as account_id,0 as credit,0 as balance,0 as debit"
+                    0 as partner_id,0 as account_id,0 as analytic_account_id,0 as credit,0 as balance,0 as debit"
 
                 query = query + (subquery)
 
