@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Float Icon template  -->
+	<template id="custom_header" inherit_id="website.layout" name="Custom Header">
+	 	<xpath expr="//div[@id='wrapwrap']" position="inside">
+	   		<div class="contact-forms__open-contact" data-forms=".contact-forms" data-close=".contact-forms__close">
+	   			<div class="contact-forms__expander"></div>
+	   			<img class="contact-forms__hello-icon" alt="Contact us." src="/skit_snippets/static/src/img/float_video/contact_icon.gif"/>
+	   			<img class="contact-forms__close-icon" src="/skit_snippets/static/src/img/float_video/close_icon_color.png"/>
+				
+	 		</div>
+<!-- 	 		<div class="contact-forms" style="display: block; visibility: hidden; opacity: 0;">
+	 		
+	 		
+	 		</div> -->
+			<div id="myNav" class="overlay">
+				<div class="overlay-content">
+					<p class="sks_float_expln">Looking for...</p>
+					<a id="contact" href="#">Software Implementation <i class="fa-2x sks_study_icon_button"/></a>
+					<a id="contact" class="hire_resource" href="#">Hire Resource <i class="fa-2x sks_study_icon_button"/></a>
+					<a id="contact" class="software_develop" href="#">Software Development Needs <i class="fa-2x sks_study_icon_button"/></a>
+					<div id="sks_float_popup" class="sks_float_popup">
+						<div id="contactForm">
+							<i id="sks_fa-chevron_left" class="fa fa-chevron-left fa-1x" aria-hidden="true" style="color:#fff; display: block !important; float: left; margin-top: 0.5%; margin-bottom: 0.5%;"/>
+							<p class="sks_float_fa_content">NEW PROJECT</p>
+							<div class="sks_float_form_content" id="message">
+							<form action="#" class="sks_float_form soft_imp">
+								<div class="contact-form__container">
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">Hey, my name is</label>
+										</span>
+										<span>
+											<input class="sks_float_input name" t-attf-ismandatorty="true"
+												type="text" placeholder="full name" />
+											,
+										</span>
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">and I work at</label>
+										</span>
+										<span>
+											<input class="sks_float_input company" t-attf-ismandatorty="false"
+												type="text" placeholder="company" />
+											.
+										</span>
+									</div>
+									<div class="contact_field_project_div">
+										<span class="contact_span">
+											<label class="contact_label">I'd like to team up with Srikesh Infotech for:
+											</label>
+										</span>
+										<br></br>
+										<input class="sks_float_input project" t-attf-ismandatorty="true"
+											type="text" placeholder="overview of project" />
+						
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">You can reach me at</label>
+										</span>
+										<span>
+											<input class="sks_float_input email" t-attf-ismandatorty="true"
+												type="text" placeholder="email" />
+										</span>
+										<input class="sks_float_input phone" t-attf-ismandatorty="true"
+											type="text" placeholder="phone no" />
+									</div>
+						
+						
+									<br />
+									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
+									<br />
+									<button type="submit" id="launch" class="sks_float_btn launch">Launch</button>
+								</div>
+							</form>
+							<form action="#" class="sks_float_form hire_form">
+								<div class="contact-form__container">
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">Hey, my name is</label>
+										</span>
+										<span>
+											<input class="sks_float_input hire_name" t-attf-ismandatorty="true"
+												type="text" placeholder="full name" />
+										</span>
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">and I work at</label>
+										</span>
+										<span>
+											<input class="sks_float_input hire_company"
+												t-attf-ismandatorty="false" type="text" placeholder="company" />
+										</span>
+									</div>
+									<div class="contact_field_project_div">
+										<span class="contact_span">
+											<label class="contact_label">I'd like to team up with Srikesh Infotech for:
+											</label>
+										</span>
+										<br></br>
+										<input class="sks_float_input hire_project"
+											t-attf-ismandatorty="true" type="text" placeholder="overview of project" />
+						
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">You can reach me at</label>
+										</span>
+										<span>
+											<input class="sks_float_input hire_email"
+												t-attf-ismandatorty="true" type="text" placeholder="email" />
+										</span>
+										<input class="sks_float_input hire_phone" t-attf-ismandatorty="true"
+											type="text" placeholder="phone no" />
+									</div>
+									<br></br>
+									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
+									<br></br>
+									<button type="submit" id="hire_launch" class="sks_float_btn hire_launch">Launch</button>
+								</div>
+							</form>
+							<form action="#" class="sks_float_form development_form">
+								<div class="contact-form__container ">
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">Hey, my name is</label>
+										</span>
+										<span>
+											<input class="sks_float_input develop_name"
+												t-attf-ismandatorty="true" type="text" placeholder="full name" />
+										</span>
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">and I work at</label>
+										</span>
+										<span>
+											<input class="sks_float_input develop_company"
+												t-attf-ismandatorty="false" type="text" placeholder="company" />
+										</span>
+									</div>
+									<div class="contact_field_project_div">
+										<span class="contact_span">
+											<label class="contact_label">I'd like to team up with Srikesh Infotech for:
+											</label>
+										</span>
+										<br></br>
+										<input class="sks_float_input develop_project"
+											t-attf-ismandatorty="true" type="text" placeholder="overview of project" />
+						
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_span">
+											<label class="contact_label">You can reach me at</label>
+										</span>
+										<span>
+											<input class="sks_float_input develop_email"
+												t-attf-ismandatorty="true" type="text" placeholder="email" />
+										</span>
+										<input class="sks_float_input develop_phone"
+											t-attf-ismandatorty="true" type="text" placeholder="phone no" />
+									</div>
+									<br />
+									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
+									<br />
+									<button type="submit" id="develop_launch" class="sks_float_btn develop_launch">Launch
+									</button>
+								</div>
+							</form>
+						</div>
+	 					<div id="confirm">
+	 						<div id="popup">
+	 							<div class="popup_div">
+	 								<canvas style="display: none" width="100" height="100"></canvas>
+	 								<img id="confirm_gif_id" class="confirm_gif" alt="Contact us." src="/skit_snippets/static/src/img/float_video/confirm.gif"/>
+	 								<span class="pop_span">Thank for registering we will contact you soon
+	 								</span>
+	 							</div>
+	 						</div>
+	   					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	  </xpath>
+	</template> 
+</odoo>

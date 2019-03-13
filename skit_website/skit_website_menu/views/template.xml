@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="skit_wesbite_style" name="SKIT Website" inherit_id="web.assets_frontend">
+			<xpath expr="//link[last()]" position="after">
+				<link type="text/stylesheet" src="/skit_website_menu/static/src/css/topmenu.css"></link>
+				<link type="text/stylesheet" src="/skit_website_menu/static/src/scss/topmenu.scss"></link>
+			</xpath>	
+			<xpath expr="//script[last()]" position="after">
+				<script type="text/javascript" src="/skit_website_menu/static/src/js/demo_example.js"></script>
+			</xpath>
+		</template>
+
+		<!-- <template id="skit_frontend_layoutview" name="Custom Menus" inherit_id="portal.frontend_layout">
+			<xpath expr="//header/nav/div[@class='container']" position="attributes">
+				<attribute name="class" add="skit_portal" separator=" " />
+			</xpath>
+		</template> -->
+
+	 <template id="skit_portal_show_sign_in" inherit_id="portal.portal_show_sign_in" name="Show Sign In">
+        <xpath expr="//ul[@id='top_menu']" position="inside">
+             <li class="nav-item">            
+<!--                 <a t-attf-href="/web/login" class="nav-link"> -->
+<!--                 <a class="nav-link">
+                	<i class="fa fa-align-right fa-lg fa-rotate-180" style="color: #000;">
+                	</i>
+                </a> -->
+                <a class="nav-link" style="margin-bottom: -17%;">
+				<a href="#toggle" class="hamburgler" style="margin-bottom: 0rem;">
+					<div class="bun top"></div>
+					<div class="meat"></div>
+					<div class="bun bottom"></div>
+					
+					<div id="sks_topmenu_myNav" class="sks_topmenu_overlay">
+						<div class="sks_topmenu_overlay-content">
+							<div style="width: 50%; float: left;">
+								<a href="#">Projects</a>
+								<a href="#">About</a>
+								<a href="#">Careers</a>
+								<a href="#">Blog</a>
+							</div>
+							<div style="width: 50%; float: right; margin-top: 3rem;">
+								<div class="top_menu_container">
+								  <div class="top_menu_column">
+								    <h1>PYTHON</h1>
+								    	<h2>ERP AND CRM</h2>
+								    		<p>Odoo</p>
+								    	<h2>ACCOUNTING</h2>
+								    		<p>Django</p>
+								  </div>
+								  <div class="top_menu_column">
+								    <h1>PHP</h1>
+								    	<p>CRM</p>
+								    	<p>ViaCRM Logistic</p>
+								  </div>
+								  <div class="top_menu_column">
+								    <h1>GWT</h1>
+								    	<h2>ERP CRM PPT Creator</h2>
+								    		<p>Slide Ninja</p>
+								    		<p>Compiere</p>
+								  </div>
+								  <div class="top_menu_column">
+								    <h1>JAVA</h1>
+								    	<h2>ERP CRM POS</h2>
+								    		<p>ADempiere</p>
+								    		<p>Open Bravo</p>
+								  </div>
+								  <div class="top_menu_column">
+								    <h1>MOBILE APPS ANDROID AND IOS</h1>
+								    	<h2>GAMES</h2>
+								    		<p>1 to King Online Rummy</p>
+								    	<h2>SOCIAL MEDIA</h2>
+								    		<p>Guzzle</p>
+								    	<h2>BUSINESS</h2>
+								    		<p>Fleet Master</p>
+								    		<p>eCommerce</p>
+								    		<p>Logistic Tracking</p>
+								  </div>								  
+								  <div class="top_menu_column" style="margin-top: 5rem;">
+								    <h1>0413 266 5612</h1>
+								    <h1>info@srikeshinfotech.com</h1>
+								    <h1>
+								    	<a href="https://www.facebook.com/srikesh.infotech.5" class="fa fa-facebook"></a>
+										<a href="https://twitter.com/srikesh2008" class="fa fa-twitter"></a>
+										<!-- <a href="#" class="fa fa-google"></a> -->
+										<a href="https://www.linkedin.com/in/srikesh-infotech-34816b79" class="fa fa-linkedin"></a>
+										<a href="https://www.youtube.com/channel/UCYuDSLSvcbWw9G3CEo8Tjqg" class="fa fa-youtube"></a>
+										<!-- <a href="#" class="fa fa-instagram"></a> -->
+										<a href="skype:srikesh2008" class="fa fa-skype"></a>
+										<!-- <a href="#" class="fa fa-yahoo"></a> -->
+									</h1>
+								  </div>
+								</div>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.top_menu_column {
+	float: left;
+    width: 50%;
+    padding: 10px;
+    height: 10rem;
+    background-color: transparent;
+}
+
+.top_menu_container h1 {
+	font-weight: bolder;
+	color: #fff;
+	font-size: 11px;
+	margin-bottom: .5rem;
+	line-height: 20px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;	
+}
+
+.top_menu_container h1 a {
+	font-size: 2em; 
+	display: inline-block; 
+	margin: 0;
+}
+
+.top_menu_container h2 {
+	font-weight: bold;
+	color: #fff;
+	font-size: 10px;
+	margin-bottom: .5rem;
+	line-height: 20px;
+	letter-spacing: 1.5px;
+	margin-left: 1rem;
+}
+
+.top_menu_container p {
+	font-weight: 300;
+	font-size: 14px;
+    margin-top: 0;
+    line-height: 0.5em;
+    opacity: 1;
+	text-align: left;
+    margin-left: 1.5rem;	
+}
+
+/* Clear floats after the columns */
+.top_menu_container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+							</div>
+						</div>
+					</div>
+				</a>
+				</a>
+<style>
+.sks_topmenu_overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  background-color: #7c7bad;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.sks_topmenu_overlay-content {
+  position: relative;
+  top: 0%;
+  width: 100%;
+  text-align: left;
+  
+}
+
+.sks_topmenu_overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 61px;
+  font-weight: bolder;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+  margin: 0rem 0rem 2rem 4rem;
+}
+
+.sks_topmenu_overlay a:hover, .sks_topmenu_overlay a:focus {
+  color: #f1f1f1;
+}
+
+.sks_topmenu_overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}
+
+@media screen and (max-height: 450px) {
+  .sks_topmenu_overlay a {font-size: 20px}
+  .sks_topmenu_overlay .closebtn {
+  font-size: 40px;
+  top: 15px;
+  right: 35px;
+  }
+}
+
+.hamburgler {
+  width: 25px;
+  height: 25px;
+  display: block;
+  transition: 0.5s ease all;
+}
+.hamburgler.no-hamburgler {
+  transform: rotate(-45deg);
+  z-index: 1;
+  position: fixed;
+}
+.bun, .meat {
+  width: 100%;
+  height: 13%;
+  display: block;
+  transition: 0.5s ease all;
+  background: #000;
+  border-radius: 50px;
+}
+.no-hamburgler .top {
+  height: 38%;
+  width: 20%;
+  margin-left: 40%;
+  border-radius: 50px 50px 0 0;
+}
+.no-hamburgler .bottom {
+  height: 38%;
+  width: 20%;
+  margin-left: 40%;
+  border-radius: 0 0 50px 50px;
+}
+.meat {
+  margin: 20% 0;
+}
+.no-hamburgler .meat {
+  margin: 1% 0;
+}
+</style>
+            </li> 
+        </xpath>
+    </template>
+</odoo>

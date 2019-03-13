@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="snippets_ui_template_signin" name="SKIT Snippets" inherit_id="web.assets_frontend">
+			<xpath expr="//link[last()]" position="after">
+				<!-- <link href="/skit_snippets/static/src/css/s_scroll.css" rel="stylesheet" type="text/less" /> -->
+				<link href="/skit_snippets/static/src/scss/s_tittle.scss" rel="stylesheet" type="text/less" />
+				<link href="/skit_snippets/static/src/css/work_scroll.css" rel="stylesheet" type="text/css" /> 
+				<link href="/skit_snippets/static/src/css/float.css" rel="stylesheet" type="text/css" />
+				<link href="/skit_snippets/static/src/css/sitemap.css" rel="stylesheet" type="text/css" />
+			</xpath>	
+			<xpath expr="//script[last()]" position="after">
+				<script type="text/javascript" src="/skit_snippets/static/src/js/jquery.scrollie.js"></script>
+				<script type="text/javascript" src="/skit_snippets/static/src/js/jquery.scrollie.min.js"></script>
+				<script type="text/javascript" src="/skit_snippets/static/src/js/jquery.scroll.js"></script>	
+				<script type="text/javascript" src="/skit_snippets/static/src/js/work_scroll.js"></script>	
+				<script type="text/javascript" src="/skit_snippets/static/src/js/float_icon.js"></script>	
+			</xpath>
+		</template>	
+	</data>
+</odoo>

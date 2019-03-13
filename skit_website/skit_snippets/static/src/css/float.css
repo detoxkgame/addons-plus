@@ -1,0 +1,411 @@
+video::-webkit-media-controls {
+  display: none;
+}
+.contact-forms__open-contact:hover {
+    -webkit-transform: translateY(-3px);
+    transform: translateY(-3px);
+}
+.contact-forms__open-contact:hover .contact-forms__hello-icon {
+    -webkit-animation: d 1.4s ease forwards;
+    animation: d 1.4s ease forwards;
+
+}
+.home .contact-forms__open-contact {
+    background: #f04e30;
+}
+.contact-forms__open-contact {
+    position: fixed;
+    z-index: 999;
+    right: 2rem;
+    bottom: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: none;
+    cursor: pointer;
+    transition: -webkit-transform .4s cubic-bezier(.15,.15,0,1);
+    transition: transform .4s cubic-bezier(.15,.15,0,1);
+    transition: transform .4s cubic-bezier(.15,.15,0,1),-webkit-transform .4s cubic-bezier(.15,.15,0,1);
+    pointer-events: all;
+}
+.contact-forms__hello-icon {
+	border-radius: 50%;	
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    -webkit-transform-origin: bottom left;
+    transform-origin: bottom left;
+}
+.contact-forms__close-icon{
+	border-radius: 50%;
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    -webkit-transform-origin: bottom left;
+    transform-origin: bottom left;
+    display:none;
+}
+.contact-forms__open-contact.-disabled {
+    pointer-events: none;
+}
+
+
+/* The Overlay (background) */
+.overlay {
+	height: 0;
+  	width: 100%;
+  	position: fixed; 
+  	z-index: 1;
+  	left: 0;
+  	top: 0;
+  	background-color: #29ce84; 
+  	overflow-y: hidden; 
+  	-webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+ 	/* transition-property: bottom, top;
+  	transition-duration: 1.5s;
+  	transition-property: width, height;
+   	transition: 2.5s;  */
+   	
+  
+}
+
+ /* Position the content inside the overlay */
+.overlay-content {
+    position: relative;
+   /*  top: 5em; */
+    width: 95%;
+    margin-left: 5%;
+    text-align: left;
+    margin-top: 30px;
+    line-height: 9em;
+}
+
+/* The navigation links inside the overlay */
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  font-size: 65px;
+  font-weight: 900;
+  
+}
+
+.overlay p {
+    text-align: left;
+    font-weight: 900;
+   /* margin-bottom: 10px; */
+}
+
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+.warning{
+	border: 2px solid red !important;
+}
+
+#confirm {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);;
+  display: none;
+}
+
+#popup {
+  max-width: 600px;
+  width: 80%;
+  padding: 20px;
+  background: #fff;
+  margin: 200px auto;
+  height: 35%;
+  box-shadow: 0 10px 6px -6px #777;
+}
+.confirm_gif{
+	width: 20%;
+ 	float: left;
+}
+.popup_div{
+	margin-top: 10%;
+	margin-bottom: 10%;
+	height: 70%;
+	vertical-align: middle;
+}
+.pop_span{
+	font-weight: 600;
+	font-size: 2em;
+	line-height: 2em;
+}
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .contact-forms__open-contact .contact-forms__close-icon {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+video::-webkit-media-controls {
+  display: none;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1.5rem !important;
+}
+
+/* Contact Form */
+/* New Code */
+/* POP Up Menus */
+	#contact {
+		-webkit-user-select: none; /* Chrome/Safari */
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* IE10+ */
+		color: white;
+		font-weight: bolder;
+		cursor: pointer;
+	}
+	
+	#contact:hover { background: transparent; }
+	#contact:active { background: #444; }
+/* Open POP Up Form */
+	#contactForm{
+		display: none;
+		padding: 2em;
+		width: 400px;
+		text-align: center;
+		background: #29ce84;/* #29ce84 */
+		position: fixed;
+		top:50%;
+		left:50%;
+		transform: translate(-50%,-50%);
+		-webkit-transform: translate(-50%,-50%);
+		line-height: 2em;
+		width:100%;
+		height:100%;
+		padding: 5%;
+		z-index: 1;
+}
+/* LOOKING FOR */
+	.sks_float_expln {
+		margin-left: 1%;
+		margin-bottom: 0.5%;
+		font-weight: 600;
+		color: #fff;
+	}
+/* POP UP WINDOW */
+	.sks_float_popup {
+		height: 100%;
+		width: 0%;
+		position: fixed;
+		z-index: 1;
+		top: 0;
+		left: 0;
+		background-color: #29ce84;
+		overflow-x: hidden;
+		transition: 0.5s;
+	}
+/* FA-CHEVRON ICON */
+	#sks_fa-chevron_left{
+		color:#fff; 
+		display: block !important; 
+		float: left; 
+		margin-top: 0.5%; 
+		margin-bottom: 0.5%; 
+		cursor: pointer;
+	}	
+/* fa-icon CONTENT */
+	.sks_float_fa_content {
+		margin-left: 3%;
+		margin-bottom: 0.5%;
+		color: #fff;
+	}
+/* INNER FORM SET WIDTH */
+	.sks_float_form_content {
+		width: 90%; 
+		height: 100%; 
+		padding: 0%;
+	}
+/* INNER FORM DESIGN */
+	.sks_float_form{
+		line-height: 1em;
+		width:90%;
+		height:35em;
+		background:transparent;
+		border-radius:8px;
+		box-shadow:0 0 40px -10px transparent;
+		margin:calc(30vh - 220px) auto;
+		padding:20px 30px;
+		max-width:calc(100vw - 40px);
+		box-sizing:border-box;
+		font-family:'Montserrat',sans-serif;
+		position:relative;
+	}
+/* INPUT FIELDS */
+	.sks_float_input{
+		width:100%;
+		margin-right: 40%;
+		margin-bottom: 0.8em;
+		margin-top: 0.8em;
+		margin-left: auto;
+		display: block;
+		padding:10px;
+		box-sizing:border-box;
+		background:none;
+		outline:none;resize:none;
+		border:0;
+		font-family:'Montserrat',sans-serif;
+		transition:all .3s;
+		border-bottom:2px solid #349067;
+		font-size: 22px;
+		opacity: 0.3;
+	}
+/* FOCUS ON INPUT FIELDS */
+	.sks_float_input:focus{
+		border-bottom:2px solid #78788c;
+	}
+/* FIELD LABLE CONTENT */
+	.sks_float_p{
+		content:attr(type);
+		display:block;
+		margin:0 0 0 0;
+		font-size:22px !important;
+		color:#fff;
+	}
+/* FORM SUBMIT BUTTON */
+	.sks_float_btn{
+		float:left;
+		padding:8px 12px;
+		margin:8px 0 0;
+		font-family:'Montserrat',sans-serif;
+		border:2px solid #78788c;
+		border-radius: 99rem;
+		background:0;
+		color:#5a5a6e;
+		cursor:pointer;
+		transition:all .3s;
+		width: 15%;
+	}
+/* TAG LINE BEFORE SUBMIT BUTTON */
+	.sks_float_p_tag {
+		color: #349067 !important; 
+		font-size: 16px !important; 
+		font-weight: normal !important;
+	}					
+/* HOVER ACTION */
+	.sks_float_btn:hover{
+		background:#fff;
+		border:2px solid #fff;
+		color:#000;
+		border-radius: 99rem;
+	}
+
+	
+/* HOMEPAGE */
+.scroll_icon {
+    -webkit-animation: mover 1s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+    width: 5%; margin: 3%;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+@keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+
+/* LOOKING FOR Page */
+i.fa.fa-long-arrow-left.fa-flip-horizontal {
+    color: #fff;
+    opacity: 0.5;
+    vertical-align: middle;
+    margin-left: 2rem;
+}
+i.fa.fa-long-arrow-left.fa-flip-horizontal:hover {
+    color: #fff;
+    opacity: 1;
+    vertical-align: middle;
+    margin-left: 2rem;
+}
+.sks_study_icon_button{
+	color: #fff;
+	opacity: 0.1;
+	vertical-align: sub;
+	margin-left: 2rem;
+}
+.sks_study_icon_button:after{
+	content: '\2192';
+}
+.sks_study_icon_button:hover {
+	color:  #fff;
+	opacity: 1;
+	vertical-align: sub;
+	margin-left: 2rem;
+}
+
+.contact_field_div{
+	content:attr(type); display:block; margin:0 0 0 0;display: table;width: 100%;
+}
+.contact_span{
+	display: table-cell;width: 1px;padding-right: .5rem;white-space: nowrap;
+}
+.contact_label{
+	font-size:22px !important; color:#fff; font-weight: 600;
+}
+.contact_field_project_div{
+	content:attr(type); display:block; margin:0 0 0 0;width: 100%;
+}
+/*Contact form */
+@media (min-width: 600px){
+.contact-form__container {
+    max-width: 665px;
+}}
+.contact-form__container {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+@media (min-width: 600px){
+.contact-form__field {
+    margin-bottom: 2rem;
+}}
+.contact-form__field {
+    display: table;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.contact-form__label {
+    display: table-cell;
+    width: 1px;
+    padding-right: .5rem;
+    white-space: nowrap;
+}
+.contact-form__input {
+    display: table-cell;
+}
+.contact-form input, .contact-form label, .contact-form textarea {
+    background-color: transparent;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+}

@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template name="Scroll" id="s_scroll">
+		
+		<section class="sks_scroll_nav" style="height: 60em;">
+			<div class="container">
+				<div class="row">
+					<div class="sks-slide slide-one pt224" data-background="#ffffff"
+						style="height: 881px;">
+						<div class="inside">
+							<h1>
+								<b>
+									<font style="font-size: 3em; font-weight: 900; color: #7C7BAD;">Shaping Ideas </font>
+								</b>
+							</h1>
+							<h1>
+								<b>
+									<font style="font-size: 3em; font-weight: 900; color: #7C7BAD;">Into Great </font>
+								</b>
+							</h1>
+							<h1>
+								<b>
+									<font style="font-size: 3em; font-weight: 900; color: #7C7BAD;">Software Products </font>
+								</b>
+							</h1>
+						</div>
+						<div>
+							<img class="scroll_icon" src="/skit_snippets/static/src/img/s_scroll/scroll_icon_gray.png"></img>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="section2" style="height: 60em;">
+			<div class="container">
+				<div class="row">
+					<div class="sks-slide slide-two" data-background="#7C7BAD"
+						style="height: 657px; width: 100%;">
+						<div class="inside">
+							<p class="o_default_snippet_text"
+								style="text-align: center; font-size: 20em; font-weight: 900; color: rgba(255, 255, 255, 0.21);">About</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section style="height: 60em;">
+			<div class="container"
+				style="width: 90%; margin-left: 5%; margin-right: 5%; max-width: 100%;">
+				<div class="row" style="width: 100%;">
+					<div class="sks-slide slide-three" data-background="#ffffff"
+						style="height: 789px; width: 30%;">
+						<div class="inside">
+							<p />
+							<div style="text-align: left;">
+								<span
+									style="color: rgb(165, 74, 123); font-family: inherit; font-size: 24px; font-weight: bold;"
+									class="o_default_snippet_text">We're a 20+ employee software</span>
+							</div>
+							<font style="font-size: 24px;">
+								<div style="text-align: left;">
+									<font
+										style="color: rgb(165, 74, 123); font-family: inherit; font-weight: bold;"
+										class="o_default_snippet_text">company that moves fast.</font>
+									<span
+										style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+								</div>
+							</font>
+							<div style="text-align: left;">
+								<br />
+							</div>
+							<div style="text-align: left;">
+								<br />
+							</div>
+							<font style="">
+								<div style="text-align: left;">
+									<span style="font-size: 16px;">
+										<br />
+									</span>
+								</div>
+								<div style="text-align: left;">
+									<br />
+								</div>
+								<span style="color: rgb(236, 240, 241); font-size: 16px;">
+									<div style="text-align: left;">
+										<span style="color: rgb(165, 74, 123); font-family: inherit;"
+											class="o_default_snippet_text">Our success stems from satisfied customers and</span>
+										<span style="font-family: inherit; color: rgb(236, 240, 241);">&amp;nbsp;</span>
+									</div>
+								</span>
+								<span style="font-size: 16px;">
+									<div style="text-align: left;">
+										<font
+											style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">
+											<span style="color: rgb(165, 74, 123); font-size: 16px;"
+												class="o_default_snippet_text">satisfied employees.</span>
+										</font>
+										<span
+											style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+									</div>
+								</span>
+							</font>
+							<div style="text-align: left;">
+								<br />
+							</div>
+							<div style="text-align: left;">
+								<br />
+							</div>
+							<font style="font-size: 11px;">
+								<div style="text-align: left;">
+									<font
+										style="color: rgb(247, 173, 107); font-family: inherit; font-weight: bold;"
+										class="o_default_snippet_text">2018</font>
+									<span
+										style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+								</div>
+							</font>
+							<div style="text-align: left;">
+								<font color="#ecf0f1">
+									<span style="color: rgb(165, 74, 123); font-size: 16px;"
+										class="o_default_snippet_text">
+										<b class="o_default_snippet_text">Entrepreneur in Odoo Community Apps</b>
+									</span>
+								</font>
+								<span
+									style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+							</div>
+							<font style="font-size: 13px;">
+								<div style="text-align: left;">
+									<span lang="EN-GB"
+										style="color: rgb(198, 123, 165); font-family: Calibri, sans-serif; font-size: 11pt; line-height: 107%;"
+										class="o_default_snippet_text">Achieved
+										position in top growing apps
+									</span>
+									<br />
+								</div>
+							</font>
+							<div style="text-align: left;">
+								<br />
+							</div>
+							<font style="font-size: 11px;">
+								<div style="text-align: left;">
+									<font
+										style="color: rgb(247, 173, 107); font-family: inherit; font-weight: bold;"
+										class="o_default_snippet_text">2017</font>
+									&amp;nbsp;
+									<span
+										style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;
+									</span>
+								</div>
+							</font>
+							<div style="text-align: left;">
+								<font
+									style="color: rgb(165, 74, 123); font-family: inherit; font-size: 16px;"
+									class="o_default_snippet_text">
+									<b class="o_default_snippet_text">Odoo ERP implementation</b>
+								</font>
+								<span
+									style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+							</div>
+							<font style="font-size: 13px;">
+								<div style="text-align: left;">
+									<font style="color: rgb(198, 123, 165); font-family: inherit;"
+										class="o_default_snippet_text">The customer’s perception is our reality</font>
+									<span
+										style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+								</div>
+							</font>
+							<div style="text-align: left;">
+								<br />
+							</div>
+							<font style="font-size: 11px;">
+								<div style="text-align: left;">
+									<font
+										style="color: rgb(247, 173, 107); font-family: inherit; font-weight: bold;"
+										class="o_default_snippet_text">2016</font>
+									<span
+										style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+								</div>
+							</font>
+							<div style="text-align: left;">
+								<font
+									style="color: rgb(165, 74, 123); font-family: inherit; font-size: 16px;"
+									class="o_default_snippet_text">
+									<b class="o_default_snippet_text">Odoo with Android business solution</b>
+								</font>
+								<span
+									style="color: rgb(236, 240, 241); font-family: inherit; font-size: 0.875rem;">&amp;nbsp;</span>
+							</div>
+							<font style="font-size: 13px;">
+								<div style="text-align: left;">
+									<span style="color: rgb(198, 123, 165); font-family: inherit;"
+										class="o_default_snippet_text">The Ultimate ERP in your Pocket</span>
+								</div>
+							</font>
+						</div>
+						<br></br>
+						<br></br>
+						<div style="&#10;">
+							<img src="/skit_snippets/static/src/img/s_scroll/right_arrow.png"
+								style="&#10; width: 15%;&#10;" />
+						</div>
+					</div>
+					<div
+						style="width: 70%; background-repeat: no-repeat; background-size: contain;">
+						<video id="skit_video" width="900" height="640" controls=""
+							loop="" autoplay="autoplay" playsinline="">
+							<source src="/skit_snippets/static/src/img/float_video/timeline.mp4"
+								type="video/mp4" />
+						</video>
+					</div>
+					<!-- <div style="width: 50%; background-repeat: no-repeat; background-size: 
+						contain; background-image: url(https://brianrhea.com/wp-content/uploads/2018/11/coding-isometric-08.png)"> 
+						</div> -->
+				</div>
+			</div>
+		</section>
+		<section class="section4" style="height: 60em;">
+			<div class="container">
+				<div class="row">
+					<div class="sks-slide slide-four" data-background="#a54a7b"
+						style="height: 657px;">
+						<div class="inside">
+							<p style="text-align: left; font-size: 3em; font-weight: 600; line-height: 2em;"><font style="color: rgb(198, 123, 165);">We expert in</font>
+								Software development, ERP implementation <font style="color: rgb(198, 123, 165);">and</font> customization,
+								Mobile Apps, Offshore development
+								<font style="color: rgb(198, 123, 165);" class="o_default_snippet_text">and</font>
+								offers resource to hire.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section style="height: 60em;">
+			<div class="container">
+				<div class="row">
+					<div class="sks-slide slide-five" data-background="#ffffff"
+						style="height: 657px; width: 100%;">
+						<div class="inside">
+							<p class="o_default_snippet_text"
+								style="text-align: center; font-size: 20em; font-weight: 900; color: rgba(230, 230, 230);">Work</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+ 		<section id="work_sec" class="work work_section">
+			<div class="container work_img_center">
+				<div class="row">
+					<div class="sks-slide slide-six" data-background="#581845">
+							<div class="work__sticky-wrapper ">
+									<div class="work__sticky-projects">
+										<div class="work__projects">
+											<div class="work__wiper" style="transform-origin: 0px 0px 0px; transform: matrix(1, 0, 0, 0, 0, 0);"></div>
+											<div id="tccl-apps" class="work__project work__project--visible">
+												 <span class="work__heading">
+											        Recent Work
+											     </span>
+											     <h2 class="work__name">
+											        TCCL
+											     </h2>
+											     <ul class="work__services">
+											         <li class="work__service">ERP for Devotional center</li>
+											     </ul>
+											     <a href="/case-study/tccl-services" title="TCCL Services" class="work_study tccl_study">
+											     	<div class="fa-4x study_icon_button"></div>
+										            <span class="icon_button__label">Case Study</span>
+										         </a>
+										         <!-- <div class="work_study tccl_study">
+										         	<div class="fa-4x study_icon_button"></div>
+										            <span class="icon_button__label">Case Study</span>
+										         </div> --> 
+											</div>	
+											<div id="viacrm-apps" class="work__project work__project--hidden">
+												 <span class="work__heading">
+											        Recent Work
+											     </span>
+											     <h2 class="work__name">
+											        VIA CRM
+											     </h2>
+											     <ul class="work__services">										                   
+											         <li class="work__service">To Automate your telemarketing campaigns with our various numbering modes</li>
+											     </ul>		
+											    <a href="/case-study/viacrm-services" title="Via CRM Services" class="work_study viacrm_study">
+													   <div class="fa-4x study_icon_button"></div>
+												       <span class="icon_button__label">Case Study</span>
+												 </a>
+												<!--  <div class="work_study viacrm_study">
+										         	<div class="fa-4x study_icon_button"></div>
+										            <span class="icon_button__label">Case Study</span>
+										         </div>	 -->						     											     
+											     <!-- <div ng-app="">
+											         <div ng-init="myVar = 'http://localhost:8069/case-study/viacrm-services'">
+															<p>Go to <a ng-href="{{myVar}}">ViaCrm page</a> to learn!</p>
+													 </div>	
+										         </div> -->				    
+											</div>	
+											<div id="fleet_master-apps" class="work__project work__project--hidden">
+												 <span class="work__heading">
+											        Recent Work
+											     </span>
+											     <h2 class="work__name">
+											        FLEET MASTER
+											     </h2>
+											     <ul class="work__services">										                   
+											         <li class="work__service">Messaging app integrated with Fleet Master</li>
+											     </ul>		
+											     <a href="/case-study/fleetmaster-services" title="LGA Services" class="work_study fleetmaster_study">
+											     	<div class="fa-4x study_icon_button"></div>
+										            <span class="icon_button__label">Case Study</span>
+										          </a>				    
+											</div>
+											<div id="lga-apps" class="work__project work__project--hidden">
+												 <span class="work__heading">
+											        Recent Work
+											     </span>
+											     <h2 class="work__name">
+											        LGA
+											     </h2>
+											     <ul class="work__services"> 
+												     <li class="work__service">Software Development</li>
+											     </ul>
+											     
+											     <a href="/case-study/lga-services" title="LGA Services" class="work_study lga_study">
+											     	<div class="fa-4x study_icon_button"></div>
+										            <span class="icon_button__label">Case Study</span>
+										          </a>	
+										          
+										         <!-- <div class="work_study lga_study">
+											     	<div class="fa-4x study_icon_button"></div>
+										            <span class="icon_button__label">Case Study</span>
+										         </div>	 -->	
+										         <!-- <div ng-app="">
+											         <div ng-init="myURL = '/case-study/lga-services'">
+															<p>Go to <a ng-href="{{myUrl}}">{{myUrl}}</a> to learn!</p>
+													 </div>	
+										         </div> -->						     
+											</div>					
+										</div>
+									</div>
+									<div class="work__sticky-progress">
+										<div class="work__progress">
+											<div class="dots">
+									          <div class="dots__active-dot process_active_dot"></div>
+									          <div class="dots__dash process_dot_dash"></div>
+										       	<a href="#tccl-apps" id="tccl_focus" class="dots__dot-container no-barba">
+									              <div class="dots__dot"></div>
+									              <span class="dots__label">TCCL</span>
+									            </a>
+									            <a href="#viacrm-apps" id="viacrm_focus" class="dots__dot-container no-barba">
+									              <div class="dots__dot"></div>
+									              <span class="dots__label">Via CRM</span>
+									            </a>
+									            <a href="#fleetmaster-apps" id="fleetmaster_focus" class="dots__dot-container no-barba">
+									              <div class="dots__dot"></div>
+									              <span class="dots__label">Fleet Master</span>
+									            </a>
+									            <a href="#lga-apps" id="lga_focus" class="dots__dot-container no-barba">
+									              <div class="dots__dot"></div>
+									              <span class="dots__label">LGA</span>
+									            </a>
+									       </div>
+										</div>
+									</div>
+							</div>
+							<div class="work__images">
+								<div class="work__background-transition"></div>
+								<div class="tccl-apps-img work__image-container">
+									<!-- <a class="project-link work__image -visible" href="https://www.vincit.com/case-study/metso-metrics-service" title="Metso Metrics Service"></a> -->
+									<div class="container text-center">		
+										<img  id="tccl-apps-img" class="work__image -visible" style="width:75%;" src="/skit_snippets/static/src/img/projects_img/tccl_img.png" />
+									</div>										
+								</div>	
+								<div class="viacrm-apps-img work__image-container">
+									<div class="container text-center">		
+										<img id="viacrm-apps-img" class="work__image" style="width:75%;" src="/skit_snippets/static/src/img/projects_img/viacrm_img.png" />
+									</div>
+								</div>	
+								<div class="fleetmaster-apps-img work__image-container">
+									<div class="container text-center">		
+										<img id="fleetmaster-apps-img" class="work__image" style="width:45%;" src="/skit_snippets/static/src/img/projects_img/fleetmaster_img.png" />
+									</div>
+								</div>	
+								<div class="lga-apps-img work__image-container">
+									<div class="container text-center">		
+										<img id="lga-apps-img" class="work__image" style="width:75%;margin-top:15%;" src="/skit_snippets/static/src/img/projects_img/lga_img.png" />
+									</div>
+								</div>									
+							</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		<style>
+
+			* { box-sizing: border-box }
+
+			body {
+			font-family: 'Coming Soon', cursive;
+			font-family: inherit;
+			transition: background 1s ease;
+			background: #ffffff;
+			}
+
+			p {
+			color: #ecf0f1;
+			font-size: auto;
+			text-align: center;
+
+			}
+
+			span {
+			clear: both;
+			font-size: auto;
+			color: #bdc3c7;
+			}
+
+			a {
+			color: #c0392b;
+			text-decoration: none;
+			}
+
+			.sks-slide {
+
+			.inside {
+			display: table;
+			height: 100%;
+			width: 100%;
+			padding: 0 3em;
+
+			p {
+			display: table-cell;
+			width: 100%;
+			clear: both;
+			vertical-align: middle;
+			text-align: center;
+			}
+			}
+			}
+
+			.navbar {
+			position: fixed;
+			width: 100%;
+			background-color: transparent !important;
+			}
+
+		</style>
+		
+	</template>
+</odoo>

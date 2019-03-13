@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template name="Tittle" id="s_tittle">
+		<section class="s_title">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						
+						<table align="center">
+							<td><img src="/web/image/theme_common.image_content_02"/></td>
+							<td><h1 class="text-center sks_headline">Heading</h1></td>
+							<td><img src="/web/image/theme_common.image_content_02"/></td>
+						</table>
+						
+					</div>
+				</div>
+			</div>
+		</section>
+	</template>
+</odoo>

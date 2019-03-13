@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<template id="skit_snippets_icons" inherit_id="website.snippets">
+		<xpath expr="//div[@id='snippet_structure']" position="after">
+				<div id="skit_snippets" class="o_panel">
+					<div class="o_panel_header">
+						<i class="fa fa-th-large" /> SKIT Snippets
+					</div>
+					<div class="o_panel_body">
+						<t t-snippet="skit_snippets.s_tittle" t-thumbnail="/skit_snippets/static/src/img/snippets/s_tittle.png" />
+						<t t-snippet="skit_snippets.s_scroll" t-thumbnail="/skit_snippets/static/src/img/snippets/s_scroll.png" />
+					</div>
+				</div>
+		</xpath>
+	</template>
+</odoo>

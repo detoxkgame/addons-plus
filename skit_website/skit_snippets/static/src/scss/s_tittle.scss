@@ -1,0 +1,26 @@
+/* Tittle With Underline*/
+.sks_headline {
+	  margin-top: 2%;
+	  line-height: 2em;
+	  color: black;
+	  position: relative;
+	  position: relative;
+	  font-weight: normal;
+}
+.sks_headline:after {
+	  content:' ';
+	  position: absolute;
+	  top: 100%;
+	  left: 50%;
+	  width: 60%;
+	  border: 2.5px solid #C7B299;
+	  border-radius: 4px;
+	  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+	  transform: translateX(-50%);
+}
+
+.navbar {
+	position: fixed;
+    width: 100%;
+    background-color: transparent !important;
+}

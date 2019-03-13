@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<templates id="template" xml:space="preserve">
+	    <t t-name="DemoExample" t-extend="DemoExample">
+	        <t t-jquery='.demo-one' t-operation='replace'>
+	            <p>Your Company Name</p>
+	        </t>
+	    </t>
+	</templates>
+</odoo>
