@@ -52,16 +52,6 @@ $(document).ready(function () {
 			}
 		}
 	});
-
-/* Make the focus on a particular Section after click the Main Menu Start */
-	$(".nav-item").click(function() {
-		var nav = $(this).find('span').text();
-		$('html,body').animate({
-			scrollTop : $(".sks_section" + nav).offset().top-150
-		}, 'slow');
-		return false;
-	});
-/* Make the focus on a particular Section after click the Main Menu End */
 	
 	/* Software Implementation page launch action */
 	  $(".launch").click(function(){		 
@@ -247,6 +237,16 @@ $(window).load(function () {
 	   
 });  
    
+  /* Make the focus on a particular Section after click the Main Menu Start */
+  	$(".nav-item").click(function() {
+  		var nav = $(this).find('span').text();
+  		$('html,body').animate({
+  			scrollTop : $(".sks_section" + nav).offset().top-150
+  		}, 'slow');
+  		return false;
+  	});
+  /* Make the focus on a particular Section after click the Main Menu End */
+
 });
 });
 
