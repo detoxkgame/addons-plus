@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>       
+        <template id="web_assets" inherit_id="web.report_assets_common">
+          <xpath expr="." position="inside">
+          		<link rel="stylesheet" type="text/scss" href="/skit_sale_report/static/src/scss/layout_boxed.scss"/> 
+         </xpath>
+        </template>    
+    </data>
+</odoo>

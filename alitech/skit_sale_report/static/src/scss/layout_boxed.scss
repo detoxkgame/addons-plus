@@ -1,0 +1,11 @@
+.o_boxed_header {
+    border-bottom: 1px solid gray('200');
+    img {
+        max-height: 80px !important;
+    }
+    h4 {
+        color: $o-we-color-text-normal;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+}
