@@ -32,7 +32,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="section2" style="height: 60em;">
+		<section class="sks_sectionAbout section2" style="height: 60em;">
 			<div class="container">
 				<div class="row">
 					<div class="sks-slide slide-two" data-background="#7C7BAD"
@@ -233,7 +233,7 @@
 				</div>
 			</div>
 		</section>
-		<section style="height: 60em;">
+		<section class="sks_sectionProducts " style="height: 60em;">
 			<div class="container">
 				<div class="row">
 					<div class="sks-slide slide-five" data-background="#ffffff"

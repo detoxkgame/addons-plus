@@ -50,7 +50,7 @@
 								  <div class="top_menu_column">
 								    <h1>PHP</h1>
 								    	<p>CRM</p>
-								    	<p>ViaCRM Logistic</p>
+								    	<p>Logistic</p>
 								  </div>
 								  <div class="top_menu_column">
 								    <h1>GWT</h1>
@@ -61,6 +61,7 @@
 								  <div class="top_menu_column">
 								    <h1>JAVA</h1>
 								    	<h2>ERP CRM POS</h2>
+								    		<p>Compiere</p>
 								    		<p>ADempiere</p>
 								    		<p>Open Bravo</p>
 								  </div>
@@ -79,13 +80,13 @@
 								    <h1>0413 266 5612</h1>
 								    <h1>info@srikeshinfotech.com</h1>
 								    <h1>
-								    	<a href="https://www.facebook.com/srikesh.infotech.5" class="fa fa-facebook"></a>
-										<a href="https://twitter.com/srikesh2008" class="fa fa-twitter"></a>
+								    	<a href="https://www.facebook.com/srikesh.infotech.5" class="fa fa-facebook" style="font-weight: 100;"></a>
+										<a href="https://twitter.com/srikesh2008" class="fa fa-twitter" style="font-weight: 100;"></a>
 										<!-- <a href="#" class="fa fa-google"></a> -->
-										<a href="https://www.linkedin.com/in/srikesh-infotech-34816b79" class="fa fa-linkedin"></a>
-										<a href="https://www.youtube.com/channel/UCYuDSLSvcbWw9G3CEo8Tjqg" class="fa fa-youtube"></a>
+										<a href="https://www.linkedin.com/in/srikesh-infotech-34816b79" class="fa fa-linkedin" style="font-weight: 100;"></a>
+										<a href="https://www.youtube.com/channel/UCYuDSLSvcbWw9G3CEo8Tjqg" class="fa fa-youtube" style="font-weight: 100;"></a>
 										<!-- <a href="#" class="fa fa-instagram"></a> -->
-										<a href="skype:srikesh2008" class="fa fa-skype"></a>
+										<a href="skype:srikesh2008" class="fa fa-skype" style="font-weight: 100;"></a>
 										<!-- <a href="#" class="fa fa-yahoo"></a> -->
 									</h1>
 								  </div>
