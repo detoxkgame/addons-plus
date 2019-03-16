@@ -6,7 +6,7 @@
 		<section class="sks_scroll_nav" style="height: 60em;">
 			<div class="container">
 				<div class="row">
-					<div class="sks-slide slide-one pt224" data-background="#ffffff"
+					<div class="sks-slide slide-one" data-background="#ffffff"
 						style="height: 881px;">
 						<div class="inside">
 							<h1>
@@ -442,7 +442,6 @@
 			}
 
 			.navbar {
-			position: fixed;
 			width: 100%;
 			background-color: transparent !important;
 			}

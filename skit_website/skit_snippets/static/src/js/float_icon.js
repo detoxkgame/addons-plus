@@ -23,7 +23,7 @@ $(document).ready(function () {
 		var $height = $(window).scrollTop();
 		var hide_video = $(".section4").offset();
 		var hide_arrow = $(".section2").offset();
-		var hide_nav = $(".sks_scroll_nav").offset();
+		/*var hide_nav = $(".sks_scroll_nav").offset();*/
 		 /* To Hide video */	
 		if(hide_video){
 			if($height <(hide_video.top)-750) {
@@ -43,14 +43,14 @@ $(document).ready(function () {
 			}
 		}
 		/* To Hide Menu nav*/	
-		if(hide_nav){
+/*		if(hide_nav){
 			if($height <(hide_nav.top)) {
 				$(".navbar").css({"opacity":"1"});
 			} 
 			else {
 				$(".navbar").css({"opacity":"0"});
 			}
-		}
+		}*/
 	});
 	
 	/* Software Implementation page launch action */
