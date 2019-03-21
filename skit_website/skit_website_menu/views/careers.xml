@@ -1,0 +1,213 @@
+<odoo>
+	<template id="careers">
+		<t t-call="website.layout">
+			<t t-set="title">Careers</t>
+			<div class="oe_structure">
+
+				<section class="sks_sectionContact section2"
+					style="height: 43em;">
+					<div class="container">
+						<div class="row">
+							<div class="sks-slide sks-sec1-contact-slide-div"
+								data-background="#fff">
+								<div class="inside sks-contact-inside">
+									<p class="o_default_snippet_text sks-sec1-contact-p">Careers</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="about_section1" style="height: 50em;">
+					<div class="container sks_container">
+						<div class="row">
+							<div class="sks-slide sks-slide-div"
+								data-background="#1c3297">
+								<div class="inside sks-inside">
+
+									<div class="sks-sec2-contact-div1">
+										<div class="sks-sec2-contact-div2">
+											<img calss="sks-sec2-contact-img"
+												src="/skit_website_menu/static/src/img/1.png" />
+										</div>
+										<div class="sks-sec2-contact-div3">
+											<div class="text-container sks-sec2-contact-div4">
+												<div class="title-container">
+													<h2 class="sks-sec2-contact-h2">
+														SEND YOUR RESUME
+													</h2>
+												</div>
+												<div class="p1-container">
+													<p class="sks-sec2-contact-p1">
+														As Srikesh Infotech offers the services such as
+														"Software
+														Development", "Offshore Development" and "ERP
+														Implementation", it requires quality human resources to
+														enlarge these services worldwide.
+														It believes in setting
+														the right person for the right task
+														with the right reward.
+													</p>
+												</div>
+												<div class="p2-container">
+													<p class="sks-sec2-contact-p2">info@srikeshinfotech.com</p>
+													<!-- <input type="email" name="email" placeholder="Email" /> 
+														<button id="submit" type="submit"> Send </button> -->
+												</div>
+												<div class="text-right sks-sec2-contact-div5"
+													runat="server" id="socialmedia_div" visible="false">
+													<div t-attf-class="s_share #{_classes or ''}">
+														<a
+															href="https://www.facebook.com/sharer/sharer.php?u={url}"
+															class="s_share_facebook" target="_blank">
+															<i class="fa fa-1x fa-facebook rounded shadow-sm" />
+														</a>
+														<a
+															href="https://twitter.com/intent/tweet?text={title}&amp;url={url}"
+															class="s_share_twitter" target="_blank">
+															<i class="fa fa-1x fa-twitter rounded shadow-sm" />
+														</a>
+														<a
+															href="http://www.linkedin.com/shareArticle?mini=true&amp;url={url}&amp;title={title}&amp;"
+															class="s_share_linkedin" target="_blank">
+															<i class="fa fa-1x fa-linkedin rounded shadow-sm" />
+														</a>
+														<a href="https://plus.google.com/share?url={url}"
+															class="s_share_google" target="_blank">
+															<i class="fa fa-1x fa-google-plus rounded shadow-sm" />
+														</a>
+														<a href="mailto:?body={url}&amp;subject={title}"
+															class="s_share_email">
+															<i class="fa fa-1x fa-envelope rounded shadow-sm" />
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<style>
+					* {
+					box-sizing: border-box
+					}
+
+					body {
+					font-family: 'Coming Soon', cursive;
+					font-family: inherit;
+					transition: background 1s ease;
+					background: #ffffff;
+					}
+
+					p {
+					color: #ecf0f1;
+					font-size: auto;
+					text-align: center;
+					}
+
+					span {
+					clear: both;
+					font-size: auto;
+					color: #bdc3c7;
+					}
+
+					a {
+					color: #c0392b;
+					text-decoration: none;
+					}
+
+					.sks-slide { .inside { display:table;
+					height: 100%;
+					width: 100%;
+					padding: 0 3em; p { display : table-cell;
+					width: 100%;
+					clear: both;
+					vertical-align: middle;
+					text-align: center;
+					}
+
+					}
+					}
+					.navbar {
+					width: 100%;
+					background-color: transparent !important;
+					}
+
+					.sks_container {
+					max-width: 100%;
+					}
+
+					.sks-sec1-contact-slide-div {
+					height: 789px;
+					width: 100%;
+					line-height: 1.5;
+					}
+
+					.sks-sec1-contact-p {
+					text-align: center;
+					font-size: 20em;
+					font-weight: 900;
+					color: rgba(0, 0, 0, 0.21);
+					}
+
+					.sks-sec2-contact-div1 {
+					width: 100%;
+					}
+
+					.sks-sec2-contact-div2 {
+					width: 50%;
+					float: right;
+					height: 50em;
+					}
+
+					.sks-sec2-contact-img {
+					width: 100%;
+					}
+
+					.sks-sec2-contact-div3 {
+					width: 50%;
+					float: left;
+					height: 50em;
+					background-color: #1c3297;
+					}
+
+					.sks-sec2-contact-div4 {
+					margin: 5%;
+					}
+
+					.sks-sec2-contact-h2 {
+					font-size: 60px;
+					font-weight: 600;
+					padding-bottom: 10px;
+					color: #fff;
+					}
+
+					.sks-sec2-contact-p1 {
+					font-family: 'Encode Sans Semi Condensed', sans-serif;
+					font-size: 15px;
+					letter-spacing: 2px;
+					text-align: left;
+					color: #d0d3d4;
+					}
+
+					.sks-sec2-contact-p2 {
+					float: left;
+					font-family: 'Encode Sans Semi Condensed', sans-serif;
+					font-size: 12px;
+					letter-spacing: 2px;
+					color: #999999;
+					}
+
+					.sks-sec2-contact-div5 {
+					margin-top: 20px;
+					font-size: 18px;
+					}
+				</style>
+			</div>
+		</t>
+	</template>
+</odoo>  		

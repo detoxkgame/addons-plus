@@ -10,7 +10,7 @@
     'description': """
         """,
     'category': "Blog",
-    'depends': ['website', 'website_blog', 'web', 'portal'],
+    'depends': ['website', 'website_blog', 'web', 'portal','skit_website_menu'],
     'data': [
         'views/blog.xml',
 

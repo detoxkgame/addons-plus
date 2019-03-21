@@ -11,8 +11,11 @@
                 'website'
                 ],
     'data': [
-        'views/template.xml'
-        ],
+        'views/template.xml',
+        'views/about.xml',
+        'views/contact.xml',
+        'views/careers.xml',
+       ],
     'qweb': ['src/xml/demo_template.xml'],
     'images': ['static/description/logo.png'],
     'license': "AGPL-3",

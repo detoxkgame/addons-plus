@@ -4,6 +4,27 @@ from odoo.http import request
 
 
 class WebsiteBlog(http.Controller):
+    
+    @http.route(['/about_us'], type='http',
+                    auth='public', website=True)
+    def about_us_mtd(self, **kw):
+        #print ("eaccdsfd dfgdfgd")
+        return request.render('skit_website_menu.about_us')
+
+    @http.route(['/contact_us'], type='http',
+                    auth='public', website=True)
+    def contact_us_mtd(self, **kw):
+        return request.render('skit_website_menu.contact_us')
+    
+    @http.route(['/products'], type='http',
+                        auth='public', website=True)
+    def products_mtd(self, **kw):
+        return request.render('skit_website_menu.products')    
+
+    @http.route(['/careers'], type='http',
+                    auth='public', website=True)
+    def careers_mtd(self, **kw):
+        return request.render('skit_website_menu.careers')
 
     @http.route([
         '/blog',

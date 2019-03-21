@@ -1,53 +1,58 @@
 /* Click to Open a Slide Window, in TOP Menu Corner Icon */
 
 /* Animated Menu Icon */
+.hamburgler {
+	width: 80px;
+	height: 80px;
+	display: block;
+	transition: 0.3s ease all;
+}
 
-/* .hamburgler {
-  width: 80px;
-  height: 80px;
-  display: block;
-  transition: 0.3s ease all;
-}
 .hamburgler.no-hamburgler {
-  transform: rotate(-45deg);
+	transform: rotate(-45deg);
 }
+
 .bun, .meat {
-  display: block;
-  width: 100%;
-  background: #000;
-  height: 5%;
-  transition: 0.3s ease all;
-  border-radius: 50px;
+	display: block;
+	width: 100%;
+	background: #000;
+	height: 5%;
+	transition: 0.3s ease all;
+	border-radius: 50px;
 }
+
 .no-hamburgler .top {
-  height: 21%;
-  width: 15%;
-  margin-left: 40%;
-  border-radius: 50px 50px 0 0;
+	height: 21%;
+	width: 15%;
+	margin-left: 40%;
+	border-radius: 50px 50px 0 0;
 }
+
 .no-hamburgler .bottom {
-  height: 21%;
-  width: 15%;
-  margin-left: 40%;
-  border-radius: 0 0 50px 50px;
+	height: 21%;
+	width: 15%;
+	margin-left: 40%;
+	border-radius: 0 0 50px 50px;
 }
+
 .meat {
-  margin: 20% 0;
+	margin: 20% 0;
 }
+
 .no-hamburgler .meat {
-  margin: 0% 0;
-} */
+	margin: 0% 0;
+}
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .top_menu_column {
 	float: left;
-    width: 50%;
-    padding: 10px;
-    height: 10rem;
-    background-color: transparent;
+	width: 50%;
+	padding: 10px;
+	height: 10rem;
+	background-color: transparent;
 }
 
 .top_menu_container h1 {
@@ -57,12 +62,12 @@
 	margin-bottom: .5rem;
 	line-height: 20px;
 	letter-spacing: 1.5px;
-	text-transform: uppercase;	
+	text-transform: uppercase;
 }
 
 .top_menu_container h1 a {
-	font-size: 2em; 
-	display: inline-block; 
+	font-size: 2em;
+	display: inline-block;
 	margin: 0;
 }
 
@@ -79,106 +84,111 @@
 .top_menu_container p {
 	font-weight: 300;
 	font-size: 14px;
-    margin-top: 0;
-    line-height: 0.5em;
-    opacity: 1;
+	margin-top: 0;
+	line-height: 0.5em;
+	opacity: 1;
 	text-align: left;
-    margin-left: 1.5rem;	
+	margin-left: 1.5rem;
 }
 
 /* Clear floats after the columns */
 .top_menu_container:after {
-  content: "";
-  display: table;
-  clear: both;
+	content: "";
+	display: table;
+	clear: both;
 }
 
-
 .sks_topmenu_overlay {
-  height: 100%;
-  width: 0;
-  position: fixed;
-
-  top: 0;
-  left: 0;
-  background-color: #7c7bad;
-  overflow-x: hidden;
-  transition: 0.5s;
+	height: 100%;
+	width: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: #7c7bad;
+	overflow-x: hidden;
+	transition: 0.5s;
 }
 
 .sks_topmenu_overlay-content {
-  position: relative;
-  top: 0%;
-  width: 100%;
-  text-align: left;
-  
+	position: relative;
+	top: 0%;
+	width: 100%;
+	text-align: left;
 }
 
 .sks_topmenu_overlay a {
-  padding: 8px;
-  text-decoration: none;
-  font-size: 61px;
-  font-weight: bolder;
-  color: #fff;
-  display: block;
-  transition: 0.3s;
-  margin: 0rem 0rem 2rem 4rem;
+	padding: 8px;
+	text-decoration: none;
+	font-size: 61px;
+	font-weight: bolder;
+	color: #fff;
+	display: block;
+	transition: 0.3s;
+	margin: 0rem 0rem 2rem 4rem;
 }
 
 .sks_topmenu_overlay a:hover, .sks_topmenu_overlay a:focus {
-  color: #f1f1f1;
+	color: #f1f1f1;
 }
 
 .sks_topmenu_overlay .closebtn {
-  position: absolute;
-  top: 20px;
-  right: 45px;
-  font-size: 60px;
+	position: absolute;
+	top: 20px;
+	right: 45px;
+	font-size: 60px;
 }
 
 @media screen and (max-height: 450px) {
-  .sks_topmenu_overlay a {font-size: 20px}
-  .sks_topmenu_overlay .closebtn {
-  font-size: 40px;
-  top: 15px;
-  right: 35px;
-  }
+	.sks_topmenu_overlay a {
+		font-size: 20px
+	}
+	.sks_topmenu_overlay .closebtn {
+		font-size: 40px;
+		top: 15px;
+		right: 35px;
+	}
 }
 
 .hamburgler {
-  width: 25px;
-  height: 25px;
-  display: block;
-  transition: 0.5s ease all;
+	width: 25px;
+	height: 25px;
+	display: block;
+	transition: 0.5s ease all;
 }
+
 .hamburgler.no-hamburgler {
-  transform: rotate(-45deg);
-  z-index: 1;
-  position: fixed;
+	transform: rotate(-45deg);
+	z-index: 1;
+	position: fixed;
 }
+
 .bun, .meat {
-  width: 100%;
-  height: 13%;
-  display: block;
-  transition: 0.5s ease all;
-  background: #000;
-  border-radius: 50px;
+	width: 100%;
+	height: 13%;
+	display: block;
+	transition: 0.5s ease all;
+	background: #000;
+	border-radius: 50px;
 }
+
 .no-hamburgler .top {
-  height: 38%;
-  width: 20%;
-  margin-left: 40%;
-  border-radius: 50px 50px 0 0;
+	height: 38%;
+	width: 20%;
+	margin-left: 40%;
+	border-radius: 50px 50px 0 0;
 }
+
 .no-hamburgler .bottom {
-  height: 38%;
-  width: 20%;
-  margin-left: 40%;
-  border-radius: 0 0 50px 50px;
+	height: 38%;
+	width: 20%;
+	margin-left: 40%;
+	border-radius: 0 0 50px 50px;
 }
+
 .meat {
-  margin: 20% 0;
+	margin: 20% 0;
 }
+
 .no-hamburgler .meat {
-  margin: 1% 0;
+	margin: 1% 0;
 }
