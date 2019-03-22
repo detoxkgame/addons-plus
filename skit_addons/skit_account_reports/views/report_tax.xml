@@ -16,21 +16,21 @@
                         <thead>
                             <tr>
                                 <th>Sale</th>
-                                <th>Net</th>
-                                <th>Tax</th>
+                                <th class="text-right">Net</th>
+                                <th class="text-right">Tax</th>
                             </tr>
                         </thead>
                         <tr t-foreach="lines['sale']" t-as="line">
                             <td><span t-esc="line.get('name')"/></td>
-                            <td><span t-att-style="style" t-esc="line.get('net')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
-                            <td><span t-att-style="style" t-esc="line.get('tax')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="line.get('net')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="line.get('tax')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
                         </tr>
                         <tr><td colspan="3"><strong>Purchase</strong></td>
                         </tr>
                         <tr t-foreach="lines['purchase']" t-as="line">
                             <td><span t-esc="line.get('name')"/></td>
-                            <td><span t-att-style="style" t-esc="line.get('net')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
-                            <td><span t-att-style="style" t-esc="line.get('tax')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="line.get('net')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="line.get('tax')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
                         </tr>
                     </table>
                 </div>
