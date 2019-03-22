@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="account_report_param" model="ir.ui.view">
+        <field name="name">Accounting Report</field>
+        <field name="model">accounting.report</field>
+        <field name="inherit_id" ref="skit_account_reports.accounting_report_view"/>
+        <field name="arch" type="xml">
+        <data>
+        <xpath expr="//group[@col='4']" position="after">
+         <group col="2">     
+           <field name="filter_analytic_account_ids" widget="many2many_tags" options="{'no_create': True}"/>         
+           </group>
+        </xpath>
+        </data>
+        </field>
+    </record>  
+       <template id="report_saleorder_document_inherit_sale_stock" inherit_id="skit_account_reports.report_financial">
+          <xpath expr="//div[@class='row mt32 mb32']" position="inside">
+            <div class="col-xs-4" groups="analytic.group_analytic_accounting">
+                        <strong>Analytic Account:</strong>
+                         <p t-esc="', '.join([ lt or '' for lt in print_analytic ])"/>
+             </div>
+          </xpath>
+      </template>
+</odoo>
