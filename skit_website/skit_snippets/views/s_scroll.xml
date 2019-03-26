@@ -415,7 +415,7 @@
 			span {
 			clear: both;
 			font-size: auto;
-			color: #bdc3c7;
+			color: inherit;
 			}
 
 			a {
