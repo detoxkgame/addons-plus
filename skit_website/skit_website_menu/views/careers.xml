@@ -54,7 +54,7 @@
 														<div class="container">
 															<div class="row it">
 																<div id="one">
-																	<div>
+																	<div class="sks-carieer-form-flds">
 																		<span class="sks-career-form-label">Hey, my name is</span>
 																		<input
 																			class="sks-career-form sks-career-form-name"
