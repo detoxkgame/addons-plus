@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<template id="skit_wesbite_style" name="SKIT Website" inherit_id="web.assets_frontend">
+<!-- 	<template id="skit_wesbite_style" name="SKIT Website" inherit_id="web.assets_frontend">
 			<xpath expr="//link[last()]" position="after">
 				<link type="text/stylesheet" src="/skit_website_menu/static/src/css/topmenu.css"></link>
 				<link type="text/stylesheet" src="/skit_website_menu/static/src/css/contact.css"></link>
@@ -9,9 +9,10 @@
 			</xpath>	
 			<xpath expr="//script[last()]" position="after">
 				<script type="text/javascript" src="/skit_website_menu/static/src/js/demo_example.js"></script>
-				<script type="text/javascript" src="/skit_website_menu/static/src/js/menu.js"></script> 
+				<script type="text/javascript" src="/skit_website_menu/static/src/js/menu.js"></script>
+				<script type="text/javascript" src="/skit_website_menu/static/src/js/careers.js"></script> 
 			</xpath>
-		</template>
+		</template> -->
 
 	 <template id="skit_portal_show_sign_in" inherit_id="portal.portal_show_sign_in" name="Show Sign In">
         <xpath expr="//ul[@id='top_menu']" position="inside">

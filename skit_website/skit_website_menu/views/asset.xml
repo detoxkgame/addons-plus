@@ -1,0 +1,14 @@
+<odoo>
+	<template id="skit_website_assets" name="SKIT Website" inherit_id="web.assets_frontend">
+		<xpath expr="//link[last()]" position="after">
+			<link href="/skit_website_menu/static/src/scss/careers.scss" rel="stylesheet" type="text/less" />
+			<link href="/skit_website_menu/static/src/scss/about.scss" rel="stylesheet" type="text/less" />
+			<link href="/skit_website_menu/static/src/scss/contact.scss" rel="stylesheet" type="text/less" />
+		</xpath>
+		<xpath expr="//script[last()]" position="after">
+			<script type="text/javascript" src="/skit_website_menu/static/src/js/demo_example.js"></script>
+			<script type="text/javascript" src="/skit_website_menu/static/src/js/menu.js"></script>
+			<script type="text/javascript" src="/skit_website_menu/static/src/js/careers.js"></script>
+		</xpath>
+	</template>
+</odoo>

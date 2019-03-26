@@ -23,7 +23,8 @@
 				<section class="about_section2">
 					<div class="container sks_container">
 						<div class="row">
-							<div class="sks-slide sks-slide-div" data-background="#3f3d41">
+							<div class="sks-slide sks-slide-div"
+								data-background="#3f3d41">
 								<div class="inside sks-inside">
 									<p class="o_default_snippet_text sks-sec2-content">
 										We believe that
@@ -64,12 +65,13 @@
 												Place to Work 3 times in Finland, and once in
 												<br></br>
 												all of Europe.
-											</p>										
+											</p>
 										</div>
 									</div>
 									<div class="sks-abt-sec3-rhs">
 										<div>
-											<img style="width: 100%; height:100%;" src="https://www.vincit.com/dist/about-img-split.jpg"></img>
+											<img style="width: 100%; height:100%;"
+												src="https://www.vincit.com/dist/about-img-split.jpg"></img>
 										</div>
 									</div>
 								</div>
@@ -78,13 +80,14 @@
 					</div>
 				</section>
 				<style>
-				@import url('https://fonts.googleapis.com/css?family=Proxima+Nova');
+					@import url('https://fonts.googleapis.com/css?family=Proxima+Nova');
 					* {
 					box-sizing: border-box
 					}
 
 					body {
-					font-family: 'proxima-nova', sans-serif;
+					font-family: 'proxima-nova',
+					sans-serif;
 					font-family: inherit;
 					transition:
 					background 1s ease;
@@ -94,13 +97,14 @@
 					p {
 					color: #ecf0f1;
 					font-size: auto;
-					text-align: center;
+					text-align:
+					center;
 					}
 
 					span {
 					clear: both;
 					font-size: auto;
-					color: #bdc3c7;
+					color: inherit;
 					}
 
 					a {
@@ -108,11 +112,13 @@
 					text-decoration: none;
 					}
 
-					.sks-slide { .inside { display:table;
+					.sks-slide { .inside {
+					display:table;
 					height: 100%;
 					width: 100%;
 					padding: 0 3em; p {
-					display : table-cell;
+					display :
+					table-cell;
 					width: 100%;
 					clear: both;
 					vertical-align: middle;
@@ -123,44 +129,8 @@
 					}
 					.navbar {
 					width: 100%;
-					background-color: transparent !important;
-					}
-					
-					.about_section1, .about_section2, .about_section3 {
-					height: 60em;
-					}
-					.sks_container {
-					max-width: 100% !important;
-					}
-					.sks-slide-div {
-					height: 789px; width: 100%; line-height: 1.5;
-					}
-					.sks-inside {
-					margin: 5% 10% 10% 10%;
-					}
-					.sks-sec1-content {
-					letter-spacing: -0.06em; text-align: left; font-size: 68px; font-weight: 900; color: rgba(0, 0, 0, 0.21);
-					}
-					.sks-sec2-content {
-					letter-spacing: -0.04em; line-height: 2em; text-align: left; font-size: 41px; font-weight: 900; color: rgba(255, 255, 255, 0.21);
-					}
-					.sks-sec2-content > span {
-					color: #fff; border: none; border-bottom: 1px solid; -o-border-image: url(https://www.vincit.com/dist/callout-border-dot.svg) 1 repeat; border-image: url(https://www.vincit.com/dist/callout-border-dot.svg) 1 repeat;
-					}
-					.sks-abt-sec3-lhs {
-					float: left; width: 50%; height: 100%;
-					}
-					.sks-abt-sec3-lhs-content {
-					margin-top: 20%; margin-bottom: 20%;
-					}
-					.sks-abt-sec3-lhs-content  p {
-					text-align: left; color: #161517; font-size: 11px; letter-spacing: 1.83px; line-height: 22px; font-weight: 800; text-transform: uppercase; font-weight: 300;
-					}
-					.sks-abt-sec3-lhs-content  h2 {
-					color: #161517; font-size: 26px; line-height: 33px; font-weight: 600; font-family: Proxima Nova A,Helvetica,sans-serif; margin-bottom: 5rem;
-					}
-					.sks-abt-sec3-rhs {
-					float: right; width: 50%; height: 100%;
+					background-color:
+					transparent !important;
 					}
 				</style>
 			</div>
