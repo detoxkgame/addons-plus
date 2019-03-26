@@ -124,12 +124,6 @@ input.sks-career-form {
 	color: #223198 !important;
 }
 
-.uploadDoc {
-	width: 60%;
-	margin-right: 20%;
-	margin-left: 20%;
-}
-
 #one {
 	box-shadow: 2px 2px 6px 3px rgba(255, 255, 255, 0.2);
 	line-height: 4em;
@@ -215,4 +209,20 @@ p {
 	left: 30px;
 	bottom: -40px;
 	text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+#uploader {
+	width: 100%;
+}
+
+.sks-form-upload-btn {
+	width: 30%;
+    margin-left: 20%;
+    margin-right: 0%;
+}
+
+.sks-form-submit-btn {
+	width: 30%;
+    margin-left: 0%;
+    margin-right: 20%;
 }
