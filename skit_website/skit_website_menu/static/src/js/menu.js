@@ -2,22 +2,21 @@ odoo.define('skit_website_menu.menu', function(require) {
 	'use strict';
 	var dom = require('web.dom');
 	var sAnimation = require('website.content.snippets.animation');
-	
 	var FixedMenu = require('website.content.menu');
+					sAnimation.registry.affixMenu = sAnimation.Class.extend({
+						_onWindowUpdate : function() {
+							this._super();
+							var wOffset = $(window).scrollTop();
+							var hOffset = this.$target.scrollTop();
+							this.$headerClone.toggleClass('affixeds',
+									wOffset > (hOffset + 300));
 
-	FixedMenu.sAnimation.registry.affixMenu.include({
-		_onWindowUpdate : function() {
-			var wOffset = $(window).scrollTop();
-			var hOffset = this.$target.scrollTop();
-			this.$headerClone
-					.toggleClass('affixeds', wOffset > (hOffset + 300));
-
-			// Reset opened menus
-			this.$dropdowns.removeClass('show');
-			this.$navbarCollapses.removeClass('show').attr('aria-expanded',
-					false);
-		},
-	});
+							// Reset opened menus
+							this.$dropdowns.removeClass('show');
+							this.$navbarCollapses.removeClass('show').attr(
+									'aria-expanded', false);
+						},
+					});
 
 	var fileTypes = ['pdf', 'docx', 'rtf', 'jpg', 'jpeg', 'png', 'txt'];  //acceptable file types
 	function readURL(input) {
