@@ -49,7 +49,7 @@
 														with the right reward.
 													</p>
 												</div>
-												<form class="sks-career-form-design">
+												 <form class="sks-career-form-design">
 													<div class="p4-container">
 														<div class="container">
 															<div class="row it">
@@ -57,27 +57,27 @@
 																	<div class="sks-carieer-form-flds">
 																		<span class="sks-career-form-label">Hey, my name is</span>
 																		<input
-																			class="sks-career-form sks-career-form-name"
+																			class="sks-career-form sks-career-form-name" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="full name" />
 																		<br></br>
 																		<span class="sks-career-form-label">My Qualification is</span>
 																		<input
-																			class="sks-career-form sks-career-form-qualification"
+																			class="sks-career-form sks-career-form-qualification" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="qualification" />
 																		<br></br>
 																		<span class="sks-career-form-label">You can call me</span>
 																		<input
-																			class="sks-career-form sks-career-form-phone"
+																			class="sks-career-form sks-career-form-phone" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="phone number" />
 																		<br></br>
 																		<span class="sks-career-form-label">You can reach me at</span>
 																		<input
-																			class="sks-career-form sks-career-form-email"
+																			class="sks-career-form sks-career-form-email" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="email" />
 																		<br></br>
 																		<span class="sks-career-form-label">Some more information</span>
 																		<input
-																			class="sks-career-form sks-career-form-about"
+																			class="sks-career-form sks-career-form-about" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="about me" />
 																		<br></br>
 																		<br></br>
@@ -89,15 +89,15 @@
 																				<div class="fileUpload btn btn-next">
 																					<i class="fa fa-upload"></i>
 																					<span class="upl" id="upload">Upload</span>
-																					<input type="file" class="upload up" id="up"
-																						onchange="readURL(this);" />
+																					<input type="file" class="upload up" id="file_upload"/>																				
 																				</div>
 																			</div>
-																			<div class="sks-form-submit-btn">
+																			<div class="sks-form-submit-btn submit">
 																				<a class="btn btn-next sks-career-submit">
 																					<i class="fa fa-paper-plane"></i>
 																					Submit
 																				</a>
+																				
 																			</div>
 																		</div>
 																	</div>
@@ -105,7 +105,7 @@
 															</div>
 														</div>
 													</div>
-												</form>
+												</form> 
 
 												<div id="confirm">
 													<div id="popup">
