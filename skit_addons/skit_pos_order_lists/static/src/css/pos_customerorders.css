@@ -1,0 +1,55 @@
+.pos .screen .oltitle{
+    font-size: 1.5em;
+    width: 100%;
+    font-weight:bold;
+    text-align:center;
+}
+
+.pending_invoice_id{
+	display:none;
+}
+.ol_pendingpay{
+	background-color: #49A6C8;
+    border: #49A6C8;
+    color: #fff !important;
+    padding: 0 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.pending_porder_id{
+	display:none;
+}
+.pos .OrderListButton:hover {
+     color: rgb(94, 185, 55);
+}
+.customer_id{
+	display:none;
+}
+.pending_order_type{
+	display:none;
+}
+.olist_tab{
+	display:flex;
+	margin-bottom: 5px !important;
+}
+.olist-group-item{
+	width:25% !important;
+}
+.olist_scroll{
+	overflow-y: scroll !important;
+}
+.olist_table_bkg{
+	background-color: #fff;
+}
+.olist_table_padding{
+	padding:10px;
+}
+.olist_column_hidden{
+  display:none;
+  visibility:hidden;
+}

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	
+	<t t-extend='OrderSelectorWidget'>
+        <t t-jquery='.order-selector' t-operation='append'>			
+            <div class="order_lists" title="All Order Lists">
+	        	 <span class="order-button square ol_paylater OrderListButton">
+	                 <i class='fa fa-list-ul'></i>
+	            </span>  
+            </div>         
+        </t>
+    </t>
+    
+    <t t-name="OrderListScreenWidget">
+        <div class="ol_paylater clientlist-screen screen">
+            <div class="screen-content orderlist-screen-content" style="max-width: 1325px;">
+                <section class="top-content">   
+	                <span class='button back'>
+	                        <i class='fa fa-angle-double-left'></i>
+	                        Cancel
+	                </span> 
+	                <span>                                                  
+	            		<t t-if='widget.pos.get_client()'>
+	            			<div class='client-name'><t t-esc="widget.pos.get_client().name" /></div>  
+	            		</t>
+	            	</span>        		                              
+                </section>
+                <section class="full-content">
+                    <div class='window olist_scroll'>
+                        <section class='subwindow collapsed'>
+                        	<p class="oltitle">Order Details</p>
+                        	<div class="container">
+									<div class="row">
+								        <div class="bhoechie-tab-container">
+								           <div class="bhoechie-tab-menu">
+								              <div class="olist_tab list-group">
+								                <a href="#" data-id='0' class="list-group-item olist-group-item text-center active">
+									                 Order Lists
+									            </a> 
+									            <a href="#" data-id='1' class="list-group-item olist-group-item text-center">
+									                 Pending Invoices
+									            </a> 
+
+								              </div>
+								            </div> 
+								            <div class="bhoechie-tab olist_table_bkg">								            
+								             <div class="bhoechie-tab-content active olist_table_padding">		
+											   	<div class="orderlist_table">
+											   		<table id="ol_otable"></table>
+											   	</div>
+											   	<div class="pending_table" style="display:none;">
+									             	<table id="ol_pending_invoice_otable"
+													       data-detail-view="true">
+													</table>
+								             	</div>	
+								             </div> 
+								            </div>
+								        </div>
+								  </div>
+								</div>   
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="OLPInvoiceLineScreenWidget">
+        <table class='dl-olist' id="pendinginvoice_oltable">
+			 <thead>
+	            <tr>
+	                <th>S.no</th>
+	                <th>Product</th>      
+	                <th class='text-right' >Qty</th>
+	                <th class='text-right' >UnitPrice</th>
+	                <th class='text-right' >Amount</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+		          <t t-foreach="lines" t-as="line">
+			          <tr>
+			          	<td><t t-esc='line.sno or ""' /></td> 
+			            <td><t t-esc='line.product or ""' /></td>
+			            <td class='text-right' ><t t-esc='line.qty or ""' /></td>
+			            <td class='text-right' ><t t-esc='line.price_unit or ""' /></td>     
+			            <td class='text-right' ><t t-esc='line.amount or ""' /></td>          
+			          </tr>
+		          </t>
+	          </tbody>
+		 </table> 
+    </t>
+    
+	 <!-- Reprint Receipt template -->
+    <t t-name="OrderReprintReceiptScreenWidget">
+        <div class='receipt-screen screen'>
+            <div class='screen-content'>
+                <div class='top-content'>
+		            <span class='button back'>
+		                <i class='fa fa-angle-double-left'></i>
+		                Back
+		            </span>
+                </div>
+                <div class="centered-content touch-scrollable">
+                    <div class="button reprintrec">
+                        <i class='fa fa-print'></i> Print Receipt
+                    </div>
+                    <div class="pos-receipt-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="PosTicketReceipt">
+        <div class="pos-sale-ticket">
+			<t t-foreach="orders" t-as="order">
+            	<div class="pos-center-align"><t t-esc="moment().format('L LT')"/> <t t-esc="order.pos_reference"/></div>
+            <br />
+            <div class="receipt-customer">
+                Customer: <t t-esc="order.customer"/><br />
+            </div>
+            <div class="receipt-mobile">
+                Mobile No.: <t t-esc="order.mobile"/><br />
+            </div>
+            <t t-esc="widget.pos.company.name"/><br />
+            <!-- <div class="receipt-phone">
+                Phone: <t t-esc="widget.pos.company.phone || ''"/><br />
+            </div> -->
+            <div class="receipt-user">
+                User: <t t-esc="widget.pos.get_cashier().name"/><br />
+            </div>
+            <br />
+            <table class='receipt-orderlines'>
+                <colgroup>
+                    <col width='50%' />
+                    <col width='25%' />
+                    <col width='25%' />
+                </colgroup>
+                <tr t-foreach="orderlines" t-as="orderline">
+                    <td>
+                        <t t-esc="orderline.product_id"/>
+                         <t t-if="orderline.discount > 0">
+                            <div class="pos-disc-font">
+                                With a <t t-esc="orderline.discount"/>% discount
+                            </div>
+                        </t>
+                    </td>
+                    <td class="pos-right-align">
+                        <t t-esc="orderline.qty"/>
+                    </td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(orderline.price_unit)"/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table class='receipt-total'>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.amount_total-order.amount_tax)"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tax:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.amount_tax)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Discount:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(discount_total)"/>
+                    </td>
+                </tr>
+                <tr class="emph">
+                    <td>Total:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.amount_total)"/>
+                    </td>
+                </tr>  
+            </table>
+            <br />
+            <table class='receipt-paymentlines'>
+                <t t-foreach="paymentlines" t-as="line">
+                  <tr>
+                      <td>
+                          <t t-esc="line.name"/>
+                      </td>
+                      <td class="pos-right-align">
+                          <t t-esc="widget.format_currency(line.amount)"/>
+                      </td>
+                  </tr>
+                </t>
+            </table>
+            <br />
+            <table class='receipt-change'>
+                <tr><td>Change:</td><td class="pos-right-align">
+                    <t t-esc="widget.format_currency(change)"/>
+                    </td></tr>
+            </table>
+            </t>
+        </div>
+    </t>
+</templates>
