@@ -269,6 +269,7 @@ screens.PaymentScreenWidget.include({
 	                this._super(force_validation);
 	                $('.PayLaterButton').css({"display":"none"});
 	                $('.customerlog-button').css({"display":"none"});
+	                $('.OrderListButton').css({"display":"none"});
 	            }
 	    	}
 	    },
