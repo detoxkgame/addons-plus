@@ -1,7 +1,4 @@
 # -*- encoding: utf-8 -*-
-# © 2016 Samuel Lefever, Jerome Sonnet
-# © 2016 Niboo SPRL (<https://www.niboo.be/>), Be-Cloud
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
     'name': 'Filter Financial reports by Analytic Account',
@@ -15,7 +12,7 @@
 
     """,
     'website': 'http://www.srikeshinfotech.com',
-    'price'  : 45,
+    'price'  : 42,
     'currency': 'EUR',    
     'images': ['images/main_screenshot.png'],
     'data': [
@@ -26,5 +23,5 @@
         'account','skit_account_reports'
     ],
     'installable': True,
-    'application': False,
+    'application': True,
 }
