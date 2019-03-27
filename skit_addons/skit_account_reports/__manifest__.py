@@ -7,7 +7,7 @@
     'author': 'Srikesh Infotech',
     'license': "AGPL-3",
     'website': 'http://www.srikeshinfotech.com',
-    'price': 75,
+    'price': 20,
     'currency': 'EUR',
     'description': """
         This module helps to generate Financial reports Balance Sheet, Profit and Loss, Trial Balance, General Ledger, Partner Ledger and Aged Partner Balance in PDF format
