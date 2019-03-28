@@ -7,10 +7,10 @@
     'author': 'Srikesh Infotech',
     'license': "AGPL-3",
     'website': 'http://www.srikeshinfotech.com',
-    'price': 29,
+    'price': 25,
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
-    'depends': ['base', 'point_of_sale',
+    'depends': ['base', 'point_of_sale', 'account',
                 'skit_pay_later'],
     'data': [
         'views/order_lists_template.xml',
