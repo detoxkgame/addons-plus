@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'skit Blog',
+    'name': 'Skit Website Blog',
     'version': '1.1',
     'summary': 'Blog for webpage',
     'author': 'Srikesh Infotech',
@@ -13,6 +13,7 @@
     'depends': ['website', 'website_blog', 'web', 'portal','skit_website_menu'],
     'data': [
         'views/blog.xml',
+        'views/blog_view.xml',
 
     ],
     'installable': True,

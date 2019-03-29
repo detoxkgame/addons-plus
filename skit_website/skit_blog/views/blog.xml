@@ -10,621 +10,53 @@
 
 
 		<template id="web_blog_pageview">
-				<section class="blog-listing">
-						<div class="blog-grid grid-container" style="position: relative; height: auto;background: #5ab7bf !important;">
-								<div class="rows_view" style="width: 100%; margin-top: 14%;">
-										<div style="width: 90%; margin-left: 5%; margin-right: 5%;">
-												<!-- <t t-esc="blog_post"/> -->
-												<t t-foreach="blog_post" t-as="post">
-														<!-- <t t-set="author" t-value="post['blog_author']" /> -->
-														<a href="" class="column_view">
+		<section class="blog-listing">
+				<div class="blog-grid grid-container" style="position: relative; height: auto;background: #5ab7bf !important;">
+						<div class="rows_view" style="width: 100%; margin-top: 14%;">
+								<div style="width: 90%; margin-left: 5%; margin-right: 5%;">
+										<!-- <t t-esc="blog_post"/> -->
+										<t t-foreach="blog_posts" t-as="blog_post">
+												<a t-attf-href="/blog/#{ slug(blog_post.blog_id) }/post/#{ slug(blog_post) }" class="column_view">
+														<div class="blog-card__category">
+														<t t-set="i" t-value="1"/>
+																<t t-foreach="blog_post.tag_ids" t-as="one_tag">
+																		<t t-esc="one_tag['name']" />
+																		<t t-if="i!=len(blog_post.tag_ids)">
+																			<t t-esc="' , '"/>
+																		</t>
+																		<t t-set="i" t-value="i+1"/>
+																</t>
 
-																<div class="blog-card__category">
-																		<t t-esc="post['blog_tag']" />
+														</div>
+														<h2 class="article-card__title">
+																<t t-esc="blog_post['name']" />
+														</h2>
+														<div class="article-card__snippet">
+																<t t-esc="blog_post['subtitle']" />
+														</div>
+														<div class="article-card__author">
+																<div class="article-card__author-img">
+																		<img class="article-card__author-img"
+																				t-att-src="'/web/image/res.partner/%s/image' % blog_post['author_id'].id" />
 																</div>
-																<h2 class="article-card__title">
-																		<t t-esc="post['blog_title']" />
-																</h2>
-																<div class="article-card__snippet">
-
-																		<t t-esc="post['blog_subtitle']" />
-																</div>
-																<div class="article-card__author">
-																		<div class="article-card__author-img">
-																	<!-- 			<img class="article-card__author-img" t-att-src="'/web/image/res.partner/%s/image' % author.id" /> -->
-					 <!-- <img class="article-card__author-img" t-att-src="data:image/jpeg;base64,post['author_img']" /> --> 
-																		<img class="article-card__author-img"  t-attf-src="#{post['author_img']}"/>
+																<div class="article-card__author-details">
+																		<div class="article-card__name">
+																				<t t-esc="blog_post['author_id'].name" />
 																		</div>
-																		<div class="article-card__author-details">
-																				<div class="article-card__name">
-																						<t t-esc="post['author_name']" />
-																				</div>
-																				<div class="article-card__date">
-																						<t t-esc="post['post_date']" />
-																				</div>
+																		<div class="article-card__date">
+																				<t t-esc="blog_post['post_date'].strftime('%d %b %y')" />
 																		</div>
 																</div>
-														</a>
-												</t>
-
-										</div>
-								</div>
-						</div>
-				</section>
-		</template>
-
-
-
-		<template id="web_blog_pageview1">
-				<section class="blog-listing">
-						<div class="blog-grid grid-container" style="position: relative; height: auto;background: #5ab7bf !important;">
-								<div class="rows_view" style="width: 100%; margin-top: 14%;">
-										<div style="width: 90%; margin-left: 5%; margin-right: 5%;">
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Culture
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Petteri Roponen</div>
-																		<div class="article-card__date">Feb 21</div>
-																</div>
 														</div>
 												</a>
-												<a href="" class="column_view  article-card">
-														<div class="blog-card__category">
-																Culture
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Ville Houttu</div>
-																		<div class="article-card__date">Feb 6</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-
-												<a href="" class="column_view">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-										</div>
-
+										</t>
 
 								</div>
-						</div>
-				</section>
-		</template>
-
-		<template id="web_blog_page">
-				<div classs="blog_page" style="width: 100% !important; max-width: 100% !important;">
-						<div class="container" style="width: 100% !important; max-width: 100% !important;">
-
-
-								<section class="blog-listing">
-										<div class="blog-grid grid-container" style="position: relative; height: 3198px;">
-												<div class="grid-sizer"></div>
-												<a href="" class="contained-cell blog-card article-card">
-														<div class="blog-card__category">
-																Culture
-														</div>
-														<h2 class="article-card__title">
-																Aloha from JSConf Hawai’i!
-														</h2>
-														<div class="article-card__snippet">
-																Vincit visited JSConf Hawai’i in February 2019. Here's our findings about
-																the conference.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Petteri Roponen</div>
-																		<div class="article-card__date">Feb 21</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Culture
-														</div>
-														<h2 class="article-card__title">
-																The Story of the Bus... and My Encounter with the Irvine Police
-														</h2>
-														<div class="article-card__snippet"></div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Ville Houttu</div>
-																		<div class="article-card__date">Feb 6</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Kickstart your GraphQL API with Hasura
-														</h2>
-														<div class="article-card__snippet">
-																We will take a look at how we can accelerate our GraphQL API
-																development using Hasura.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Turkka Mannila</div>
-																		<div class="article-card__date">Feb 1</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Product Owner Wanted
-														</h2>
-														<div class="article-card__snippet">
-																Here are a few of the most common Product Owner related issues that many
-																development teams are experiencing
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Mikko Salokangas</div>
-																		<div class="article-card__date">Jan 25</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Culture
-														</div>
-														<h2 class="article-card__title">
-																2018 Second Anniversary Update with Video
-														</h2>
-														<div class="article-card__snippet">
-																As we race into 2019, here is a quick video and update of all the
-																exciting things that happened for Vincit California in 2018
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Rachel Valentine</div>
-																		<div class="article-card__date">Jan 3</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   blurb-card -green">
-														<div class="blog-card__category">Blurb</div>
-														<div class="blurb-card__blurb">
-																<p>Vincit Dev Talks 7.0 is on the calendar! Be sure to RSVP
-																		through our meetup page
-																</p>
-														</div>
-														<div class="blurb-card__date">Nov 26</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																How to Use RxSwift with MVVM Pattern – Part 1
-														</h2>
-														<div class="article-card__snippet">
-																This article is all about how to use RxSwift with MVVM. RxSwift has been
-																a hot topic in the swift community for a few years now, but
-																somehow I've managed to avoid it.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Jussi Suojanen</div>
-																		<div class="article-card__date">Oct 23</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																SummAR of ’17 Part 2: Development Edition
-														</h2>
-														<div class="article-card__snippet">
-																In a previous blog post about my summer at Vincit, I went over some
-																general information and user experiences about HoloLens.
-																This post picks up right where the last one ended and offers
-																some insight in to the development process for HoloLens.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Eemeli Heinonen</div>
-																		<div class="article-card__date">Jan 12</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   blurb-card -purple">
-														<div class="blog-card__category">Blurb</div>
-														<div class="blurb-card__blurb">
-																<p>
-																		Meet us tonight at our new office Open House event
-																		5:00-8:00pm. Enjoy the Irvine Mayor’s speech, 11th floor
-																		views, double the taps and #
-																		<strong>ducks</strong>
-																		going #
-																		<strong>disco</strong>
-																		. Welcome!
-																</p>
-														</div>
-														<div class="blurb-card__date">Dec 19</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																SummAR of ‘17
-														</h2>
-														<div class="article-card__snippet">
-																Even though Augmented Reality is still young, the AR hype train is
-																gathering momentum steadily, as more and more companies
-																invest in the technology.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Eemeli Heinonen</div>
-																		<div class="article-card__date">Dec 5</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Design
-														</div>
-														<h2 class="article-card__title">
-																Code Monkey in Defense of Good Design Work and Tight Cross-Disciplinary
-																Collaboration
-														</h2>
-														<div class="article-card__snippet">
-																There often is quite a bit of confusion about what “UX designers” and
-																“service designers” actually do in a software project.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Antti Martikainen</div>
-																		<div class="article-card__date">Nov 30</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																How we stream events at Vincit
-														</h2>
-														<div class="article-card__snippet">
-																Vincit was founded in Tampere in 2007 but it has since expanded to
-																Helsinki, Turku and all the way to California. Every month
-																we have an internal meeting where we go through what has
-																happened during the previous month. Here's how we do it.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Antti Pulakka</div>
-																		<div class="article-card__date">Oct 5</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Culture
-														</div>
-														<h2 class="article-card__title">
-																Empty Promises and Other Heresay
-														</h2>
-														<div class="article-card__snippet">
-																How functional programming in Clojure made me a better person
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Toni Vanhala</div>
-																		<div class="article-card__date">Aug 30</div>
-																</div>
-														</div>
-												</a>
-												<a href="" class="blog-card contained-cell   article-card">
-														<div class="blog-card__category">
-																Technology
-														</div>
-														<h2 class="article-card__title">
-																Software Development 450 Words Per Minute
-														</h2>
-														<div class="article-card__snippet">
-																“Something’s a little bit off here.” That’s what I predict your first thought to
-																be upon seeing my cubicle for the first time. There’s no
-																screen or mouse in sight. Instead there’s a guy hammering
-																away on a keyboard, staring at seemingly nothing.
-														</div>
-														<div class="article-card__author">
-																<div class="article-card__author-img"
-																		style="background-image: url('../skit_blog/static/src/img/user.jpg')"
-																></div>
-																<div class="article-card__author-details">
-																		<div class="article-card__name">Tuukka Ojala</div>
-																		<div class="article-card__date">Aug 28</div>
-																</div>
-														</div>
-												</a>
-
-										</div>
-								</section>
-
-								<!-- </t> -->
 						</div>
 				</div>
-		</template>
+		</section>
+</template>
+
 		<template name="web_blog_page" inherit_id="website_blog.latest_blogs" id="skit_blog_post_complete">
 				<xpath expr="//div[1]" position="replace">
 
@@ -633,6 +65,7 @@
 
 		</template>
 		
+		
 		<!-- Nav menu -->
 
 		<template id="skit_frontend_layoutview" name="Custom Menus" inherit_id="portal.frontend_layout">
@@ -640,7 +73,7 @@
 				<attribute name="class" add="skit_portal" separator=" " />
 			</xpath>
 		</template>
-
-		<!-- <template id="skit_frontend_layoutview" inherit_id="portal.frontend_layout"> <xpath expr="//header/nav/div[@class='container']" 
-				position="attributes"> <attribute name="class" add="container portal" separator=" "/> </xpath> </template> -->
+		
+		
+		
 </odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<data>
+				<record id="skit_blog_view" model="ir.ui.view">
+						<field name="name">blog.post.form.inherit</field>
+						<field name="model">blog.post</field>
+						<field name="inherit_id" ref="website_blog.view_blog_post_form" />
+						<field name="arch" type="xml">
+								<xpath expr="//field[@name='tag_ids']" position="after">
+										<field name="content" />
+								</xpath>
+						</field>
+
+				</record>
+		</data>
+
+</odoo>
