@@ -69,9 +69,13 @@ $(document).ready(function(){
 				          }
 				          })
 				      }
+				 
 				      reader.readAsDataURL(file);			
 		  }
-		  return false; 
+		  else{
+			  return false;
+		  } 
+		  
 	});
 	  
 	 

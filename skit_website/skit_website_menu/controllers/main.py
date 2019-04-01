@@ -38,4 +38,4 @@ class Website(http.Controller):
                                                 })
             samo = sam._convert_to_write({name: sam[name] for name in sam._cache})
             new_attachment = request.env['ir.attachment'].sudo().create(samo)
-        return True
+        return []
