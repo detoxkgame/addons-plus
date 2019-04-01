@@ -1,6 +1,7 @@
 
 from odoo import http
 from odoo.http import request
+import base64
 
 
 class Website(http.Controller):
@@ -11,6 +12,8 @@ class Website(http.Controller):
         """ Create New application """
 
         data = post.get('doxFile')
+        data = data.split(",")
+        data = data[1]
         file_name = post.get('file_name')
         file_size = post.get('size')
         file_type = post.get('file_type')
@@ -27,14 +30,18 @@ class Website(http.Controller):
                                             'partner_name': post['name']
                                             })
         if new_application:
+            bin_data = base64.b64decode(data) if data else b''
             sam = request.env['ir.attachment'].new({'name': file_name,
                                                     'res_model': 'hr.applicant',
                                                     'res_id': new_application.id,
                                                     'db_datas': data,
                                                     'datas_fname': file_name,
                                                     'type': 'binary',
-                                                    'file_size': file_size,
-                                                    'mimetype': file_type
+                                                    # 'file_size': file_size,
+                                                    'mimetype': file_type,
+                                                    'file_size': len(bin_data),
+                                                    'checksum': request.env['ir.attachment']._compute_checksum(bin_data),
+                                                    'index_content': request.env['ir.attachment']._index(bin_data, file_name, file_type)
                                                 })
             samo = sam._convert_to_write({name: sam[name] for name in sam._cache})
             new_attachment = request.env['ir.attachment'].sudo().create(samo)
