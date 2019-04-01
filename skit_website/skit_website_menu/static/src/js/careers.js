@@ -59,9 +59,12 @@ $(document).ready(function(){
 				              contentType: false,
 
 				          success: function(data, textStatus, jqXHR){
-				              console.log('Saved');
+				             
 				              $('#confirm').fadeIn( 600 ).delay( 2500 ).fadeOut( 700 );
 							  $('.sks-career-form-design').trigger("reset");
+							  $('.sks-career-form-design #file_upload').val();
+							  $('.sks-career-form-design #upload').text("Upload");
+							  
 				          },
 				          error: function (jqXHR, textStatus, errorThrown) { 
 				        	  
