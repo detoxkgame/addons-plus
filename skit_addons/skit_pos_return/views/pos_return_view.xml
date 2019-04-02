@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+		<record id="view_pos_return_form" model="ir.ui.view">
+		        <field name="name">pos.order.form.view.inherit.event</field>
+		        <field name="model">pos.order</field>
+		        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"></field>
+		        <field name="arch" type="xml">
+		            <xpath 
+		            	expr="/form/sheet/notebook/page[1]/field[@name='lines']/tree//field[@name='discount']"
+							position="after"> 
+					        <field name="return_qty" readonly="1" />
+					        <field name="reason_for_return" />
+					        <field name="refund_line_id" invisible="1" />
+		        	</xpath>
+		        	<xpath 
+		            	expr="//field[@name='partner_id']"
+							position="after"> 
+					        <field name="is_refund" readonly="1" />
+		        	</xpath>
+		        	<!-- <xpath expr="//header/button[@name='refund']"
+		        			 position="replace">
+		        			 <button name="refund" string="Return Products" type="object"
+		        			 	invisible="1"/> 
+		        	</xpath> -->
+		        </field>
+	 	</record>
+	    
+	    <!-- For creating Checkbox in products screen (Under Sales tab)  -->	
+	    <record id="product_template_discount_view" model="ir.ui.view">
+		<field name="name">product.template.form.inherit</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="stock.view_template_property_form" />
+		<field name="arch" type="xml">
+			<!-- <group name="pos" position="inside"> -->
+			<xpath expr="//group//field[@name='to_weight']" position="after">
+					<field name="returnable"/>
+					<field name="return_days"
+						attrs="{'invisible': [('returnable','!=',True)]}"/>
+			</xpath>
+			<!-- </group> -->
+		</field>
+		</record>
+		
+		<!-- For creating Textbox in products (Under category tab)  -->
+		<record id="view_category_property_form1" model="ir.ui.view">
+        <field name="name">product.category.stock.property.form.inherit</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='property_valuation']" position="after">
+                    <field name="categ_return_days"/>
+            </xpath>
+        </field>
+    	</record>
+	    	
+	    <record id="action_pos_return" model="ir.actions.act_window">
+	        <field name="name">Return Orders</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">pos.order</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" eval="False"/>
+	        <field name="domain">[('is_refund', '=', True)]</field>
+	        <field name="help" type="html">
+	            <p class="oe_view_nocontent_create">
+	                Click to create a new order.
+	            </p><p>
+	                Use this menu to browse previous orders. To record new
+	                orders, you may use the menu <i>Your Session</i> for
+	                the touchscreen interface.
+	            </p>
+	        </field>
+    	</record>
+    
+	    <menuitem id="menu_pos_return" parent="point_of_sale.menu_point_of_sale" action="action_pos_return" sequence="4" groups="point_of_sale.group_pos_manager,point_of_sale.group_pos_user"/>
+    </data>
+</odoo>

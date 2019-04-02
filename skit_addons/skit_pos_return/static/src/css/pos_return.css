@@ -1,0 +1,53 @@
+.pos .returnbtn:hover {
+     color: rgb(94, 185, 55);
+}
+.width100{
+	width:100%;
+}
+.control-left{
+	float:left;
+}
+.returnbtn-confirm, .complete-returnbtn{
+	background-color:rgb(94, 185, 55) !important;
+	color: #fff;
+}
+.displaynone{
+	display:none;
+}
+.footer{
+	height: 65px !important;
+}
+/* .pos .clientlist-screen .button {
+	line-height: 32px;
+    padding: 1px 13px;
+    background: rgb(230, 230, 230);
+    margin: 4px !important;
+    border-radius: 3px;
+    border: solid 1px rgb(209, 209, 209);
+    cursor: pointer;
+    transition: all 150ms linear;
+} */
+.return_confirm, .return_cancel{
+	margin: 4px !important;
+}
+
+@media print{
+	.pos .pos-sale-ticket{
+        margin: 0;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        border: none !important;
+        font-size: 14px !important;
+        width: 300px !important;
+    }
+    .pos .pos-sale-ticket .barcode-lines{
+    	/* width:0px; */
+    	font-size:100em !important
+    }
+}
+.error{
+	display: none;
+	color: red;
+	text-align: center;
+	font-size: initial;
+}

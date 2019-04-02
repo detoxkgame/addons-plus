@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<template id="inv_reports" name="return_invoice_print" inherit_id="account.report_invoice_document">
+			<xpath expr="//div[@name = 'reference']" position="replace">
+				<div name="reference" class="col-xs-2" t-if="o.reference">
+                <strong>Reference:</strong>
+                    <p t-field="o.name"/>
+                </div>
+			</xpath>
+			
+			<xpath expr="//table[@class='table table-sm'][1]" position="replace">
+				<t t-set="invoice_type" t-value="o._get_invoice_type()"/>
+				<t t-set="is_refund_invoice" t-value="invoice_type['is_refund_inv']"/>
+				<table class="table table-sm" name="invoice_line_table">
+	            	<thead>
+						<tr>
+	                    <t t-set="colspan" t-value="6"/>
+		                    <th class="text-left"><span>Description</span></th>
+		                    <th class="d-none text-left"><span>Source Document</span></th>
+		                    <th class="text-right"><span>Quantity</span></th>
+		                    <th t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Unit Price</span></th>
+		                    <th t-if="display_discount" t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+		                    	<span>Disc.(%)</span>
+		                    	<t t-set="colspan" t-value="colspan+1"/>
+		                    </th>
+		                    <th t-attf-class="text-left {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Taxes</span></th>
+		                    <th class="text-right">
+		                    	<span groups="account.group_show_line_subtotals_tax_excluded">Amount</span>
+		                        <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+		                    </th>
+	                    </tr>
+	                </thead>
+	                <tbody class="invoice_tbody">
+					<t t-set="current_subtotal" t-value="0"/>
+	                <t t-foreach="o.invoice_line_ids" t-as="line">
+	                <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+	                <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+						<tr t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
+	                    <t t-if="not line.display_type" name="account_invoice_line_accountable">
+	                    	<td name="account_invoice_line_name"><span t-field="line.name"/></td>
+	                        <td class="d-none"><span t-field="line.origin"/></td>
+	                        <td class="text-right">
+	                        	<t t-if="is_refund_invoice">
+							    	<t t-set="qty" t-value="int(line.quantity)*-1"/>
+							        <t t-esc="qty" />
+							    </t>
+							    <t t-else="">
+					            	<span t-field="line.quantity"/>
+					            </t>
+	                            <span t-field="line.uom_id"  groups="uom.group_uom"/>
+	                        </td>
+	                        <td t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+	                        	<span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+	                        </td>
+	                        <td t-if="display_discount" t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+	                        	<span t-field="line.discount"/>
+	                        </td>
+	                        <td t-attf-class="text-left {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+	                        	<span t-esc="', '.join(map(lambda x: (x.description or x.name), line.invoice_line_tax_ids))"/>
+	                        </td>
+	                        <td class="text-right">
+		                        <t t-if="is_refund_invoice">
+		                        	<span>-</span><span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+			                        <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+			                    </t>
+			                    <t t-else="">
+			                    	<span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+			                        <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+				                </t>
+	                        </td>
+	                        </t>
+	                        <t t-if="line.display_type == 'line_section'">
+		                        <td t-att-colspan="colspan">
+		                        	<span t-field="line.name"/>
+		                        </td>
+	                        	<t t-set="current_section" t-value="line"/>
+	                        	<t t-set="current_subtotal" t-value="0"/>
+	                        </t>
+	                        <t t-if="line.display_type == 'line_note'">
+		                        <td t-att-colspan="colspan">
+		                        	<span t-field="line.name"/>
+		                        </td>
+	                        </t>
+	                    </tr>
+	                    <t t-if="current_section and (line_last or o.invoice_line_ids[line_index+1].display_type == 'line_section')">
+		                    <tr class="is-subtotal text-right">
+			                    <td t-att-colspan="colspan">
+			                    	<strong class="mr16">Subtotal</strong>
+			                    	<t t-if="is_refund_invoice">
+										<span>-</span><span
+			                    		t-esc="current_subtotal"
+			                    		t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+									</t>
+									<t t-else="">
+			                    		<span
+			                    		t-esc="current_subtotal"
+			                    		t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+			                    	</t>
+			                    </td>
+		                    </tr>
+	                    </t>
+	                </t>
+	                </tbody>
+	            </table>
+            </xpath>
+            
+            <xpath expr="//div[@class='clearfix']" position="replace">
+           	<div class="clearfix">
+		        <div id="total" class="row">
+					<div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+			            <table class="table table-condensed" style="min-width: 250px;max-width: 400px;">
+			            	<tr class="border-black">
+				                <td></td>
+				                <td><strong>Subtotal</strong></td>
+					                <td class="text-right">
+					                <t t-if="is_refund_invoice">
+										<span>-</span><span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+									</t>
+									<t t-else="">
+					               		<span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+					                </t>
+				               		</td>
+			                </tr>
+							<t t-foreach="o.amount_by_group" t-as="amount_by_group">
+				                <tr style="border-bottom:1px solid #dddddd;">
+				                <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+					                <td>
+					                	<span t-esc="amount_by_group[0]"/>
+					                </td>
+					                <td>
+						                <span>&amp;nbsp;<span>on</span>
+						               	</span> 
+						                <t t-esc="amount_by_group[4]"/>
+					                </td>
+					                <td class="text-right">
+						                <t t-if="is_refund_invoice">
+											<span>-</span><span t-esc="amount_by_group[3]"/>
+										</t>
+										<t t-else="">
+											<span t-esc="amount_by_group[3]"/>
+										</t>
+					                </td>
+				                </t>
+				                <t t-else="">
+					                <td><span t-esc="amount_by_group[0]"/></td>
+					                <td class="text-right">
+					                	<span t-esc="amount_by_group[3]" />
+					                </td>
+				                </t>
+				                </tr>
+							</t>
+							<tr class="border-black">
+				                <td></td>
+				                <td><strong>Total</strong></td>
+				                <td class="text-right">
+					                <t t-if="is_refund_invoice">
+										<span>-</span><span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+									</t>
+									<t t-else="">
+					                	<span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+					                </t>
+				                </td>
+			                </tr>
+			                <tr class="border-black">
+			                <t t-set="statement" t-value="o._get_payment_modes()" />
+								<t t-if="statement">
+									<t t-if="o._get_current_pending_invoice()">
+										<tr t-foreach="statement" t-as="payment">
+										<t t-if="(not(payment['journal'].is_pay_later))">
+											<td></td>
+											<td><t t-if="(not(payment['journal'].is_pay_later))"><h5><span t-esc="payment['journal'].name"></span></h5></t></td>
+											<td class="text-right"><h5><span t-esc="payment['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'></span></h5></td>
+										</t>
+										</tr>
+									</t>
+									<t t-else="">								
+										<tr t-foreach="statement" t-as="payment">
+										<td></td>
+										<td><h5><span t-esc="payment['journal'].name"></span></h5></td>
+										<td class="text-right"><h5><span t-esc="payment['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'></span></h5></td>
+										</tr>
+									</t>
+								</t>
+							</tr>
+			            </table>
+		            </div>
+	            </div>
+	        </div>
+            </xpath>
+       </template>
+
+</odoo>

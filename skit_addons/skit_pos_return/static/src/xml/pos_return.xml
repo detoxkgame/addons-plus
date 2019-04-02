@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	
+	<!-- To add barcode in reciept -->
+	<t t-extend='PosTicket'>
+	    <t t-jquery='.receipt-user' t-operation='after'>
+        	<div id="barcode"></div>
+       	</t>
+	</t>
+	
+	<!-- To add return button in POS screen -->
+	<t t-extend='OrderSelectorWidget'>
+        <t t-jquery='.order-selector' t-operation='append'>			
+            	<div class="return" title="Returns">
+	        	 <span class="order-button square returnbtn">
+	                 <i class='fa fa-repeat'></i>
+	            </span>  
+            </div>         
+        </t>
+    </t>
+   
+    <t t-name="ScanBarcodeWidget">
+	    <div class="modal-dialog clientlist-screen">     
+            <div class="popup popup-text">
+                <p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                	<div  class='packlot-lines'>               
+                	<table class="ol-table width100">
+			            <tr>
+			            <td>
+			            <span>Please scan the barcode.</span><br></br>
+			            <br></br>
+			            <input type="text" name="barcode_no"  class="barcode_no" autofocus="autofocus"/></td>
+			            </tr>		            
+		            </table>
+                    </div>
+                	<div class="footer">
+                    	<div class="button confirm return_confirm" id="scan_confirm"> Ok </div>
+                    	<div class="button cancel return_cancel"> Cancel </div>
+                	</div>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="ReturnPopupWidget">
+	    <div class="modal-dialog clientlist-screen">     
+            <div class="popup popup-text">
+                <p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                	<div  class='packlot-lines'>               
+                	<table class="ol-table width100">
+                		<thead>
+				            <tr>
+					            <th style="float:left">Product (Qty.)</th>
+					            <th></th>
+					            <th>Return Qty.</th>
+					            <th class="reason_for_return">Reason for return</th>
+				            </tr>
+			            </thead>
+			            <tbody>
+					            <t t-if="widget.options.product_details">
+					            <t t-foreach='widget.options.product_details' t-as='line'>
+					            	<tr class="get_return_products" t-attf-id="#{line.id}">
+						            	<td class="control-left">
+						            		<br></br>
+						            		<input type="hidden" class="control-left" name="productid"  t-att-value="line.product_id" t-attf-id="id-#{line.id}"/>
+						            		<t t-if="line.product_name != 'Step Discount'">
+						            			<span t-attf-id="product_name-#{line.id}"><t t-esc='line.product_name'/></span><span t-attf-id="quantity-#{line.id}">(<t t-esc='line.quantity'/>)</span>
+						            		</t>	
+				                       	    <t t-else="">
+				                       	    	<span class="displaynone" t-attf-id="product_name-#{line.id}"><t class="displaynone" t-esc='line.product_name'/></span><span class="displaynone" t-attf-id="quantity-#{line.id}">(<t class="displaynone" t-esc='line.quantity'/>)</span>
+				                       	    </t>
+				                       	    <input type="hidden" class="control-left" name="price"  t-att-value="line.price" t-attf-id="price-#{line.id}"/>	
+				                       	    <input type="hidden" class="control-left" name="quanity"  t-att-value="line.quantity" t-attf-id="qty-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left product" name="product_name"  t-att-value="line.product_name" t-attf-id="product_name-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="partner"  t-att-value="line.partner" t-attf-id="partner-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="is_refund"  t-att-value="line.is_refund" t-attf-id="is_refund-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="discount"  t-att-value="line.discount" t-attf-id="discount-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="returnable"  t-att-value="line.returnable" t-attf-id="returnable-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="date_order"  t-att-value="line.date_order" t-attf-id="date_order-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="return_days"  t-att-value="line.return_days" t-attf-id="return_days-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="categ_return_days"  t-att-value="line.categ_return_days" t-attf-id="categ_return_days-#{line.id}"/>
+				                       	    <t  t-if="line.pack_lot_ids">
+				                       	    <t t-foreach='line.pack_lot_ids' t-as='lot'>				
+				                       	    <input type="hidden" class="control-left" name="lot"  t-att-value="lot[2].lot_name" t-attf-id="lot-#{line.id}"/>
+				                       	    </t>
+				                       	    </t>
+										</td>
+										<td></td>
+										<td>
+						            		<br></br>
+						            		<t t-if="line.product_name != 'Step Discount'">
+						            			<input type="text" class="control-left" name="barcode_no"  t-attf-id="returnqty-#{line.id}"/>
+						            		</t>
+			            					<t t-else="">
+			            						<input type="hidden" class="control-left" name="barcode_no"  t-attf-id="returnqty-#{line.id}" t-attf-value="#{line.quantity}"/>
+			            					</t>				
+										</td>
+										<td>
+										<t>
+											<br></br>
+											<input type="text" class="control-left reason_for_return" name="reason_for_return"  t-attf-id="reason_for_return-#{line.id}"/>
+						            	</t>
+						            	</td>
+									</tr>
+					            </t>
+					            </t>
+			            </tbody>		            
+		            </table>
+                    </div>
+                	<div class="footer">
+                		<span class="error">Return Quantity exceeded.</span>
+                    	<div class="button cancel">
+                        	Cancel
+                    	</div>
+                    	<div class="button returnbtn-confirm" id="return_confirm">
+                        	Return
+                    	</div>
+                    	<div class="button confirm complete-returnbtn" id="complete_return">
+                        	Complete Return
+                    	</div>
+                	</div>
+            </div>
+        </div>
+    </t>
+</templates>

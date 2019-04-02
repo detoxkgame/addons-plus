@@ -3,6 +3,7 @@
 	<data>
 		<template id="inv_report" inherit_id="account.report_invoice_document">
 			<xpath expr="//div[@class='clearfix']" position="replace">
+			<div class="clearfix">
 				<div id="total" class="row">
 				<div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
                                 <table class="table table-condensed" style="min-width: 250px;max-width: 400px;">
@@ -68,6 +69,7 @@
 						</t>
 						</tr>
                     </table>
+                            </div>
                             </div>
                             </div>
 			</xpath> 

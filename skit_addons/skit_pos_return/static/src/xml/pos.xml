@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	
+	<!-- Payment mode edit - POPUP Widget  -->
+	<t t-name="PaymentEditPopupWidget">
+		<div class="modal-dialog clientlist-screen">  
+    		<div class="popup pos_payment_edit_popup text-left">
+				<p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                <p class="body"><t t-esc=" widget.options.body || '' "/></p>
+                <t t-if="widget.options.lines">	     
+         			<table class="client-list" id="payment-grid">
+			 			<thead>
+	            			<tr>
+				        		<th>Invoice No.</th>
+				                <th>Statement</th>      
+				                <th>Payment Mode</th>
+				                <th>Amount</th>
+				                <th>New Payment mode</th>
+				                <th><span class="payment-add fa fa-plus" name="add"> </span></th>
+				                <th></th>
+				                <th></th>
+				                <th></th>
+				            </tr>
+						</thead>
+	          			<tbody class="client-list-contents edit_payment_tbody">
+				        	<t t-set="i" t-value="0"/>
+				          	<t t-set="amount_total" t-value="0"/>
+				          	<t t-set="order_id" t-value="0"/>
+				    		<tr class="text-left display_none" t-att-id="0">
+								<td></td> 
+						      	<td></td>
+						       	<td><span class="old_payment"></span></td>
+						        <td><input class="payment_amount" name='amount' type="text"></input></td>        
+						        <td>
+						       		<select class="payment_mode_select styled-select" name='payment_mode'>
+										<option t-att-value="0"><t t-esc="''"/></option>
+							        	<t t-foreach="widget.options.payment_mode_list" t-as="payment_mode">
+								  			<option t-att-value="payment_mode.value"><t t-esc="payment_mode.key"/></option>
+							        	</t>
+									</select>
+						       	</td>
+								<td> <span class="payment-delete fa fa-trash-o" name="delete"></span></td>
+						       	<td></td>	
+						       	<td></td>	
+						       	<td></td>			              
+							</tr>
+					  		<t t-foreach="widget.options.lines" t-as="line">
+								<tr class="text-left payment_rows" t-att-id="i">
+									<td><t t-esc='line.invoice_no or ""' /></td> 
+						            <td><t t-esc='line.statement or ""' /></td>
+						            <td><span class="old_payment" t-att-old-journal-id="line.journal_id"><t t-esc='line.payment_mode or ""' /></span></td>
+						            <td><input class="payment_amount" name='amount' type="text" t-att-value='line.amount or ""'></input></td>        
+						            <td>
+						            	<select class="payment_mode_select styled-select" name='payment_mode'>
+						      				<option t-att-value="0"><t t-esc="''"/></option>
+							             	<t t-foreach="widget.options.payment_mode_list" t-as="payment_mode_list">
+								           		<option t-att-value="payment_mode_list.value"><t t-esc="payment_mode_list.key"/></option>
+							             	</t>
+							            </select>
+						       		</td>
+									<td><span class="payment-delete fa fa-trash-o" name="delete"></span></td>	
+						       		<td><span class="bank_stmt_line_id display_none"><t t-esc='line.bank_stmt_line_id or ""' /></span></td>						              
+									<td><span class="old_amount display_none"><t t-esc='line.amount' /></span></td>
+									<td><span class="display_none"></span></td>	
+									    
+								</tr>
+								<t t-set="i" t-value="i+1"/> 
+								
+								<t t-if="line.invoice_amount_total">
+						    		<t t-set="amount_total" t-value="line.invoice_amount_total"/> 
+						    	</t>
+						    	<t t-else="">
+						    		<t t-set="amount_total" t-value="line.order_amount_total"/> 
+						    	</t>
+						    	 
+						    	<t t-set="order_id" t-value="line.order_id"/> 
+					  		</t>  
+						    <tr class="text-left total" >	   
+								<td><strong>Invoice/Order total</strong></td>		
+								<td id="inv_total">
+									<span class="amount_total"><t t-esc='amount_total or ""'/></span>
+								</td>
+								<td><strong>Total</strong></td>	
+								<td id="pay_total">
+									<span class="payment_total"><t t-esc='amount_total or ""'/></span>
+								</td>  
+								<td><span class="old_payment"></span></td>   
+								<td><span class="display_none order_id"><t t-esc='order_id or ""' /></span></td>   
+								<td></td>  
+								<td></td>    
+								<td></td>            
+							</tr>
+						</tbody>
+					</table> 
+				</t>
+                <div class="footer">
+                	<div class="payment_edit_error_panel">
+                		<span class="error">Please fill in the particulars in the mandatory fields.</span>
+                	</div>
+          			<div class="button confirm edit_payment_popup_btn">
+                        OK 
+                    </div>
+                    <div class="button cancel edit_payment_popup_btn">
+                        Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+   
+</templates>
