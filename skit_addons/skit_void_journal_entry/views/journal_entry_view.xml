@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Inherited Journal Entry form view -->
+	    <record id="skit_journal_entry_view_move_form" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+				 <!-- Added void button in header-->
+            	 <xpath expr="//button[@name='action_post']" position="before">
+            	 	 <button name="void" states="draft" string="Void" type="object" class="oe_highlight" groups="account.group_account_manager"/>
+            	 </xpath>
+            	 <!-- Changed 'Cancel entry' to 'Unpost entry'-->
+            	 <xpath expr="//button[@name='button_cancel']" position="replace">
+            	 	<button name="button_cancel" states="posted" string="Unpost Entry" type="object"/>
+                 </xpath>
+                 <!-- inherited line_ids field to readonly when status is voided -->
+                 <xpath expr="//field[@name='line_ids']" position="attributes">
+            	 	<attribute name="attrs">{'readonly':[('state','in',('posted','voided'))]}</attribute>
+                 </xpath>
+            </field>
+        </record>
+</odoo>
