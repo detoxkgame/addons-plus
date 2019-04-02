@@ -96,9 +96,14 @@ chrome.OrderSelectorWidget.include({
 chrome.Chrome.include({
     build_widgets: function(){
         this._super();
-        this.gui.set_startup_screen('firstpage');
-        this.gui.set_default_screen('firstpage');
-       
+        if(this.pos.config.is_room || this.pos.config.module_pos_restaurant){
+        	this.gui.set_startup_screen('products');
+            this.gui.set_default_screen('products');
+        }
+        else{
+        	this.gui.set_startup_screen('firstpage');
+            this.gui.set_default_screen('firstpage');
+        }
     },
     
 });
