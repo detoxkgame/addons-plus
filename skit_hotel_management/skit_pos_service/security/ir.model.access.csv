@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hm_service_type_manager,hm.service.type.manager,model_hm_service_type,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_service_type_user,hm.service.type.user,model_hm_service_type,skit_hotel_management.group_hotel_user,1,1,1,1
+access_hm_service_line_manager,hm.service.line.manager,model_hm_service_line,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_service_line_user,hm.service.line.user,model_hm_service_line,skit_hotel_management.group_hotel_user,1,1,1,1
+access_hm_room_supply_manager,hm.room.supply.manager,model_hm_room_supply,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_room_supply_user,hm.room.supply.user,model_hm_room_supply,skit_hotel_management.group_hotel_user,1,1,1,1
+access_room_supply_details_manager,room.supply.details.manager,model_room_supply_details,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_room_supply_details_user,room.supply.details.user,model_room_supply_details,skit_hotel_management.group_hotel_user,1,1,1,1
+access_room_manage_manager,room.manage.manager,model_room_manage,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_room_manage_user,room.manage.user,model_room_manage,skit_hotel_management.group_hotel_user,1,1,1,1
+access_hm_house_keeping_manager,hm.house.keeping.manager,model_hm_house_keeping,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_house_keeping_user,hm.house.keeping.user,model_hm_house_keeping,skit_hotel_management.group_hotel_user,1,1,1,1

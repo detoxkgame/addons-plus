@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="pos_hm_service_assets" inherit_id="point_of_sale.assets">
+			<xpath expr="." position="inside">
+				<script type="text/javascript"
+					src="/skit_pos_service/static/src/js/pos_hm_service.js"></script>
+			</xpath>
+			<xpath expr="//link[@id='pos-stylesheet']" position="after">
+              <link rel="stylesheet" href="/skit_pos_service/static/src/css/hm_service.css"/>
+          </xpath>
+		</template>
+	</data>
+</odoo>

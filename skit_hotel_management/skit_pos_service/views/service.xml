@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<!-- Add Service  Type under Hotel Management -->
+		<record id="view_service_type_tree" model="ir.ui.view">
+			<field name="name">view.service.type.tree</field>
+			<field name="model">hm.service.type</field>
+			<field name="arch" type="xml">
+				<tree string="Service Types">
+					<field name="name" />
+					<field name="model_id" />
+					<field name="description" />
+					<field name="sequence_no" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_service_type_form" model="ir.ui.view">
+			<field name="name">view.service.type.form</field>
+			<field name="model">hm.service.type</field>
+			<field name="arch" type="xml">
+				<form string="Service Types">
+					<sheet>
+						<group>
+							<field name="name" />
+							<field name="model_id" />
+							<field name="description" />
+							<field name="sequence_no" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+				
+		<record id="hotel_service_type" model="ir.actions.act_window">
+	        <field name="name">Service Types</field>
+	        <field name="res_model">hm.service.type</field>
+	        <field name="view_type">form</field>
+	        <field name="context">{}</field>
+	        <field name="view_mode">tree,form</field>
+	    </record>
+	    
+	    <menuitem id="menu_hm_service_types" name="Service Types"
+			action="skit_pos_service.hotel_service_type" parent="skit_hotel_management.menu_hotel_service" />
+		
+		<!-- Add product in Point of Sale configuration -->
+		<record id="inherited_restaurant_table" model="ir.ui.view">
+            <field name="name">Restaurant Table</field>
+            <field name="model">restaurant.table</field>
+            <field name="inherit_id" ref="pos_restaurant.view_restaurant_table_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='name']" position="before">
+            		<field name="product_id" string="Room No"/>
+            	</xpath>
+            </field>
+        </record>
+        
+        <record id="inherited_restaurant_floor" model="ir.ui.view">
+            <field name="name">Restaurant Table</field>
+            <field name="model">restaurant.floor</field>
+            <field name="inherit_id" ref="pos_restaurant.view_restaurant_floor_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='table_ids']/tree/field[@name='name']" position="before">
+            		<field name="product_id" string="Room No"/>
+            	</xpath>
+            </field>
+        </record>
+
+		<!-- Service Line under Folio -->
+		
+		<record id="viewview_hotel_folio_form_inherited" model="ir.ui.view">
+            <field name="name">pos.order.form.inherit</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="skit_hotel_management.view_hotel_folio_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//form/sheet/notebook/page[6]" position="after">
+            		<page string="Service Lines">
+                        <field name="hm_service_line_ids">
+                            <tree editable="bottom" string="Service Lines">
+                                <field name="product_id"/>
+                                <field name="room_no"/>
+                                <field name="qty"/>
+                                <field name="unit_price"/>
+                                <field name="discount"/>
+                                <field name="account_tax"/>
+                                <field name="service_type"/>
+                                <field name="check_in"/>
+                                <field name="check_out"/>
+                                <field name="session_id"/>
+                                <field name="price_subtotal"/>
+                                <field name="price_subtotal_incl"/>
+                            </tree>
+                        </field>
+                    </page>
+            	</xpath>
+            </field>
+       	</record>
+       	
+       	<!-- Add checkbox under POS Configuration -->
+       	
+       	<record id="view_pos_config_view_form_inherited" model="ir.ui.view">
+		<field name="name">pos.config.form.view</field>
+		<field name="model">pos.config</field>
+		<field name="inherit_id"
+			ref="point_of_sale.pos_config_view_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='module_pos_restaurant']"
+				position="after">
+				<div class="row mt16 o_settings_container">
+                      <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                          <field name="is_room"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                          <label for="is_room" string="Room Management"/>
+                        </div>
+                      </div>
+                    </div>
+			</xpath>
+		</field>
+	</record>
+	
+	<!-- Room Supply -->
+	
+	<record id="view_room_supply_tree" model="ir.ui.view">
+			<field name="name">view.room.supply.tree</field>
+			<field name="model">hm.room.supply</field>
+			<field name="arch" type="xml">
+				<tree string="Room Supply">
+					<field name="name" />
+					<field name="notes" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_room_supply_form" model="ir.ui.view">
+			<field name="name">view.room.supply.form</field>
+			<field name="model">hm.room.supply</field>
+			<field name="arch" type="xml">
+				<form string="Room supply">
+					<sheet>
+						<group>
+							<field name="name" />
+							<field name="notes" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="hm_room_supply" model="ir.actions.act_window">
+		        <field name="name">Room Supply</field>
+		        <field name="res_model">hm.room.supply</field>
+		        <field name="view_type">form</field>
+		        <field name="context">{}</field>
+		        <field name="view_mode">tree,form</field>
+		</record>
+	    
+		<menuitem id="menu_hm_room_supply" name="Room Supply"
+				action="skit_pos_service.hm_room_supply" parent="skit_hotel_management.hotel_configuration_menu" />
+				
+	<!-- Add Room Supply Details -->
+	
+		<record id="view_room_supply_details_tree" model="ir.ui.view">
+			<field name="name">view.room.supply.details.tree</field>
+			<field name="model">room.manage</field>
+			<field name="arch" type="xml">
+				<tree string="Room Supply Details">
+					<field name="room_no" />
+					<field name="date" />
+					<field name="folio_no" />
+					<field name="supervisor" />
+					<field name="supplier" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_room_supply_details_form" model="ir.ui.view">
+			<field name="name">view.room.supply.details.form</field>
+			<field name="model">room.manage</field>
+			<field name="arch" type="xml">
+				<form string="Room Manage">
+					<sheet>
+						<group>
+							<group>
+								<field name="room_no" />
+								<field name="supervisor" />
+								<field name="date" />
+							</group>
+							<group>
+								<field name="folio_no" />
+								<field name="supplier" />
+							</group>
+						</group>
+						<notebook>
+	                        <page string="Room Supply Details" name="room_supply_details">
+	                        	<field name="room_supply_details">
+		                            <tree string='Room Supply Details' editable="bottom" >
+		                                <field name="room_supply" />                                
+		                                <field name="refilled" /> 
+		                                <field name="room_manage_id" invisible="1"/> 
+		                            </tree>
+		                        </field>
+	                        </page>
+                        </notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+	
+		<record id="hm_room_supply_details" model="ir.actions.act_window">
+		        <field name="name">Room Supply Details</field>
+		        <field name="res_model">room.manage</field>
+		        <field name="view_type">form</field>
+		        <field name="context">{}</field>
+		        <field name="view_mode">tree,form</field>
+		</record>
+				
+		<menuitem id="menu_hm_room_supply_details" name="Room Supply Details"
+				action="skit_pos_service.hm_room_supply_details" parent="skit_hotel_management.hotel_configuration_menu" sequence="17"/>
+				
+		<!-- Add House Keeping -->
+		
+		<record id="view_house_keeping_tree" model="ir.ui.view">
+			<field name="name">view.house.keeping.tree</field>
+			<field name="model">hm.house.keeping</field>
+			<field name="arch" type="xml">
+				<tree string="House Keeping">
+					<field name="supervisor" />
+					<field name="house_keeper" />
+					<field name="room_no" />
+					<field name="date" />
+					<field name="folio_no" />
+					<field name="activity" />
+					<field name="remarks" />
+					<field name="cleaning_start" />
+					<field name="cleaning_end" />
+					<field name="inspect_time" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_house_keeping_form" model="ir.ui.view">
+			<field name="name">view.house.keeping.form</field>
+			<field name="model">hm.house.keeping</field>
+			<field name="arch" type="xml">
+				<form string="Room supply Details">
+				<header>
+	            		<field name="state" widget="statusbar"/>
+	            	</header>
+					<sheet>
+					<group>
+						<group>
+							<field name="supervisor" />
+							<field name="room_no" />
+							<field name="cleaning_start" />
+							<field name="folio_no" />
+							<field name="activity" />
+						</group>
+						<group>
+							<field name="house_keeper" />
+							<field name="date" />
+							<field name="cleaning_end" />
+							<field name="inspect_time" />
+							<field name="remarks" />
+						</group>
+					</group>
+						
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record id="house_keeping_details" model="ir.actions.act_window">
+		        <field name="name">House Keeping</field>
+		        <field name="res_model">hm.house.keeping</field>
+		        <field name="view_type">form</field>
+		        <field name="context">{}</field>
+		        <field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_house_keeping" name="House Keeping"
+				action="skit_pos_service.house_keeping_details" parent="skit_hotel_management.hotel_configuration_menu" sequence="18"/>
+	
+	</data>
+</odoo>

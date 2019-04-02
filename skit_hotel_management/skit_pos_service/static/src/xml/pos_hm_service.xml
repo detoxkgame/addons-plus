@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+<t t-extend="FloorScreenWidget">
+		<t t-jquery='.screen-content-flexbox' t-operation='prepend'>
+			<t t-if="widget.pos.config.is_room">
+				<t t-if='widget.pos.service_types'>
+				<div class='service-selector'>
+					 <t t-foreach="widget.pos.service_types" t-as="service">
+	                            <t t-if="service.id === widget.service_types.id">
+	                                <span class='button button-service active' t-att-data-id="service.id"><t t-esc="service.name" /></span>
+	                            </t>
+	                            <t t-if="service.id !== widget.service_types.id">
+	                                <span class='button button-service' t-att-data-id="service.id"><t t-esc="service.name" /></span>
+	                            </t>
+	                        </t>
+					</div>
+				</t>
+			</t>
+       </t>
+	</t>
+	
+	<t t-extend="ActionpadWidget">
+		<t t-jquery='.pay' t-operation='replace'>
+			<button class='button pay'>
+            	<t t-if="widget.pos.config.is_room">
+	                <div class='pay-circle'>
+	                    <i class='fa fa-chevron-right' role="img" aria-label="Pay" title="Pay"/>
+	                </div>
+	                Order
+                </t>
+                <t t-else="">
+	                <div class='pay-circle'>
+	                    <i class='fa fa-chevron-right' role="img" aria-label="Pay" title="Pay"/>
+	                </div>
+	                Payment
+                </t>
+            </button>
+		</t>
+	</t>
+	
+</templates>
