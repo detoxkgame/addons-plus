@@ -16,6 +16,7 @@
 	font-family: "Proxima Nova", Helvetica, sans-serif;
 	margin-bottom: 2.5rem;
 	height: 17vh;
+    margin-bottom: 27%;
 }
 
 @media ( min-width : 1600px) {
@@ -43,7 +44,7 @@
 	box-shadow: 0 9px 19px 0 rgba(0, 0, 0, 0.05);
 	background: #fff;
 	margin-bottom: 2rem;
-	padding: 3rem 3rem;
+	padding: 1.5rem 2.5rem;
 	border-radius: 10px;
 	overflow: hidden;
 	box-shadow: 0 9px 19px 0 rgba(0, 0, 0, 0.05);
