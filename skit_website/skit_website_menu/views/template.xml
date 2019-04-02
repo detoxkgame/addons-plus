@@ -31,7 +31,7 @@
 					<div id="sks_topmenu_myNav" class="sks_topmenu_overlay">
 						<div class="sks_topmenu_overlay-content">
 							<div style="width: 50%; float: left;">
-								<a href="#">Projects</a>
+								<a href="/projects">Projects</a>
 								<a href="/about_us">About</a>
 								<a href="/careers">Careers</a>
 								<a href="/blog">Blog</a>

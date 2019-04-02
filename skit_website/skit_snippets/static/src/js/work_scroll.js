@@ -111,24 +111,24 @@ $(document).ready(function() {
 		}
 		//Via Crm
 		if($('#viacrm-apps-img').hasClass('-visible')){
-			$('#viacrm-apps-img').css({'transform': 'rotateY(0deg)','transition-duration': '2s'});
+			$('#viacrm-apps-img').css({'transform': 'skewX(0deg)','transition-duration': '2s'});
 		}
 		else{
-			$('#viacrm-apps-img').css({'transform': 'rotateY(2.142rad)','transition-duration': '1s'});
+			$('#viacrm-apps-img').css({'transform': 'skewX(-4deg)','transition-duration': '1s'});
 		}
 		//Fleet Master
 		if($('#fleetmaster-apps-img').hasClass('-visible')){
-			$('#fleetmaster-apps-img').css({'transform': 'rotate(-40deg)','transition-duration': '2s'});
+			$('#fleetmaster-apps-img').css({'transform': 'skewX(0deg)','transition-duration': '2s'});
 		}
 		else{
-			$('#fleetmaster-apps-img').css({'transform': 'rotate(-30deg)','transition-duration': '1s'});
+			$('#fleetmaster-apps-img').css({'transform': 'skewX(-4deg)','transition-duration': '1s'});
 		}
 		//LGA
 		if($('#lga-apps-img').hasClass('-visible')){
-			$('#lga-apps-img').css({'transform': 'rotateY(0deg)','transition-duration': '2s'});
+			$('#lga-apps-img').css({'transform': 'skewX(0deg)','transition-duration': '2s'});
 		}
 		else{
-			$('#lga-apps-img').css({'transform': 'rotateY(2.142rad)','transition-duration': '1s'});
+			$('#lga-apps-img').css({'transform': 'skewX(-4deg)','transition-duration': '1s'});
 		}
 		/** End */
     }

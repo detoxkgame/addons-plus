@@ -76,7 +76,12 @@
 
 
 									</div>
-									<button class="sks_contact_info">Submit</button>
+									<div class="sks-form-submit-btn submit">
+										<a class="btn sks-contact-btn-next sks-career-submit">
+											<i class="fa fa-paper-plane" />
+											Submit
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>

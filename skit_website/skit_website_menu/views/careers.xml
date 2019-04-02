@@ -27,7 +27,7 @@
 
 									<div class="sks-sec2-contact-div1">
 										<div class="sks-sec2-contact-div2">
-											<img calss="sks-sec2-contact-img"
+											<img class="sks-sec2-contact-img"
 												src="/skit_website_menu/static/src/img/1.png" />
 										</div>
 										<div class="sks-sec2-contact-div3">
@@ -56,31 +56,29 @@
 																<div id="one">
 																	<div class="sks-carieer-form-flds">
 																		<span class="sks-career-form-label">Hey, my name is</span>
-																		<input
+																		<input style="width: 20em;"
 																			class="sks-career-form sks-career-form-name" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="full name" />
 																		<br></br>
 																		<span class="sks-career-form-label">My Qualification is</span>
-																		<input
+																		<input style="width: 19.3em;"
 																			class="sks-career-form sks-career-form-qualification" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="qualification" />
 																		<br></br>
 																		<span class="sks-career-form-label">You can call me</span>
-																		<input
+																		<input style="width: 20.3em;"
 																			class="sks-career-form sks-career-form-phone" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="phone number" />
 																		<br></br>
 																		<span class="sks-career-form-label">You can reach me at</span>
-																		<input
+																		<input style="width: 18.1em;"
 																			class="sks-career-form sks-career-form-email" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="email" />
 																		<br></br>
 																		<span class="sks-career-form-label">Some more information</span>
-																		<input
-																			class="sks-career-form sks-career-form-about" t-attf-ismandatorty="true"
-																			type="text" name="name" placeholder="about me" />
-																		<br></br>
-																		<br></br>
+	                                                                    <label for="field4">
+	                                                                        <textarea style="width: 16.8em;" class="sks-career-form sks-career-form-about sks-form-style-4" name="field4" placeholder="about me" onkeyup="adjust_textarea(this)" required="true"/>
+	                                                                    </label>
 																	</div>
 																	<div id="uploader">
 																		<div class="row uploadDoc">
@@ -182,6 +180,13 @@
 					transparent !important;
 					}
 				</style>
+				<script type="text/javascript">
+				//auto expand textarea
+					function adjust_textarea(h) {
+					    h.style.height = "20px";
+					    h.style.height = (h.scrollHeight)+"px";
+					}
+				</script>
 			</div>
 		</t>
 	</template>
