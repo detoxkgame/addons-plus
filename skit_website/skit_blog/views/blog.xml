@@ -32,7 +32,9 @@
 																<t t-esc="blog_post['name']" />
 														</h2>
 														<div class="article-card__snippet">
-																<t t-esc="blog_post['subtitle']" />
+														<!-- display the content value from 1to 220 char -->
+														<t t-set="id" t-value="blog_post['id']"/>
+															<t t-esc="post[id]" />
 														</div>
 														<div class="article-card__author">
 																<div class="article-card__author-img">
@@ -56,6 +58,25 @@
 				</div>
 		</section>
 </template>
+
+<template name="skit_blog_post_completeview" inherit_id="website_blog.blog_post_complete" id="skit_blog_post_completeview">
+				<xpath expr="//div[@class='blog_title']" position="replace">
+				<div class="blog_title">
+				                    <h1 t-field="blog_post.name" id="blog_post_name" t-att-data-blog-id="blog_post.id" placeholder="Blog Post Title"/>
+				                    <p class="post-meta text-muted text-center" name="blog_post_data"/>
+				                    <p class="post-meta text-muted text-center" t-if="len(blog_post.tag_ids)">
+				                        <span class="fa fa-tags" role="img" aria-label="Tags" title="Tags"/>
+				                        <t t-foreach="blog_post.tag_ids" t-as="one_tag">
+				                            <a class="badge badge-primary mr8" t-attf-href="#{blog_url(tag=one_tag.id)}" t-esc="one_tag.name"/>
+				                        </t>
+				                    </p>
+				                    <div t-if="'cover_full' in blog_post_cover_properties.get('resize_class', '')" id="blog_angle_down">
+				                        <strong><a href="#blog_content" class="fa fa-angle-down fa-3x fa-inverse mt4" aria-label="To blog content" title="To blog content"/></strong>
+				                    </div>
+				                </div>
+				                </xpath>
+</template>
+
 
 		<template name="web_blog_page" inherit_id="website_blog.latest_blogs" id="skit_blog_post_complete">
 				<xpath expr="//div[1]" position="replace">

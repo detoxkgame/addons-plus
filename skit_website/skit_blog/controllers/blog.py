@@ -3,7 +3,7 @@ from odoo import http, fields
 from odoo.http import request
 import werkzeug
 from odoo.addons.http_routing.models.ir_http import slug, unslug
-
+from bs4 import BeautifulSoup
 
 class WebsiteBlog(http.Controller):
 
@@ -56,15 +56,18 @@ class WebsiteBlog(http.Controller):
             domain += [('tag_ids', 'in', active_tag_ids)]
         if blog:
             domain += [('blog_id', '=', blog.id)]
-        if date_begin and date_end:
-            domain += [("post_date", ">=", date_begin), ("post_date", "<=", date_end)]
-        else:
-            domain += [("post_date", "<=", fields.Datetime.now())]
-
+        post={}
         blog_posts = BlogPost.search(domain, order="post_date desc")
+        for vlogs in blog_posts:
+            content_arr = BeautifulSoup(vlogs.content).get_text()
+            extra_content = ""
+            if (len(content_arr)>220):
+                extra_content = "..."
+            post[vlogs.id] = content_arr[1:220]+extra_content
 
         values = {
             'blog_posts': blog_posts,
+            'post': post,
         }
         response = request.render("website_blog.latest_blogs", values)
         return response
