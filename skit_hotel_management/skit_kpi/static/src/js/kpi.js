@@ -206,7 +206,7 @@ chrome.OrderSelectorWidget.include({
     	self._rpc({
             model: 'kpi.history',
             method: 'get_history',
-            args: [0, from_date, to_date],
+            args: [0],
         })
         .then(function(val) {
         	self.pos.gui.show_screen('kpireport',{dldata: val},'refresh');   

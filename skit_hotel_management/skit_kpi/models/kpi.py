@@ -153,16 +153,20 @@ class KPI(models.Model):
     @api.multi
     def update_next_execution_date(self):
         for obj in self:
-            if obj.periodicity_uom == 'hour':
-                delta = timedelta(hours=obj.periodicity)
-            elif obj.periodicity_uom == 'day':
-                delta = timedelta(days=obj.periodicity)
-            elif obj.periodicity_uom == 'week':
-                delta = timedelta(weeks=obj.periodicity)
-            elif obj.periodicity_uom == 'month':
-                delta = timedelta(months=obj.periodicity)
-            else:
-                delta = timedelta()
+            #===================================================================
+            # if obj.periodicity_uom == 'hour':
+            #     delta = timedelta(hours=obj.periodicity)
+            # elif obj.periodicity_uom == 'day':
+            #===================================================================
+            delta = timedelta(days=obj.periodicity)
+            #===================================================================
+            # elif obj.periodicity_uom == 'week':
+            #     delta = timedelta(weeks=obj.periodicity)
+            # elif obj.periodicity_uom == 'month':
+            #     delta = timedelta(months=obj.periodicity)
+            # else:
+            #     delta = timedelta()
+            #===================================================================
             new_date = datetime.now() + delta
 
             obj.next_execution_date = new_date.strftime(DATETIME_FORMAT)
@@ -182,7 +186,8 @@ class KPI(models.Model):
         ]
         if 'filters' in self.env.context:
             filters.extend(self.env.context['filters'])
-        obj_ids = self.search(filters)
+        # obj_ids = self.search(filters)
+        obj_ids = self.search([])
         res = None
 
         try:
