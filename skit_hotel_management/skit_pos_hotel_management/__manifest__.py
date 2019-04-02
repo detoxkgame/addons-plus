@@ -14,7 +14,8 @@
     'data': [
         'views/point_of_sale.xml',
     ],
-    'qweb': ['static/src/xml/pos.xml'],
+    'qweb': ['static/src/xml/pos.xml',
+             'static/src/xml/reservation.xml'],
     #'css': ['static/src/css/giftcard.css'],
     'installable': True,
     'auto_install': False,

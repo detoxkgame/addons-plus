@@ -25,7 +25,8 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
         $('.night_audit_session').trigger("click");
        },   
     show_roomstatus:function(){
-    	$('.rooomstatus').trigger("click");
+    	//$('.rooomstatus').trigger("click");
+    	 this.gui.show_screen('room_reservation');
    },
     show_hotel:function(){
     	 this.gui.show_screen('vendor_dashboard');

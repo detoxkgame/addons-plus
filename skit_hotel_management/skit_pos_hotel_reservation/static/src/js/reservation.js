@@ -12,7 +12,8 @@ var PopupWidget = require('point_of_sale.popups');
 var rpc = require('web.rpc');
 var PosDB = require('point_of_sale.DB');
 
-var _super_posmodel = models.PosModel.prototype;
+/** Code Placed in Common file */
+/*var _super_posmodel = models.PosModel.prototype;
 models.PosModel = models.PosModel.extend({
 
 	initialize : function(session, attributes) {
@@ -47,11 +48,11 @@ models.PosModel = models.PosModel.extend({
         return def;
     },
 
-});
+});*/
 
 
 /* Order */
-var _super_order = models.Order.prototype;
+/*var _super_order = models.Order.prototype;
 models.Order = models.Order.extend({
     initialize: function() {
         _super_order.initialize.apply(this,arguments);
@@ -68,7 +69,7 @@ models.Order = models.Order.extend({
         _super_order.init_from_JSON.apply(this,arguments);
         this.reservation_details = json.reservation_details;
     },
-    /* ---- reservation_details  --- */
+     ---- reservation_details  --- 
     set_reservation_details: function(reservation_details) {
         this.reservation_details = reservation_details;
         this.trigger('change');
@@ -77,7 +78,7 @@ models.Order = models.Order.extend({
         return this.reservation_details;
     },
     
-});
+});*/
 
 var ReservationWidget2 = screens.ScreenWidget.extend({
 	template: 'ReservationWidget2',

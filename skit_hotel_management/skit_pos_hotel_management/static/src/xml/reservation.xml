@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	
+	<t t-name="RoomReservationScreenWidget">
+		<div class="hm-container">
+			<div class="hm-container hm-reservation-content">
+			</div>
+		</div>
+	</t>
+	
+	<t t-name="ReservationContent">
+		<div class="hm-container" >
+			<!-- Start Left Panel -->
+			<div class="hm-left-container">
+				<div class="hm-left-logo">
+					<t t-if="(left_panel_temp).length > 0">
+						<t t-set="tcount" t-value="0" />
+						<t t-foreach="left_panel_temp" t-as="left_ptemp" >
+							<t t-foreach="left_panel_temp[tcount]" t-as="left_temp" >
+								<t t-foreach="left_temp['line_group_key']" t-as="line_key">
+									<t t-foreach="left_temp['line_group'][line_key]" t-as="data">
+										<t t-if="data.form_field_type == 'logo'">
+											<div class="hm-logo-div">
+												<img t-attf-id="#{data.id}" class="hm-logo-img"
+									                t-att-src='widget.template_line_icon_url(data.id)' alt="Icon"/>
+											</div>
+										</t>
+									</t>
+								</t>
+							</t>
+						</t>
+					</t>
+				</div>
+				<div class="hm-left-tree">
+					<t t-if="(left_panel_temp).length > 0">
+						<t t-set="tcount" t-value="0" />
+						<t t-foreach="left_panel_temp" t-as="left_ptemp" >
+						<t t-foreach="left_panel_temp[tcount]" t-as="left_temp" >
+							 <table class="hm-form-table" t-attf-style="background:#{left_temp['sub_temp_color']}">
+								 <tbody class="hm-left-tree-body">
+									 <t t-foreach="left_temp['line_group_key']" t-as="line_key">
+										<t t-foreach="left_temp['line_group'][line_key]" t-as="data">
+											<t t-if="data.form_field_type == 'menu'">
+											<tr class="hm-left-tree-tr">
+												<td style="width: 20%;">
+													<img t-attf-id="#{data.id}" class="hm-left-tree-img"
+									                t-att-src='widget.template_line_icon_url(data.id)' alt="Icon"/>
+												</td>
+												<td style="width: 80%;">
+													<span class="hm-float" t-attf-style="#{data.field_styles}; font-size:#{font_size}px;">
+														<t t-esc="data.form_label" />
+													</span>
+												</td>
+											</tr>
+											</t>
+										</t>
+									</t> 
+								</tbody>
+							</table>
+						</t>
+						<t t-set="tcount" t-value="(tcount + 1)" />
+						</t>
+					</t>
+				</div>
+			</div>
+			<!-- End Left Panel -->
+			
+			<!-- Start Center Panel -->
+			<div class="hm-center-container">
+				<!-- <section class="top-content">   
+		                <span class='button back'>
+		                	<i class='fa fa-angle-double-left'></i>
+		                    Back
+		                </span> 
+	            </section>	 -->			
+				
+				<!-- Start Top Panel -->
+				<div class="hm-top-container">
+					<t t-if="(top_panel_temp).length > 0">
+						<t t-set="tcount" t-value="0" />
+						<t t-foreach="top_panel_temp" t-as="top_ptemp" >
+						<div class="hm-top-div">
+						<t t-foreach="top_panel_temp[tcount]" t-as="top_temp" >
+							 <t t-foreach="top_temp['line_group_key']" t-as="line_key">
+							 	<t t-set="datalen" t-value="(100/((top_temp['line_group'][line_key]).length))" />
+								<t t-foreach="top_temp['line_group'][line_key]" t-as="data">
+									<div class="hm-top-div1" t-attf-style="width:#{datalen}%;">
+										<!-- <t t-esc="data.form_label" /> -->
+										<div class="hm-top-inner-div">
+										<div class="hm-top-inner-div1 top_panel_form_btn" t-attf-id="top_panel#{data.sub_template_id}" t-attf-subid="#{data.sub_template_id}"
+											t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px; font-style:#{data.font-style};">
+											<t t-esc="data.form_label" /></div>
+										</div>
+										<!-- <span class="hm-top-buttons" t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px; font-style:#{data.font-style};">
+											<t t-esc="data.form_label" />
+										</span> -->
+									</div>
+								</t>
+							</t> 
+						</t>
+						</div>
+						<t t-set="tcount" t-value="(tcount + 1)" />
+						</t>
+					</t>
+				</div>
+				<!-- End Top Panel -->
+				
+				<div class="hm-center-form-design">
+				<div class="hm-title-div">
+					<span class="hm-title-span" id="center_sub_form" t-attf-subid="#{center_panel_sub_id}">
+						<t t-if="(center_panel_temp).length > 0">
+							<t t-esc="form_name" />
+						</t>
+					</span>
+				</div>
+				
+				<div class="hm-center-form-container">
+					<t t-if="(center_panel_temp).length > 0">
+						<t t-set="tcount" t-value="0" />
+						<t t-foreach="center_panel_temp" t-as="center_ptemp" >
+						<t t-foreach="center_panel_temp[tcount]" t-as="center_temp" >
+							<!-- Form View -->
+	    					<t t-if="form_view == 'form'">
+	    						<table class="hm-form-table">
+	    						<tbody class="hm-form-body">
+								 <t t-foreach="center_temp['line_group_key']" t-as="line_key">
+								 	<t t-set="datalen" t-value="(94/((center_temp['line_group'][line_key]).length))" />
+									<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
+									<tr t-attf-class="#{(((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')) ? 'hm-display-none' : 'hm-form-tr hm-order-details' }" >
+										<!-- First Column -->
+										<td class="hm-form-td">
+			    							<t t-if="(first_col.form_field_type)=='header_label'">
+			    								<span class="hm-form-headerlabel" t-attf-style="#{first_col.field_styles};font-size:#{first_col.font_size}px;"><t t-esc="first_col.form_label" /></span>
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='input_char'">
+			    								<input type="text"  class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+			    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='input_int'">
+			    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+				    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+			    							</t>
+			    							<t t-if="(first_col.form_field_type)=='date'">
+			    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+				    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+			    							</t>
+			    						</td>
+			    						<!-- Sub Form Template -->
+			    						<t t-if="((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')">
+			    							<t t-foreach="center_temp['sub_form_template'][first_col.sub_template_id]" t-as="stemp" >
+			    								<t t-if="center_temp['sub_line_group_key']">
+			    									<t t-foreach="center_temp['sub_line_group_key_array'][first_col.sub_template_id]" t-as="sline_key" >
+			    										<t t-set="sub_first_col" t-value="center_temp['sub_line_group_array'][first_col.sub_template_id][sline_key][0]" />
+			    										<tr class="hm-form-tr hm-orderline-details">
+			    											<td class="hm-form-td">
+			    												<t t-if="(sub_first_col.form_field_type)=='input_char'">
+									    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+									    								t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value="" />
+									    						</t>
+									    						<t t-if="(sub_first_col.form_field_type)=='input_int'">
+											    					<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+											    						t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value=""  />
+											    				</t>
+											    				<t t-if="(sub_first_col.form_field_type)=='many2one'">
+												    				<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_first_col.form_fields}" 
+												    				t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" t-attf-style="width: 88%;#{sub_first_col.field_styles}; font-size:#{sub_first_col.font_size}px;">
+												    					<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="sub_first_col.form_placeholder" /></option>
+																		<t t-foreach='sub_first_col.form_template_model_fields' t-as='prod'> 
+																			<option t-att-id='prod.id' t-att-value="prod.id" t-att-amt="prod.amount" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																		</t>
+																	</select>
+											    				</t>
+			    											</td>
+			    											<!-- Sub Template Same Row -->
+			    											<t t-foreach="center_temp['sub_line_group_array'][first_col.sub_template_id][sline_key]" t-as="sub_same_row">
+			    												<t t-if="sub_same_row.sameline">
+			    													<td class="hm-form-td">
+			    														<t t-if="(sub_same_row.form_field_type)=='input_char'">
+											    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+											    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+											    						</t>
+											    						<t t-if="(sub_same_row.form_field_type)=='input_int'">
+											    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+											    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+											    						</t>
+											    						<t t-if="(sub_same_row.form_field_type)=='many2one'">
+											    							<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_same_row.form_fields}" 
+											    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" t-attf-style="width: 88%;#{sub_same_row.field_styles}; font-size:#{sub_same_row.font_size}px;">
+												    							<option id="" disabled="disabled"  selected="selected" class="placeholder"><t t-esc="sub_same_row.form_placeholder" /></option>
+																				<t t-foreach='sub_same_row.form_template_model_fields' t-as='prod'> 
+																					<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																				</t>
+																			</select>
+											    						</t>
+			    													</td>
+			    												</t>
+			    											</t>
+			    										</tr>
+			    									</t>
+			    								</t>
+			    							</t>
+			    						</t>
+			    						<!-- Same Row -->
+			    						<t t-foreach="center_temp['line_group'][line_key]" t-as="same_row">
+			    							<t t-if="same_row.sameline">
+			    								<td class="hm-form-td">
+			    									<t t-if="(same_row.form_field_type)=='header_label'">
+					    								<span class="hm-form-headerlabel" t-attf-style="#{same_row.field_styles};font-size:#{same_row.font_size}px;"><t t-esc="same_row.form_label" /></span>
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='input_char'">
+					    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='input_int'">
+					    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+					    							</t>
+					    							<t t-if="(same_row.form_field_type)=='date'">
+					    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+					    							</t>
+			    								</td>
+			    								<!-- Sub Form Template -->
+			    								<t t-if="((same_row.form_field_type)=='sub_form') and ((same_row.ttype)=='one2many')">
+					    							<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="stemp" >
+					    								<t t-if="center_temp['sub_line_group_key']">
+					    									<t t-foreach="center_temp['sub_line_group_key_array'][same_row.sub_template_id]" t-as="sline_key" >
+					    										<t t-set="sub_first_col" t-value="center_temp['sub_line_group_array'][same_row.sub_template_id][sline_key][0]" />
+					    										<tr class="hm-form-tr hm-orderline-details">
+					    											<td class="hm-form-td">
+					    												<t t-if="(sub_first_col.form_field_type)=='input_char'">
+											    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+											    								t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value="" />
+											    						</t>
+											    						<t t-if="(sub_first_col.form_field_type)=='input_int'">
+													    					<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+													    						t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value=""  />
+													    				</t>
+													    				<t t-if="(sub_first_col.form_field_type)=='many2one'">
+														    				<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_first_col.form_fields}" 
+														    				t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" t-attf-style="width: 88%;#{sub_first_col.field_styles}; font-size:#{sub_first_col.font_size}px;">
+														    					<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="sub_first_col.form_placeholder" /></option>
+																				<t t-foreach='sub_first_col.form_template_model_fields' t-as='prod'> 
+																					<option t-att-id='prod.id' t-att-value="prod.id" t-att-amt="prod.amount" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																				</t>
+																			</select>
+													    				</t>
+					    											</td>
+					    											<!-- Sub Template Same Row -->
+					    											<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][sline_key]" t-as="sub_same_row">
+					    												<t t-if="sub_same_row.sameline">
+					    													<td class="hm-form-td">
+					    														<t t-if="(sub_same_row.form_field_type)=='input_char'">
+													    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+													    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+													    						</t>
+													    						<t t-if="(sub_same_row.form_field_type)=='input_int'">
+													    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+													    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+													    						</t>
+													    						<t t-if="(sub_same_row.form_field_type)=='many2one'">
+													    							<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_same_row.form_fields}" 
+													    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" t-attf-style="width: 88%;#{sub_same_row.field_styles}; font-size:#{sub_same_row.font_size}px;">
+														    							<option id="" disabled="disabled"  selected="selected" class="placeholder"><t t-esc="sub_same_row.form_placeholder" /></option>
+																						<t t-foreach='sub_same_row.form_template_model_fields' t-as='prod'> 
+																							<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																						</t>
+																					</select>
+													    						</t>
+					    													</td>
+					    												</t>
+					    											</t>
+					    										</tr>
+					    									</t>
+					    								</t>
+					    							</t>
+					    						</t>
+			    							</t>
+			    						</t>
+									</tr>
+								</t> 
+								</tbody>
+								<!-- Footer -->
+								<tfoot class="hm-footer">
+									<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
+							    		<t t-foreach="line_group[line_key]" t-as="same_row">
+								    		<t t-if="((same_row.form_field_type)=='sub_form') and ((same_row.field_group)=='htmlfooter')">
+								    			<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="temp" >
+								    				<t t-if="center_temp['sub_line_group_key']">
+								    					<tr class="hm-form-tr">
+								    						<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id]" t-as="line_key" >
+								    						<td class="hm-footer-td">
+								    							<div class="hm-footer-div">
+								    								<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key]" t-as="data" >
+								    									<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    								</t>
+								    							</div>
+								    						<!-- <t t-set="first_col" t-value="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key][0]" />
+								    						<t t-esc="first_col.form_label" />
+								    							<div><t t-esc="first_col.form_label" /></div> -->
+								    						</td>
+								    						</t>
+								    					</tr>
+								    				</t>
+								    			</t>
+								    		</t>
+							    		</t>
+						    		</t>
+								</tfoot>
+								</table>
+							</t>
+						</t>
+						<t t-set="tcount" t-value="(tcount + 1)" />
+						</t>
+					</t>
+				</div>
+				</div>
+			</div>
+			<!-- End Center Panel -->
+			
+			<!-- Start Rignt Panel -->
+			<div class="hm-right-container">
+				<t t-if="(right_panel_temp).length > 0">
+					<t t-set="tcount" t-value="0" />
+					<t t-foreach="right_panel_temp" t-as="right_ptemp" >
+					<t t-foreach="right_panel_temp[tcount]" t-as="right_temp" >
+						<t t-foreach="right_temp['line_group_key']" t-as="line_key">
+							<t t-set="datalen" t-value="(100/((right_temp['line_group_key']).length))" />
+							<t t-foreach="right_temp['line_group'][line_key]" t-as="data">
+								<div class="hm-right-div" t-attf-style="height:#{datalen}%;">
+									<span class="hm-right-label" t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">
+										<t t-esc="data.form_label" />
+									</span>
+								</div>
+							</t>
+						</t> 
+					</t>
+					<t t-set="tcount" t-value="(tcount + 1)" />
+					</t>
+				</t>
+			</div>
+			<!-- End Right Panel -->
+		</div>
+	</t>
+	
+	<!-- Center Panel Design -->
+	<t t-name="CenterPanelContent">
+		<div class="hm-title-div">
+			<span class="hm-title-span" id="center_sub_form" t-attf-subid="#{center_panel_sub_id}">
+				<t t-esc="form_name" />
+			</span>
+		</div>
+				
+		<div class="hm-center-form-container">
+			<t t-if="(center_panel_temp).length > 0">
+				<t t-set="tcount" t-value="0" />
+				<t t-foreach="center_panel_temp" t-as="center_ptemp" >
+				<t t-foreach="center_panel_temp[tcount]" t-as="center_temp" >
+					<!-- Form View -->
+	    			<t t-if="form_view == 'form'">
+	    				<table class="hm-form-table">
+	    				<tbody class="hm-form-body">
+							<t t-foreach="center_temp['line_group_key']" t-as="line_key">
+								<t t-set="datalen" t-value="(94/((center_temp['line_group'][line_key]).length))" />
+								<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
+								<tr t-attf-class="#{(((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')) ? 'hm-display-none' : 'hm-form-tr hm-order-details' }" >
+									<!-- First Column -->
+									<td class="hm-form-td">
+			    						<t t-if="(first_col.form_field_type)=='header_label'">
+			    							<span class="hm-form-headerlabel" t-attf-style="#{first_col.field_styles};font-size:#{first_col.font_size}px;"><t t-esc="first_col.form_label" /></span>
+			    						</t>
+			    						<t t-if="(first_col.form_field_type)=='input_char'">
+			    							<input type="text"  class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+			    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+			    						</t>
+			    						<t t-if="(first_col.form_field_type)=='input_int'">
+			    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+				    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+			    						</t>
+			    						<t t-if="(first_col.form_field_type)=='date'">
+			    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+				    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+			    						</t>
+			    					</td>
+			    					<!-- Sub Form Template -->
+			    					<t t-if="((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')">
+			    						<t t-foreach="center_temp['sub_form_template'][first_col.sub_template_id]" t-as="stemp" >
+			    							<t t-if="center_temp['sub_line_group_key']">
+			    								<t t-foreach="center_temp['sub_line_group_key_array'][first_col.sub_template_id]" t-as="sline_key" >
+			    									<t t-set="sub_first_col" t-value="center_temp['sub_line_group_array'][first_col.sub_template_id][sline_key][0]" />
+			    									<tr class="hm-form-tr hm-orderline-details">
+			    										<td class="hm-form-td">
+			    											<t t-if="(sub_first_col.form_field_type)=='input_char'">
+									    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+									    							t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value="" />
+									    					</t>
+									    					<t t-if="(sub_first_col.form_field_type)=='input_int'">
+											    				<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+											    					t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value=""  />
+											    			</t>
+											    			<t t-if="(sub_first_col.form_field_type)=='many2one'">
+												    			<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_first_col.form_fields}" 
+												    				t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" t-attf-style="width: 88%;#{sub_first_col.field_styles}; font-size:#{sub_first_col.font_size}px;">
+												    				<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="sub_first_col.form_placeholder" /></option>
+																	<t t-foreach='sub_first_col.form_template_model_fields' t-as='prod'> 
+																		<option t-att-id='prod.id' t-att-value="prod.id" t-att-amt="prod.amount" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																	</t>
+																</select>
+											    			</t>
+			    										</td>
+			    										<!-- Sub Template Same Row -->
+			    										<t t-foreach="center_temp['sub_line_group_array'][first_col.sub_template_id][sline_key]" t-as="sub_same_row">
+			    											<t t-if="sub_same_row.sameline">
+			    												<td class="hm-form-td">
+			    													<t t-if="(sub_same_row.form_field_type)=='input_char'">
+											    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+											    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+											    					</t>
+											    					<t t-if="(sub_same_row.form_field_type)=='input_int'">
+											    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+											    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+											    					</t>
+											    					<t t-if="(sub_same_row.form_field_type)=='many2one'">
+											    						<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_same_row.form_fields}" 
+											    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" t-attf-style="width: 88%;#{sub_same_row.field_styles}; font-size:#{sub_same_row.font_size}px;">
+												    						<option id="" disabled="disabled"  selected="selected" class="placeholder"><t t-esc="sub_same_row.form_placeholder" /></option>
+																			<t t-foreach='sub_same_row.form_template_model_fields' t-as='prod'> 
+																				<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																			</t>
+																		</select>
+											    					</t>
+			    												</td>
+			    											</t>
+			    										</t>
+			    									</tr>
+			    								</t>
+			    							</t>
+			    						</t>
+			    					</t>
+			    					<!-- Same Row -->
+			    					<t t-foreach="center_temp['line_group'][line_key]" t-as="same_row">
+			    						<t t-if="same_row.sameline">
+			    							<td class="hm-form-td">
+			    								<t t-if="(same_row.form_field_type)=='header_label'">
+					    							<span class="hm-form-headerlabel" t-attf-style="#{same_row.field_styles};font-size:#{same_row.font_size}px;"><t t-esc="same_row.form_label" /></span>
+					    						</t>
+					    						<t t-if="(same_row.form_field_type)=='input_char'">
+					    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+					    						</t>
+					    						<t t-if="(same_row.form_field_type)=='input_int'">
+					    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+					    						</t>
+					    						<t t-if="(same_row.form_field_type)=='date'">
+					    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+					    						</t>
+			    							</td>
+			    							<!-- Sub Form Template -->
+			    							<t t-if="((same_row.form_field_type)=='sub_form') and ((same_row.ttype)=='one2many')">
+					    						<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="stemp" >
+					    							<t t-if="center_temp['sub_line_group_key']">
+					    								<t t-foreach="center_temp['sub_line_group_key_array'][same_row.sub_template_id]" t-as="sline_key" >
+					    									<t t-set="sub_first_col" t-value="center_temp['sub_line_group_array'][same_row.sub_template_id][sline_key][0]" />
+					    									<tr class="hm-form-tr hm-orderline-details">
+					    										<td class="hm-form-td">
+					    											<t t-if="(sub_first_col.form_field_type)=='input_char'">
+											    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+											    								t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value="" />
+											    					</t>
+											    					<t t-if="(sub_first_col.form_field_type)=='input_int'">
+													    				<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+													    						t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" value=""  />
+													    			</t>
+													    			<t t-if="(sub_first_col.form_field_type)=='many2one'">
+														    			<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_first_col.form_fields}" 
+														    				t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" t-attf-style="width: 88%;#{sub_first_col.field_styles}; font-size:#{sub_first_col.font_size}px;">
+														    				<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="sub_first_col.form_placeholder" /></option>
+																			<t t-foreach='sub_first_col.form_template_model_fields' t-as='prod'> 
+																				<option t-att-id='prod.id' t-att-value="prod.id" t-att-amt="prod.amount" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																			</t>
+																		</select>
+													    			</t>
+					    										</td>
+					    										<!-- Sub Template Same Row -->
+					    										<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][sline_key]" t-as="sub_same_row">
+					    											<t t-if="sub_same_row.sameline">
+					    												<td class="hm-form-td">
+					    													<t t-if="(sub_same_row.form_field_type)=='input_char'">
+													    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+													    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+													    					</t>
+													    					<t t-if="(sub_same_row.form_field_type)=='input_int'">
+													    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+													    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" value=""  />
+													    					</t>
+													    					<t t-if="(sub_same_row.form_field_type)=='many2one'">
+													    						<select onchange="this.className=this.options[this.selectedIndex].className" class="hm-form-input hm-placeholder" t-attf-id="#{sub_same_row.form_fields}" 
+													    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" t-attf-style="width: 88%;#{sub_same_row.field_styles}; font-size:#{sub_same_row.font_size}px;">
+														    						<option id="" disabled="disabled"  selected="selected" class="placeholder"><t t-esc="sub_same_row.form_placeholder" /></option>
+																					<t t-foreach='sub_same_row.form_template_model_fields' t-as='prod'> 
+																						<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																					</t>
+																				</select>
+													    					</t>
+					    												</td>
+					    											</t>
+					    										</t>
+					    									</tr>
+					    								</t>
+					    							</t>
+					    						</t>
+					    					</t>
+			    						</t>
+			    					</t>
+								</tr>
+							</t> 
+						</tbody>
+						<!-- Footer -->
+						<tfoot class="hm-footer">
+							<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
+							    <t t-foreach="line_group[line_key]" t-as="same_row">
+								    <t t-if="((same_row.form_field_type)=='sub_form') and ((same_row.field_group)=='htmlfooter')">
+								    	<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="temp" >
+								    		<t t-if="center_temp['sub_line_group_key']">
+								    			<tr class="hm-form-tr">
+								    				<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id]" t-as="line_key" >
+								    					<td class="hm-footer-td">
+								    						<div class="hm-footer-div">
+								    							<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key]" t-as="data" >
+								    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    							</t>
+								    						</div>
+								    					</td>
+								    				</t>
+								    			</tr>
+								    		</t>
+								    	</t>
+								    </t>
+							    </t>
+						    </t>
+						</tfoot>
+						</table>
+					</t>
+					
+					<!-- Search View -->
+					<t t-if="form_view == 'search_view'">
+						<div class="hm-search-form">
+							<div class="hm-search-div">
+								<t t-foreach="center_temp['line_group_key']" t-as="line_key">
+									<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
+									<t t-if="(first_col.form_field_type)=='header_label'">
+			    						<span class="hm-search-label" t-attf-style="#{first_col.field_styles};font-size:#{first_col.font_size}px;"><t t-esc="first_col.form_label" /></span>
+			    					</t>
+								</t>
+							</div>
+							<table class="hm-search-form-table">
+								<tbody class="hm-search-form-tbody">
+									<t t-foreach="center_temp['line_group_key']" t-as="line_key">
+										<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
+										<t t-if="(first_col.form_field_type)=='input_char' or (first_col.form_field_type)=='input_int' or (first_col.form_field_type)=='date'">
+										<tr class="hm-search-form-tr">
+											<td class="hm-search-form-td-first">
+					    						<t t-if="(first_col.form_field_type)=='input_char'">
+					    							<input type="text"  class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+					    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+					    						</t>
+					    						<t t-if="(first_col.form_field_type)=='input_int'">
+					    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+						    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+					    						</t>
+					    						<t t-if="(first_col.form_field_type)=='date'">
+					    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+						    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+					    						</t>
+					    						<t t-if="(first_col.form_field_type)=='search'">
+							    							<button type="button" class="hm-search-btn" t-attf-subid="#{first_col.sub_template_id}" t-attf-style="#{first_col.field_styles};font-size:#{first_col.font_size}px;">
+							    								<t t-esc="first_col.form_label" /> <i class="fa fa-search hm-fa-icon" aria-hidden="true"></i>
+							    							</button>
+							    				</t>
+			    							</td>
+			    							<!-- Same Row -->
+					    					<t t-foreach="center_temp['line_group'][line_key]" t-as="same_row">
+					    						<t t-if="same_row.sameline">
+					    							<td class="hm-search-form-td-same">
+							    						<t t-if="(same_row.form_field_type)=='input_char'">
+							    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+							    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+							    						</t>
+							    						<t t-if="(same_row.form_field_type)=='input_int'">
+							    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+							    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+							    						</t>
+							    						<t t-if="(same_row.form_field_type)=='date'">
+							    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+							    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+							    						</t>
+							    						<t t-if="(same_row.form_field_type)=='search'">
+							    							<button type="button" class="hm-search-btn" t-attf-subid="#{same_row.sub_template_id}" t-attf-style="#{same_row.field_styles};font-size:#{same_row.font_size}px;">
+							    								<t t-esc="same_row.form_label" /> <i class="fa fa-search hm-fa-icon" aria-hidden="true"></i>
+							    							</button>
+							    						</t>
+					    							</td>
+					    						</t>
+					    					</t>
+										</tr>
+										</t>
+									</t>
+								</tbody>
+							</table>
+						</div>
+					</t> 
+				</t>
+				<t t-set="tcount" t-value="(tcount + 1)" />
+				</t>
+			</t>
+		</div>
+	</t>
+</templates>

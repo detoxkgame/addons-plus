@@ -8,7 +8,7 @@ class FormTemplate(models.Model):
     @api.multi
     def get_reservationform(self):
         
-        reservation_dashboard =  self.env['hm.vendor.dashboard'].sudo().search([('dashboard_category','ilike','Reservation')])
+        reservation_dashboard =  self.env['hm.vendor.dashboard'].sudo().search([('dashboard_category','=','reservation')])
 
         form_template = self.env['hm.form.template'].sudo().search(
                          [('vendor_dashboard_id', '=', reservation_dashboard.id)])
@@ -231,37 +231,39 @@ class PosOrder(models.Model):
     
     
     
-    @api.model
-    def _process_order(self, pos_order):
-        pos_order['to_invoice']=True
-        orders = super(PosOrder, self)._process_order(pos_order)
-        print (orders)       
-        if(orders):        
-            print (pos_order)
-            if pos_order.get('reservation_details'):
-                #post = pos_order.get('reservation_details')
-                post_order_details = pos_order.get('reservation_details')
-                #===============================================================
-                # if post_order_details['order_line']:
-                #     for line in post_order_details['order_line']:                    
-                #         if line.get('product_id') ==orders.mapped('lines').mapped('product_id').id:
-                #             
-                #         
-                #     
-                #===============================================================
-                
-                
-                del post_order_details['order_line']
-                
-                orders.update(post_order_details)
-                #===============================================================
-                # if orders.statement_ids:
-                #     for stmt in orders.statement_ids:
-                #         stmt.update({'journal_id':13})
-                #===============================================================
-                
-                
-        return orders
+    #===========================================================================
+    # @api.model
+    # def _process_order(self, pos_order):
+    #     pos_order['to_invoice']=True
+    #     orders = super(PosOrder, self)._process_order(pos_order)
+    #     print (orders)       
+    #     if(orders):        
+    #         print (pos_order)
+    #         if pos_order.get('reservation_details'):
+    #             #post = pos_order.get('reservation_details')
+    #             post_order_details = pos_order.get('reservation_details')
+    #             #===============================================================
+    #             # if post_order_details['order_line']:
+    #             #     for line in post_order_details['order_line']:                    
+    #             #         if line.get('product_id') ==orders.mapped('lines').mapped('product_id').id:
+    #             #             
+    #             #         
+    #             #     
+    #             #===============================================================
+    #             
+    #             
+    #             del post_order_details['order_line']
+    #             
+    #             orders.update(post_order_details)
+    #             #===============================================================
+    #             # if orders.statement_ids:
+    #             #     for stmt in orders.statement_ids:
+    #             #         stmt.update({'journal_id':13})
+    #             #===============================================================
+    #             
+    #             
+    #     return orders
+    #===========================================================================
         
     @api.multi   
     def newreservation(self,post,order_row_line_array):
