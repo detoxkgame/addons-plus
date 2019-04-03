@@ -163,7 +163,7 @@ input:hover, textarea:hover, input:focus, textarea:focus {
 }
 
 .phone-container {
-	font-size: 32px;
+	font-size: 22px;
 	font-weight: bolder;
 	line-height: 2.5em;
 	color: #fff;
@@ -189,7 +189,7 @@ input[type=text] {
 	border-bottom: 1px solid #c5c5c5;
 	border-color: #c5c5c5;
 	color: inherit;
-	font-size: 32px;
+	font-size: 22px;
 	width: inherit;
 	background: inherit;
 }
@@ -209,7 +209,7 @@ input[type=text] {
 	border-bottom: 1px solid #c5c5c5;
 	border-color: #c5c5c5;
 	color: inherit;
-	font-size: 32px;
+	font-size: 22px;
 	width: inherit;
 	background: inherit;
 }
@@ -280,7 +280,7 @@ input[type=text] {
 
 .sks-sec2-contact-inside-div1 {
 	height: 20em;
-	width: 50%;
+	width: 70%;
 }
 
 .sks-sec2-contact-inside-div2 {
@@ -302,4 +302,8 @@ input[type=text] {
 .sks-contact-btn-next:hover {
 	background-color: #fff;
 	color: #f7af00 !important;
+}
+
+.navbar-brand.logo img {
+    height: 4rem !important;
 }
