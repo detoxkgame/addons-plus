@@ -3,7 +3,7 @@
     <data>       
         <template id="assets" inherit_id="point_of_sale.assets">
           <xpath expr="." position="inside">
-          	   <!-- <script type="text/javascript" src="/skit_pos_return/static/src/js/pos_edit_payment_mode.js"></script> -->
+          	   <script type="text/javascript" src="/skit_pos_return/static/src/js/pos_edit_payment_mode.js"></script>
                <script type="text/javascript" src="/skit_pos_return/static/src/js/pos_return.js"></script> 
                <script type="text/javascript" src="/skit_pos_return/static/src/js/jquery-barcode.js"></script>
                <link rel="stylesheet" href="/skit_pos_return/static/src/css/pos_return.css" /> 

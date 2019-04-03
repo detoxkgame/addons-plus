@@ -1,4 +1,4 @@
-odoo.define('skit_pos_edit_payment_mode.pos_edit_payment_mode', function (require) {
+odoo.define('skit_pos_return.pos_edit_payment_mode', function (require) {
 "use strict";
 
 	var core = require('web.core');

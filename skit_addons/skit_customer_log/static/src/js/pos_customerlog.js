@@ -186,4 +186,7 @@ odoo.define('skit_customer_log.pos_customerlog', function (require) {
 		    },
 		
 	});
+	return {
+		CustomerLogScreenWidget: CustomerLogScreenWidget,
+	}
 });

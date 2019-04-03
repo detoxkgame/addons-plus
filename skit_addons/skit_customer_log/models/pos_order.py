@@ -58,6 +58,8 @@ class Skit_PosOrder(models.Model):
                 sno = sno + 1
                 dateorder = False
                 if key == 'SO':
+                    session_id = 0
+                    invoice_cancel = False
                     invoices = self.env['account.invoice'].search([
                                         ('id', 'in', order.invoice_ids.ids)])
                     dateorder = fields.Date.from_string(order.date_order)
@@ -72,6 +74,8 @@ class Skit_PosOrder(models.Model):
                     else:
                         state = 'Cancelled'
                 elif key == 'POS':
+                    session_id = order.session_id.id
+                    invoice_cancel = True if order.invoice_id.state == 'cancel' else False
                     invoices = self.env['account.invoice'].search([
                                         ('id', 'in', order.invoice_id.ids)])
                     dateorder = fields.Date.from_string(order.date_order)
@@ -86,6 +90,8 @@ class Skit_PosOrder(models.Model):
                     else:
                         state = 'Invoiced'
                 else:
+                    session_id = 0
+                    invoice_cancel = False
                     invoices = self.env['account.invoice'].search([
                                                     ('id', '=', order.id)])
                     dateorder = fields.Date.from_string(order.date_invoice)
@@ -116,7 +122,9 @@ class Skit_PosOrder(models.Model):
                                 'amount_total': round(order.amount_total, 2),
                                 'date_order': dateorder,
                                 'name': order.name or '',
-                                'status': state})
+                                'status': state,
+                                'session_id': session_id,
+                                'invoice_cancel': invoice_cancel})
                 else:
                     datas.append({'id': order.id,
                                   'sno': sno,
@@ -126,7 +134,10 @@ class Skit_PosOrder(models.Model):
                                   'amount_total': round(order.amount_total, 2),
                                   'date_order': dateorder,
                                   'name': order.name or '',
-                                  'status': state})
+                                  'status': state,
+                                  'session_id': session_id,
+                                  'invoice_cancel': invoice_cancel
+                                  })
         return datas
 
     @api.model
