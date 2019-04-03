@@ -19,7 +19,8 @@
              'report/reconcil_report_temp.xml',
              'report/reconcil_report.xml',
              'wizard/difference_amount.xml',
-             'views/popup_template.xml'
+             'views/popup_template.xml',
+             'views/bank_reconcil_view.xml'
             ],
     'auto_install': False,
     'application': True,

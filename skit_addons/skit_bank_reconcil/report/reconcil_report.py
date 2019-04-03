@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import api, models, fields
-
+from odoo import api, models, fields, tools
+from datetime import datetime
     
 class SkitBankReconcilReport(models.AbstractModel):
     _name = "report.skit_bank_reconcil.reconcil_report"
@@ -65,37 +65,44 @@ class SkitBankReconcilReport(models.AbstractModel):
         #Unreconciled Bank Statement Lines
         journal_id = str(journal.id)
         company_id = str(self.env.user.company_id.id)
+        unreconcile_line = """(select 1 from account_move am join account_move_line aml on aml.move_id = am.id where aml.statement_line_id  = stl.id) """ 
+        if date_to: 
+            date_toparam = "'"+date_to+"'"
+            unreconcile_line =  """(select 1 from account_move am join account_move_line aml on aml.move_id = am.id where aml.statement_line_id  = stl.id and  date_maturity<"""+date_toparam+""")""" 
+            
         sql_query = """SELECT stl.id 
-                        FROM account_bank_statement_line stl  \
-                        where account_id IS NULL AND journal_id= """+journal_id+""" \
-                        AND not exists (select 1 from account_move am join account_move_line aml on aml.move_id = am.id where aml.statement_line_id  = stl.id) \
-                        AND company_id= """+company_id
+                        FROM account_bank_statement_line stl inner join account_move_line aml on stl.journal_id=aml.journal_id \
+                        where stl.account_id IS NULL AND stl.journal_id= """+journal_id+""" AND aml.reconciled_date IS NULL                        
+                        AND stl.company_id= """+company_id+""" AND not exists """+unreconcile_line+""" """
                     
         list=[]
         list.append({'journal_id':journal.id,'company_id' :self.env.user.company_id.id,})
         if date_from:
             date_fromparam = "'"+date_from+"'"
-            sql_query = sql_query+(""" AND date::date >="""+date_fromparam)
+            sql_query = sql_query+(""" AND aml.statement_date >="""+date_fromparam)
             list.append(date_from)
         if date_to: 
             date_toparam = "'"+date_to+"'"
-            sql_query=sql_query+(""" AND date::date <="""+date_toparam)
+            sql_query=sql_query+(""" AND aml.statement_date <="""+date_toparam)
             list.append(date_to)
-        sql_query += """ ORDER BY stl.id"""
+        sql_query += """ GROUP BY stl.id"""
+        
+        #print (sql_query)
         self.env.cr.execute(sql_query, [],)
         st_lines_left = self.env['account.bank.statement.line'].browse([line.get('id') for line in self.env.cr.dictfetchall()])
         
         #Validated Payments not linked with a Bank Statement Line
         domain_checks_to_print = [
                                   ('account_id', '=', default_debit_acc_id),
-                                  ('full_reconcile_id','=', False), 
-                                  ('statement_id','=',False),            
+                                  #('full_reconcile_id','=', False), 
+                                  #('statement_id','=',False),            
             
         ]
         if date_from:
-            domain_checks_to_print.append(('date', '>=', date_from),)
+            domain_checks_to_print.append(('reconciled_date', '>=', date_from),)
         if date_to:
-            domain_checks_to_print.append(('date', '<=', date_to),)
+            domain_checks_to_print.append(('reconciled_date', '>', date_to),)
+            #print (date_to)
         pay_move_line = self.env['account.move.line'].search(domain_checks_to_print)
         
         payment_lines=[]
@@ -127,6 +134,54 @@ class SkitBankReconcilReport(models.AbstractModel):
         }
 
 
+
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+    
+    reconciled_date = fields.Datetime(string='Reconciled Date')
+    statement_date = fields.Datetime(string='statement Date')   
+    
+    
+    @api.multi
+    def create(self,vals):
+        #super(AccountMoveLine,self).create(vals)
+        #if vals.get('date_maturity'):
+            #vals['statement_date'] =vals.get('date_maturity')
+        records  = super(AccountMoveLine,self).create(vals)
+        for res in records:
+            #print (res)
+            vals=[]
+            statement_date = self.env['account.bank.statement'].browse(res.statement_id.id)
+            if res.date or statement_date:
+                #res.statement_date = datetime.strftime(statement_date, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+                #res.reconciled_date= datetime.strftime(res.date, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+                r_date = datetime.strftime(res.date, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+                if(statement_date):
+                    s_date = datetime.strftime(statement_date.date, '%Y-%m-%d %H:%M:%S')
+                else:
+                    s_date = False
+                records.write({'statement_date': s_date,
+                               'reconciled_date': r_date})
+               
+        return records;
+    
+    
+#===============================================================================
+#     @api.multi
+#     def write(self,vals):
+# #         super(AccountMoveLine,self).write(vals)
+# #         if vals.get('date'):
+# #             vals['statement_date'] =vals.get('date')
+# #         super(AccountMoveLine,self).write(vals)
+#         
+#         
+#         if self.date or vals.get('date'):
+#                 vals['statement_date']= datetime.strftime(self.date, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+#                 vals['reconciled_date']= datetime.strftime(self.date, tools.DEFAULT_SERVER_DATETIME_FORMAT)
+#         res  = super(AccountMoveLine,self).write(vals)
+#                 #print (res.statement_date)
+#                 #print (res.reconciled_date)
+#===============================================================================
  
     
         
