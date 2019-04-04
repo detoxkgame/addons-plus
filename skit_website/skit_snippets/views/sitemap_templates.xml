@@ -86,7 +86,7 @@
             <section class="s_text_block pt16 pb8 sitemap_section">
                 <div class="container sitemap-container">
                     <div class="row menu_nav">
-						<div class="stiemap-width-25">
+						<div class="sitemap-width-60">
 							<div class="footer-col-split">
 								<t t-foreach="website.menu_id.child_id" t-as="submenu">
 									<t t-set="counter" t-value="0" />
@@ -96,20 +96,20 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="stiemap-width-50" id="office">
-							<p class="contact_address"><strong>Puducherry</strong></p>
-							<p class="contact_address">
-								<span t-field="res_company.street"/>
+						<div class="sitemap-width-60" id="office">
+							<h5>Puducherry</h5>
+							<p class="contact_address addres_margin">
+								<span t-field="res_company.street"/><br></br>
+								<span t-field="res_company.street2"/>
 								<span t-field="res_company.city"/><br></br>
-								<span t-field="res_company.state_id"/>
+								<span t-field="res_company.state_id"/> - 
 								<span t-field="res_company.zip"/><br></br>
 								<span t-field="res_company.country_id"/>
 							</p>
 						</div>
-                        <div class="stiemap-width-50" id="connect"> 
+                        <div class="sitemap-width-40" id="connect"> 
                             <h5>Connect with us</h5>
                             <ul class="list-unstyled">
-                                <li><a href="/contactus">Contact us</a></li>
                                 <li><i class="fa fa-phone"/> <span t-field="res_company.phone"/></li>
                                 <li><i class="fa fa-envelope"/>  <span t-field="res_company.email"/></li>
                             </ul>

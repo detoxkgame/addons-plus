@@ -109,13 +109,16 @@
 	margin-right: 5%;
 	max-width:100%;
 }
-.stiemap-width-25{
+.stiemap-width-40{
 	width: 25%;
 }
-.stiemap-width-50{
+.sitemap-width-60{
 	width: 50%;
 }
 .contact_address{
 	color: #212529;
 	text-align: left;
+}
+.addres_margin{
+	margin: 0px !important;
 }
