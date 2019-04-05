@@ -173,6 +173,9 @@ class Skit_PosOrder(models.Model):
                 if account_payment:
                     paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
                 paid_amount = paid_amount1 + paid_amount2
+                #To avoid return orders in pending invoice
+                if(paid_amount<0):
+                    paid_amount = -(paid_amount)
                 dateinvoice = fields.Date.from_string(invoice.date_invoice)
                 diff = (invoice.amount_total - paid_amount)
                 amt = round(diff, 2)

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 import odoo.addons.decimal_precision as dp
+from odoo.tools import float_is_zero
+from odoo.exceptions import UserError
 
 
 class PosOrder(models.Model):
@@ -9,6 +11,48 @@ class PosOrder(models.Model):
     _description = "Get POS Order Details"
 
     is_refund = fields.Boolean(string='Return')
+    
+    @api.model
+    def _process_order(self, pos_order):
+        order = super(PosOrder, self)._process_order(pos_order)
+        print (order)
+        
+        journal_id = 0
+        for payments in pos_order['statement_ids']:
+            journal_ids = set()
+            journal_id = journal_ids.add(payments[2]['journal_id'])
+            print (journal_id)
+            
+        if pos_order['amount_total'] < 0 and journal_id == 0:
+                pos_session = self.env['pos.session'].browse(pos_order['pos_session_id'])
+                if pos_session.state == 'closing_control' or pos_session.state == 'closed':
+                    pos_order['pos_session_id'] = self._get_valid_session(pos_order).id
+                cash_journal_id = pos_session.cash_journal_id.id
+                if not cash_journal_id:
+                        # Select for change one of the cash journals used in this
+                        # payment
+                    cash_journal = self.env['account.journal'].search([
+                        ('type', '=', 'cash'),
+                        ('id', 'in', list(journal_ids)),
+                    ], limit=1)
+                    if not cash_journal:
+                            # If none, select for change one of the cash journals of the POS
+                            # This is used for example when a customer pays by credit card
+                            # an amount higher than total amount of the order and gets cash back
+                        cash_journal = [statement.journal_id for statement in pos_session.statement_ids if statement.journal_id.type == 'cash']
+                        if not cash_journal:
+                            raise UserError(_("No cash statement found for this session. Unable to record returned cash."))
+                    cash_journal_id = cash_journal[0].id
+                    print (journal_id)
+                
+                order.add_payment({
+                            'amount': pos_order['amount_total'],
+                            'payment_date': fields.Date.context_today(self),
+                            'payment_name': _('return'),
+                            'journal': cash_journal_id,
+                    })
+        return order
+    
 
     def get_order_details(self, barcode_no):
         pos_order = self.search([('pos_reference', '=',  barcode_no)])
