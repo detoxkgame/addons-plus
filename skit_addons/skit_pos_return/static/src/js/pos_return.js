@@ -297,7 +297,7 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    		}
 	    		//qty exceed condition
 	    		if(return_qty > quantity){
-	    			$(".error").css({"display":"block", "height":"9px", "margin-bottom":"3px"});
+	    			$(".error").css({"display":"block", "height":"9px", "margin-bottom":"-5px"});
 					error = true;
 	    		}
 	    		else{

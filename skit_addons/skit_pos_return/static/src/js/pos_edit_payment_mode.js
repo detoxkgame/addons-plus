@@ -39,7 +39,7 @@ odoo.define('skit_pos_return.pos_edit_payment_mode', function (require) {
 	    	var order_id = tr.find('.dl_order_id').text();
 	    	
 	    	//new Model('pos.order').call('cancel_invoice',[order_id]).then(function(result){
-	    	$(document).on('click','.cancel_invoice_btn',function(event){
+	    	self._rpc({model: 'pos.order', method: 'cancel_invoice', args: [order_id], }).then(function(result) {
 	    		if(result == true){
 	    			tr.find('.edit_payment_btn').addClass("display_none");
 	    			tr.find('.cancel_invoice_btn').addClass("display_none");

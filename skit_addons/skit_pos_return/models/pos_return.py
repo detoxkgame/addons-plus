@@ -191,3 +191,23 @@ class ProductCategory(models.Model):
     categ_return_days = fields.Char(
             'Return Days',
             help="Return Order from specified number of days")
+
+class AccountInvoice(models.Model):
+    _inherit = "account.invoice"
+    
+    @api.multi
+    def action_invoice_open(self):
+        acc_inv = super(AccountInvoice, self).action_invoice_open()
+        
+        to_open_invoices = self.filtered(lambda inv: inv.state != 'open')
+        if to_open_invoices.filtered(lambda inv: not inv.partner_id):
+            raise UserError(_("The field Vendor is required, please complete it to validate the Vendor Bill."))
+        if to_open_invoices.filtered(lambda inv: inv.state != 'draft'):
+            raise UserError(_("Invoice must be in draft state in order to validate it."))
+        if to_open_invoices.filtered(lambda inv: not inv.account_id):
+            raise UserError(_('No account was found to create the invoice, be sure you have installed a chart of account.'))
+        to_open_invoices.action_date_assign()
+        to_open_invoices.action_move_create()
+        return to_open_invoices.invoice_validate()
+    
+    
