@@ -264,7 +264,7 @@
 											     <ul class="work__services">
 											         <li class="work__service">ERP for Devotional center</li>
 											     </ul>
-											     <a href="/case-study/tccl-services" title="TCCL Services" class="work_study tccl_study">
+											     <a href="/projects/odoo/project1/theckchen-choling" title="TCCL Services" class="work_study tccl_study">
 											     	<div class="fa-4x study_icon_button"></div>
 										            <span class="icon_button__label">Case Study</span>
 										         </a>
@@ -283,7 +283,7 @@
 											     <ul class="work__services">										                   
 											         <li class="work__service">To Automate your telemarketing campaigns with our various numbering modes</li>
 											     </ul>		
-											    <a href="/case-study/viacrm-services" title="Via CRM Services" class="work_study viacrm_study">
+											    <a href="/projects/php/project1/via-crm" title="Via CRM Services" class="work_study viacrm_study">
 													   <div class="fa-4x study_icon_button"></div>
 												       <span class="icon_button__label">Case Study</span>
 												 </a>
@@ -307,7 +307,7 @@
 											     <ul class="work__services">										                   
 											         <li class="work__service">Messaging app integrated with Fleet Master</li>
 											     </ul>		
-											     <a href="/case-study/fleetmaster-services" title="LGA Services" class="work_study fleetmaster_study">
+											     <a href="/projects/ios/project1/fleet-master" title="LGA Services" class="work_study fleetmaster_study">
 											     	<div class="fa-4x study_icon_button"></div>
 										            <span class="icon_button__label">Case Study</span>
 										          </a>				    

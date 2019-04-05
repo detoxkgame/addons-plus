@@ -1,53 +1,8 @@
-// Colors
-
-$light: transparent;
-$dark: #000;
-$radius: 50px;
-
-.hamburgler{
-	width: 150px;
-	height: 150px;
-	display: block;
-	transition: .3s ease all;
-
-	&.no-hamburgler{
-		transform: rotate(-45deg);
-	}
+.hamburgler.no-hamburgler {
+	z-index: 99 !important;
 }
 
-.bun,
-.meat{
-	display: block;
-	width: 100%;
-	background: $dark;
-	height: 20%;
-	transition: .3s ease all;
-	border-radius: $radius;
-}
-
-.top{
-	 .no-hamburgler & {
-		height: 38%;
-		width: 20%;
-		margin-left: 40%;
-		border-radius: $radius $radius 0 0;
-	}
-}
-
-.bottom{
-	.no-hamburgler & {
-		height: 38%;
-		width: 20%;
-		margin-left: 40%;
-		border-radius: 0 0 $radius $radius;
-	}
-}
-
-.meat{
-	margin: 20% 0;
-	
-	.no-hamburgler &{
-		margin: 2% 0;
-
-	}
+.sks_topmenu_overlay {
+	z-index: 9;
+	color: #fff;
 }
