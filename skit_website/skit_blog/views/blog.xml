@@ -12,7 +12,7 @@
 		<template id="web_blog_pageview">
 		<section class="blog-listing">
 				<div class="blog-grid grid-container" style="position: relative; height: auto;background: #5ab7bf !important;">
-						<div class="rows_view" style="width: 100%; margin-top: 14%;">
+						<div class="rows_view" style="width: 100%; margin-top: 20%;">
 								<div style="width: 90%; margin-left: 5%; margin-right: 5%;">
 										<!-- <t t-esc="blog_post"/> -->
 										<t t-foreach="blog_posts" t-as="blog_post">
