@@ -97,14 +97,22 @@
 					</div>
 					<div class="row">
 						<div class="sitemap-width-60" id="office">
-							<h5>Puducherry</h5>
+							<p class="contact_address"><strong>Registered Office</strong></p>
 							<p class="contact_address addres_margin">
 								<span t-field="res_company.street"/><br></br>
-								<span t-field="res_company.street2"/>
+								<span t-field="res_company.street2"/><br></br>
 								<span t-field="res_company.city"/><br></br>
 								<span t-field="res_company.state_id"/> - 
 								<span t-field="res_company.zip"/><br></br>
 								<span t-field="res_company.country_id"/>
+							</p>
+							<p class="contact_address"><strong>Development Center</strong></p>
+							<p class="contact_address">
+								<span>No 2. 4th Cross Street</span><br></br>
+								<span>Sidhanantha Nagar</span><br></br>
+								<span>Near IG Square</span><br></br>
+								<span>Pudhucherry 605001</span><br></br>
+								<span>India</span>
 							</p>
 						</div>
                         <div class="sitemap-width-40" id="connect"> 
