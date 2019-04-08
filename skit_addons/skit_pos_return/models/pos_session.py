@@ -21,11 +21,8 @@ class Skit_PosSession(models.Model):
                 [('id', '=', pos_order_id)]
             )
             if pos_order.invoice_id.state == 'cancel':
-                payment_acc_move = self.env['account.move'].search(
-                    [('statement_line_id', '=', line.id)]
-                )
                 payment_acc_move_line = self.env['account.move.line'].search(
-                    [('move_id', '=', payment_acc_move.id)], limit=1)
+                    [('statement_line_id', '=', line.id)], limit=1)
                 account_payment = payment_acc_move_line.payment_id
                 account_payment.cancel_payment()
         return res
