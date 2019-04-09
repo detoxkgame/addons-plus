@@ -27,17 +27,15 @@
 								data-background="#3f3d41">
 								<div class="inside sks-inside">
 									<p class="o_default_snippet_text sks-sec2-content">
-										We believe that
-										<span>mondays shouldn't suck, </span>
-										<br></br>
-										that
-										<span>flat company hierarchy is better,</span>
-										and
-										<br></br>
-										that
-										<span>the best measure of success is client </span>
-										<br></br>
-										<span>and employee happiness.</span>
+										<span>SrikeshInfotech</span>
+										is an India based software company that
+										<span>focuses on highly qualitative, timely delivered and cost-effective offshore software development.</span>
+										We have 
+										<span>8+ years of technical and functional experience</span>
+										in
+										<span>ERP Customization and Implementation.</span>
+										The experience made us understand all the logics followed in compiere both 
+										<span>functionally and technically.</span>
 									</p>
 								</div>
 							</div>
@@ -70,8 +68,8 @@
 									</div>
 									<div class="sks-abt-sec3-rhs">
 										<div>
-											<img style="width: 100%; height:100%;"
-												src="https://www.vincit.com/dist/about-img-split.jpg"></img>
+											<img style="width: 70%; height:100%;"
+												src="/skit_website_menu/static/src/img/our_projects/others/about_us.jpg"></img>
 										</div>
 									</div>
 								</div>
