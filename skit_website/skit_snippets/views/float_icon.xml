@@ -27,48 +27,34 @@
 							<form action="#" class="sks_float_form soft_imp">
 								<div class="contact-form__container">
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">Hey, my name is</label>
-										</span>
-										<span>
+											<span class="contact_label">Hey, my name is</span>
 											<input class="sks_float_input name" t-attf-ismandatorty="true"
 												type="text" placeholder="full name" />
 											,
-										</span>
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">and I work at</label>
-										</span>
-										<span>
+											<span class="contact_label">and I work at</span>
 											<input class="sks_float_input company" t-attf-ismandatorty="false"
 												type="text" placeholder="company" />
 											.
-										</span>
 									</div>
 									<div class="contact_field_project_div">
-										<span class="contact_span">
-											<label class="contact_label">I'd like to team up with Srikesh Infotech for:
-											</label>
-										</span>
-										<br></br>
+											<span class="contact_label">I'd like to team up with Srikesh Infotech for:
+											</span>
 										<input class="sks_float_input project" t-attf-ismandatorty="true"
 											type="text" placeholder="overview of project" />
 						
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">You can reach me at</label>
-										</span>
-										<span>
+											<span class="contact_label">You can reach me at</span>
 											<input class="sks_float_input email" t-attf-ismandatorty="true"
 												type="text" placeholder="email" />
-										</span>
-										<input class="sks_float_input phone" t-attf-ismandatorty="true"
+									</div>
+									<div class="contact_field_div">		
+											<span class="contact_label" style="visibility: hidden;">You can reach me at</span>
+											<input class="sks_float_input phone" t-attf-ismandatorty="true"
 											type="text" placeholder="phone no" />
 									</div>
-						
-						
 									<br />
 									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br />
@@ -78,42 +64,30 @@
 							<form action="#" class="sks_float_form hire_form">
 								<div class="contact-form__container">
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">Hey, my name is</label>
-										</span>
-										<span>
+											<span class="contact_label">Hey, my name is</span>
 											<input class="sks_float_input hire_name" t-attf-ismandatorty="true"
 												type="text" placeholder="full name" />
-										</span>
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">and I work at</label>
-										</span>
-										<span>
+											<span class="contact_label">and I work at</span>
 											<input class="sks_float_input hire_company"
 												t-attf-ismandatorty="false" type="text" placeholder="company" />
-										</span>
 									</div>
 									<div class="contact_field_project_div">
-										<span class="contact_span">
-											<label class="contact_label">I'd like to team up with Srikesh Infotech for:
-											</label>
-										</span>
-										<br></br>
+											<span class="contact_label">I'd like to team up with Srikesh Infotech for:
+											</span>
 										<input class="sks_float_input hire_project"
 											t-attf-ismandatorty="true" type="text" placeholder="overview of project" />
 						
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">You can reach me at</label>
-										</span>
-										<span>
+											<span class="contact_label">You can reach me at</span>
 											<input class="sks_float_input hire_email"
 												t-attf-ismandatorty="true" type="text" placeholder="email" />
-										</span>
-										<input class="sks_float_input hire_phone" t-attf-ismandatorty="true"
+									</div>
+									<div class="contact_field_div">
+											<span class="contact_label" style="visibility: hidden;">You can reach me at</span>
+											<input class="sks_float_input hire_phone" t-attf-ismandatorty="true"
 											type="text" placeholder="phone no" />
 									</div>
 									<br></br>
@@ -125,41 +99,35 @@
 							<form action="#" class="sks_float_form development_form">
 								<div class="contact-form__container ">
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">Hey, my name is</label>
-										</span>
-										<span>
+										
+											<span class="contact_label">Hey, my name is</span>
 											<input class="sks_float_input develop_name"
 												t-attf-ismandatorty="true" type="text" placeholder="full name" />
-										</span>
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">and I work at</label>
-										</span>
-										<span>
+										
+											<span class="contact_label">and I work at</span>
+
 											<input class="sks_float_input develop_company"
 												t-attf-ismandatorty="false" type="text" placeholder="company" />
-										</span>
 									</div>
 									<div class="contact_field_project_div">
-										<span class="contact_span">
-											<label class="contact_label">I'd like to team up with Srikesh Infotech for:
-											</label>
-										</span>
+										
+											<span class="contact_label">I'd like to team up with Srikesh Infotech for:
+											</span>
 										<br></br>
 										<input class="sks_float_input develop_project"
 											t-attf-ismandatorty="true" type="text" placeholder="overview of project" />
 						
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_span">
-											<label class="contact_label">You can reach me at</label>
-										</span>
-										<span>
+										
+											<span class="contact_label">You can reach me at</span>
 											<input class="sks_float_input develop_email"
 												t-attf-ismandatorty="true" type="text" placeholder="email" />
-										</span>
+									</div>
+									<div class="contact_field_div">
+										<span class="contact_label" style="visibility: hidden;">You can reach me at</span>
 										<input class="sks_float_input develop_phone"
 											t-attf-ismandatorty="true" type="text" placeholder="phone no" />
 									</div>
