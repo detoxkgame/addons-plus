@@ -56,7 +56,7 @@ class Skit_PosOrder(models.Model):
                 acc_invoice.write({"state": 'cancel'})
                 pos_order.invoice_cancel = True
         except Exception as e:
-            return e.message or e.name
+            return e
         return True
 
     @api.model
