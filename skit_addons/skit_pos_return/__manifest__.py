@@ -22,7 +22,6 @@
     'data': [
         'views/pos_return_template.xml',
         'views/pos_return_view.xml',
-        'report/report_invoice.xml'
              ],
     'qweb': ['static/src/xml/pos_return.xml',
              'static/src/xml/pos.xml'],

@@ -47,6 +47,8 @@ class Skit_PosOrder(models.Model):
             else:
                 for order_line in pos_order_line:
                     order_line.write({"price_unit": 0.0})
+                    order_line._onchange_amount_line_all()
+                pos_order._onchange_amount_all()
                 for inv_line in account_invoice_line:
                     inv_line.write({"price_unit": 0.0})
                 account_move.button_cancel()

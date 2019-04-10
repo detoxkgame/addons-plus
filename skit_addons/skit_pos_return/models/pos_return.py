@@ -15,7 +15,6 @@ class PosOrder(models.Model):
     @api.model
     def _process_order(self, pos_order):
         order = super(PosOrder, self)._process_order(pos_order)
-        print (order)
         
         journal_id = 0
         for payments in pos_order['statement_ids']:
@@ -94,6 +93,7 @@ class PosOrder(models.Model):
 
     def get_order_no(self, order):
         pos_order = self.search([('pos_reference', '=', order)])
+
         for order in pos_order:
             return order.name
 
@@ -132,10 +132,14 @@ class PosOrder(models.Model):
         if invoice_id:
             if line.refund_line_id:
                 invoice_line.update({
-                    'quantity': line.qty if self.amount_total >= 0 else -line.qty,
+                    'quantity': line.qty,
                     })
                 invoice_line.invoice_id.update({
                     'name':  line.refund_line_id.order_id.name,
+                    })
+            else:
+                invoice_line.update({
+                    'quantity': line.qty
                     })
 
 
@@ -209,5 +213,4 @@ class AccountInvoice(models.Model):
         to_open_invoices.action_date_assign()
         to_open_invoices.action_move_create()
         return to_open_invoices.invoice_validate()
-    
     
