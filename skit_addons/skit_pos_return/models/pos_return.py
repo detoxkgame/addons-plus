@@ -201,8 +201,6 @@ class AccountInvoice(models.Model):
     
     @api.multi
     def action_invoice_open(self):
-        acc_inv = super(AccountInvoice, self).action_invoice_open()
-        
         to_open_invoices = self.filtered(lambda inv: inv.state != 'open')
         if to_open_invoices.filtered(lambda inv: not inv.partner_id):
             raise UserError(_("The field Vendor is required, please complete it to validate the Vendor Bill."))
