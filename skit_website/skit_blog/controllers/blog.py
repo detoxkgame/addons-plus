@@ -57,7 +57,7 @@ class WebsiteBlog(http.Controller):
         if blog:
             domain += [('blog_id', '=', blog.id)]
         post={}
-        blog_posts = BlogPost.search(domain, order="post_date desc")
+        blog_posts = BlogPost.sudo().search(domain, order="post_date desc")
         for vlogs in blog_posts:
             content_arr = BeautifulSoup(vlogs.content).get_text()
             extra_content = ""

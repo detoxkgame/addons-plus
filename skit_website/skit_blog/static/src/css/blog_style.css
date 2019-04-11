@@ -34,8 +34,9 @@
 	box-sizing: border-box;
 } */
 /* /* Create three equal columns that floats next to each other */
-.column_view :hover {
-	color: black !important;
+.column_view:hover {
+	color: #000;
+	text-decoration: none !important;
 }
 
 .column_view {
@@ -55,7 +56,8 @@
 	height: 40em; /*Should be removed. Only for demonstration*/
 	margin-left: 1.5%;
 	margin-right: 1.5%;
-	color: black !important;
+	color: #000;
+	text-decoration: none !important;
 }
 
 .column_view:nth-child(2) {
