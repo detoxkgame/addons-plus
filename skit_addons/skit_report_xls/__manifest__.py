@@ -8,8 +8,7 @@
         Financial Reports has "Print XLS" button, Click on this exports data to Excel 
         """,
     'category': "Tools",
-    'depends': ['account', 'skit_account_reports'],
-    'data': ['view/skit_report_xls.xml'],
+    'depends': ['account'],
     'demo': [],
     'installable': True,
 }
