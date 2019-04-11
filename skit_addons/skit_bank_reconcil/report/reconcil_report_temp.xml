@@ -8,8 +8,14 @@
 			<t t-call="web.internal_layout">
 				<div class="page">
 				<div align="center"> 
-		        <h4>Bank Reconciliation Report</h4>
-		         <h5>As of  <span  t-esc="data['date_to']"/></h5>
+		        	<h3>Bank Reconciliation Report</h3>
+		        	 <div class="row mt32">
+			        	<div class="col-4">
+			        		<strong>As of:</strong> 
+							<span><t t-if="data['skit_report_type']=='pdf'"><t t-esc="data['date_to']"/></t>
+							<t t-else="data['skit_report_type']=='XLS'"><t t-esc="data['form']['date_to']"/></t></span>
+						</div>
+						</div>
 				</div>
 					<table class="table table-condensed">
 						 <thead>
