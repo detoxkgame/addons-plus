@@ -41,7 +41,7 @@
 }
 
 .sks-sec2-contact-h2 {
-	font-size: 60px;
+	font-size: 3.5em;
 	font-weight: 600;
 	padding-bottom: 10px;
 	color: #fff;
@@ -247,8 +247,12 @@ p {
     width: 15.6em;
 	overflow: hidden;
 	resize:none;
-	height:2.2em;
+	height:3em;
 }
 .sks-form-style-4:hover {
     background-color: transparent;
+}
+
+::placeholder {
+	color: #c5c5c5;
 }

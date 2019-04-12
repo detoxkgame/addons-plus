@@ -30,13 +30,11 @@
 											<span class="contact_label">Hey, my name is</span>
 											<input class="sks_float_input name" t-attf-ismandatorty="true"
 												type="text" placeholder="full name" />
-											,
 									</div>
 									<div class="contact_field_div">
 											<span class="contact_label">and I work at</span>
 											<input class="sks_float_input company" t-attf-ismandatorty="false"
 												type="text" placeholder="company" />
-											.
 									</div>
 									<div class="contact_field_project_div">
 											<span class="contact_label">I'd like to team up with Srikesh Infotech for:
@@ -58,7 +56,7 @@
 									<br />
 									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br />
-									<button type="submit" id="launch" class="sks_float_btn launch">Launch</button>
+									<button type="submit" id="launch" class="sks_float_btn launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch</button>
 								</div>
 							</form>
 							<form action="#" class="sks_float_form hire_form">
@@ -93,7 +91,7 @@
 									<br></br>
 									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br></br>
-									<button type="submit" id="hire_launch" class="sks_float_btn hire_launch">Launch</button>
+									<button type="submit" id="hire_launch" class="sks_float_btn hire_launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch</button>
 								</div>
 							</form>
 							<form action="#" class="sks_float_form development_form">
@@ -134,7 +132,7 @@
 									<br />
 									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br />
-									<button type="submit" id="develop_launch" class="sks_float_btn develop_launch">Launch
+									<button type="submit" id="develop_launch" class="sks_float_btn develop_launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch
 									</button>
 								</div>
 							</form>

@@ -29,7 +29,7 @@ $(document).ready(function() {
 			}
 		}
 		/** Change related work and progress */
-		if($(window).scrollTop() + $(window).height() > $(document).height()-500){
+		if($(window).scrollTop() + $(window).height() > $(document).height()-800){
 			/*Display LGA content*/
 			$('#lga-apps-img').addClass('-visible');
 			$('#lga-apps').removeClass('work__project--hidden').addClass('work__project--visible');
@@ -40,7 +40,7 @@ $(document).ready(function() {
 			$('#fleetmaster-apps-img').removeClass('-visible');
 			$('#fleet_master-apps').removeClass('work__project--visible').addClass('work__project--hidden');
 		}
-		else if($(window).scrollTop() + $(window).height() > $(document).height()-1200){
+		else if($(window).scrollTop() + $(window).height() > $(document).height()-1500){
 			/*Display Fleet Master content*/
 			$('#fleetmaster-apps-img').addClass('-visible');
 			$('#fleet_master-apps').removeClass('work__project--hidden').addClass('work__project--visible');
@@ -51,7 +51,7 @@ $(document).ready(function() {
 			$('#tccl-apps-img').removeClass('-visible');
 			$('#tccl-apps').removeClass('work__project--visible').addClass('work__project--hidden');
 		}
-		else if($(window).scrollTop() + $(window).height() > $(document).height()-1750){
+		else if($(window).scrollTop() + $(window).height() > $(document).height()-2100){
 			/*Display ViaCrm content*/	
 			$('#viacrm-apps-img').addClass('-visible');
 			$('#viacrm-apps').removeClass('work__project--hidden').addClass('work__project--visible');
