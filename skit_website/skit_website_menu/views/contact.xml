@@ -32,18 +32,20 @@
 											<p style="text-align: left;">No 2, 4th Cross Street</p>
 											<p style="text-align: left;">Sidhanantha Nagar</p>
 											<p style="text-align: left;">Near IG Square</p>
-											<p style="text-align: left;">Pondicherry</p>
+											<p style="text-align: left;">Puducherry</p>
 										</div>
-										<div style=" float: right; color: #fff;">
+										<div class="sks-sec2-contact-inside-div2" style=" float: right; color: #fff;">
 											<h2 style="visibility: hidden;">Contact Info</h2>
 											<p style="text-align: left;">info@srikeshinfotech.com</p>
 											<p style="text-align: left;">0123456789</p>
 										</div>
 									</div>
+									<div class="sks_float_form_content" id="message">
+									<form action="#" class="sks_float_form sks_contact_form">
 									<div class="phone-container">
 										<span style="color: #fff;">Hey, my name is</span>
 										<input style="outline: none; width: 15.6em;"
-											class="phone-input" type="text" name="name"
+											class="phone-input sks_contact_name" t-attf-ismandatorty="true" type="text" name="name"
 											placeholder="full name" />
 										,
 
@@ -52,7 +54,7 @@
 									<div class="phone-container">
 										<span style="color: #fff;">and I work at</span>
 										<input style="outline: none; width: 17.3em;"
-											class="phone-input" type="text" name="name"
+											class="phone-input sks_contact_company" t-attf-ismandatorty="true" type="text" name="name"
 											placeholder="company" />
 										,
 
@@ -61,8 +63,17 @@
 									<div class="phone-container">
 										<span style="color: #fff;">You can reach me at</span>
 										<input style="outline: none; width: 13.7em;"
-											class="phone-input" type="text" name="name"
+											class="phone-input sks_contact_email" t-attf-ismandatorty="true" type="text" name="name"
 											placeholder="email" />
+										,
+
+
+									</div>
+									<div class="phone-container">
+										<span style="color: #fff; visibility: hidden;">You can reach me at</span>
+										<input style="outline: none; width: 13.7em;"
+											class="phone-input sks_contact_phone" t-attf-ismandatorty="true" type="text" name="name"
+											placeholder="phone no" />
 										,
 
 
@@ -70,18 +81,27 @@
 									<div class="phone-container">
 										<span style="color: #fff;">If you have any queries</span>
 										<input style="outline: none; width: 12.4em;"
-											class="phone-input" type="text" name="name"
+											class="phone-input sks_contact_project" t-attf-ismandatorty="true" type="text" name="name"
 											placeholder="message" />
 										,
 
 
 									</div>
-									<div class="sks-form-submit-btn submit">
-										<a class="btn sks-contact-btn-next sks-career-submit">
-											<i class="fa fa-paper-plane" />
-											Submit
-										</a>
+									<br></br><br></br>
+									<button type="submit" id="sks-contact-launch" class="sks_float_btn sks-contact-launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch
+									</button>
+									</form>
 									</div>
+				 					<div id="confirm">
+				 						<div id="popup">
+				 							<div class="popup_div">
+				 								<canvas style="display: none" width="100" height="100"></canvas>
+				 								<img id="confirm_gif_id" class="confirm_gif" alt="Contact us." src="/skit_snippets/static/src/img/float_video/confirm.gif"/>
+				 								<span class="pop_span">Thank for registering we will contact you soon
+				 								</span>
+				 							</div>
+				 						</div>
+				   					</div>
 								</div>
 							</div>
 						</div>

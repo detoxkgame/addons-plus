@@ -279,7 +279,7 @@ input[type=text] {
 }
 
 .sks-sec2-contact-inside-div1 {
-	height: 20em;
+	height: 15em;
 	width: 70%;
 }
 
@@ -306,4 +306,17 @@ input[type=text] {
 
 .navbar-brand.logo img {
     height: 4rem !important;
+}
+
+.sks-sec2-contact-inside-div2 p {
+    margin: 0;
+    padding: 0;
+}
+
+button#sks-contact-launch:focus {
+    outline: none;
+}
+
+button#launch:focus {
+    outline: none;
 }

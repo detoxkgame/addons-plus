@@ -112,7 +112,7 @@ video::-webkit-media-controls {
   color: #f1f1f1;
 }
 .warning{
-	border: 2px solid red !important;
+	border-bottom: 2px solid red !important;
 }
 
 #confirm {
@@ -248,8 +248,8 @@ video::-webkit-media-controls {
 		background:transparent;
 		border-radius:8px;
 		box-shadow:0 0 40px -10px transparent;
-		margin:calc(30vh - 220px) auto;
-		padding:20px 30px;
+		/* margin:calc(30vh - 220px) auto;
+		padding:20px 30px; */
 		max-width:calc(100vw - 40px);
 		box-sizing:border-box;
 		font-family:'Montserrat',sans-serif;
@@ -293,16 +293,17 @@ video::-webkit-media-controls {
 /* FORM SUBMIT BUTTON */
 	.sks_float_btn{
 		float:left;
-		padding:8px 12px;
+		padding:12px 12px;
 		margin:8px 0 0;
 		font-family:'Montserrat',sans-serif;
-		border:2px solid #78788c;
+		border:2px solid #fff;
 		border-radius: 99rem;
 		background:0;
-		color:#5a5a6e;
+		color:#fff;
 		cursor:pointer;
 		transition:all .3s;
 		width: 20%;
+		font-weight: bold;
 	}
 /* TAG LINE BEFORE SUBMIT BUTTON */
 	.sks_float_p_tag {
@@ -315,6 +316,7 @@ video::-webkit-media-controls {
 		background:#fff;
 		border:2px solid #fff;
 		color:#000;
+		font-weight: bold;
 		border-radius: 99rem;
 	}
 

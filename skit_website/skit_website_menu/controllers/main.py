@@ -6,6 +6,19 @@ import base64
 
 class Website(http.Controller):
 
+    @http.route(['/websites/contact_us'], type='json', auth="public", methods=['POST'], website=True)
+    def software_imp(self, **post):
+        """ Contact Form Details """
+        partner = request.env['res.partner'].sudo().create({'name': post['sks_contact_name']})
+        new_crm = request.env['crm.lead'].sudo().create({
+                                            'name': post['sks_contact_project']+str(' (Contact Form)'),
+                                            'description': post['sks_contact_company'],
+                                            'partner_id': partner.id,
+                                            'email_from': post['sks_contact_email'],
+                                            'phone': post['sks_contact_phone']
+                                            })
+        return new_crm
+    
     @http.route(['/websites/career/information'], csrf=False, method=['POST', 'GET'],
                 auth="public", website=True)
     def website_career(self, **post):

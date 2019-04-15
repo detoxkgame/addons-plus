@@ -11,6 +11,7 @@
 			<script type="text/javascript" src="/skit_website_menu/static/src/js/demo_example.js"></script>
 			<script type="text/javascript" src="/skit_website_menu/static/src/js/menu.js"></script>
 			<script type="text/javascript" src="/skit_website_menu/static/src/js/careers.js"></script>
+			<script type="text/javascript" src="/skit_website_menu/static/src/js/contact.js"></script>
 		</xpath>
 	</template>
 </odoo>

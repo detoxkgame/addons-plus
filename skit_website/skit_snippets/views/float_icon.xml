@@ -54,7 +54,6 @@
 											type="text" placeholder="phone no" />
 									</div>
 									<br />
-									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br />
 									<button type="submit" id="launch" class="sks_float_btn launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch</button>
 								</div>
@@ -89,7 +88,6 @@
 											type="text" placeholder="phone no" />
 									</div>
 									<br></br>
-									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br></br>
 									<button type="submit" id="hire_launch" class="sks_float_btn hire_launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch</button>
 								</div>
@@ -130,7 +128,6 @@
 											t-attf-ismandatorty="true" type="text" placeholder="phone no" />
 									</div>
 									<br />
-									<p class="sks_float_p sks_float_p_tag">P.S. I'll bring cookies to the kickoff meeting.</p>
 									<br />
 									<button type="submit" id="develop_launch" class="sks_float_btn develop_launch"><i class="fa fa-paper-plane"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Launch
 									</button>
