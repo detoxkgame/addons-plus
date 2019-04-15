@@ -182,9 +182,14 @@ video::-webkit-media-controls {
 	}
 	
 	#contact:hover { background: transparent; }
-	#contact:active { background: #444; }
+	#contact:active { background: transparent; }
+
+a#contact:focus {
+	outline: 0;
+}
+
 /* Open POP Up Form */
-	#contactForm{
+#contactForm{
 		display: none;
 		padding: 2em;
 		width: 400px;

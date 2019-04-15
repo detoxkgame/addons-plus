@@ -260,3 +260,20 @@ p {
 .sks-carieer-form-flds textarea::placeholder {
   color: #c5c5c5;
 }
+
+.fa-paper-plane {
+	transition: opacity .3s, transform 2s;
+	transform: rotate(-0deg) scale(1);
+}
+
+.sks_float_btn:hover {
+	.fa-paper-plane {
+		transform: rotate(360deg) scale(1);
+	}
+}
+
+.sks-career-submit:hover {
+	.fa-paper-plane {
+		transform: rotate(360deg) scale(1);
+	}
+}
