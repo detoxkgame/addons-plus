@@ -370,3 +370,8 @@ margin-top: 20%;
 .blog_title,.o_sharing_links{
 	margin:2%;
 }
+
+.sks_nxt_blog {
+	text-align: right;
+    margin: 0% !important;	
+}

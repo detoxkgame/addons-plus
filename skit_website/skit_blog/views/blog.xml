@@ -95,6 +95,10 @@
 			</xpath>
 		</template>
 		
-		
+		<template  id="sks_opt_blog_post_complete_read_next" inherit_id="website_blog.opt_blog_post_complete_read_next" active="True" customize_show="True">>
+			<xpath expr="//div[@class='blog_title']/p[@class='mt32']" position="replace">
+				<p class="mt32 sks_nxt_blog">Read Next <span class="fa fa-long-arrow-right"/></p>	
+			</xpath>
+		</template>
 		
 </odoo>
