@@ -1,0 +1,27 @@
+<odoo>
+	<template id="sks_layout_logo_show" inherit_id="website.layout_logo_show"
+		customize_show="True" name="SKIT Show Logo">
+		<xpath expr="//a[hasclass('navbar-brand')]"
+			position="replace">
+			<a href="/" class="navbar-brand logo sks-nav-logo">
+				<div style="width: 100%;">
+					<div class="sks-logo-main">
+						<span>Srikesh</span><br></br>
+						<span>Infotech</span>
+					</div>
+					<div class="sks-logo-tagline">
+						<span>Implements</span><br></br>
+						<span>Your</span><br></br>
+						<span>Imaginations</span>
+					</div>
+				</div>
+<!-- 				<span t-field="res_company.logo"
+					t-options="{'widget': 'image'}" role="img"
+					t-att-aria-label="'Logo of %s' % res_company.name"
+					t-att-title="res_company.name" /> -->
+<!-- 				<span t-field="res_company.partner_id" style="font-weight: bold; font-size: 3vh; color: #400090; border-bottom: 1px solid #9e9e9e26;"/><br></br>
+				<span t-field="res_company.company_registry" style="font-size: 1.2vh; color: #9E9E9E; letter-spacing: 0.14em;"/> -->
+			</a>
+		</xpath>
+	</template>
+</odoo>

@@ -16,6 +16,7 @@
         'views/contact.xml',
         'views/careers.xml',
         'views/asset.xml',
+        'views/navmenu_logo.xml',
        ],
     'qweb': ['src/xml/demo_template.xml'],
     'images': ['static/description/logo.png'],
