@@ -43,7 +43,7 @@
     
     <t t-name="ReturnPopupWidget">
 	    <div class="modal-dialog clientlist-screen">     
-            <div class="popup popup-text">
+            <div class="popup popup-text popup_return">
                 <p class="title"><t t-esc=" widget.options.title || '' " /></p>
                 	<div  class='packlot-lines'>               
                 	<table class="ol-table width100">
@@ -73,6 +73,7 @@
 				                       	    <input type="hidden" class="control-left product" name="product_name"  t-att-value="line.product_name" t-attf-id="product_name-#{line.id}"/>
 				                       	    <input type="hidden" class="control-left" name="partner"  t-att-value="line.partner" t-attf-id="partner-#{line.id}"/>
 				                       	    <input type="hidden" class="control-left" name="is_refund"  t-att-value="line.is_refund" t-attf-id="is_refund-#{line.id}"/>
+				                       	    <input type="hidden" class="control-left" name="is_exchange"  t-att-value="line.is_exchange" t-attf-id="is_exchange-#{line.id}"/>
 				                       	    <input type="hidden" class="control-left" name="discount"  t-att-value="line.discount" t-attf-id="discount-#{line.id}"/>
 				                       	    <input type="hidden" class="control-left" name="returnable"  t-att-value="line.returnable" t-attf-id="returnable-#{line.id}"/>
 				                       	    <input type="hidden" class="control-left" name="date_order"  t-att-value="line.date_order" t-attf-id="date_order-#{line.id}"/>
@@ -108,8 +109,11 @@
                     </div>
                 	<div class="footer">
                 		<span class="error">Return Quantity exceeded.</span>
-                    	<div class="button cancel">
+                    	<div class="button cancel return_cancel">
                         	Cancel
+                    	</div>
+                    	<div class="button exchange-confirm" id="exchange_confirm">
+                        	Exchange
                     	</div>
                     	<div class="button returnbtn-confirm" id="return_confirm">
                         	Return

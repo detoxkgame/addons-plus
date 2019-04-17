@@ -12,6 +12,10 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	var QWeb = core.qweb;
 	var ActionpadWidget = screens.ActionpadWidget;
 	var _t = core._t;
+	var is_complete = false;
+	var is_return  = false;
+	var exchange = false;
+	
 	PopupWidget.include({
 		show: function(options){
 	        options = options || {};
@@ -45,16 +49,19 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    export_for_printing: function(){
 	        var json = _super_order.export_for_printing.apply(this,arguments);
 	        json.is_refund = this.get_is_refund();
+	        json.is_exchange = this.get_is_exchange();
 	        return json;
 	    },
 	    export_as_JSON: function() {
 	        var json = _super_order.export_as_JSON.apply(this,arguments);
 	        json.is_refund = this.is_refund;
+	        json.is_exchange = this.is_exchange;
 	        return json;
 	    },
 	    init_from_JSON: function(json) {
 	        _super_order.init_from_JSON.apply(this,arguments);
 	        this.is_refund = json.is_refund;
+	        this.is_exchange = json.is_exchange;
 	    },
 	     /*---- Renewal  --- */
 	    set_is_refund: function(is_refund) {
@@ -63,6 +70,13 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    },
 	    get_is_refund: function(){
 	        return this.is_refund;
+	    },
+	    set_is_exchange: function(is_exchange) {
+	        this.is_exchange = is_exchange;
+	        this.trigger('change');
+	    },
+	    get_is_exchange: function(){
+	        return this.is_exchange;
 	    },
 	});
 	
@@ -180,12 +194,16 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    events: _.extend({}, PopupWidget.prototype.events, {
 	        'click #return_confirm': 'confirm_return',
 	        'click #complete_return': 'complete_return',
+	        'click #exchange_confirm': 'exchange_confirm'
 	    }),
 	    complete_return: function(e){
 	    	var self = this;
 	    	var order = this.pos.get_order();
 	    	var name_product1 = [];
 	    	var return_error = false;
+	    	is_complete = true;
+	    	is_return = false;
+	    	exchange = false;
 	    	
 		    	$('.get_return_products').each(function() {
 			    	var id =  $(this).attr('id');
@@ -247,6 +265,24 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 		    	    	 });
 		    		}
 			    	order.set_is_refund(true);
+			    	order.set_is_exchange(false);
+		    	});
+		    	$('.product-list').on('click',function(event){
+		    		var order = self.pos.get_order();
+		    		var total = order.get_total_with_tax();
+		    		if(order.get_orderlines().length === 1){
+		    			is_return = false;
+		    	    	is_complete = false;
+		    	    	exchange = false;
+		    		}
+		    		if(is_complete){
+			    		self.pos.gui.show_popup('alert', {
+			    			'title': 'Alert Message',
+			                'body': 'The product is not Exchangeable',
+			            });
+			    		var order_line = order.get_selected_orderline();
+			    		order.remove_orderline(order_line);
+		    		}
 		    	});
 	    },
 	    confirm_return: function(e){
@@ -256,6 +292,9 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    	var order_lines_arr=[];
 	    	var error = false;
 	    	var return_error = false;
+	    	is_return = true;
+	    	is_complete = false;
+	    	exchange = false;
 	    	
 	    	$('.get_return_products').each(function() {
 	    		var line_return = false;
@@ -342,6 +381,7 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	      		}
 	    	}
 	    	order.set_is_refund(true);
+	    	order.set_is_exchange(false);
 	    	if(!error){
 	    		self.gui.close_popup();
 	    		if(return_error){
@@ -352,8 +392,152 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    			return false;
 		    	}
 	    	}
+	    	$('.product-list').on('click',function(event){
+	    		var order = self.pos.get_order();
+	    		var total = order.get_total_with_tax();
+	    		if(order.get_orderlines().length === 1){
+	    			is_return = false;
+	    	    	is_complete = false;
+	    	    	exchange = false;
+	    		}
+	    		if(is_return){
+		    		self.pos.gui.show_popup('alert', {
+		    			'title': 'Alert Message',
+		                'body': 'You cannot add product while return. Kindly proceed to Payment',
+		            });
+			    	var order_line = order.get_selected_orderline();
+			    	order.remove_orderline(order_line);
+	    		}
+	    	});
+	    },
+	    exchange_confirm: function(e){
+	    	var self = this;
+	    	var order = this.pos.get_order();
+	    	var name_product1 = [];
+	    	var order_lines_arr1=[];
+	    	var error = false;
+	    	var return_error = false;
+	    	exchange = true;
 	    	
-	    },	    
+	    	$('.get_return_products').each(function() {
+	    		var line_return = false;
+	    		var id =  $(this).attr('id');
+	    		var product_id = $('#id-'+id).val();
+	    		var reason = $('#reason_for_return-'+id).val();
+	    		var price = $('#price-'+id).val();
+	    		var returnable = $('#returnable-'+id).val();
+	    		var product_name = $(this).find('input.product').val();
+	    		var dateorder = ($('#date_order-'+id).val()).slice(0,10).replace(/-/g,'-');
+	    		var date_1 = new Date(dateorder);
+	    		var date = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+	    		var date_2 = new Date(date);
+	    		var timeDiff = Math.abs(date_2.getTime() - date_1.getTime());
+			    var numberOfDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+			    var return_days = $('#return_days-'+id).val();
+			    var categ_return_days = $('#categ_return_days-'+id).val();
+	    		var return_qty = parseInt($('#returnqty-'+id).val());
+	    		var quantity = parseInt($('#qty-'+id).val());
+	    		var partner = $('#partner-'+id).val();
+	    		var discount = $('#discount-'+id).val();
+	    		var lot = $('#lot-'+id).val();
+	    		var product = self.pos.db.get_product_by_id(product_id);
+	    		var is_refund = $('#is_refund-'+id).val();
+	    		var is_exchange = $('#is_exchange-'+id).val();
+	    		
+	    		//To display name of the product
+	    		if(((return_days == 'false') && (categ_return_days <= numberOfDays)) || (return_days <= numberOfDays) && product_name){
+	    			name_product1.push(product_name);
+		    	}
+	    		//Return days condition(only product)
+	    		if(return_days <= numberOfDays){
+	    			return_error = true;
+	    			line_return = true;
+	    		}
+	    		//Return days condition(no product and has category)
+	    		if((return_days == 'false') && (categ_return_days <= numberOfDays)){
+	    			return_error = true;
+	    			line_return = true;
+	    		}
+	    		//qty exceed condition
+	    		if(return_qty > quantity){
+	    			$(".error").css({"display":"block", "height":"9px", "margin-bottom":"3px"});
+					error = true;
+	    		}
+	    		else{
+		    		order_lines_arr1.push({ 
+		    			 product: product,
+		    			 merge: false,
+		    			 return_qty: return_qty,
+		   	    		 quantity: (-return_qty), 
+		   	    		 is_refund: true, 
+		   	    		 is_exchange: true,
+		   	    		 price: price,
+		   	    		 lot: lot,
+		   	    		 refund_line_id: id, // set_refund_line_id
+		   	    		 discount: discount,
+		   	    		 returnable: returnable,
+		   	    		 reason_for_return: reason,
+		   	    		 error: error,
+		   	    		 line_return: line_return,
+		    		});
+	    		}
+	    	});
+	    	if(!error){
+	    		var len = order_lines_arr1.length;
+	    		for (var i = 0; i < len; i++)
+	    			
+	      		{
+		      			var line_val = order_lines_arr1[i];
+		      			if(line_val["return_qty"]>0 && line_val["line_return"] == false){
+				    		order.add_product(line_val["product"], {
+				    			merge: false,
+				    			quantity: line_val["quantity"], 
+					    		is_refund: true, 
+					    		is_exchange: true,
+					    		price: line_val["price"],
+					    		lot: line_val["lot"],
+					    		refund_line_id: line_val["refund_line_id"], // set_refund_line_id
+					    		discount: line_val["discount"],
+					    		returnable: line_val["returnable"],
+					    		reason_for_return: line_val["reason_for_return"],
+				    		});
+				    		
+		      			}
+	      		}
+	    	}
+	    	order.set_is_refund(true);
+	    	order.set_is_exchange(true);
+	    	if(!error){
+	    		self.gui.close_popup();
+	    		if(return_error){
+		    		self.pos.gui.show_popup('alert',{
+		    			'title': 'Date Exceeded',
+		    			'body': 'The product "' + name_product1 + '" is not returnable. Return date is exceeded.',   
+		    		});
+	    			return false;
+		    	}
+	    	}
+	    	var order = self.pos.get_order();
+    		var order_line = self.pos.get_order().get_selected_orderline();
+    		var total = order.get_total_with_tax();
+    		if(order.get_orderlines().length === 1){
+    			is_return = false;
+    	    	is_complete = false;
+    	    	exchange = false;
+    		}
+	    	$('.pay').on('click',function(event){
+	    		var order = self.pos.get_order();
+	    		var order_line = self.pos.get_order().get_selected_orderline();
+	    		var total = order.get_total_with_tax();
+	    			if(total < 0){
+					    self.gui.show_screen('products');
+					    self.pos.gui.show_popup('alert',{
+					    	'title': 'Message',
+					        'body': 'Amount cannot be refunded. Kindly select an alternative product for Exchange.',                  
+					    });
+	    			}
+	    	});
+	    },
 	});
 	gui.define_popup({name:'returnpopup', widget: ReturnPopupWidget});
 

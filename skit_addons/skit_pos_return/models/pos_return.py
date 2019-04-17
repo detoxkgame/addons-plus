@@ -11,6 +11,7 @@ class PosOrder(models.Model):
     _description = "Get POS Order Details"
 
     is_refund = fields.Boolean(string='Return')
+    is_exchange = fields.Boolean(string='Exchange')
     
     @api.model
     def _process_order(self, pos_order):
@@ -80,6 +81,7 @@ class PosOrder(models.Model):
                                   'price': line.price_unit,
                                   'partner': line.order_id.partner_id.id,
                                   'is_refund': line.order_id.is_refund,
+                                  'is_exchange': line.order_id.is_exchange,
 #                                   'reason_for_return': line.reason,
                                   'discount': line.discount,
                                   'returnable': line.product_id.returnable,
@@ -101,6 +103,7 @@ class PosOrder(models.Model):
     def _order_fields(self, ui_order):
         order_fields = super(PosOrder, self)._order_fields(ui_order)
         order_fields['is_refund'] = ui_order.get('is_refund')
+        order_fields['is_exchange'] = ui_order.get('is_exchange')
         return order_fields
 
     def _prepare_invoice(self):
@@ -132,14 +135,10 @@ class PosOrder(models.Model):
         if invoice_id:
             if line.refund_line_id:
                 invoice_line.update({
-                    'quantity': line.qty,
+                    'quantity': line.qty if self.amount_total >= 0 else -line.qty,
                     })
                 invoice_line.invoice_id.update({
                     'name':  line.refund_line_id.order_id.name,
-                    })
-            else:
-                invoice_line.update({
-                    'quantity': line.qty
                     })
 
 

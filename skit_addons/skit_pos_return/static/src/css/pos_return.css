@@ -7,9 +7,19 @@
 .control-left{
 	float:left;
 }
-.returnbtn-confirm, .complete-returnbtn{
+.popup_return{
+	width: 610px !important;
+    height: 445px !important;
+}
+.returnbtn-confirm, .complete-returnbtn, .exchange-confirm{
 	background-color:rgb(94, 185, 55) !important;
 	color: #fff;
+	margin: 7px !important;
+	padding: 2px 13px !important
+}
+.return_cancel, .return_confirm{
+	margin: 7px !important;
+	padding: 2px 13px !important;
 }
 .displaynone{
 	display:none;
@@ -27,9 +37,6 @@
     cursor: pointer;
     transition: all 150ms linear;
 } */
-.return_confirm, .return_cancel{
-	margin: 4px !important;
-}
 
 @media print{
 	.pos .pos-sale-ticket{
@@ -48,6 +55,6 @@
 .error{
 	display: none;
 	color: red;
-	text-align: center;
+	text-align: center !important;
 	font-size: initial;
 }
