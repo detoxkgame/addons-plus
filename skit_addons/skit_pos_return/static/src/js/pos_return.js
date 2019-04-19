@@ -278,7 +278,7 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 		    		if(is_complete){
 			    		self.pos.gui.show_popup('alert', {
 			    			'title': 'Alert Message',
-			                'body': 'The product is not Exchangeable',
+			                'body': 'You cannot add product while return. Kindly proceed to Payment',
 			            });
 			    		var order_line = order.get_selected_orderline();
 			    		order.remove_orderline(order_line);
@@ -520,11 +520,6 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    	var order = self.pos.get_order();
     		var order_line = self.pos.get_order().get_selected_orderline();
     		var total = order.get_total_with_tax();
-    		if(order.get_orderlines().length === 1){
-    			is_return = false;
-    	    	is_complete = false;
-    	    	exchange = false;
-    		}
 	    	$('.pay').on('click',function(event){
 	    		var order = self.pos.get_order();
 	    		var order_line = self.pos.get_order().get_selected_orderline();
