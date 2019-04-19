@@ -529,7 +529,7 @@ odoo.define('skit_pos_return.pos_return', function(require) {
 	    		var order = self.pos.get_order();
 	    		var order_line = self.pos.get_order().get_selected_orderline();
 	    		var total = order.get_total_with_tax();
-	    			if(total < 0){
+	    			if(exchange && total < 0){
 					    self.gui.show_screen('products');
 					    self.pos.gui.show_popup('alert',{
 					    	'title': 'Message',

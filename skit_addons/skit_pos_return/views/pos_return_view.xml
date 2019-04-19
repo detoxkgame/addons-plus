@@ -17,6 +17,7 @@
 		            	expr="//field[@name='partner_id']"
 							position="after"> 
 					        <field name="is_refund" readonly="1" />
+					        <field name="is_exchange" readonly="1" />
 		        	</xpath>
 		        	<!-- <xpath expr="//header/button[@name='refund']"
 		        			 position="replace">
