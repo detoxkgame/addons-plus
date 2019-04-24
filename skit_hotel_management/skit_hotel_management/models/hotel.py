@@ -523,6 +523,9 @@ class FormTemplateLine(models.Model):
                                 help="Small-sized image of this contact. It is automatically \
              resized as a 64x64px image, with aspect ratio preserved. \
              Use this field anywhere a small image is required.")
+    model_name = fields.Char(string="Model Name")
+    model_method = fields.Char(string="Model Method")
+    description = fields.Char(string="Description")
 
     @api.onchange('form_field_type')
     def change_form_field_type(self):
@@ -653,6 +656,12 @@ class PosOrder(models.Model):
         if(orders):
             if pos_order.get('reservation_details'):
                 post_order_details = pos_order.get('reservation_details')
+                if post_order_details.get('order_line'):
+                    order_lines = post_order_details.get('order_line')
+                    i = 0
+                    for line in orders.lines:
+                        line.update(order_lines[i])
+                        i = i + 1
                 del post_order_details['order_line']
                 orders.update(post_order_details)
         return orders

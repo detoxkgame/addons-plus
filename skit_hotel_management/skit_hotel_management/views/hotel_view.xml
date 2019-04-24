@@ -1274,6 +1274,9 @@
 		                                <field name="isMandatory" />
 		                                <field name="form_template_selection_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('selection','statusbar','top_buttons'))]}"></field>
 		                               	<field name="form_template_model_fields" widget="many2many_tags" attrs="{'invisible': [('form_field_type','not in',('many2one', 'many2many','one2many'))]}"></field>
+		                               	<field name="model_name" />
+		                               	<field name="model_method" />
+		                               	<field name="description" />
 		                               	<!-- <field name="field_domain" /> -->
 		                               
 		                                
