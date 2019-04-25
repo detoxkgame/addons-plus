@@ -24,3 +24,11 @@ class PosConfig(models.Model):
     def write(self, vals):
         tools.image_resize_images(vals)
         return super(PosConfig, self).write(vals)
+
+
+class RestaurantTable(models.Model):
+    _inherit = 'restaurant.floor'
+
+    is_room_service = fields.Boolean('Is RoomService', default=False,
+                                     help="""If false, the room supply is deactivated and will
+                                            not be available in the point of sale """)

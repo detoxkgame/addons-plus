@@ -153,7 +153,7 @@ class ResPartner(models.Model):
             if line.form_field_id:
                 fields.append(line.form_field_id.name)
                 field_type.append(line.form_field_id.ttype)
-            if line.form_field_type == 'sub_form' or line.form_field_type == 'view_buttons' or line.form_field_type == 'button':
+            if line.form_field_type == 'sub_form' or line.form_field_type == 'view_buttons' or line.form_field_type == 'button' or line.form_field_type == 'menu':
                 sub_form_temp_ids.append(line.sub_template_id.id)
             selection_items = []
             if line.form_template_selection_fields:

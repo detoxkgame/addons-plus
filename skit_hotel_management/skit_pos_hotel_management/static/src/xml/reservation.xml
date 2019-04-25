@@ -41,13 +41,13 @@
 									 <t t-foreach="left_temp['line_group_key']" t-as="line_key">
 										<t t-foreach="left_temp['line_group'][line_key]" t-as="data">
 											<t t-if="data.form_field_type == 'menu'">
-											<tr class="hm-left-tree-tr">
+											<tr class="hm-left-tree-tr menu_form_btn" t-attf-subid="#{data.sub_template_id}">
 												<td style="width: 20%;">
 													<img t-attf-id="#{data.id}" class="hm-left-tree-img"
 									                t-att-src='widget.template_line_icon_url(data.id)' alt="Icon"/>
 												</td>
 												<td style="width: 80%;">
-													<span class="hm-float" t-attf-style="#{data.field_styles}; font-size:#{font_size}px;">
+													<span class="hm-float" t-attf-menu_name="#{data.form_label}" t-attf-style="#{data.field_styles}; font-size:#{font_size}px;">
 														<t t-esc="data.form_label" />
 													</span>
 												</td>
@@ -636,7 +636,27 @@
 						</table>
 						</t>
 					</t>
-					
+
+					<!-- Restaurant table -->
+					<t t-if="form_view == 'restaurant_table'">
+						<t t-if='floor_count > 1'>
+		                    <div class='floor-selector'>
+		                        <t t-foreach="floors" t-as="floor">
+		                            <t t-if="floor.id === floor_id">
+		                                <span class='button button-floor active' t-att-data-id="floor.id"><t t-esc="floor.name" /></span>
+		                            </t>
+		                            <t t-if="floor.id !== floor_id">
+		                                <span class='button button-floor' t-att-data-id="floor.id"><t t-esc="floor.name" /></span>
+		                            </t>
+		                        </t>
+		                    </div>
+		                </t>
+		                <div class="rooms_container">
+		                   <div class="res_tables">
+		                   </div> 
+		                </div>
+					</t>
+
 					<!-- Search View -->
 					<t t-if="form_view == 'search_view'">
 						<div class="hm-search-form">
@@ -722,6 +742,46 @@
             </span>
         </span>
     </t>
+    <!-- Restaurant Rooms -->
+	<t t-name="RestaurantRooms">
+		<t t-foreach="tables" t-as="table">
+			<t t-if="table.state == 'inprogress'">
+				<div data-toggle="rs_popover" data-placement="right" class="res_table room_service popper inprogress_room" 
+					t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+		            									left: #{table.position_h + table.width/2}px; 
+		            									border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+		            									t-attf-room_id="#{table.product_id}" t-attf-manage_id="#{table.rm_id}" t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}">
+						<span class='label'>
+			                   <t t-esc='table.name' />
+			            </span>
+				</div>
+			</t>
+			<t t-else="">
+				<div data-toggle="rs_popover" data-placement="right" class="res_table room_service popper" 
+					t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+		            									left: #{table.position_h + table.width/2}px; 
+		            									border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+		            									t-attf-room_id="#{table.product_id}" t-attf-manage_id="#{table.rm_id}" t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}">
+						<span class='label'>
+			                   <t t-esc='table.name' />
+			            </span>
+				</div>				
+			</t>
+			<div class="popover rs_popup popper-content">
+					<div class="confirm_rs rspopup_div" t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}">
+						<t t-foreach="table.supply_items" t-as="item">
+					    	<input class="items_checked" type="checkbox" t-attf-name="#{item.name}" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
+					    </t>
+					    <t t-if="table.state == 'inprogress'">
+					    	 <button type="button" class="service_close"> Close </button> 	
+					    </t>
+					    <t t-else="">
+					    	<button type="button" class="service_confirm"> Confirm </button> 	
+					    </t>
+				    </div>    	        
+			</div>		
+		</t>	
+	</t>
 	<!-- Room Service Popup -->
 	<!-- <t t-name="RoomServicePopupWidget">
 		

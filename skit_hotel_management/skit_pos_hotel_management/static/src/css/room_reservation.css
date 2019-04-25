@@ -349,6 +349,39 @@
 	margin-left: 5px;
 }
 
+/* Room Services*/
+.rooms_container{
+    width: 98%;
+    height: 87%;
+    border-radius: 5px;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    box-shadow: 0 0 15px #6EC89B;
+    display: inline-flex;
+}
+
+.res_tables{
+	display:inline-flex;
+	width: 100%;
+    height: 98%;
+    position: relative;
+    overflow: auto;
+}
+.res_tables .res_table{
+	position: absolute;
+	text-align: center;
+	font-size: 18px;
+	color: slategrey;
+	background: #f0f1fc;
+	border-radius: 3px;
+	cursor: pointer;
+	/* box-shadow: 0px 3px rgba(0,0,0,0.07); */
+	transition: background, background-color 300ms ease-in-out;
+	overflow: hidden;
+}
+
 /** Pop Over*/
 
 .popover.top{
@@ -532,4 +565,37 @@
 	cursor: pointer;
 	padding: 5px;
 	font-size: 18px;
+}
+
+.service_confirm{
+	width: 100%;
+    border-radius: 15px;
+    color: white;
+    background: #32CD32;
+    border-color: #32CD32;
+    outline: none;
+    border: 1px solid transparent;
+}
+.service_close{
+	width: 100%;
+    border-radius: 15px;
+    color: white;
+    background: #32CD32;
+    border-color: #32CD32;
+    outline: none;
+    border: 1px solid transparent;
+}
+.select_room{
+	border: 1px solid #32CD32;
+ 	background: #ffff !important;
+}
+.inprogress_room{
+	border: 1px solid #32CD32;
+ 	background: #ffff !important;
+}
+.rspopup_div{
+    margin-left: 5px;
+    margin-right: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

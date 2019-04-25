@@ -26,6 +26,18 @@ class RestaurantFloor(models.Model):
 
     product_id = fields.Many2one('product.template', string="Room")
 
+    @api.onchange('product_id')
+    def product_id_change(self):
+        """ on change room_no update product name in table name
+             @parma: product_id
+        """
+        # update table name on change product
+        if self.product_id:
+            # update product name in table name
+            self.update({'name': self.product_id.name})
+        else:
+            self.update({'name': self.name})
+
 
 class HMSeviceLine(models.Model):
 
@@ -165,7 +177,7 @@ class HMRoomManage(models.Model):
     _description = "Room Manage"
 
     room_no = fields.Many2one('product.template', string="Room No")
-    date = fields.Datetime("Date & Time")
+    date = fields.Datetime("Requested Time")
     folio_no = fields.Many2one('pos.order', "Folio")
     supervisor = fields.Many2one('res.partner', "Supervisor")
     supplier = fields.Many2one('res.partner', "Supplier")
@@ -173,6 +185,46 @@ class HMRoomManage(models.Model):
                                           'room_manage_id',
                                           string="Room Supply Details",
                                           copy=True)
+    closed_time = fields.Datetime("Closed Time")
+    state = fields.Selection(
+                [('draft', 'New'),
+                 ('inprogress', 'In Progress'),
+                 ('close', 'Close'),
+                 ],
+                'Status',  copy=False, default='draft')
+
+    @api.model
+    def create_supply_details(self, vals):
+        if vals[0]['room_no']:
+            room_manage = ({
+                            'room_no': int(vals[0]['room_no']),
+                            })
+            res = super(HMRoomManage, self).create(room_manage)
+            # Update room supply details
+            room_supply_details = self.env['room.supply.details']
+            rs_details = vals[0]['room_supply_details']
+            room_supply_ids = []
+            for supply_detail in rs_details:
+                items = supply_detail['items']
+                room_supply = room_supply_details.create({
+                                            'room_supply': items['item_id'],
+                                            'room_manage_id': res.id,
+                                     })
+                room_supply_ids.append(room_supply.id)
+            # Update folio_no for respective room
+            pos_order = self.env['pos.order'].sudo().search([
+                                        ('reservation_status', '=', 'checkin')])
+            pos_order_line = self.env['pos.order.line'].sudo().search([
+                                                ('product_id', '=', int(vals[0]['room_no'])),
+                                                ('order_id', 'in', pos_order.ids)])
+            order_id = pos_order_line.order_id.id
+            res.write({'room_supply_details': [(6, 0, room_supply_ids)],
+                       'date': res.create_date,
+                       'state': 'inprogress',
+                       'folio_no': order_id,
+                       'supervisor': self.env.user.partner_id.id,
+                       })
+            return res
 
 
 class HoueseKeeping(models.Model):

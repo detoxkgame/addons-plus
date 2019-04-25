@@ -69,6 +69,44 @@ class FormTemplate(models.Model):
         return result;
 
     @api.multi
+    def get_restaurant_table(self, floor_id):
+        tables = []
+        rs_items = []
+        room_manage = []
+        room_supply_items = self.env['hm.room.supply'].sudo().search([])
+        if room_supply_items:
+            for items in room_supply_items:
+                rs_items.append({'id': items.id,
+                                 'name': items.name,
+                                 })
+        if floor_id:
+            floor_table_ids = self.env['restaurant.table'].sudo().search([
+                                ('floor_id', '=', int(floor_id))])
+            for floor_table in floor_table_ids:
+                room_manage_id = self.env['room.manage'].sudo().search([
+                                ('room_no', '=', floor_table.product_id.id),
+                                ('state', '=', 'inprogress')])
+                tables.append({'id': floor_table.id,
+                               'floor_id': floor_table.floor_id.id,
+                               'name': floor_table.name,
+                               'product_id': floor_table.product_id.id,
+                               'room_name': floor_table.product_id.name,
+                               'seats': floor_table.seats,
+                               'shape': floor_table.shape,
+                               'color': floor_table.color,
+                               'width': floor_table.width,
+                               'height': floor_table.height,
+                               'position_h': floor_table.position_h,
+                               'position_v': floor_table.position_v,
+                               'supply_items': rs_items,
+                               'room_manage': room_manage,
+                               'rm_id': room_manage_id.id,
+                               'room_no': room_manage_id.room_no.id,
+                               'state': room_manage_id.state,
+                               })
+        return tables
+
+    @api.multi
     def get_sub_form(self, form_template_id, color, order_id):
         panel_form_temp = self.env['hm.form.template'].sudo().search([
                                 ('id', '=', form_template_id)])
@@ -81,6 +119,7 @@ class FormTemplate(models.Model):
         key = 0
         count = 0
         result = []
+        floors = []
         current_order = []
         current_order_lines = []
         model_method_datas = {}
@@ -331,7 +370,15 @@ class FormTemplate(models.Model):
                 orderline_data['id'] = ''
                 orderline_data['state'] = ''
                 current_order_lines.append(orderline_data)
-
+        floor_count = 0
+        if panel_form_temp.form_view == 'restaurant_table':
+            floor_count = self.env['restaurant.floor'].sudo().search_count([
+                                            ('is_room_service', '=', True)])
+            floor_plans = self.env['restaurant.floor'].sudo().search([
+                                            ('is_room_service', '=', True)])
+            for floor in floor_plans:
+                floors.append({'id': floor.id,
+                               'name': floor.name})
         result.append({'line_group': line_group,
                        'line_group_key': sorted(line_group.keys()),
                        'form_view': panel_form_temp.form_view,
@@ -367,6 +414,8 @@ class FormTemplate(models.Model):
                        #========================================================
                        'sub_temp_color': color,
                        'model_method_datas': model_method_datas,
+                       'floors': floors,
+                       'floor_count': floor_count,
                        })
         return result
 

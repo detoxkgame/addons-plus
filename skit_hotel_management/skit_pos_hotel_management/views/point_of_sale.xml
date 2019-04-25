@@ -21,8 +21,8 @@
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap.min.js"></script>
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/bootstrap-datetimepicker.min.js"></script> -->
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/checkout.js"></script>
-				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery-ui-sliderAccess.js"></script>
-				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery-ui-timepicker-addon.js"></script>
+				<!-- <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery-ui-sliderAccess.js"></script>
+				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery-ui-timepicker-addon.js"></script> -->
 				<!-- <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery-ui.min.js"></script>
 				<script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/jquery-2.min.js"></script>-->
 				<!-- <script type="text/javascript" src="/skit_pos_hotel_management/static/src/js/dataTables.checkboxes.min.js"></script> -->
@@ -37,8 +37,8 @@
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datepicker.standalone.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datepicker.standalone.min.css"></link>
 				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/chosen.min.css"></link> 
-				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/jquery-ui-timepicker-addon.css"></link> 
-				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/jquery-ui.css"></link> 
+				<!-- <link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/jquery-ui-timepicker-addon.css"></link> 
+				<link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/jquery-ui.css"></link>  -->
 				<!-- <link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/dataTables.checkboxes.css"></link>  -->
 				<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" /> -->
 				<!-- <link rel="stylesheet" type="text/css" href="/skit_pos_hotel_management/static/src/css/bootstrap-datetimepicker.min.css"></link> 

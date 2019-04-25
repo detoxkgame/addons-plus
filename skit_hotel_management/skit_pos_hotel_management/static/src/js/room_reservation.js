@@ -70,7 +70,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			var right_panel_temp = result[0]['right_panel_temp']
 			var center_panel_sub_id = result[0]['center_panel_sub_id']
 			var model_method_datas = result[0]['model_method_datas']
-			
+			var floor_id = 1;
 			//console.log("Check:"+JSON.stringify(model_method_datas))
 			var contents = self.$('.hm-reservation-content');
 			contents.innerHTML = "";
@@ -124,6 +124,67 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    		});
 	        });
 	        
+	        /** Load the form in Center Panel using menu click */
+	        contents.off('click','.menu_form_btn');
+	        contents.on('click','.menu_form_btn',function(){
+	        	contents.find('.hm-top-inner-selected').removeClass("hm-top-inner-selected");
+	        	var menu_name = $(this).attr('menu_name');
+	        	$(this).addClass("hm-top-inner-selected");
+	        	/*if (menu_name == 'Room Supply'){
+	        		if (self.pos.config.iface_floorplan)
+	        			var floor_screen = self.gui.show_screen('floors');
+	        		//contents.find('.hm-center-form-design').html(floor_screen);
+	        		//self.chrome.widget.order_selector.floor_button_click_handler();
+	        	}
+	        	else{*/
+	        		var subid = $(this).attr('subid');
+		        	$(this).addClass("hm-top-inner-selected");
+		        	self._rpc({
+		    			model: 'hm.form.template',
+		    			method: 'get_center_panel_form',
+		    			args: [0, subid],
+		    		}).then(function(result){
+		    			var form_name = result[0]['form_name']
+		    			var center_panel_temp = result[0]['center_panel_temp']
+		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+		    			var form_view = result[0]['form_view']
+		    			//floor_id = $(this).find('.floor-selector .button .active').attr('data-id');
+		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+		    				form_name: form_name, form_view: form_view,
+		    				center_panel_temp: center_panel_temp,
+							center_panel_sub_id: center_panel_sub_id,
+							floor_id: floor_id,
+							});
+		    			//var centerform = document.createElement('div');
+		    			//centerform.innerHTML = center_panel_html;
+		    			//centerform = reservationform.childNodes[1];
+		    			contents.find('.hm-center-form-design').html(center_panel_html);
+		    		});
+	        	//}	        	
+	        });
+
+	        /** Tab click */
+	        contents.off('click','.floor-selector .button');
+	        contents.on('click','.floor-selector .button',function(){
+	        	contents.find('.popover').removeClass('in');
+	        	contents.find('.active').removeClass("active");
+	        		floor_id = $(this).attr('data-id');
+	        		//console.log('floor_id '+floor_id);
+		        	$(this).addClass("active");
+		        	self._rpc({
+		    			model: 'hm.form.template',
+		    			method: 'get_restaurant_table',
+		    			args: [0, floor_id],
+		    		}).then(function(result){
+		    			var tables = result;
+		    			var restaurant_rooms_html = QWeb.render('RestaurantRooms',{widget: self, 
+		    				tables: tables, 
+							floor_id: floor_id,
+							});
+		    			contents.find('.rooms_container .res_tables').html(restaurant_rooms_html);
+		    		});
+	        });
+
 	        /** Search Button Action - Find the Reserve Order */
 	        contents.off('click','.hm-search-btn');
 	        contents.on('click','.hm-search-btn',function(){
@@ -393,7 +454,79 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	            	}
             	}
             });
-            
+
+            /* Room supply booking */
+  	       contents.off('click','.room_service');
+  	        contents.on('click','.room_service',function(){
+  	        	$(this).addClass('select_room');
+  	        	var room_id = $(this).attr('room_id');  	
+  	        	/** Render supply popup **/
+  	        	$('[data-toggle="rs_popover"]').popover({
+  	        		container: "body",
+        	          	html: true,
+        	          	content: function() {
+        	          		//return $($(this).data('contentwrapper')).html();
+        	          		 return $(this).next('.popper-content').html();
+        	          	}
+  	        	}).click(function (e) {
+  	                $('[data-toggle=rs_popover]').not(this).popover('hide');
+  	                contents.find('.select_room').removeClass('select_room');	
+  	            });
+
+  	        	/** Confirm service*/
+  	        	$('.popover .service_confirm').on('click', function (e) {
+  	 	        	var items=[]
+  	 	        	var supply_detail=[]
+  	 	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
+ 	 	 	    		closest_div.find('input').each(function(index, element) { 
+ 	 	 	    			var items_array ={};
+ 	 	 	    			if(this.checked){
+ 		 	 	    			var item_id = $(this).attr('item_id');
+ 		 						items_array[element.name]=element.value;
+ 		 						items_array['item_id'] = parseInt(item_id);
+ 		 						items.push({
+ 		 							'room_id':room_id,
+ 		 							'items':items_array
+ 		 						})
+ 	 	 	    			}
+ 	 					});
+ 	 	 	    		supply_detail.push({
+  							'room_no':room_id,
+  							'room_supply_details':items,
+  						})
+  	 	    			//console.log('supply_details '+JSON.stringify(supply_detail));
+ 	 					if(supply_detail){
+ 		 					 self._rpc({
+ 		 	 	     			model: 'room.manage',
+ 		 	 	     			method:'create_supply_details',
+ 		 	 	     			args: [supply_detail],
+ 		 	 	     		}).then(function(result){
+ 		 	 	     			if(result){
+ 		 	 	     				self.pos.gui.show_popup('alert',{
+ 					                     'title': _t('Success'),
+ 					                     'body': _t('Requested things will be delivered soon.'),
+ 					                });
+ 		 	 	     				$('[data-toggle="rs_popover"]').popover('hide');
+ 		 	 	     				contents.find('.select_room').addClass('inprogress_room');		 	 	     			
+ 		 	 	     			}
+ 		 	 	     		});
+ 	 					}
+  		    	 });
+  	        	/** Close service*/
+  	        	$('.popover .service_close').on('click', function (e) {
+  	        		//contents.find('.inprogress_room').removeClass('inprogress_room');	
+  	        	});
+  	        });
+  	        
+  	        /** Hide popover */
+  	        $('body').on('click', function (e) {
+  	    	    $('[data-toggle="rs_popover"]').each(function () {
+  	    	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+  	    	            $(this).popover('hide');   
+  	    	        }
+  	    	     });
+  	    	 });
+  	       
             /*contents.off('click','.hm-right-reserve-btn');
             contents.on('click','.hm-right-reserve-btn',function(e){
             	self.pos.gui.show_popup('popuproomservicewidget', {
@@ -485,7 +618,7 @@ chrome.OrderSelectorWidget.include({
     renderElement: function(){
         var self = this;
         this._super();
-        alert('Room')
+        //alert('Room')
     },
 });
 
