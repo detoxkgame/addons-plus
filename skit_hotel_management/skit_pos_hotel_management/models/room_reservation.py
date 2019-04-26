@@ -72,7 +72,7 @@ class FormTemplate(models.Model):
     def get_restaurant_table(self, floor_id):
         tables = []
         rs_items = []
-        room_manage = []
+        rm_supply_items = []
         room_supply_items = self.env['hm.room.supply'].sudo().search([])
         if room_supply_items:
             for items in room_supply_items:
@@ -86,6 +86,13 @@ class FormTemplate(models.Model):
                 room_manage_id = self.env['room.manage'].sudo().search([
                                 ('room_no', '=', floor_table.product_id.id),
                                 ('state', '=', 'inprogress')])
+                if room_manage_id:
+                    for rm_supply in room_manage_id.room_supply_details:
+                        rm_supply_items.append({
+                                            'id': rm_supply.room_supply.id,
+                                            'name': rm_supply.room_supply.name,
+                                            'rm_id': room_manage_id.id,
+                                            })
                 tables.append({'id': floor_table.id,
                                'floor_id': floor_table.floor_id.id,
                                'name': floor_table.name,
@@ -99,7 +106,7 @@ class FormTemplate(models.Model):
                                'position_h': floor_table.position_h,
                                'position_v': floor_table.position_v,
                                'supply_items': rs_items,
-                               'room_manage': room_manage,
+                               'rm_supply_items': rm_supply_items,
                                'rm_id': room_manage_id.id,
                                'room_no': room_manage_id.room_no.id,
                                'state': room_manage_id.state,
@@ -127,7 +134,7 @@ class FormTemplate(models.Model):
             if form_line.form_field_id:
                 fields.append(form_line.form_field_id.name)
                 field_type.append(form_line.form_field_id.ttype)
-            if form_line.form_field_type == 'sub_form' or form_line.form_field_type == 'view_buttons' or form_line.form_field_type == 'button':
+            if form_line.form_field_type == 'sub_form' or form_line.form_field_type == 'view_buttons' or form_line.form_field_type == 'button' or form_line.form_field_type == 'menu':
                 sub_form_temp_ids.append(form_line.sub_template_id.id)
             selection_items = []
             if form_line.form_template_selection_fields:

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _, tools
-import datetime
+from datetime import datetime
 import psycopg2
 import logging
+import pytz
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 _logger = logging.getLogger(__name__)
 
@@ -225,6 +227,47 @@ class HMRoomManage(models.Model):
                        'supervisor': self.env.user.partner_id.id,
                        })
             return res
+
+    @api.model
+    def update_items_refilled(self, vals):
+        if vals[0]['manage_id']:
+            room_supply_ids = self.env['room.supply.details'].sudo().search([
+                                                ('room_manage_id', '=',
+                                                 int(vals[0]['manage_id'])),
+                                                ])
+            for items in room_supply_ids:
+                items.write({
+                             'refilled': True,
+                             })
+            room_manage_id = self.env['room.manage'].sudo().search([
+                                ('id', '=', int(vals[0]['manage_id'])),
+                                ])
+            if room_manage_id:
+                #===============================================================
+                # closedtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                # close_time = datetime.strptime(closedtime,
+                #                                '%Y-%m-%d %H:%M:%S')
+                # user_time_zone = pytz.UTC
+                # if self.env.user.partner_id.tz:
+                #     user_time_zone = pytz.timezone(
+                #                             self.env.user.partner_id.tz)
+                # # allocated_time time zone
+                # closed_time = str(close_time)
+                # utc_start = datetime.strptime(closed_time,
+                #                               DEFAULT_SERVER_DATETIME_FORMAT)
+                # utc = utc_start.replace(tzinfo=pytz.UTC)
+                # from_actual_time = utc.astimezone(user_time_zone).strftime(
+                #                             DEFAULT_SERVER_DATETIME_FORMAT)
+                # closed_datetime = datetime.strptime(from_actual_time,
+                #                                     '%Y-%m-%d %H:%M:%S')
+                #===============================================================
+                room_manage_id.write({
+                                      'state': 'close',
+                                      })
+                room_manage_id.write({
+                                      'closed_time': room_manage_id.write_date,
+                                      })
+        return True
 
 
 class HoueseKeeping(models.Model):

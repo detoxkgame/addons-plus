@@ -768,14 +768,26 @@
 				</div>				
 			</t>
 			<div class="popover rs_popup popper-content">
-					<div class="confirm_rs rspopup_div" t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}">
-						<t t-foreach="table.supply_items" t-as="item">
-					    	<input class="items_checked" type="checkbox" t-attf-name="#{item.name}" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
-					    </t>
-					    <t t-if="table.state == 'inprogress'">
+					<div class="confirm_rs rspopup_div" t-attf-room_id="#{table.product_id}" t-attf-manage_id="#{table.rm_id}" t-attf-floor_id="#{table.floor_id}">
+						<t t-if="table.state == 'inprogress'">
+							<t t-foreach="table.supply_items" t-as="item">
+							 	<t t-set="check_val" t-value="0"/>
+								 <t t-foreach="table.rm_supply_items" t-as="rm_item">
+									<t t-if="(item.id == rm_item.id) and (table.rm_id == rm_item.rm_id)">
+										<t t-set="check_val" t-value="1"/>
+										<input class="items_checked requested" type="checkbox" t-attf-name="#{item.name}" disabled="disabled" t-attf-checked="true" t-attf-rm_item="#{rm_item.id}" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
+									</t>						
+						    	</t> 
+						    	<t t-if="(check_val == 0)">
+						    		<input class="items_checked" type="checkbox" t-attf-name="#{item.name}" disabled="disabled" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
+						    	</t>						    	
+						    </t>
 					    	 <button type="button" class="service_close"> Close </button> 	
 					    </t>
 					    <t t-else="">
+					    	<t t-foreach="table.supply_items" t-as="item">
+						    	<input class="items_checked" type="checkbox" t-attf-name="#{item.name}" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
+						    </t>
 					    	<button type="button" class="service_confirm"> Confirm </button> 	
 					    </t>
 				    </div>    	        

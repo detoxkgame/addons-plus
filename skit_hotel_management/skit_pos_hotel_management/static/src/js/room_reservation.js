@@ -166,7 +166,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        /** Tab click */
 	        contents.off('click','.floor-selector .button');
 	        contents.on('click','.floor-selector .button',function(){
-	        	contents.find('.popover').removeClass('in');
+	        	//contents.find('.popover').removeClass('in');
 	        	contents.find('.active').removeClass("active");
 	        		floor_id = $(this).attr('data-id');
 	        		//console.log('floor_id '+floor_id);
@@ -459,7 +459,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	       contents.off('click','.room_service');
   	        contents.on('click','.room_service',function(){
   	        	$(this).addClass('select_room');
-  	        	var room_id = $(this).attr('room_id');  	
+  	        	var room_id = $(this).attr('room_id');  
+  	        	var room_manage_id = $(this).attr('manage_id');
   	        	/** Render supply popup **/
   	        	$('[data-toggle="rs_popover"]').popover({
   	        		container: "body",
@@ -494,8 +495,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   							'room_no':room_id,
   							'room_supply_details':items,
   						})
-  	 	    			//console.log('supply_details '+JSON.stringify(supply_detail));
- 	 					if(supply_detail){
+  	 	    			//console.log('supply_details '+JSON.stringify(supply_detail[0]['room_supply_details'].length));
+ 	 					if(supply_detail[0]['room_supply_details'].length > 0){
  		 					 self._rpc({
  		 	 	     			model: 'room.manage',
  		 	 	     			method:'create_supply_details',
@@ -507,14 +508,37 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
  					                     'body': _t('Requested things will be delivered soon.'),
  					                });
  		 	 	     				$('[data-toggle="rs_popover"]').popover('hide');
- 		 	 	     				contents.find('.select_room').addClass('inprogress_room');		 	 	     			
+ 		 	 	     				contents.find('.select_room').addClass('inprogress_room');		
  		 	 	     			}
  		 	 	     		});
  	 					}
   		    	 });
   	        	/** Close service*/
   	        	$('.popover .service_close').on('click', function (e) {
-  	        		//contents.find('.inprogress_room').removeClass('inprogress_room');	
+  	 	        	var supply_detail=[]
+  	 	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
+  	        		var manage_id = closest_div.attr('manage_id');  	        		
+ 	 	 	    		supply_detail.push({
+  							'room_no': room_id,
+  							'manage_id': manage_id,
+  						})	
+  						if(supply_detail){
+		 					 self._rpc({
+		 	 	     			model: 'room.manage',
+		 	 	     			method:'update_items_refilled',
+		 	 	     			args: [supply_detail],
+		 	 	     		}).then(function(result){
+		 	 	     			if(result){
+		 	 	     				self.pos.gui.show_popup('alert',{
+					                     'title': _t('Success'),
+					                     'body': _t('Items Refilled.'),
+					                });
+		 	 	     				$('[data-toggle="rs_popover"]').popover('hide');
+		 	 	     				contents.find('.select_room').removeClass('inprogress_room');
+		 	 	     				contents.find('.select_room').removeClass('select_room');
+		 	 	     			}
+		 	 	     		});
+	 					}
   	        	});
   	        });
   	        
@@ -522,8 +546,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	        $('body').on('click', function (e) {
   	    	    $('[data-toggle="rs_popover"]').each(function () {
   	    	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-  	    	            $(this).popover('hide');   
-  	    	        }
+  	    	            $(this).popover('hide');
+  	    	        }  	    	      
   	    	     });
   	    	 });
   	       
