@@ -71,14 +71,6 @@ class FormTemplate(models.Model):
     @api.multi
     def get_restaurant_table(self, floor_id):
         tables = []
-        rs_items = []
-        rm_supply_items = []
-        room_supply_items = self.env['hm.room.supply'].sudo().search([])
-        if room_supply_items:
-            for items in room_supply_items:
-                rs_items.append({'id': items.id,
-                                 'name': items.name,
-                                 })
         if floor_id:
             floor_table_ids = self.env['restaurant.table'].sudo().search([
                                 ('floor_id', '=', int(floor_id))])
@@ -86,13 +78,6 @@ class FormTemplate(models.Model):
                 room_manage_id = self.env['room.manage'].sudo().search([
                                 ('room_no', '=', floor_table.product_id.id),
                                 ('state', '=', 'inprogress')])
-                if room_manage_id:
-                    for rm_supply in room_manage_id.room_supply_details:
-                        rm_supply_items.append({
-                                            'id': rm_supply.room_supply.id,
-                                            'name': rm_supply.room_supply.name,
-                                            'rm_id': room_manage_id.id,
-                                            })
                 tables.append({'id': floor_table.id,
                                'floor_id': floor_table.floor_id.id,
                                'name': floor_table.name,
@@ -105,13 +90,48 @@ class FormTemplate(models.Model):
                                'height': floor_table.height,
                                'position_h': floor_table.position_h,
                                'position_v': floor_table.position_v,
-                               'supply_items': rs_items,
-                               'rm_supply_items': rm_supply_items,
                                'rm_id': room_manage_id.id,
                                'room_no': room_manage_id.room_no.id,
                                'state': room_manage_id.state,
                                })
         return tables
+
+    @api.multi
+    def get_roomsupply_items(self, room_id):
+        room_supply = []
+        rs_items = []
+        rm_supply_items = []
+        room_supply_items = self.env['hm.room.supply'].sudo().search([])
+        if room_supply_items:
+            for items in room_supply_items:
+                rs_items.append({'id': items.id,
+                                 'name': items.name,
+                                 })
+        if room_id:
+            floor_table_ids = self.env['restaurant.table'].sudo().search([
+                                ('product_id', '=', int(room_id))])
+            for floor_table in floor_table_ids:
+                room_manage_id = self.env['room.manage'].sudo().search([
+                                ('room_no', '=', floor_table.product_id.id),
+                                ('state', '=', 'inprogress')])
+                if room_manage_id:
+                    for rm_supply in room_manage_id.room_supply_details:
+                        rm_supply_items.append({
+                                            'id': rm_supply.room_supply.id,
+                                            'name': rm_supply.room_supply.name,
+                                            'rm_id': room_manage_id.id,
+                                            })
+                room_supply.append({'id': floor_table.id,
+                                    'floor_id': floor_table.floor_id.id,
+                                    'name': floor_table.name,
+                                    'product_id': floor_table.product_id.id,
+                                    'supply_items': rs_items,
+                                    'rm_supply_items': rm_supply_items,
+                                    'rm_id': room_manage_id.id,
+                                    'room_no': room_manage_id.room_no.id,
+                                    'state': room_manage_id.state,
+                                    })
+        return room_supply
 
     @api.multi
     def get_sub_form(self, form_template_id, color, order_id):

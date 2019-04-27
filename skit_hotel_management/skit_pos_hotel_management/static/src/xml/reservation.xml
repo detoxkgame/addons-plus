@@ -746,7 +746,7 @@
 	<t t-name="RestaurantRooms">
 		<t t-foreach="tables" t-as="table">
 			<t t-if="table.state == 'inprogress'">
-				<div data-toggle="rs_popover" data-placement="right" class="res_table room_service popper inprogress_room" 
+				<div data-contentwrapper='#supply-container' data-toggle="rs_popover" data-placement="right" class="res_table room_service popper inprogress_room" 
 					t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 		            									left: #{table.position_h + table.width/2}px; 
 		            									border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
@@ -757,7 +757,7 @@
 				</div>
 			</t>
 			<t t-else="">
-				<div data-toggle="rs_popover" data-placement="right" class="res_table room_service popper" 
+				<div data-contentwrapper='#supply-container' data-toggle="rs_popover" data-placement="right" class="res_table room_service popper" 
 					t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 		            									left: #{table.position_h + table.width/2}px; 
 		            									border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
@@ -767,7 +767,14 @@
 			            </span>
 				</div>				
 			</t>
-			<div class="popover rs_popup popper-content">
+			<!-- Display Suppy items  -->
+			<div id="supply-container" class="popover rs_popup popper-content items_popover"> 	        
+			</div>		
+		</t>	
+	</t>
+	<!-- Room supply popover template  -->
+	<t t-name="RoomSupplyPopover">
+		<t t-foreach="tables" t-as="table">
 					<div class="confirm_rs rspopup_div" t-attf-room_id="#{table.product_id}" t-attf-manage_id="#{table.rm_id}" t-attf-floor_id="#{table.floor_id}">
 						<t t-if="table.state == 'inprogress'">
 							<t t-foreach="table.supply_items" t-as="item">
@@ -790,20 +797,8 @@
 						    </t>
 					    	<button type="button" class="service_confirm"> Confirm </button> 	
 					    </t>
-				    </div>    	        
-			</div>		
+				    </div>
 		</t>	
 	</t>
-	<!-- Room Service Popup -->
-	<!-- <t t-name="RoomServicePopupWidget">
-		
-		<div class="modal-dialog">
-            <div class="popup popup-alert">
-            	<p class="title"><t t-esc=" widget.options.title || '' " /></p>
-                <div class="body copy_pre_body">
-					<span>TEst</span>
-                </div>
-            </div>
-        </div>
-	</t> -->
+	
 </templates>

@@ -130,13 +130,6 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        	contents.find('.hm-top-inner-selected').removeClass("hm-top-inner-selected");
 	        	var menu_name = $(this).attr('menu_name');
 	        	$(this).addClass("hm-top-inner-selected");
-	        	/*if (menu_name == 'Room Supply'){
-	        		if (self.pos.config.iface_floorplan)
-	        			var floor_screen = self.gui.show_screen('floors');
-	        		//contents.find('.hm-center-form-design').html(floor_screen);
-	        		//self.chrome.widget.order_selector.floor_button_click_handler();
-	        	}
-	        	else{*/
 	        		var subid = $(this).attr('subid');
 		        	$(this).addClass("hm-top-inner-selected");
 		        	self._rpc({
@@ -160,29 +153,16 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    			//centerform = reservationform.childNodes[1];
 		    			contents.find('.hm-center-form-design').html(center_panel_html);
 		    		});
-	        	//}	        	
+		        	self.render_rooms(floor_id,contents);        	
 	        });
 
 	        /** Tab click */
 	        contents.off('click','.floor-selector .button');
 	        contents.on('click','.floor-selector .button',function(){
-	        	//contents.find('.popover').removeClass('in');
 	        	contents.find('.active').removeClass("active");
 	        		floor_id = $(this).attr('data-id');
-	        		//console.log('floor_id '+floor_id);
-		        	$(this).addClass("active");
-		        	self._rpc({
-		    			model: 'hm.form.template',
-		    			method: 'get_restaurant_table',
-		    			args: [0, floor_id],
-		    		}).then(function(result){
-		    			var tables = result;
-		    			var restaurant_rooms_html = QWeb.render('RestaurantRooms',{widget: self, 
-		    				tables: tables, 
-							floor_id: floor_id,
-							});
-		    			contents.find('.rooms_container .res_tables').html(restaurant_rooms_html);
-		    		});
+	        		self.render_rooms(floor_id,contents); //
+	        		$(this).addClass('active');	        		
 	        });
 
 	        /** Search Button Action - Find the Reserve Order */
@@ -454,99 +434,109 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	            	}
             	}
             });
-
+            
+            var room_id = 0;
+            var room_manage_id = 0;
             /* Room supply booking */
   	       contents.off('click','.room_service');
   	        contents.on('click','.room_service',function(){
-  	        	$(this).addClass('select_room');
-  	        	var room_id = $(this).attr('room_id');  
-  	        	var room_manage_id = $(this).attr('manage_id');
+  	        	var rid = $(this).attr('room_id'); 
+  	        	var manage_id = $(this).attr('manage_id');
+  	        	if(rid){
+  	        		room_id = rid;
+  	        	}
+  	        	if(manage_id){
+  	        		room_manage_id = manage_id;
+  	        	}
   	        	/** Render supply popup **/
-  	        	$('[data-toggle="rs_popover"]').popover({
-  	        		container: "body",
-        	          	html: true,
-        	          	content: function() {
-        	          		//return $($(this).data('contentwrapper')).html();
-        	          		 return $(this).next('.popper-content').html();
-        	          	}
-  	        	}).click(function (e) {
-  	                $('[data-toggle=rs_popover]').not(this).popover('hide');
-  	                contents.find('.select_room').removeClass('select_room');	
-  	            });
-
+  	        	if(room_id && room_id != 'false'){
+  	        		$(this).addClass('select_room');
+  	        		self.render_supply_items(room_id,contents);
+	  	        	$('.popper').popover({	  	        		
+	  	        		container: "body",
+	  	  	          	html: true,
+	  	  	          	content: function() {
+	  	  	          		 //return $($(this).data('contentwrapper')).html();
+	  	  	          		 return $(this).next('.popper-content').html();
+	  	  	          	}
+	  	        	}).click(function (e) {
+	  	                $('.popper').not(this).popover('destroy');
+	  	                contents.find('.select_room').removeClass('select_room');	
+	  	            });
+  	        	}
+  	        	/** Popover Button Action*/
   	        	/** Confirm service*/
   	        	$('.popover .service_confirm').on('click', function (e) {
-  	 	        	var items=[]
-  	 	        	var supply_detail=[]
-  	 	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
- 	 	 	    		closest_div.find('input').each(function(index, element) { 
- 	 	 	    			var items_array ={};
- 	 	 	    			if(this.checked){
- 		 	 	    			var item_id = $(this).attr('item_id');
- 		 						items_array[element.name]=element.value;
- 		 						items_array['item_id'] = parseInt(item_id);
- 		 						items.push({
- 		 							'room_id':room_id,
- 		 							'items':items_array
- 		 						})
- 	 	 	    			}
- 	 					});
- 	 	 	    		supply_detail.push({
-  							'room_no':room_id,
-  							'room_supply_details':items,
-  						})
-  	 	    			//console.log('supply_details '+JSON.stringify(supply_detail[0]['room_supply_details'].length));
- 	 					if(supply_detail[0]['room_supply_details'].length > 0){
- 		 					 self._rpc({
- 		 	 	     			model: 'room.manage',
- 		 	 	     			method:'create_supply_details',
- 		 	 	     			args: [supply_detail],
- 		 	 	     		}).then(function(result){
- 		 	 	     			if(result){
- 		 	 	     				self.pos.gui.show_popup('alert',{
- 					                     'title': _t('Success'),
- 					                     'body': _t('Requested things will be delivered soon.'),
- 					                });
- 		 	 	     				$('[data-toggle="rs_popover"]').popover('hide');
- 		 	 	     				contents.find('.select_room').addClass('inprogress_room');		
- 		 	 	     			}
- 		 	 	     		});
- 	 					}
-  		    	 });
-  	        	/** Close service*/
-  	        	$('.popover .service_close').on('click', function (e) {
-  	 	        	var supply_detail=[]
-  	 	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
-  	        		var manage_id = closest_div.attr('manage_id');  	        		
- 	 	 	    		supply_detail.push({
-  							'room_no': room_id,
-  							'manage_id': manage_id,
-  						})	
-  						if(supply_detail){
-		 					 self._rpc({
-		 	 	     			model: 'room.manage',
-		 	 	     			method:'update_items_refilled',
-		 	 	     			args: [supply_detail],
-		 	 	     		}).then(function(result){
-		 	 	     			if(result){
-		 	 	     				self.pos.gui.show_popup('alert',{
-					                     'title': _t('Success'),
-					                     'body': _t('Items Refilled.'),
-					                });
-		 	 	     				$('[data-toggle="rs_popover"]').popover('hide');
-		 	 	     				contents.find('.select_room').removeClass('inprogress_room');
-		 	 	     				contents.find('.select_room').removeClass('select_room');
-		 	 	     			}
-		 	 	     		});
-	 					}
-  	        	});
+  	  	        	var items=[]
+  	  	        	var supply_detail=[]
+  	  	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');	
+  	  	 	    		closest_div.find('input').each(function(index, element) { 
+  	  	 	    			var items_array ={};
+  	  	 	    			if(this.checked){
+  	  	 	 	    			var item_id = $(this).attr('item_id');
+  	  	 						items_array[element.name]=element.value;
+  	  	 						items_array['item_id'] = parseInt(item_id);
+  	  	 						items.push({
+  	  	 							'room_id':room_id,
+  	  	 							'items':items_array
+  	  	 						})
+  	  	 	    			}
+  	  					});
+  	  	 	    		supply_detail.push({
+  	  						'room_no':room_id,
+  	  						'room_supply_details':items,
+  	  					})
+  	  					if(supply_detail[0]['room_supply_details'].length > 0){
+  	  	 					 self._rpc({
+  	  	 	 	     			model: 'room.manage',
+  	  	 	 	     			method:'create_supply_details',
+  	  	 	 	     			args: [supply_detail],
+  	  	 	 	     		}).then(function(result){
+  	  	 	 	     			if(result){
+  	  	 	 	     				self.pos.gui.show_popup('alert',{
+  	  				                     'title': _t('Success'),
+  	  				                     'body': _t('Requested things will be delivered soon.'),
+  	  				                });
+  	  	 	 	     				$('.popper').popover('destroy');
+  	  	 	 	     				contents.find('.select_room').addClass('inprogress_room');		
+  	  	 	 	     			}
+  	  	 	 	     		});
+  	  					}
+  	  	    	 });
+  	  	      	/** Close service*/
+  	  	      	$('.popover .service_close').on('click', function (e) {
+  	  		        	var supply_detail=[]
+  	  		        	var closest_div = $(e.currentTarget).closest('.confirm_rs'); 	        		
+  	  		 	    		supply_detail.push({
+  	  							'room_no': room_id,
+  	  							'manage_id': room_manage_id,
+  	  						})	
+  	  						if(supply_detail){
+  	  	 					 self._rpc({
+  	  	 	 	     			model: 'room.manage',
+  	  	 	 	     			method:'update_items_refilled',
+  	  	 	 	     			args: [supply_detail],
+  	  	 	 	     		}).then(function(result){
+  	  	 	 	     			if(result){
+  	  	 	 	     				self.pos.gui.show_popup('alert',{
+  	  				                     'title': _t('Success'),
+  	  				                     'body': _t('Items Refilled.'),
+  	  				                });
+  	  	 	 	     				$('.popper').popover('destroy');
+  	  	 	 	     				contents.find('.select_room').removeClass('inprogress_room');
+  	  	 	 	     				contents.find('.select_room').removeClass('select_room');
+  	  	 	 	     			}
+  	  	 	 	     		});
+  	  						}
+  	  	      	});
+  	        	
   	        });
   	        
   	        /** Hide popover */
   	        $('body').on('click', function (e) {
-  	    	    $('[data-toggle="rs_popover"]').each(function () {
+  	        	$('.popper').each(function () {
   	    	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-  	    	            $(this).popover('hide');
+  	    	            $(this).popover('destroy');
   	    	        }  	    	      
   	    	     });
   	    	 });
@@ -583,6 +573,40 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             });
 		});
 
+    },
+    render_rooms:function(floor_id,contents){
+    	var self = this;
+    	if(floor_id){
+	    	self._rpc({
+				model: 'hm.form.template',
+				method: 'get_restaurant_table',
+				args: [0, floor_id],
+			}).then(function(result){
+				var tables = result;
+				var restaurant_rooms_html = QWeb.render('RestaurantRooms',{widget: self, 
+					tables: tables, 
+					floor_id: floor_id,
+					});
+				contents.find('.rooms_container .res_tables').html(restaurant_rooms_html);
+			});
+    	}
+    },
+    render_supply_items:function(room_id,contents){
+    	var self = this;
+    	if(room_id){
+	    	self._rpc({
+				model: 'hm.form.template',
+				method: 'get_roomsupply_items',
+				args: [0, room_id],
+			}).then(function(result){
+				var tables = result;
+				var supply_items_html = QWeb.render('RoomSupplyPopover',{widget: self, 
+					tables: tables, 
+					room_id: room_id,
+					});
+				contents.find('.rooms_container .res_tables .items_popover').html(supply_items_html);
+			});
+    	}
     },
     template_line_icon_url: function(id){
         return '/web/image?model=hm.form.template.line&id='+id+'&field=image';
@@ -675,10 +699,4 @@ models.PosModel = models.PosModel.extend({
 	            //this.gui.show_screen('products')
     },
 });
-/** Room Service Popup Widget */
-/*var RoomServicePopupWidget = PopupWidget.extend({
-	 template: 'RoomServicePopupWidget', 
-});
-gui.define_popup({name:'popuproomservicewidget', widget: RoomServicePopupWidget});*/
-
 });
