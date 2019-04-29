@@ -138,6 +138,8 @@ class FormTemplate(models.Model):
                                     'rm_id': room_manage_id.id,
                                     'room_no': room_manage_id.room_no.id,
                                     'state': room_manage_id.state,
+                                    'supplier_id': room_manage_id.supplier.id,
+                                    'supplier_name': room_manage_id.supplier.name,
                                     'room_supplier_ids': room_supplier_ids,
                                     })
         return room_supply

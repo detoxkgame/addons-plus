@@ -219,12 +219,18 @@ class HMRoomManage(models.Model):
             pos_order_line = self.env['pos.order.line'].sudo().search([
                                                 ('product_id', '=', int(vals[0]['room_no'])),
                                                 ('order_id', 'in', pos_order.ids)])
+            if vals[0]['supplier_id']:
+                supplier_id = self.env['res.partner'].sudo().search([
+                                                ('id', '=',
+                                                 int(vals[0]['supplier_id'])),
+                                                ])
             order_id = pos_order_line.order_id.id
             res.write({'room_supply_details': [(6, 0, room_supply_ids)],
                        'date': res.create_date,
                        'state': 'inprogress',
                        'folio_no': order_id,
                        'supervisor': self.env.user.partner_id.id,
+                       'supplier': supplier_id.id,
                        })
             return res
 

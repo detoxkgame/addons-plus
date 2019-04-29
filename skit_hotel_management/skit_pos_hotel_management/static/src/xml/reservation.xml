@@ -792,12 +792,20 @@
 							    		
 							    	</t>						    	
 							    </t>
+							    <p class="room_attendant">Room Attendant</p>
 							    <select name="supplier" id="supplier" class="select_supplier">
 							    	 	<t t-foreach="table.room_supplier_ids" t-as="supplier">
 											<p>
-												<option t-att-value="supplier.partner_id">
-													<t t-esc="supplier.name" />
-												</option>
+												<t t-if="(supplier.partner_id == table.supplier_id)">
+													<option t-attf-selected="true" t-att-value="table.supplier_id">
+														<t t-esc="table.supplier_name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="supplier.partner_id">
+														<t t-esc="supplier.name" />
+													</option>
+												</t>
 											</p>
 										</t>
 								</select>
@@ -805,9 +813,21 @@
 					    	<button type="button" class="service_close"> Close </button>	
 					    </t>
 					    <t t-else="">
-					    	<t t-foreach="table.supply_items" t-as="item">
-						    	<input class="items_checked" type="checkbox" t-attf-name="#{item.name}" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
-						    </t>
+					    	<div>
+						    	<t t-foreach="table.supply_items" t-as="item">
+							    	<input class="items_checked" type="checkbox" t-attf-name="#{item.name}" t-attf-item_id="#{item.id}"> <t t-esc='item.name' /></input><br></br><br></br>
+							    </t>
+							    <p class="room_attendant">Room Attendant</p>
+							    <select name="supplier" id="supplier" class="select_supplier">
+								    	 	<t t-foreach="table.room_supplier_ids" t-as="supplier">
+												<p>
+													<option t-att-value="supplier.partner_id">
+														<t t-esc="supplier.name" />
+													</option>
+												</p>
+											</t>
+								</select>
+							</div>	
 					    	<button type="button" class="service_confirm"> Confirm </button> 	
 					    </t>
 				    </div>

@@ -580,6 +580,7 @@
     border-color: #32CD32;
     outline: none;
     border: 1px solid transparent;
+    margin-top: 7px;
 }
 .service_close{
 	width: 100%;
@@ -604,4 +605,8 @@
     margin-right: 20px;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+.room_attendant{
+	margin-bottom: 5px;
+	font-size:16px;
 }

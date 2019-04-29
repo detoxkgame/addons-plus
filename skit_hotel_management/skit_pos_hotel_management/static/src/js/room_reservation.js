@@ -469,7 +469,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	        	$('.popover .service_confirm').on('click', function (e) {
   	  	        	var items=[]
   	  	        	var supply_detail=[]
-  	  	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');	
+  	  	        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
+  	  	        	var supplier_id = closest_div.find('.select_supplier option:selected').val();
   	  	 	    		closest_div.find('input').each(function(index, element) { 
   	  	 	    			var items_array ={};
   	  	 	    			if(this.checked){
@@ -485,6 +486,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  	 	    		supply_detail.push({
   	  						'room_no':room_id,
   	  						'room_supply_details':items,
+  	  						'supplier_id':supplier_id,
   	  					})
   	  					if(supply_detail[0]['room_supply_details'].length > 0){
   	  	 					 self._rpc({
