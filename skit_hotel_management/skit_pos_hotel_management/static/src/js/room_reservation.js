@@ -143,6 +143,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			//centerform.innerHTML = center_panel_html;
 	    			//centerform = reservationform.childNodes[1];
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
+	    			// Room Status Report
+	    			if(form_view == "room_status_report"){
+	    				self.status_report(contents);  
+	    			}
 	    		});
 	        });
 	        
@@ -661,6 +665,99 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			});
     	}
     },
+ // Room Status Report
+    status_report: function(contents){
+    	var self = this;
+    	var rooms_status_html = QWeb.render('RoomstatusReportScreen',{widget: self});
+    	contents.find('.rooms_status_report').html(rooms_status_html);
+    	//To display details initially at the begining
+    	self._rpc({
+    	            model: 'product.template',
+    	            method: 'get_roomstatus',
+    	            args: [0, from_date, to_date],
+    	        })
+    	        .then(function(val) {
+    	        	var table = $("#rs_table").DataTable()
+    	        	table.destroy();
+    	        	self.render_order(val);  
+    	        });
+    	 $('#sandbox-container .input-daterange').datepicker({
+    	   		todayHighlight: true
+    	   	});
+    	    //Display records based on strt and end date
+    	    var from_date;
+    		var to_date;
+    		contents.on('change','.rdate_from',function(){
+    			from_date = $(this).val();
+    		});
+    		contents.on('change','.rdate_to',function(){
+    			to_date = $(this).val();
+    		});
+        	//To display details while changing the date
+    		contents.on('change','.rooms_status_report',function(){
+    			self._rpc({
+    	            model: 'product.template',
+    	            method: 'get_roomstatus',
+    	            args: [0, from_date, to_date],
+    	        })
+    	        .then(function(val) {
+    	        	var table = $("#rs_table").DataTable()
+    	        	table.destroy();
+    	        	self.render_order(val);  
+    	        });
+    		});
+    	/*var self = this;
+    	var center_panel_html = QWeb.render('RoomstatusReportScreen',{widget: self});
+		var statusreport = document.createElement('div');
+		statusreport.innerHTML = center_panel_html;
+		statusreport = statusreport.childNodes[1];
+	    contents.append(statusreport);
+    //Datepicker
+    $('#sandbox-container .input-daterange').datepicker({
+   		todayHighlight: true
+   	});
+    //Display records based on strt and end date
+    var from_date;
+	var to_date;
+	contents.on('change','.rdate_from',function(){
+		from_date = $(this).val();
+	});
+	contents.on('change','.rdate_to',function(){
+		to_date = $(this).val();
+	});
+	contents.on('change','.report',function(){
+		self._rpc({
+            model: 'product.template',
+            method: 'get_roomstatus',
+            args: [0, from_date, to_date],
+        })
+        .then(function(val) {
+        	console.log(JSON.stringify(val));
+        	var table = $("#rs_table").DataTable()
+        	table.destroy();
+        	self.render_order(val);  
+        });
+	});*/
+    },
+    render_order: function(result){
+    	//alert('result'+JSON.stringify(result))
+    	var self = this;
+   	 	var histories = result;
+	   	var contents = this.$el[0].querySelector('.dl_otable');
+	   	if(contents!=null)
+		{	
+	   		var order_html = QWeb.render('RoomStatusReportDetailsScreenWidget1',{widget: self,lines:result});
+			contents.innerHTML=order_html;
+		}
+	   	var table = self.$el.find('table#rs_table').DataTable({
+	        sScrollX: true,
+	        sScrollXInner: "100%",
+	        bScrollCollapse: true,
+	        bSort: false,
+	        bPaginate: true, 
+	        pageLength: 10,
+		});
+   },
     render_supply_items:function(room_id,contents){
     	var self = this;
     	if(room_id){
@@ -760,6 +857,19 @@ chrome.OrderSelectorWidget.include({
             }
         }
        
+    },
+    // Room Status Report
+    roomstatus_report_handler: function(event, $el, from_date, to_date) {
+    	var self = this;
+    	var order = self.pos.get_order();
+    	self._rpc({
+        model: 'product.template',
+        method: 'get_roomstatus',
+        args: [0, from_date, to_date],
+    })
+    .then(function(val) {
+    	self.pos.gui.show_screen('roomstatusreport',{dldata: val},'refresh');   
+    });
     },
 });
 

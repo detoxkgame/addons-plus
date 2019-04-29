@@ -623,3 +623,13 @@
 	margin-bottom: 5px;
 	font-size:16px;
 }
+@media screen and (min-width: 1024px) {
+    .screen .screen-content{
+        border-left:  0px;
+        border-right: 0px;
+    }
+}
+div.bhoechie-tab-container{
+	border: 0px !important;
+	box-shadow: none !important;
+}

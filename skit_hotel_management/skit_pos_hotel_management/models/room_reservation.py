@@ -1002,3 +1002,45 @@ class PosOrder(models.Model):
         #     self._process_service_lines(order, pos_order)
         # return order
         #=======================================================================
+        
+class RoomStatus(models.Model):
+    """Room Status"""
+  
+    _inherit = 'product.template'
+    _description = "Status of the Rooms"
+ 
+     
+    def get_roomstatus(self, from_date, to_date):
+ 
+        N = 2
+        
+        date_array=[]      
+        if(from_date and to_date):
+            from_date = datetime.strptime(from_date, '%m/%d/%Y')
+            to_date = datetime.strptime(to_date, '%m/%d/%Y')
+            d1 = from_date.date()  # start date
+            d2 = to_date.date()  # end date
+            delta = d2 - d1         # timedelta
+            N = delta.days + 1
+
+        product_history_ids_list = self.env['product.history'].sudo().search([])
+        list_product_array = {}
+        room_status_list_array = {}        
+        if product_history_ids_list:
+                for history in product_history_ids_list:
+                    product = history.product_id.id
+                    product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
+                    rowdate = ""+datetime.strftime(history.date, "%b %d %Y")#""+history.date.strftime('%Y-%m-%d %H:%M:%S')
+                    key = str(product)+"-"+rowdate
+                    room_status_list_array[key] = history.state
+                    list_product_array[product] = product_arr.name
+                    
+        
+        for i in range(N):
+            if from_date and to_date:
+                range_date = from_date + timedelta(i)
+            else:
+                range_date = datetime.now() - timedelta(i)
+            date = datetime.strftime(range_date, "%b %d %Y")            
+            date_array.append(date)
+        return {'date_key':date_array,'room_status_list_array':room_status_list_array,'list_product_array':list_product_array}
