@@ -732,7 +732,13 @@
 						</table>
 						</t>
 					</t>
-
+					<!-- Night Audit -->
+					<t t-if="form_view == 'night_audit'">
+		                <div class="nightaudit_container">
+		                   <div class="night_audit">
+		                   </div> 
+		                </div>
+					</t>
 					<!-- Restaurant table -->
 					<t t-if="form_view == 'restaurant_table'">
 						<span id="restaurant_table" style="display:none">false</span>

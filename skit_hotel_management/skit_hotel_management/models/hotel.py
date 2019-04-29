@@ -366,6 +366,7 @@ class FormTemplate(models.Model):
                     ('right_panel', _('Right Panel')),
                     ('top_panel', _('Top Panel')),
                     ('center_panel', _('Center Panel')),
+                    ('night_audit', _('Night Audit')),
                     ('restaurant_table', _('Restaurant Table')),
                     ('room_status_report', _('Room Status Report')),
                     ('search_view', _('Search View'))], string="Form View",

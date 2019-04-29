@@ -178,8 +178,13 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    			//centerform.innerHTML = center_panel_html;
 		    			//centerform = reservationform.childNodes[1];
 		    			contents.find('.hm-center-form-design').html(center_panel_html);
-		    		});
-		        	self.render_rooms(floor_id,contents);        	
+		    			if(form_view == "restaurant_table"){
+		    				self.render_rooms(floor_id,contents); 
+		    			}
+		    			if(form_view == "night_audit"){
+		    				self.render_night_audit(contents); 
+		    			}
+		    		});       	
 	        });
 
 	        /** Tab click */
@@ -477,7 +482,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	        	/** Render supply popup **/
   	        	if(room_id && room_id != 'false'){
   	        		$(this).addClass('select_room');
-  	        		self.render_supply_items(room_id,contents);
+  	        		self.render_supply_items(room_id,contents); //display items inside the popover
 	  	        	$('.popper').popover({	  	        		
 	  	        		container: "body",
 	  	  	          	html: true,
@@ -640,6 +645,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 
     },
     render_rooms:function(floor_id,contents){
+    	//Room supply floor render function
     	var self = this;
     	var room_service = $('#restaurant_table').text();
     	if(floor_id){
@@ -759,6 +765,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		});
    },
     render_supply_items:function(room_id,contents){
+    	//display items inside the popover
     	var self = this;
     	if(room_id){
 	    	self._rpc({
@@ -774,6 +781,26 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				contents.find('.rooms_container .res_tables .items_popover').html(supply_items_html);
 			});
     	}
+    },
+    render_night_audit:function(contents){
+    	//Night audit render function
+    	var self = this;
+    	var partner_list = []
+    	var partners_all = this.pos.db.get_partners_sorted(1000);
+    	for(var i=0; i<partners_all.length; i++){
+    		partner_list.push({ 
+    			'value' : partners_all[i].id,'key':partners_all[i].name,
+    		});
+    	}
+    	self._rpc({
+    		model: 'pos.session',
+            method: 'get_pos_session',
+            args: [0, self.pos.pos_session.id],
+    	}).then(function(result){ 
+    		var session  = result;
+    		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, session:session, partner_list:partner_list,partners_all:partners_all});
+			contents.find('.nightaudit_container .night_audit').html(night_audit_html);
+    	});
     },
     template_line_icon_url: function(id){
         return '/web/image?model=hm.form.template.line&id='+id+'&field=image';
