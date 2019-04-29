@@ -135,6 +135,7 @@
             			<field name="child" />
             			<field name="driver_name" />
             			<field name="car_no" />
+            			<field name="source_folio_id" readonly="1"/>
             		</group>
             	</xpath>
             	<page name="extra" position="after">  

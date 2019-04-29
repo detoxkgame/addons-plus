@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 	
+	<t t-name="BackToRoomService">
+        <span class="order-button room-service-button">
+            <i class='fa fa-angle-double-left' role="img" aria-label="Back to service" title="Back to service"/>
+            <span class='table-name'>
+                Room No( <t t-esc="room_name"/> )
+            </span>
+        </span>
+    </t>
+    
 	<t t-name="RoomReservationScreenWidget">
 		<div class="hm-container">
 			<div class="hm-container hm-reservation-content">
@@ -348,7 +357,7 @@
 			</div>
 			<!-- End Center Panel -->
 			
-			<!-- Start Rignt Panel -->
+			<!-- Start Right Panel -->
 			<div class="hm-right-container">
 				<t t-if="(right_panel_temp).length > 0">
 					<t t-set="tcount" t-value="0" />
@@ -373,10 +382,14 @@
 											<t t-foreach="right_temp['model_method_datas'][data.id]" t-as="code">
 												<t t-if="data.model_method == 'get_room_service'">
 													<t t-if="code.state == 'delivered'">
-														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn hm-delivery-service" t-attf-orderid="#{code.order_id}" t-attf-state="#{code.state}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
+														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn hm-delivery-service" 
+														t-attf-orderid="#{code.order_id}" t-attf-partnerid="#{code.partner_id}" t-attf-roomname="#{code.room_name}" 
+														t-attf-state="#{code.state}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
 													</t>
 													<t t-else="">
-														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn" t-attf-orderid="#{code.order_id}" t-attf-state="#{code.state}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
+														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn" 
+														t-attf-orderid="#{code.order_id}" t-attf-partnerid="#{code.partner_id}" t-attf-roomname="#{code.room_name}" 
+														t-attf-state="#{code.state}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
 													</t>
 												</t>
 												<t t-else="">
@@ -399,9 +412,9 @@
 			<div id='room-service-action' style='display: none;'>
 		       <div id="div_id_filters" class="form-group">
 		          	<div class="controls">
-		          		<div class="hm-service-div service-delivered" ><span class="hm-service-span">Delivered</span></div>
-		          		<div class="hm-service-div service-add" ><span class="hm-service-span">Add / Edit</span></div>
-		          		<div class="hm-service-div service-close"><span class="hm-service-span">Close</span></div>
+		          		<div id="service-delivered" class="hm-service-div service-delivered" ><span class="hm-service-span">Delivered</span></div>
+		          		<div id="service-add" class="hm-service-div service-add" ><span class="hm-service-span">Add / Edit</span></div>
+		          		<div id="service-close" class="hm-service-div service-close"><span class="hm-service-span">Close</span></div>
 		        	</div>
 		   		</div>
            </div>
@@ -639,6 +652,7 @@
 
 					<!-- Restaurant table -->
 					<t t-if="form_view == 'restaurant_table'">
+						<span id="restaurant_table" style="display:none">false</span>
 						<t t-if='floor_count > 1'>
 		                    <div class='floor-selector'>
 		                        <t t-foreach="floors" t-as="floor">
@@ -834,4 +848,39 @@
 		</t>	
 	</t>
 	
+	
+	<!-- Room Service Table -->
+	<t t-name="RestaurantRoomsService">
+		<t t-foreach="tables" t-as="table">
+			<div data-placement="right" class="res_table hm-room-service" 
+				 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+		          left: #{table.position_h + table.width/2}px; 
+		          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+		         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" >
+				<span class='label'>
+			    	<t t-esc='table.name' />
+			    </span>
+		    </div>
+		</t>	
+	</t>
+	
+	<!-- Room Service Order Confirmation Popup -->
+	<t t-name="ServiceOrderPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm">
+                <p class="title"><t t-esc=" widget.options.title || 'Receipt' " /></p>
+                <div class="body copy_pre_body">
+                	<p>Do you want to create a order? </p>
+                </div>
+                <div class="footer">                   
+                    <div class="button cancel">
+                        No 
+                    </div>
+                    <div class="button confirm">
+                        Yes 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
 </templates>

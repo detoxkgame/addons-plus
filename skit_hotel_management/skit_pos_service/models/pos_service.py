@@ -61,6 +61,10 @@ class HMSeviceLine(models.Model):
     check_out = fields.Datetime("Service Check Out")
     session_id = fields.Many2one('pos.session', "Session")
     pos_order_id = fields.Many2one('pos.order', string="Folio No")
+    state = fields.Selection([('draft', 'Draft'),
+                              ('delivered', 'Delivered'),
+                              ('close', 'Close')], 'State',  copy=False,
+                             default='draft')
 
 
 class PosOrder(models.Model):
@@ -81,16 +85,15 @@ class PosOrder(models.Model):
         existing_references = set([o['pos_reference'] for o in existing_orders])
         orders_to_save = [o for o in orders if o['data']['name'] not in existing_references]
         order_ids = []
-
         for tmp_order in orders_to_save:
             to_invoice = tmp_order['to_invoice']
             order = tmp_order['data']
             if to_invoice:
                 self._match_payment_to_invoice(order)
             pos_order = self._process_order(order)
-            pos_service_line = self._process_service_lines(pos_order, order)
+            if(order.get('is_service_order')):
+                pos_service_line = self._process_service_lines(pos_order, order)
             order_ids.append(pos_order.id)
-
             try:
                 pos_order.action_pos_order_paid()
             except psycopg2.OperationalError:
@@ -123,7 +126,7 @@ class PosOrder(models.Model):
                                 'price_subtotal_incl': line.price_subtotal_incl,
                                 'check_in': order.date_order,
                                 'session_id': order.session_id.id,
-                                'pos_order_id': order.id,
+                                'pos_order_id': order.source_folio_id.id,
                                 'service_type': service.get('service_type_id')
                                     })
         return hm_service_line

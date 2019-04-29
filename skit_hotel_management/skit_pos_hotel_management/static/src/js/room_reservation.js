@@ -12,6 +12,27 @@ var PopupWidget = require('point_of_sale.popups');
 var QWeb = core.qweb;
 var _t = core._t;
 
+var ServiceOrderPopupWidget = PopupWidget.extend({
+    template: 'ServiceOrderPopupWidget',
+    click_confirm: function(){
+    	 this.gui.close_popup();
+    	var order = this.pos.get_order();
+ 		var datas = order.export_as_JSON();
+ 		this._rpc({
+    			model: 'pos.order',
+    			method:'create_pos_service_order',
+    			args: [datas],
+    		}).then(function(result){
+    	});
+    },
+   
+    click_cancel: function(){
+    	this.gui.close_popup();
+    	this.gui.show_screen('firstpage');
+    }
+});
+
+gui.define_popup({name:'popup_service_order', widget: ServiceOrderPopupWidget});
 
 var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     template: 'RoomReservationScreenWidget',
@@ -91,6 +112,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        var reservationform = document.createElement('div');
 	        reservationform.innerHTML = reservation_html;
 	        reservationform = reservationform.childNodes[1];
+	        contents.empty();
 	        contents.append(reservationform);
 	        /** Set the Default Form (Reservation Form) */
 	        var center_sub_id = contents.find('#center_sub_form').attr('subid');
@@ -552,34 +574,70 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	               
 	            });
             });*/
-            contents.find('[rel=hm-popover]').popover({
-	            html:true,
-	            placement:'right',
-	            content:function(){
-	                return $($(this).data('contentwrapper')).html();
-	            }
-	        }).click(function (e) {
-	            $('[rel=hm-popover]').not(this).popover('hide');
+  	        
+  	        contents.off('click','.hm-room-service');
+	        contents.on('click','.hm-room-service',function(e){
+	        	var room_id = $(this).attr('room_id');
+	        	var room_table_id = $(this).attr('table_id');
+	        	self._rpc({
+	        		model: 'pos.order',
+		 	 	    method:'get_room_order',
+		 	 	    args: [0, room_id],
+		 	 	}).then(function(result){
+		 	 		//self.pos.set_service_order(true);
+		 	 		self.pos.set_service_table(result['partner_id'], result['source_order_id'], result['room_name'], room_table_id, true);
+		 	 	});
+	        	//self.pos.set_service_table(partner_id);
 	        });
-            
-            contents.off('click','.service-delivered');
-            contents.on('click','.service-delivered',function(e){
-            	alert('test')
-            	self.pos.set_service_table();
-            	/*var orders = self.pos.get_order_list();
-	            if (orders.length) {
-	            	alert('IF')
-	                self.pos.set_order(orders[0]); // and go to the first one ...
-	            }*/
-            	//self.pos.add_new_order();
-            	//_super_posmodel.add_new_order()
-            	//self.pos.gui.show_screen('products')
-            });
+	        
+	        /** Room Service Action */
+	  	    var order_id = 0;
+	        var partner_id = 0;
+	        var service_room = '';
+	        contents.off('click','.hm-right-reserve-btn');
+	        contents.on('click','.hm-right-reserve-btn',function(e){
+		         var oid = $(this).attr('orderid');
+		         var pid = $(this).attr('partnerid');
+		         var room = $(this).attr('roomname');
+		         if(oid){
+		        	order_id = oid;
+		         }
+		         if(pid){
+		          	partner_id = pid;
+		         }
+		         if(room){
+		        	 service_room = room;
+		         }
+	         });
+	         contents.find('[rel=hm-popover]').popover({
+	        	 html:true,
+		         placement:'right',
+		         content:function(){
+		        	 return $($(this).data('contentwrapper')).html();
+		         }
+		     }).click(function (e) {
+		            $('[rel=hm-popover]').not(this).popover('hide');
+		     });
+	          
+	         contents.off('click','.hm-service-div');
+	         contents.on('click','.hm-service-div',function(e){
+	        	 var id = $(this).attr('id')
+		         if(id == 'service-delivered'){
+		        	 alert('Deliverd')
+		         }
+		         if(id == 'service-add'){
+		        	 self.pos.set_service_order_details(self, partner_id, order_id, service_room);
+		         }
+		         if(id == 'service-close'){
+		          	 alert('Close')
+		         }
+	         });
 		});
 
     },
     render_rooms:function(floor_id,contents){
     	var self = this;
+    	var room_service = $('#restaurant_table').text();
     	if(floor_id){
 	    	self._rpc({
 				model: 'hm.form.template',
@@ -587,10 +645,18 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				args: [0, floor_id],
 			}).then(function(result){
 				var tables = result;
-				var restaurant_rooms_html = QWeb.render('RestaurantRooms',{widget: self, 
-					tables: tables, 
-					floor_id: floor_id,
+				if(room_service == 'true'){
+    				var restaurant_rooms_html = QWeb.render('RestaurantRoomsService',{widget: self, 
+	    				tables: tables, 
+						floor_id: floor_id,
 					});
+    			}else{
+    				var restaurant_rooms_html = QWeb.render('RestaurantRooms',{widget: self, 
+    					tables: tables, 
+    					floor_id: floor_id,
+    				});
+    			}
+				
 				contents.find('.rooms_container .res_tables').html(restaurant_rooms_html);
 			});
     	}
@@ -658,8 +724,19 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 gui.define_screen({name:'room_reservation', widget: RoomReservationScreenWidget});
 
 chrome.OrderSelectorWidget.include({
-    floor_button_click_handler: function(){
-        this.pos.set_table(null);
+	room_service_button_click_handler: function(){
+		/*var order = this.pos.get_order();
+		var datas = order.export_as_JSON();
+		this._rpc({
+   			model: 'pos.order',
+   			method:'create_pos_service_order',
+   			args: [datas],
+   		}).then(function(result){
+   		});*/
+		this.pos.gui.show_popup('popup_service_order', {
+            'title': _t('Confirmation'),
+        });
+
     },
     hide: function(){
         this.$el.addClass('oe_invisible');
@@ -670,37 +747,86 @@ chrome.OrderSelectorWidget.include({
     renderElement: function(){
         var self = this;
         this._super();
-        //alert('Room')
+        if (this.pos.config.iface_room_service) {
+            if (this.pos.get_order()) {
+            	this.$('.orders').prepend(QWeb.render('BackToRoomService',{room_name:this.pos.room_name}));
+                this.$('.room-service-button').click(function(){
+                		
+                        self.room_service_button_click_handler();
+                });
+                this.$el.removeClass('oe_invisible');
+            } else {
+                this.$el.addClass('oe_invisible');
+            }
+        }
+       
     },
 });
+
 
 var _super_posmodel = models.PosModel.prototype;
 models.PosModel = models.PosModel.extend({
     initialize: function(session, attributes) {
         this.table = null;
+        this.table_name = '';
+        this.room_name = '';
         return _super_posmodel.initialize.call(this,session,attributes);
     },
-    set_service_table: function(table) {
-    	alert('SErvice')
-    	console.log('SErvice:'+JSON.stringify(this.tables_by_id[113]))
-    	var table_floor = this.tables_by_id[113]
+    
+    set_service_order_details: function(order_self, partner_id, order_id, service_room){
+    	this.room_name = service_room;
+    	var order  = this.get_order();
+    	var client = this.db.get_partner_by_id(partner_id);
+    	order.set_client(client);
+    	var lines = order.get_orderlines();	
+    	for(var i=0; i<lines.length; i++){
+    		order.remove_orderline(lines[i]);
+    	}
+    	var self = this;
+    	order_self._rpc({
+    		model: 'pos.order',
+	 	 	    method:'get_service_order',
+	 	 	    args: [0, order_id],
+	 	}).then(function(result){
+	 		for(var i=0; i<result.length; i++){
+	 			var product = self.db.get_product_by_id(result[i].product_id);
+		    	order.add_product(product, 
+		    			{quantity: result[i].qty, room_line_id: result[i].line_id}
+		    	);
+	 		}
+	 		self.gui.show_screen('products');
+	 	});
     	
-    	this.floor = this.floors_by_id[7];
-    	table_floor['floor'] = this.floor;
-    	this.table = table_floor;
-    	//this.table.floor = this.floors_by_id[8]
-    	 
-    	this.set_table(this.table);
-    	//this.set_order(null)
-    	/*console.log('SErvice:'+JSON.stringify(this.tables_by_id[113]))
-    	 this.table = this.tables_by_id[113];
-    	 this.floor = this.floors_by_id[8];
-    	var orders = this.get_order_list();
-	            if (orders.length) {
-	            	alert('IF')
-	                this.set_order(orders[0]); // and go to the first one ...
-	            }*/
-	            //this.gui.show_screen('products')
     },
+    set_service_table: function(partner_id, source_order_id, room_name, room_table_id, is_service) {
+    	this.room_name = room_name;
+    	var orders = this.get_order_list();
+    	var client = this.db.get_partner_by_id(partner_id);
+    	var order = this.get_order();
+		order.set_client(client);
+		order.set_service_order(is_service);
+		order.set_source_folio_id(source_order_id);
+		order.set_room_table_id(room_table_id);
+		console.log('Orders'+JSON.stringify(orders))
+		var pos_order = this.db.get_order(107)
+		console.log('pos_order:'+JSON.stringify(pos_order))
+        if (orders.length) {
+        	//alert('order')
+           // this.set_order(orders[0]); // and go to the first one ...
+        	this.set_service_room(orders[0]);
+        } else {
+        	alert('empty')
+            this.add_new_order();  // or create a new order with the current table
+        }
+    },
+    set_service_room: function(table){
+    	if(!table){
+    		this.gui.show_screen('firstpage');
+    	}else{
+    		//this.$('.orders').prepend(QWeb.render('BackToRoomService',{table_name:'table', floor_name: 'floor'}));
+    		this.gui.show_screen('products');
+    	}
+    }
 });
+
 });

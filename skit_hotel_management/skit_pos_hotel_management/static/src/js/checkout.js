@@ -78,7 +78,7 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
             	self._rpc({
         			model: 'hm.form.template',
         			method: 'get_vendor_list',
-        			args: [0,0, dashboard_id, 0, false, sub_temp_id, current_order_id, 0, [], true],
+        			args: [0,0, dashboard_id, 0, false, sub_temp_id, current_order_id, 0, [],[], true],
         		}).then(function(result){ 
         			var result_datas = result[0]['result_datas']
         			var line_group = result[0]['line_group']
@@ -99,7 +99,7 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
         			});
         			
         			/** Show Payment Screen */
-        			contents.off('click','.folio-payment'); 
+        			/*contents.off('click','.folio-payment'); 
         	        contents.on('click','.folio-payment',function(){
         				var invoice_id = $(this).attr('invid');
                     	var amount = $(this).attr('amt');
@@ -116,7 +116,7 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
         	 	    	order.set_pending_order_type('POS');
         	 	    	order.set_is_hm_pending(true);
         				self.gui.show_screen('payment');
-        	        });
+        	        });*/
         			
         			/** Action for Back Button */
         			contents.off('click','.back-btn'); 
@@ -124,7 +124,7 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
         				self._rpc({
                 			model: 'hm.form.template',
                 			method: 'get_vendor_list',
-                			args: [0,0, dashboard_id, 0, false, 0, 0, 0, [], true],
+                			args: [0,0, dashboard_id, 0, false, 0, 0, 0, [], [], true],
                 		}).then(function(result){ 
                 			var result_datas = result[0]['result_datas']
                 			var line_group = result[0]['line_group']
@@ -154,8 +154,8 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
                     	var order_id = 0;
                     	
         	        	$('#vendor_order_list tbody tr').each(function(){
-        	        		console.log($(this).find('input[type="checkbox"]').prop("checked"));
-        	        		console.log($(this).find("span.folio-payment").attr('amt'));
+        	        		//console.log($(this).find('input[type="checkbox"]').prop("checked"));
+        	        		//console.log($(this).find("span.folio-payment").attr('amt'));
 	       	        	    if($(this).find('input[type="checkbox"]').prop("checked")){
 	       	        	    	invoice_id = $(this).find("span.folio-payment").attr('invid');
 	                        	amount = amount + parseFloat($(this).find("span.folio-payment").attr('amt'));
@@ -173,6 +173,7 @@ var VendorPaymentScreenWidget = screens.ScreenWidget.extend({
             	 	    	order.set_pending_porder(order_id);
             	 	    	order.set_pending_order_type('POS');
             	 	    	order.set_is_hm_pending(true);
+            	 	    	//order.set_to_invoice(true);
             				self.gui.show_screen('payment');
         	        	}
         	        });

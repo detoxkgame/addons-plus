@@ -9,8 +9,8 @@
 	        <div class="hexIn">
 	          <a class="hexLink hotel" href="#">
 	          
-	            <img  src="https://image.flaticon.com/icons/svg/227/227365.svg" alt="" />
-	            <h1>HOME</h1>
+	            <img  src="/skit_hotel_management/static/src/img/restaurent.jpg" alt="" />
+	            <h1>RESTAURENT</h1>
 	            <p><t t-esc="widget.pos.config.id"/></p>
 	          </a>
 	        </div>
@@ -18,7 +18,7 @@
 	      <li class="hex">
 	        <div class="hexIn">
 	          <a class="hexLink reservation" href="#">
-	            <img src="https://image.flaticon.com/icons/svg/227/227333.svg" alt="" />
+	            <img src="/skit_hotel_management/static/src/img/reservation.jpg" alt="" />
 	            <h1>RESERVATION</h1>
 	            <p></p>
 	          </a>
@@ -29,8 +29,8 @@
 	      <li class="hex">
 	        <div class="hexIn">
 	          <a class="hexLink checkin" href="#">
-	            <img src="https://image.flaticon.com/icons/svg/227/227385.svg" alt="" />
-	            <h1>CHECK IN</h1>
+	            <img src="/skit_hotel_management/static/src/img/vendor_selection.jpg" alt="" />
+	            <h1>VENDOR SELECTION</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -38,8 +38,8 @@
 	      <li class="hex">
 	        <div class="hexIn">
 	          <a class="night_audit hexLink" href="#">
-	            <img src="/skit_pos_hm_night_audit/static/src/img/night_audit_1.png" alt="" />
-	            <h1>Night Audit</h1>
+	            <img src="/skit_hotel_management/static/src/img/night_audit.jpg" alt="" />
+	            <h1>NIGHT AUDIT</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -47,8 +47,8 @@
 	      <li class="hex">
 	        <div class="hexIn">
 	          <a class="hexLink checkout" href="#">
-	            <img src="https://image.flaticon.com/icons/svg/227/227339.svg" alt="" />
-	            <h1>CheckOut</h1>
+	            <img src="/skit_hotel_management/static/src/img/check_inout.jpg" alt="" />
+	            <h1>CHECKIN / CHECKOUT</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -58,8 +58,8 @@
 	      <li class="hex">
 	        <div class="hexIn">
 	          <a class="hexLink roomstatus" href="#">
-	            <img src="https://image.flaticon.com/icons/svg/227/227302.svg" alt="" />
-	            <h1>ROOM SERVICE</h1>
+	            <img src="/skit_hotel_management/static/src/img/reports.jpg" alt="" />
+	            <h1>REPORTS</h1>
 	            <p></p>
 	          </a>
 	        </div>
@@ -67,7 +67,7 @@
 	      <li class="hex">
 	        <div class="hexIn">
 	          <a class="hexLink" href="#">
-	            <img src="https://image.flaticon.com/icons/svg/227/227348.svg" alt="" />
+	            <img src="/skit_hotel_management/static/src/img/room_status.jpg" alt="" />
 	            <h1>ROOM STATUS</h1>
 	            <p></p>
 	          </a>

@@ -876,8 +876,38 @@ class PosOrder(models.Model):
         return checkout_rooms
 
     @api.multi
-    def get_room_service(self, line_id):
+    def get_room_service123(self, line_id):
+        service_order = self.env['pos.order'].sudo().search([
+                                    ('reservation_status', '=', 'checkin')])
+        service_room = []
+        state = 'draft'
+        for order in service_order:
+            if(order.hm_service_line_ids):
+                service_line = self.env['hm.service.line'].sudo().search([
+                                    ('pos_order_id', '=', order.id),
+                                    ('state', '=', 'draft')])
+                if(service_line):
+                    state = 'draft'
+                else:
+                    state = 'delivered'
+                close_service_line = self.env['hm.service.line'].sudo().search([
+                                        ('pos_order_id', '=', service_order.id),
+                                        ('state', '=', 'close')])
+                if(close_service_line):
+                    state = 'close'
+            for line in order.lines:
+                if(state != 'close'):
+                    service_room.append({'room_id': line.product_id.id,
+                                         'room_name': line.product_id.name,
+                                         'order_id': order.id,
+                                         'partner_id': order.partner_id.id,
+                                         'state': state
+                                         })
+        return service_room
 
+    @api.multi
+    def get_room_service(self, line_id):
+ 
         sql = """select sl.room_no, sl.pos_order_id, po.partner_id from hm_service_line sl 
                 inner join pos_order po on po.id = sl.pos_order_id
                 where sl.state != 'close'
@@ -909,6 +939,7 @@ class PosOrder(models.Model):
                 service_room.append({'room_id': service_prod.id,
                                      'room_name': service_prod.name,
                                      'order_id': service_order.id,
+                                     'partner_id': service_order.partner_id.id,
                                      'state': state
                                      })
         return service_room
@@ -929,3 +960,45 @@ class PosOrder(models.Model):
                                       'room_name': line.room_type_id.name})
 
         return checkin_rooms
+
+    @api.multi
+    def get_room_order(self, product_id):
+        prod = self.env['product.product'].sudo().search([
+                            ('product_tmpl_id', '=', int(product_id))],
+                                                limit=1)
+        order_line = self.env['pos.order.line'].sudo().search([
+                            ('order_id.reservation_status', '=', 'checkin'),
+                            ('product_id', '=', prod.id)], limit=1)
+        data = {'partner_id': order_line.order_id.partner_id.id,
+                'source_order_id': order_line.order_id.id,
+                'room_name': order_line.product_id.name}
+        return data
+
+    @api.multi
+    def get_service_order(self, order_id):
+        pos_order = self.env['pos.order'].sudo().search([
+                            ('source_folio_id', '=', int(order_id))])
+        lines = []
+        for order in pos_order:
+            for line in order.lines:
+                lines.append({'line_id': line.id,
+                              'product_id': line.product_id.id,
+                              'qty': line.qty})
+        return lines
+
+    @api.model
+    def create_pos_service_order(self, pos_order):
+        print(pos_order)
+        pos_session = self.env['pos.session'].browse(pos_order['pos_session_id'])
+        if pos_session.state == 'closing_control' or pos_session.state == 'closed':
+            pos_order['pos_session_id'] = self._get_valid_session(pos_order).id
+        #=======================================================================
+        # order = self.create(self._order_fields(pos_order))
+        # if pos_order.get('source_folio_id'):
+        #     order.update({'source_folio_id': pos_order.get('source_folio_id')})
+        # if pos_order.get('room_table_id'):
+        #     order.update({'table_id': pos_order.get('room_table_id')})
+        # if(pos_order.get('is_service_order')):
+        #     self._process_service_lines(order, pos_order)
+        # return order
+        #=======================================================================

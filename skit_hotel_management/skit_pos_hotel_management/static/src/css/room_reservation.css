@@ -349,6 +349,11 @@
 	margin-left: 5px;
 }
 
+.hm-room-service:hover{
+	border: 1px solid #32CD32;
+ 	background: #ffff !important;
+}
+
 /* Room Services*/
 .rooms_container{
     width: 98%;
@@ -555,7 +560,15 @@
     margin-bottom: 15px;
 }
 
-
+/** Product Page */
+.pos .order-button.room-service-button{
+	background: #6EC89B;
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 128px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
 
 .hm-service-div{
 	margin-bottom: 10px;

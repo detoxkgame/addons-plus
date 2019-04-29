@@ -649,9 +649,11 @@ class PosOrder(models.Model):
     capacity = fields.Integer(string="Person")
     car_type_id = fields.Many2one('hm.car.type', string="Car Type")
     no_night = fields.Integer(string="No of Night")
+    source_folio_id = fields.Many2one("pos.order", string='Source Folio')
 
     @api.model
     def _process_order(self, pos_order):
+        print('Process Order')
         pos_order['to_invoice'] = True
         orders = super(PosOrder, self)._process_order(pos_order)
         if(orders):
@@ -665,6 +667,11 @@ class PosOrder(models.Model):
                         i = i + 1
                 del post_order_details['order_line']
                 orders.update(post_order_details)
+            if pos_order.get('source_folio_id'):
+                orders.update({'source_folio_id': pos_order.get('source_folio_id')})
+            if pos_order.get('room_table_id'):
+                orders.update({'table_id': pos_order.get('room_table_id')})
+        print(orders)
         return orders
 
 

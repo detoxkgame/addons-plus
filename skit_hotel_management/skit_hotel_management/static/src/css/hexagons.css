@@ -119,7 +119,7 @@ ol.hexgrid_odd {
           transition:          transform .2s ease-out, opacity .3s ease-out;
 }
 .hex h1 {
-  bottom: 50%;
+  bottom: 48%;
   padding-top:50%;
   font-size: 1.5em;
   z-index: 1;
@@ -137,7 +137,7 @@ ol.hexgrid_odd {
   border-bottom: 1px solid #fff;
 }
 .hex p {
-  top: 50%;
+  top: 52%;
   padding-bottom:50%;
   -webkit-transform:translate3d(0,100%,0);
       -ms-transform:translate3d(0,100%,0);

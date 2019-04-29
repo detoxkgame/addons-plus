@@ -161,7 +161,6 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                // alert(JSON.stringify(contents.html()))
                // alert("vendorlist"+JSON.stringify(vendorlist.html()))
                
-                
                 var table = el_node.find('#vendor_order_list').DataTable({
     		        //sScrollX: true,
     		       // sScrollXInner: "100%",
@@ -192,7 +191,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var form_name = result[0]['form_name']
             			var text_color = result[0]['text_color']
             			var sub_form_template = result[0]['sub_form_template']
-            			var products = result[0]['products']
+            			var available_rooms = result[0]['available_rooms']
             			var template_lines = result[0]['template_lines']
             			var current_order = result[0]['current_order']
             			var current_order_lines = result[0]['current_order_lines']
@@ -215,7 +214,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-    						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+    						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, available_rooms: available_rooms, vendor_id: vendor_id,
     						template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
     						form_temp_id: form_temp_id, model_name: model_name,
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
@@ -239,7 +238,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         
                         /** Disabled the Order details for [order, done, cancel, return] state */
                         if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
-                        		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return')){
+                        		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return') || (current_order[0]['state'] == 'purchase')){
                         	$('table.order-form-detail').each(function() {
                         		$(this).find("input").attr('disabled',true);
                         		$(this).find("select").attr('disabled',true);
@@ -310,16 +309,24 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             		});
                 });
                 /** Action for Vendors */
-                contents.off('click','.vendor-form-icon, .invoice-action');
-                contents.on('click','.vendor-form-icon, .invoice-action',function(){ 
+                contents.off('click','.vendor-form-icon, .invoice-action, .picking-action');
+                contents.on('click','.vendor-form-icon, .invoice-action, .picking-action',function(){ 
                 	var sub_temp_id = $(this).attr('id');
                 	var vendor_id = $(this).attr('vendor');
-                	var invoice_ids = contents.find('#invoice_ids').text()
+                	var action = $(this).attr('action');
+                	var invoice_ids = []
+                	var picking_ids = []
+                	if(action == 'invoice'){
+                		invoice_ids = contents.find('#invoice_ids').text()
+                	}
+                	if(action == 'picking'){
+                		picking_ids = contents.find('#picking_ids').text()
+                	}
                 	//alert('invoice_ids'+invoice_ids);
                 	self._rpc({
             			model: 'hm.form.template',
             			method: 'get_vendor_list',
-            			args: [0,vendor_categ_id, dashboard_id, line_id, true, sub_temp_id, order_id, vendor_id, invoice_ids],
+            			args: [0,vendor_categ_id, dashboard_id, line_id, true, sub_temp_id, order_id, vendor_id, invoice_ids, picking_ids],
             		}).then(function(result){ 
             			var result_datas = result[0]['result_datas']
             			var line_group = result[0]['line_group']
@@ -328,7 +335,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var form_name = result[0]['form_name']
             			var text_color = result[0]['text_color']
             			var sub_form_template = result[0]['sub_form_template']
-            			var products = result[0]['products']
+            			var available_rooms = result[0]['available_rooms']
             			var template_lines = result[0]['template_lines']
             			var current_order = result[0]['current_order']
             			var current_order_lines = result[0]['current_order_lines']
@@ -350,7 +357,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var fcontents = el_node.find('.vendor-contents');
         	        	fcontents.innerHTML = "";
         	        	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-    						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+    						form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, available_rooms: available_rooms, vendor_id: vendor_id,
     						template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
     						form_temp_id: form_temp_id, model_name: model_name,
     						line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
@@ -452,7 +459,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                     	
             		});
                 });
-                
+                                
                 /** Cancel Action */
                 contents.off('click','#order_cancel');
                 contents.on('click','#order_cancel',function(){
@@ -478,8 +485,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 });
                
                 /** Confirm Action */
-                contents.off('click','#order_confirm, #action_confirm');
-                contents.on('click','#order_confirm, #action_confirm',function(){
+                contents.off('click','#order_confirm, #action_confirm, #save');
+                contents.on('click','#order_confirm, #action_confirm, #save',function(){
                 	var order_datas = {}
                 	var line_order_datas = []
                 	var line_data = {}
@@ -505,8 +512,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			var value = $(this).find('input#'+form_fields_records[i].form_fields).val();
 	                			order_datas[field] = value;
 	                			if(form_fields_records[i].form_fields == 'guest_name'){
-	                				var value1 =  $(this).find('#product_id option:selected').attr("id");
-	                				order_datas['product_id'] = value1;
+	                				var value1 =  $(this).find('#room_id option:selected').attr("id");
+	                				order_datas['room_id'] = value1;
 	                				
 	                			}
 	                			if(!value && mandatory){
@@ -544,7 +551,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 		line_data = {}
                 		if(tr_count > 0) {
 	                		for(var i=0; i<line_form_fields.length; i++){
-		                		console.log('field'+ line_form_fields[i].form_fields)
+		                		//console.log('field'+ line_form_fields[i].form_fields)
 		                		var field = line_form_fields[i].form_fields;
 		                		var mandatory =line_form_fields[i].isMandatory;
 		                		
@@ -559,6 +566,9 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 		                		
 		                		if(line_form_fields[i].form_field_type == 'input_char'){
 		                			var value = $(this).find('input#'+line_form_fields[i].form_fields).val();
+		                			if(!value){
+		                				value = false;
+		                			}
 		                			line_data[field] = value;
 		                			if(!value && mandatory){
 		                				error = true;
@@ -603,7 +613,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	//console.log('Order Datas'+ JSON.stringify(line_order_datas));
                 	//console.log('error'+ error);
                 	if(!error){
-                		console.log('inner')
+                		//console.log('inner')
 	                	self._rpc({
 	            			model: 'hm.form.template',
 	            			method: 'create_order',
@@ -624,9 +634,45 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	}
                 });
                 
+                /** Create a Register Payment */
+                contents.off('click','#register_payment');
+                contents.on('click','#register_payment',function(){
+                	var order_id = contents.find('#order_id').text();
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'get_invoice_details',
+            			args: [0, order_id],
+            		}).then(function(result){
+                    	console.log(result['partner_id']);
+                    	var invoice_id = result['id']
+                    	var partner = result['partner']
+                    	var amount = result['amount']
+                    	var order = self.pos.get_order();
+        				//order.set_client(self.pos.db.get_partner_by_id(partner_id));
+        				self.pos.proxy.open_cashbox();
+        				order.set_is_pending(true);
+        	        	order.set_is_purchase(true);
+        	        	order.set_pending_invoice(invoice_id);
+        	 	    	order.set_pending_amt(amount);
+        	 	    	order.set_vendor(partner);
+        				self.gui.show_screen('payment');
+            		});
+                	/*var order = self.pos.get_order();
+    				order.set_client(self.pos.db.get_partner_by_id(9));
+    				self.pos.proxy.open_cashbox();
+    				order.set_is_pending(true);
+    	        	order.set_is_purchase(true);
+    	        	order.set_pending_invoice(29);
+    	 	    	order.set_pending_amt(20);
+    	 	    	//order.set_pending_porder(order_id);
+    	 	    	//order.set_pending_order_type('POS');
+    	 	    	//order.set_is_hm_pending(true);
+    				self.gui.show_screen('payment');*/
+                });
+                
                 /** Create Invoice */
-                contents.off('click','#order_invoice');
-                contents.on('click','#order_invoice',function(){
+                contents.off('click','#order_invoice, #vendor_bill');
+                contents.on('click','#order_invoice, #vendor_bill',function(){
                 	var order_id = contents.find('#order_id').text();
                 	var form_temp_id = contents.find('#form_temp_id').text();
                 	var model_name = contents.find('#model_name').text();
@@ -791,6 +837,15 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 contents.off('click','.delete-line');
                 contents.on('click','.delete-line',function(e){
                 	$(this).closest('tr').remove();
+                });
+                
+                /** Set Folio Number and Guest Name */
+                contents.on('change','#room_id',function(e){
+                	var guest = $(this).closest('td').find("option:selected").attr('guest');
+                	var folio = $(this).closest('td').find("option:selected").attr('folio');
+                	$(this).closest('tr').find('#guest_name').val(guest);
+                	contents.find('select#pos_order_id').attr('class', 'drop-down-select');
+                	contents.find('select#pos_order_id').val(folio);
                 });
                 
                 /** Set amount for purchase order */
@@ -968,7 +1023,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var form_name = result[0]['form_name']
 			var text_color = result[0]['text_color']
 			var sub_form_template = result[0]['sub_form_template']
-			var products = result[0]['products']
+			var available_rooms = result[0]['available_rooms']
 			var template_lines = result[0]['template_lines']
 			var current_order = result[0]['current_order']
 			var current_order_lines = result[0]['current_order_lines']
@@ -991,7 +1046,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var fcontents = el_node.find('.vendor-contents');
         	fcontents.innerHTML = "";
         	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
-				form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, products: products, vendor_id: vendor_id,
+				form_name: form_name, text_color:text_color, sub_form_template: sub_form_template, available_rooms: available_rooms, vendor_id: vendor_id,
 				template_lines: template_lines, current_order: current_order, current_order_lines: current_order_lines,
 				form_temp_id: form_temp_id, model_name: model_name,
 				line_form_temp_id: line_form_temp_id, line_model_name: line_model_name,
@@ -1024,7 +1079,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             /** Disabled the Order details for [order, done, cancel, return] state */
             if(current_order.length > 0){
 	            if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
-	            		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return')){
+	            		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return') || (current_order[0]['state'] == 'purchase')){
 	            	$('table.order-form-detail').each(function() {
 	            		$(this).find("input").attr('disabled',true);
 	            		$(this).find("select").attr('disabled',true);

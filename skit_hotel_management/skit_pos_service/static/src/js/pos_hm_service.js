@@ -82,7 +82,7 @@ odoo.define('skit_pos_service.pos_hm_service',function(require){
 	                event.target === self.$('.floor-map .tables')[0]) {
 	                self.deselect_tables();
 	            }
-	            var table = self.pos.table;
+	           /* var table = self.pos.table;
 	            var service_id = $('.service-selector').find('.active').attr('data-id');
 	            var service_vals = self.pos.service_type_by_id[service_id];
 	            if(service_vals){
@@ -97,7 +97,7 @@ odoo.define('skit_pos_service.pos_hm_service',function(require){
         			args: [0,table.id, table.product_id[0]],
         		}).then(function(result){ 
         			self.pos.get_order().set_client(self.pos.db.get_partner_by_id(result));
-        		});
+        		});*/
 	        });
 
 	    },
