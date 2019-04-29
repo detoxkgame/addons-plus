@@ -531,7 +531,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  					}
   	  					else{
   	  						self.pos.gui.show_popup('alert',{
-			                     'title': _t('Waring'),
+			                     'title': _t('Warning'),
 			                     'body': _t('Please select room supply items.'),
 			                });
   	  					}
