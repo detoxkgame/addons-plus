@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="car_service" model="product.product">
+        <field name="name">Car Rental</field>
+        <field name="type">service</field>
+    </record>
+    <record id="health_service" model="product.product">
+        <field name="name">Doctor Service</field>
+        <field name="type">service</field>
+    </record>
+</odoo>
