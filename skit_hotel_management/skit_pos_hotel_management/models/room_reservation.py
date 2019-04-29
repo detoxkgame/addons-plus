@@ -101,12 +101,20 @@ class FormTemplate(models.Model):
         room_supply = []
         rs_items = []
         rm_supply_items = []
+        room_supplier_ids = []
         room_supply_items = self.env['hm.room.supply'].sudo().search([])
         if room_supply_items:
             for items in room_supply_items:
                 rs_items.append({'id': items.id,
                                  'name': items.name,
                                  })
+        supplier_ids = self.env['res.users'].sudo().search([])
+        if supplier_ids:
+            for supplier in supplier_ids:
+                room_supplier_ids.append({'id': supplier.id,
+                                          'name': supplier.name,
+                                          'partner_id': supplier.partner_id.id
+                                          })
         if room_id:
             floor_table_ids = self.env['restaurant.table'].sudo().search([
                                 ('product_id', '=', int(room_id))])
@@ -130,6 +138,7 @@ class FormTemplate(models.Model):
                                     'rm_id': room_manage_id.id,
                                     'room_no': room_manage_id.room_no.id,
                                     'state': room_manage_id.state,
+                                    'room_supplier_ids': room_supplier_ids,
                                     })
         return room_supply
 

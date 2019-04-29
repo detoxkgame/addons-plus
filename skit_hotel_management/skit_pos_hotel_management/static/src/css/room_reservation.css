@@ -567,6 +567,11 @@
 	font-size: 18px;
 }
 
+.select_supplier{
+	font-weight: 400 !important;
+	width: 135px !important;
+	height: 30px;
+}
 .service_confirm{
 	width: 100%;
     border-radius: 15px;
@@ -584,6 +589,7 @@
     border-color: #32CD32;
     outline: none;
     border: 1px solid transparent;
+    margin-top: 7px;
 }
 .select_room{
 	border: 1px solid #32CD32;
@@ -595,7 +601,7 @@
 }
 .rspopup_div{
     margin-left: 5px;
-    margin-right: 25px;
+    margin-right: 20px;
     margin-top: 5px;
     margin-bottom: 5px;
 }

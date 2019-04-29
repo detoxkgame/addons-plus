@@ -456,8 +456,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	  	        		container: "body",
 	  	  	          	html: true,
 	  	  	          	content: function() {
-	  	  	          		 //return $($(this).data('contentwrapper')).html();
-	  	  	          		 return $(this).next('.popper-content').html();
+	  	  	          		 return $($(this).data('contentwrapper')).html();
+	  	  	          		// return $(this).next('.popper-content').html();
 	  	  	          	}
 	  	        	}).click(function (e) {
 	  	                $('.popper').not(this).popover('destroy');
@@ -506,10 +506,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  	      	/** Close service*/
   	  	      	$('.popover .service_close').on('click', function (e) {
   	  		        	var supply_detail=[]
-  	  		        	var closest_div = $(e.currentTarget).closest('.confirm_rs'); 	        		
+  	  		        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
+  	  		        	var supplier_id = closest_div.find('.select_supplier option:selected').val();
   	  		 	    		supply_detail.push({
   	  							'room_no': room_id,
   	  							'manage_id': room_manage_id,
+  	  							'supplier_id': supplier_id,
   	  						})	
   	  						if(supply_detail){
   	  	 					 self._rpc({

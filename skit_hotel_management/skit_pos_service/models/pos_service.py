@@ -182,7 +182,7 @@ class HMRoomManage(models.Model):
     date = fields.Datetime("Requested Time")
     folio_no = fields.Many2one('pos.order', "Folio")
     supervisor = fields.Many2one('res.partner', "Supervisor")
-    supplier = fields.Many2one('res.partner', "Supplier")
+    supplier = fields.Many2one('res.partner', "Room Attendant")
     room_supply_details = fields.One2many('room.supply.details',
                                           'room_manage_id',
                                           string="Room Supply Details",
@@ -243,6 +243,11 @@ class HMRoomManage(models.Model):
                                 ('id', '=', int(vals[0]['manage_id'])),
                                 ])
             if room_manage_id:
+                if vals[0]['supplier_id']:
+                    supplier_id = self.env['res.partner'].sudo().search([
+                                                ('id', '=',
+                                                 int(vals[0]['supplier_id'])),
+                                                ])
                 #===============================================================
                 # closedtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 # close_time = datetime.strptime(closedtime,
@@ -263,6 +268,7 @@ class HMRoomManage(models.Model):
                 #===============================================================
                 room_manage_id.write({
                                       'state': 'close',
+                                      'supplier': supplier_id.id,
                                       })
                 room_manage_id.write({
                                       'closed_time': room_manage_id.write_date,
