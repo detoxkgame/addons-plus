@@ -413,7 +413,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1060;
+    z-index: 975;
     display: none;
     max-width: 276px;
     padding: 1px;
@@ -622,6 +622,10 @@
 .room_attendant{
 	margin-bottom: 5px;
 	font-size:16px;
+}
+.night_audit_session{
+	text-align:left;
+	width: 1020px;
 }
 @media screen and (min-width: 1024px) {
     .screen .screen-content{

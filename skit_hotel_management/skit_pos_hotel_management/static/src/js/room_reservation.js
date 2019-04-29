@@ -8,6 +8,9 @@ var screens = require('point_of_sale.screens');
 var core = require('web.core');
 var rpc = require('web.rpc');
 var PopupWidget = require('point_of_sale.popups');
+var is_room_confirmed = false;
+var is_service_confirmed = false;
+var is_purchase_confirmed = false;
 
 var QWeb = core.qweb;
 var _t = core._t;
@@ -466,19 +469,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	}
             });
             
-            var room_id = 0;
-            var room_manage_id = 0;
             /* Room supply booking */
   	       contents.off('click','.room_service');
   	        contents.on('click','.room_service',function(){
-  	        	var rid = $(this).attr('room_id'); 
-  	        	var manage_id = $(this).attr('manage_id');
-  	        	if(rid){
-  	        		room_id = rid;
-  	        	}
-  	        	if(manage_id){
-  	        		room_manage_id = manage_id;
-  	        	}
+  	        	var room_id = $(this).attr('room_id');
   	        	/** Render supply popup **/
   	        	if(room_id && room_id != 'false'){
   	        		$(this).addClass('select_room');
@@ -535,18 +529,25 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  	 	 	     			}
   	  	 	 	     		});
   	  					}
+  	  					else{
+  	  						self.pos.gui.show_popup('alert',{
+			                     'title': _t('Waring'),
+			                     'body': _t('Please select room supply items.'),
+			                });
+  	  					}
   	  	    	 });
   	  	      	/** Close service*/
   	  	      	$('.popover .service_close').on('click', function (e) {
   	  		        	var supply_detail=[]
   	  		        	var closest_div = $(e.currentTarget).closest('.confirm_rs');
+  	  		        	var room_manage_id = closest_div.attr('manage_id');
   	  		        	var supplier_id = closest_div.find('.select_supplier option:selected').val();
   	  		 	    		supply_detail.push({
   	  							'room_no': room_id,
   	  							'manage_id': room_manage_id,
   	  							'supplier_id': supplier_id,
   	  						})	
-  	  						if(supply_detail){
+  	  					if(supply_detail && room_manage_id !='false'){
   	  	 					 self._rpc({
   	  	 	 	     			model: 'room.manage',
   	  	 	 	     			method:'update_items_refilled',
@@ -562,7 +563,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  	 	 	     				contents.find('.select_room').removeClass('select_room');
   	  	 	 	     			}
   	  	 	 	     		});
-  	  						}
+  	  					}
   	  	      	});
   	        	
   	        });
@@ -575,7 +576,198 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	    	        }  	    	      
   	    	     });
   	    	 });
-  	       
+
+  	        /**Start Night Audit Session Button click actions*/
+  	        /* Session Put Money click */
+  	    	contents.off('click','.pos_button_section .PutMoneyIn');
+	        contents.on('click','.pos_button_section .PutMoneyIn',function(event){
+	          	self.pos.gui.show_popup('popupMoney',{
+	          		'title': 'Put Money In',
+	          		'body': 'Fill in this form if you put money in the cash register: ',
+	          		confirm: function(){                	
+	          			var values ={};
+	                   	values.reason = this.$('.reason').val();
+	                   	values.amount = this.$('.amount').val();
+	                   	values.session_id = self.pos.pos_session.id;    
+	                   	
+	                   	self._rpc({
+	                   		model: 'cash.box.in',
+	       	                method: 'run_from_ui',
+	       	                args: [0,values],
+	       	            }).then(function (result) {
+	       	            	if(result)
+	       	            		self.pos.gui.show_popup('error',{
+	       	            			'title': 'Put Money In',
+	       	            			'body': JSON.stringify(result),				                    
+	       	            		});
+	       	            	else{
+	      	            		self.gui.show_screen('sessionscreen',null,'refresh');	
+	       	            	}
+	       	            });                	
+	                   },
+	                   cancel: function(){
+	                   	$('.session').trigger('click');
+	                   },
+        		});	
+     	    });
+
+	        /* Session TakeMoneyOut click*/
+	        contents.off('click','.pos_button_section .TakeMoneyOut');
+	        contents.on('click','.pos_button_section .TakeMoneyOut',function(event){
+	        	self.pos.gui.show_popup('popupMoney',{
+            		'title': 'Take Money Out',
+            		'body': 'Describe why you take money from the cash register: ',
+            		confirm: function(){    
+            			var values ={};
+                    	values.reason = this.$('.reason').val();
+                    	values.amount = this.$('.amount').val();
+                    	values.session_id = self.pos.pos_session.id;
+                    	self._rpc({
+                    		model: 'cash.box.out',
+        	                method: 'run_from_ui',
+        	                args: [0,values],
+        	            }).then(function(result){ 
+        	            	if(result)
+        	            		self.pos.gui.show_popup('error',{
+        	            			'title': 'Take Money Out',
+        	            			'body': JSON.stringify(result),	                   
+        	            		});
+        	            	else
+        	            		self.gui.show_screen('sessionscreen',null,'refresh');	
+        	            });               	
+                    },
+                    cancel: function(){
+                    	$('.session').trigger('click');
+                    },
+         		});	
+	        });
+
+	        /* Session SetClosingBalance click */
+	        contents.off('click','.pos_button_section .SetClosingBalance');
+	        contents.on('click','.pos_button_section .SetClosingBalance',function(e){
+	        	var tr = $(e.currentTarget);
+    	    	var balance = tr.attr('value');
+    	    	var check = "";
+    	    	self._rpc({
+                    model: 'pos.session',
+                    method: 'get_cashbox',
+                    args: [0, self.pos.pos_session.id,balance,check],
+                }).then(function(result){ 						
+                	self.pos.gui.show_popup('popupBalance',{
+                		'title': 'Cash Control',
+                		'pos_cashbox_line': result,
+                		confirm: function(){       			                   
+                			var values = [];
+                			var tbl = document.getElementById("cashbox-grid");				
+                			var row = tbl.getElementsByTagName("tbody")[0].getElementsByTagName("tr");	    			      		   
+                			if (tbl != null) {	
+                				for (var i = 0; i < row.length-1; i++) 
+                				{		    			           	            	
+                					var id=null, number=null,coin_value=null;
+                					var cell_count = row[i].cells.length;
+                					for (var j = 0; j < cell_count ? 3 : 0; j++)
+                					{	    			           	                		    			           	                	
+                						if(j==0)
+                							id = row[i].cells[j].innerHTML;	    			                           	
+                						var children = row[i].cells[j].childNodes;
+                						for (var k = 0; k < children.length; k++)
+                						{	    			           	                		
+                							if(children[k].value)
+                							{	    			           	                			
+                								if(j==1)
+                									coin_value = children[k].value;
+                								if(j==2)
+                									number = children[k].value;	
+                							}
+                						}	    			           	                
+                					}
+                					if(cell_count > 0)
+                						values.push({'id':parseInt(id),number,coin_value});	
+                				}	
+                			} 
+                			self._rpc({
+                				model: 'account.bank.statement.cashbox',
+                				method: 'validate_from_ui',
+                				args: [0,self.pos.pos_session.id,balance,values],
+                			}).then(function(result){ 
+                				if(result){
+                					self.pos.gui.show_popup('alert',{
+                						'title': _t( 'Cash Control !!!!'),
+                						'body': JSON.stringify(result),	
+                						'cancel' : function() {	
+                							self.gui.show_screen('sessionscreen',null,'refresh');	
+                						}
+                					}); 
+                				}
+                				else
+                					$('.session').trigger('click');
+                			});
+                		},
+                		cancel: function(){
+                			$('.session').trigger('click');
+                		},
+                	}); 							
+                });
+	        });
+	        /*Session EndOfSession click*/
+	        contents.off('click','.pos_button_section .EndOfSession');
+	        contents.on('click','.pos_button_section .EndOfSession',function(event){
+	        	var id = self.pos.pos_session.id;   
+	           	 self._rpc({
+	           		 model: 'pos.session',
+	           		 method: 'action_pos_session_closing_control',
+	           		 args: [id],
+	           	 }).then(function(result){  
+	           		 self.gui.show_screen('sessionscreen',null,'refresh');	
+	           	 },function(err,event){
+	           		 event.preventDefault();
+	           		 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
+	           		 if(err.data.message)
+	           			 err_msg = err.data.message;
+	           		 self.gui.show_popup('alert',{
+	           			 'title': _t('Odoo Warning'),
+	           			 'body': _t(err_msg),
+	           		 });
+	           	 }); 
+	        });
+
+	        /* Session print statement click */
+	        contents.off('click','.pos_button_section .vcpentries');
+	        contents.on('click','.pos_button_section .vcpentries',function(event){
+	        	var id = self.pos.pos_session.id;
+	           	 if(is_room_confirmed && is_service_confirmed && is_purchase_confirmed){
+	           		 self._rpc({
+	           		 model: 'pos.session',
+	           		 method: 'action_pos_session_validate',
+	           		 args: [id],
+	           		 }).then(function(result){  
+	           			 self.gui.close_popup();
+	           			 self.gui.close();
+	           		 },function(err,event){
+	           			 event.preventDefault();
+	           			 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
+	           			 if(err.data.message)
+	           				 err_msg = err.data.message;
+	           			 self.gui.show_popup('alert',{
+	           				 'title': _t('Odoo Warning'),
+	           				 'body': _t(err_msg),
+	           			 });
+	           		 }); 
+	           	 }
+	           	 else{
+	           		 self.get_room_details(self)
+	           	 }              
+	        });
+  	        /* Session print statement click */
+	        contents.off('click','.pos_button_section .printstatement');
+	        contents.on('click','.pos_button_section .printstatement',function(event){
+	        	var id = self.pos.pos_session.id;
+	        	self.chrome.do_action('skit_pos_hm_night_audit.pos_session_report',
+	        								{additional_context:{active_ids:[id],}
+	        								});	               
+	        });
+	        
+	        /** End Night Audit Session Button click actions*/
             /*contents.off('click','.hm-right-reserve-btn');
             contents.on('click','.hm-right-reserve-btn',function(e){
             	self.pos.gui.show_popup('popuproomservicewidget', {
@@ -799,9 +991,22 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     	}).then(function(result){ 
     		var session  = result;
     		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, session:session, partner_list:partner_list,partners_all:partners_all});
-			contents.find('.nightaudit_container .night_audit').html(night_audit_html);
+			contents.find('.nightaudit_container .night_audit_session').html(night_audit_html);
     	});
     },
+    get_room_details: function(self){
+		self._rpc({
+            model: 'pos.session',
+            method: 'get_room_details',
+            args: [0, self.pos.pos_session.id],
+        }).then(function(result){ 
+        	self.pos.gui.show_popup('room_popup',{
+        		'title': 'Room Details',
+        		'room_details': result,
+        		'is_room_confirmed': is_room_confirmed
+        	}); 							
+        });      
+    },	
     template_line_icon_url: function(id){
         return '/web/image?model=hm.form.template.line&id='+id+'&field=image';
     },
