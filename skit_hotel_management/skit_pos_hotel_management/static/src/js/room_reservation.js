@@ -141,13 +141,17 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 	    				form_name: form_name, form_view: form_view,
 	    				center_panel_temp: center_panel_temp,
-						center_panel_sub_id: center_panel_sub_id
+						center_panel_sub_id: center_panel_sub_id,
+						floor_id: floor_id,
 						});
 	    			//var centerform = document.createElement('div');
 	    			//centerform.innerHTML = center_panel_html;
 	    			//centerform = reservationform.childNodes[1];
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
 	    			contents.find('#restaurant_table').text('true');
+	    			if(form_view == "restaurant_table"){
+	    				self.render_rooms(floor_id,contents); 
+	    			}
 	    			// Room Status Report
 	    			if(form_view == "room_status_report"){
 	    				self.status_report(contents);  
@@ -395,7 +399,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	 					$(this).find('select').each(function(index, element) {     						
 	 						order_line_array[element.name]=element.value;
 	 						if(element.name =='product_id'){
-	 							product_array.push(element.value);
+	 							product_array.push(parseInt(element.value));
 	 						}
 	         			});
 	 					
@@ -1173,6 +1177,8 @@ models.PosModel = models.PosModel.extend({
     	var orders = this.get_order_list();
     	var client = this.db.get_partner_by_id(partner_id);
     	var order = this.get_order();
+    	var lines = order.get_orderlines();	
+    	order.remove_orderline(lines);
 		order.set_client(client);
 		order.set_service_order(is_service);
 		order.set_source_folio_id(source_order_id);

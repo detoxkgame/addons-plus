@@ -79,6 +79,10 @@ class FormTemplate(models.Model):
                 room_manage_id = self.env['room.manage'].sudo().search([
                                 ('room_no', '=', floor_table.product_id.id),
                                 ('state', '=', 'inprogress')])
+                service_order = self.env['pos.order'].sudo().search([
+                                    ('is_service_order', '=', True),
+                                    ('service_status', '!=', 'close'),
+                                    ('table_id', '=', floor_table.id)], limit=1)
                 tables.append({'id': floor_table.id,
                                'floor_id': floor_table.floor_id.id,
                                'name': floor_table.name,
@@ -94,6 +98,7 @@ class FormTemplate(models.Model):
                                'rm_id': room_manage_id.id,
                                'room_no': room_manage_id.room_no.id,
                                'state': room_manage_id.state,
+                               'orderid': service_order.id or 0
                                })
         return tables
 
