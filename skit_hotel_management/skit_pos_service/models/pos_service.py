@@ -65,6 +65,7 @@ class HMSeviceLine(models.Model):
                               ('delivered', 'Delivered'),
                               ('close', 'Close')], 'State',  copy=False,
                              default='draft')
+    pos_order_line_id = fields.Many2one('pos.order.line', string="Pos Order Line")
 
 
 class PosOrder(models.Model):
@@ -127,7 +128,8 @@ class PosOrder(models.Model):
                                 'check_in': order.date_order,
                                 'session_id': order.session_id.id,
                                 'pos_order_id': order.source_folio_id.id,
-                                'service_type': service.get('service_type_id')
+                                'service_type': service.get('service_type_id'),
+                                'pos_order_line_id': line.id
                                     })
         return hm_service_line
 

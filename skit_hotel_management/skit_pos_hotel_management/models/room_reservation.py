@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 from odoo import SUPERUSER_ID
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
+from odoo.tools import float_is_zero
 
 
 class FormTemplate(models.Model):
@@ -908,40 +909,54 @@ class PosOrder(models.Model):
     @api.multi
     def get_room_service(self, line_id):
  
-        sql = """select sl.room_no, sl.pos_order_id, po.partner_id from hm_service_line sl 
-                inner join pos_order po on po.id = sl.pos_order_id
-                where sl.state != 'close'
-                group by sl.room_no, sl.pos_order_id, po.partner_id order by room_no"""
+        #=======================================================================
+        # sql = """select sl.room_no, sl.pos_order_id, po.partner_id from hm_service_line sl 
+        #         inner join pos_order po on po.id = sl.pos_order_id
+        #         where sl.state != 'close'
+        #         group by sl.room_no, sl.pos_order_id, po.partner_id order by room_no"""
+        #=======================================================================
         #cr = self.cr
         #cr.execute(sql)
+        sql = """ select id from pos_order where is_service_order = true and service_status != 'close' """
         self._cr.execute(sql)
         services = self.env.cr.fetchall()
         service_room = []
         for val in services:
-            service_prod = self.env['product.product'].sudo().search([
-                                        ('product_tmpl_id', '=', val[0])],
-                                                        limit=1)
             service_order = self.env['pos.order'].sudo().search([
-                                            ('id', '=', val[1])])
-            service_line = self.env['hm.service.line'].sudo().search([
-                                    ('pos_order_id', '=', service_order.id),
-                                    ('state', '=', 'draft')])
-            if(service_line):
-                state = 'draft'
-            else:
-                state = 'delivered'
-            close_service_line = self.env['hm.service.line'].sudo().search([
-                                    ('pos_order_id', '=', service_order.id),
-                                    ('state', '=', 'close')])
-            if(close_service_line):
-                state = 'close'
-            if(state != 'close'):
-                service_room.append({'room_id': service_prod.id,
-                                     'room_name': service_prod.name,
-                                     'order_id': service_order.id,
-                                     'partner_id': service_order.partner_id.id,
-                                     'state': state
-                                     })
+                                             ('id', '=', val[0])])
+            service_room.append({'room_id': service_order.table_id.product_id.id,
+                                 'room_name': service_order.table_id.product_id.name,
+                                 'order_id': service_order.id,
+                                 'partner_id': service_order.partner_id.id,
+                                 'state': service_order.service_status,
+                                 'source_folio_id': service_order.source_folio_id.id
+                                })
+            #===================================================================
+            # service_prod = self.env['product.product'].sudo().search([
+            #                             ('product_tmpl_id', '=', val[0])],
+            #                                             limit=1)
+            # service_order = self.env['pos.order'].sudo().search([
+            #                                 ('id', '=', val[1])])
+            # service_line = self.env['hm.service.line'].sudo().search([
+            #                         ('pos_order_id', '=', service_order.id),
+            #                         ('state', '=', 'draft')])
+            # if(service_line):
+            #     state = 'draft'
+            # else:
+            #     state = 'delivered'
+            # close_service_line = self.env['hm.service.line'].sudo().search([
+            #                         ('pos_order_id', '=', service_order.id),
+            #                         ('state', '=', 'close')])
+            # if(close_service_line):
+            #     state = 'close'
+            # if(state != 'close'):
+            #     service_room.append({'room_id': service_prod.id,
+            #                          'room_name': service_prod.name,
+            #                          'order_id': service_order.id,
+            #                          'partner_id': service_order.partner_id.id,
+            #                          'state': state
+            #                          })
+            #===================================================================
         return service_room
 
     @api.multi
@@ -977,7 +992,7 @@ class PosOrder(models.Model):
     @api.multi
     def get_service_order(self, order_id):
         pos_order = self.env['pos.order'].sudo().search([
-                            ('source_folio_id', '=', int(order_id))])
+                            ('id', '=', int(order_id))])
         lines = []
         for order in pos_order:
             for line in order.lines:
@@ -988,21 +1003,92 @@ class PosOrder(models.Model):
 
     @api.model
     def create_pos_service_order(self, pos_order):
-        print(pos_order)
         pos_session = self.env['pos.session'].browse(pos_order['pos_session_id'])
         if pos_session.state == 'closing_control' or pos_session.state == 'closed':
             pos_order['pos_session_id'] = self._get_valid_session(pos_order).id
-        #=======================================================================
-        # order = self.create(self._order_fields(pos_order))
-        # if pos_order.get('source_folio_id'):
-        #     order.update({'source_folio_id': pos_order.get('source_folio_id')})
-        # if pos_order.get('room_table_id'):
-        #     order.update({'table_id': pos_order.get('room_table_id')})
-        # if(pos_order.get('is_service_order')):
-        #     self._process_service_lines(order, pos_order)
-        # return order
-        #=======================================================================
-        
+        if(pos_order.get('exit_order_id') > 0):
+            order = self.env['pos.order'].sudo().search([('id', '=', int(pos_order.get('exit_order_id')))])
+            exit_order_line_ids = order.lines.ids
+            order_line_ids = []
+            if(pos_order.get('lines')):
+                for line in pos_order.get('lines'):
+                    print(line)
+                    if(line[2].get('room_line_id')):
+                        order_line_ids.append(line[2].get('room_line_id'))
+                        pos_order_line = self.env['pos.order.line'].sudo().search(
+                                    [('id', '=', line[2].get('room_line_id'))])
+                        del line[2]['id']
+                        del line[2]['room_line_id']
+                        del line[2]['note']
+                        pos_order_line.update(line[2])
+                    else:
+                        line[2]['order_id'] = order.id
+                        line[2]['source_order_id'] = pos_order.get('source_folio_id')
+                        pos_order_line = self.env['pos.order.line'].sudo().create(line[2])
+                        print(pos_order_line)
+
+                line_ids = [elem for elem in exit_order_line_ids if elem not in order_line_ids ]
+                if line_ids:
+                    order_line = self.env['pos.order.line'].sudo().search([('id', 'in', line_ids)])
+                    order_line.unlink()
+        else:
+            order = self.create(self._order_fields(pos_order))
+            if pos_order.get('source_folio_id'):
+                order.update({'source_folio_id': pos_order.get('source_folio_id')})
+            if pos_order.get('room_table_id'):
+                order.update({'table_id': pos_order.get('room_table_id')})
+            if(pos_order.get('is_service_order')):
+                order.update({'is_service_order': pos_order.get('is_service_order')})
+                order.lines.update({'source_order_id': pos_order.get('source_folio_id')})
+        return order
+
+    @api.model
+    def update_service_order(self, order_id, status):
+        if(status == 'delivery'):
+            pos_order = self.env['pos.order'].sudo().search([
+                                    ('id', '=', int(order_id))])
+            pos_order.update({'service_status': 'delivered'})
+        else:
+            pos_order = self.env['pos.order'].sudo().search([
+                                    ('id', '=', int(order_id))])
+            account_journal = self.env['account.journal'].sudo().search([
+                                                ('is_pay_later', '=', True)],
+                                                            limit=1)
+            account_statement = self.env['account.bank.statement'].sudo().search(
+                                [('pos_session_id', '=', pos_order.session_id.id),
+                                 ('journal_id', '=', account_journal.id)])
+            current_date = (datetime.today()).strftime('%Y-%m-%d %H:%M:%S')
+            prec_acc = pos_order.pricelist_id.currency_id.decimal_places
+            journal_ids = set()
+
+            if(pos_order.invoice_id):
+                paid_amount = sum([x.amount for x in pos_order.statement_ids])
+                invoice_amount = pos_order.invoice_id.amount_total - paid_amount
+                if not float_is_zero(invoice_amount, precision_digits=prec_acc):
+                    pos_order.add_payment(self._payment_fields({'name': current_date, 
+                                                                'partner_id': pos_order.partner_id.id,
+                                                                'statement_id': account_statement.id, 
+                                                                'account_id': account_journal.default_debit_account_id, 
+                                                                'journal_id': account_journal.id, 
+                                                                'amount': invoice_amount}))
+                pos_order.update({'service_status': 'close'})
+            else:
+                pos_order.action_pos_order_invoice()
+                pos_order.invoice_id.sudo().action_invoice_open()
+                pos_order.account_move = pos_order.invoice_id.move_id
+
+                if not float_is_zero(pos_order.invoice_id.residual, precision_digits=prec_acc):
+                    pos_order.add_payment(self._payment_fields({'name': current_date, 
+                                                                'partner_id': pos_order.partner_id.id,
+                                                                'statement_id': account_statement.id, 
+                                                                'account_id': account_journal.default_debit_account_id, 
+                                                                'journal_id': account_journal.id, 
+                                                                'amount': pos_order.invoice_id.residual}))
+                journal_ids.add(account_journal.id)
+                pos_order.update({'service_status': 'close'})
+        return True
+
+
 class RoomStatus(models.Model):
     """Room Status"""
   

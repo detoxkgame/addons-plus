@@ -22,10 +22,11 @@ var ServiceOrderPopupWidget = PopupWidget.extend({
     	var order = this.pos.get_order();
  		var datas = order.export_as_JSON();
  		this._rpc({
-    			model: 'pos.order',
-    			method:'create_pos_service_order',
-    			args: [datas],
-    		}).then(function(result){
+ 			model: 'pos.order',
+    		method:'create_pos_service_order',
+    		args: [datas],
+ 		}).then(function(result){
+    		this.gui.show_screen('firstpage');
     	});
     },
    
@@ -146,6 +147,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			//centerform.innerHTML = center_panel_html;
 	    			//centerform = reservationform.childNodes[1];
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
+	    			contents.find('#restaurant_table').text('true');
 	    			// Room Status Report
 	    			if(form_view == "room_status_report"){
 	    				self.status_report(contents);  
@@ -790,16 +792,17 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		 	 	});
 	        	//self.pos.set_service_table(partner_id);
 	        });
-	        
 	        /** Room Service Action */
 	  	    var order_id = 0;
 	        var partner_id = 0;
 	        var service_room = '';
+	        var source_id = 0;
 	        contents.off('click','.hm-right-reserve-btn');
 	        contents.on('click','.hm-right-reserve-btn',function(e){
 		         var oid = $(this).attr('orderid');
 		         var pid = $(this).attr('partnerid');
 		         var room = $(this).attr('roomname');
+		         var sid = $(this).attr('sourceid');
 		         if(oid){
 		        	order_id = oid;
 		         }
@@ -808,6 +811,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		         }
 		         if(room){
 		        	 service_room = room;
+		         }
+		         if(sid){
+		        	 source_id = sid;
 		         }
 	         });
 	         contents.find('[rel=hm-popover]').popover({
@@ -824,13 +830,29 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	         contents.on('click','.hm-service-div',function(e){
 	        	 var id = $(this).attr('id')
 		         if(id == 'service-delivered'){
-		        	 alert('Deliverd')
+		        	self._rpc({
+						model: 'pos.order',
+						method: 'update_service_order',
+						args: [order_id, 'delivery'],
+					}).then(function(result){
+						$("[orderid="+order_id+"]").addClass("hm-delivery-service");
+						$('[rel=hm-popover]').popover('hide');
+					});
+		        	 
 		         }
 		         if(id == 'service-add'){
-		        	 self.pos.set_service_order_details(self, partner_id, order_id, service_room);
+		        	 self.pos.set_service_order_details(self, partner_id, order_id, service_room, source_id);
+		        	 $('[rel=hm-popover]').popover('hide');
 		         }
 		         if(id == 'service-close'){
-		          	 alert('Close')
+		          	 self._rpc({
+						model: 'pos.order',
+						method: 'update_service_order',
+						args: [order_id, 'close'],
+					}).then(function(result){
+						$('[rel=hm-popover]').popover('hide');
+						$("[orderid="+order_id+"]").remove();
+					});
 		         }
 	         });
 		});
@@ -1078,6 +1100,7 @@ chrome.OrderSelectorWidget.include({
         this._super();
         if (this.pos.config.iface_room_service) {
             if (this.pos.get_order()) {
+            	//alert('dsfs')
             	this.$('.orders').prepend(QWeb.render('BackToRoomService',{room_name:this.pos.room_name}));
                 this.$('.room-service-button').click(function(){
                 		
@@ -1115,15 +1138,15 @@ models.PosModel = models.PosModel.extend({
         return _super_posmodel.initialize.call(this,session,attributes);
     },
     
-    set_service_order_details: function(order_self, partner_id, order_id, service_room){
+    set_service_order_details: function(order_self, partner_id, order_id, service_room, source_id){
     	this.room_name = service_room;
     	var order  = this.get_order();
     	var client = this.db.get_partner_by_id(partner_id);
     	order.set_client(client);
+    	order.set_exit_order_id(parseInt(order_id));
+    	order.set_source_folio_id(source_id);
     	var lines = order.get_orderlines();	
-    	for(var i=0; i<lines.length; i++){
-    		order.remove_orderline(lines[i]);
-    	}
+    	order.remove_orderline(lines);
     	var self = this;
     	order_self._rpc({
     		model: 'pos.order',
@@ -1138,7 +1161,7 @@ models.PosModel = models.PosModel.extend({
 	 		}
 	 		self.gui.show_screen('products');
 	 	});
-    	
+    	self.gui.show_screen('products');
     },
     set_service_table: function(partner_id, source_order_id, room_name, room_table_id, is_service) {
     	this.room_name = room_name;

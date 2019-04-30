@@ -82,7 +82,7 @@
 
 		<!-- Service Line under Folio -->
 		
-		<record id="viewview_hotel_folio_form_inherited" model="ir.ui.view">
+		<!-- <record id="viewview_hotel_folio_form_inherited" model="ir.ui.view">
             <field name="name">pos.order.form.inherit</field>
             <field name="model">pos.order</field>
             <field name="inherit_id" ref="skit_hotel_management.view_hotel_folio_form"/>
@@ -109,7 +109,7 @@
                     </page>
             	</xpath>
             </field>
-       	</record>
+       	</record> -->
        	
        	<!-- Add checkbox under POS Configuration -->
        	

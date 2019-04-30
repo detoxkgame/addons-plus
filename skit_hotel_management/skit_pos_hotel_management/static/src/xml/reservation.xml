@@ -467,12 +467,12 @@
 													<t t-if="code.state == 'delivered'">
 														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn hm-delivery-service" 
 														t-attf-orderid="#{code.order_id}" t-attf-partnerid="#{code.partner_id}" t-attf-roomname="#{code.room_name}" 
-														t-attf-state="#{code.state}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
+														t-attf-state="#{code.state}" t-attf-sourceid="#{code.source_folio_id}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
 													</t>
 													<t t-else="">
 														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn" 
 														t-attf-orderid="#{code.order_id}" t-attf-partnerid="#{code.partner_id}" t-attf-roomname="#{code.room_name}" 
-														t-attf-state="#{code.state}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
+														t-attf-state="#{code.state}" t-attf-sourceid="#{code.source_folio_id}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
 													</t>
 												</t>
 												<t t-else="">

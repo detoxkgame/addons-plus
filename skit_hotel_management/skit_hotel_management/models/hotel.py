@@ -652,6 +652,13 @@ class PosOrder(models.Model):
     car_type_id = fields.Many2one('hm.car.type', string="Car Type")
     no_night = fields.Integer(string="No of Night")
     source_folio_id = fields.Many2one("pos.order", string='Source Folio')
+    is_service_order = fields.Boolean(string="Is Service", default=False)
+    service_status = fields.Selection([('draft', 'Draft'),
+                                       ('delivered', 'Delivered'),
+                                       ('close', 'Close')], 'Service Status',
+                                      copy=False, default='draft')
+    service_line_ids = fields.One2many('pos.order.line', 'source_order_id',
+                                       string="Service Line", copy=True)
 
     @api.model
     def _process_order(self, pos_order):
@@ -673,6 +680,9 @@ class PosOrder(models.Model):
                 orders.update({'source_folio_id': pos_order.get('source_folio_id')})
             if pos_order.get('room_table_id'):
                 orders.update({'table_id': pos_order.get('room_table_id')})
+            if(pos_order.get('is_service_order')):
+                orders.update({'is_service_order': pos_order.get('is_service_order')})
+                orders.lines.update({'source_order_id': pos_order.get('source_folio_id')})
         print(orders)
         return orders
 
@@ -697,6 +707,7 @@ class PosOrderLine(models.Model):
     child = fields.Integer('Child')
     room_type_id = fields.Many2one('product.category', domain=[
                                 ('is_room', '=', True)], string="Room Type")
+    source_order_id = fields.Many2one("pos.order", string='Source Order')
 
 
 class SaleOrder(models.Model):
