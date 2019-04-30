@@ -87,6 +87,11 @@
 	background: #06f !important;
 	color: white !important;
 }
+.hm_menu_inner_selected{
+	color: white !important;
+    border-radius: 80px;
+    background: #3385ff !important;
+}
 /* .hm-top-buttons{
 	display: inline-block;
 	background: white;
@@ -623,9 +628,12 @@
 	margin-bottom: 5px;
 	font-size:16px;
 }
-.night_audit_session{
+.rs_night_audit_session{
 	text-align:left;
-	width: 1020px;
+	/*width: 1020px;*/
+}
+.na_session_width{
+	width:17% !important;
 }
 @media screen and (min-width: 1024px) {
     .screen .screen-content{

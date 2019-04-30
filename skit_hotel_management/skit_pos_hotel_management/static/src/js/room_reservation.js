@@ -159,10 +159,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.off('click','.menu_form_btn');
 	        contents.on('click','.menu_form_btn',function(){
 	        	contents.find('.hm-top-inner-selected').removeClass("hm-top-inner-selected");
+	        	contents.find('.hm_menu_inner_selected').removeClass("hm_menu_inner_selected");
 	        	var menu_name = $(this).attr('menu_name');
-	        	$(this).addClass("hm-top-inner-selected");
+	        	$(this).addClass("hm_menu_inner_selected");
 	        		var subid = $(this).attr('subid');
-		        	$(this).addClass("hm-top-inner-selected");
+		        	$(this).addClass("hm_menu_inner_selected");
 		        	self._rpc({
 		    			model: 'hm.form.template',
 		    			method: 'get_center_panel_form',
@@ -603,7 +604,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	       	            			'body': JSON.stringify(result),				                    
 	       	            		});
 	       	            	else{
-	      	            		self.gui.show_screen('sessionscreen',null,'refresh');	
+	       	            		$('.menu_form_btn').trigger('click');
+	      	            		//self.gui.show_screen('sessionscreen',null,'refresh');	
 	       	            	}
 	       	            });                	
 	                   },
@@ -634,8 +636,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
         	            			'title': 'Take Money Out',
         	            			'body': JSON.stringify(result),	                   
         	            		});
-        	            	else
-        	            		self.gui.show_screen('sessionscreen',null,'refresh');	
+        	            	else{
+        	            		$('.menu_form_btn').trigger('click');
+        	            		//self.gui.show_screen('sessionscreen',null,'refresh');	
+        	            	}       	            		
         	            });               	
                     },
                     cancel: function(){
@@ -1013,7 +1017,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     	}).then(function(result){ 
     		var session  = result;
     		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, session:session, partner_list:partner_list,partners_all:partners_all});
-			contents.find('.nightaudit_container .night_audit_session').html(night_audit_html);
+			contents.find('.nightaudit_container .rs_night_audit_session').html(night_audit_html); //set night audit form in service window
+			contents.find('.pos_button_section .SetClosingBalance').addClass('na_session_width');//set widht for closing balance button
     	});
     },
     get_room_details: function(self){

@@ -735,7 +735,7 @@
 					<!-- Night Audit -->
 					<t t-if="form_view == 'night_audit'">
 		                <div class="nightaudit_container">
-		                   <div class="night_audit_session">
+		                   <div class="rs_night_audit_session">
 		                   </div> 
 		                </div>
 					</t>
