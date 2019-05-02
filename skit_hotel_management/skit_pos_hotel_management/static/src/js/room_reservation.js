@@ -410,7 +410,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	 					});
 	 					
 	 					$(this).find('select').each(function(index, element) {     						
-	 						order_line_array[element.name]=element.value;
+	 						order_line_array[element.name]=parseInt(element.value);
 	 						if(element.name =='product_id'){
 	 							product_array.push(parseInt(element.value));
 	 						}
