@@ -696,7 +696,7 @@ class PosOrder(models.Model):
                                             'product_id': product_id.id,
                                             'order_id': orders.id,
                                             'state': orders.reservation_status,
-                                            'date': orders.create_date,
+                                            'date': orders.checkin_date,
                                      })
             product_history_ids.append(room_detail.id)
             if product_history_ids:
