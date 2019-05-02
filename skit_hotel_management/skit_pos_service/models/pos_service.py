@@ -220,11 +220,13 @@ class HMRoomManage(models.Model):
                 room_supply_ids.append(room_supply.id)
             # Update folio_no for respective room
             pos_order = self.env['pos.order'].sudo().search([
-                                        ('reservation_status', '=', 'checkin')],
-                                        limit=1, order='id desc')
+                                        ('reservation_status', '=', 'checkin'),
+                                        ('is_service_order', '=', False)],
+                                        )
             pos_order_line = self.env['pos.order.line'].sudo().search([
                                                 ('product_id', '=', int(vals[0]['room_no'])),
-                                                ('order_id', 'in', pos_order.ids)])
+                                                ('order_id', 'in', pos_order.ids)],
+                                                limit=1, order='id desc')
             if vals[0]['supplier_id']:
                 supplier_id = self.env['res.partner'].sudo().search([
                                                 ('id', '=',
