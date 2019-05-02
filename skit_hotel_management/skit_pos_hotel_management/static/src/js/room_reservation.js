@@ -18,7 +18,8 @@ var _t = core._t;
 var ServiceOrderPopupWidget = PopupWidget.extend({
     template: 'ServiceOrderPopupWidget',
     click_confirm: function(){
-    	 this.gui.close_popup();
+    	var self = this;
+    	this.gui.close_popup();
     	var order = this.pos.get_order();
  		var datas = order.export_as_JSON();
  		this._rpc({
@@ -26,7 +27,7 @@ var ServiceOrderPopupWidget = PopupWidget.extend({
     		method:'create_pos_service_order',
     		args: [datas],
  		}).then(function(result){
-    		this.gui.show_screen('firstpage');
+ 			self.gui.show_screen('firstpage');
     	});
     },
    
@@ -37,6 +38,16 @@ var ServiceOrderPopupWidget = PopupWidget.extend({
 });
 
 gui.define_popup({name:'popup_service_order', widget: ServiceOrderPopupWidget});
+
+var HMWaringPopupWidget = PopupWidget.extend({
+    template: 'HMWaringPopupWidget',
+    
+    click_cancel: function(){
+    	this.gui.close_popup();
+    }
+});
+
+gui.define_popup({name:'popup_hm_warning', widget: HMWaringPopupWidget});
 
 var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     template: 'RoomReservationScreenWidget',
@@ -95,7 +106,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			var right_panel_temp = result[0]['right_panel_temp']
 			var center_panel_sub_id = result[0]['center_panel_sub_id']
 			var model_method_datas = result[0]['model_method_datas']
-			var floor_id = 1;
+			//var floor_id = 1;
 			//console.log("Check:"+JSON.stringify(model_method_datas))
 			var contents = self.$('.hm-reservation-content');
 			contents.innerHTML = "";
@@ -137,6 +148,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var center_panel_temp = result[0]['center_panel_temp']
 	    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 	    			var form_view = result[0]['form_view']
+	    			var floor_id = result[0]['floor_id']
 	    			
 	    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 	    				form_name: form_name, form_view: form_view,
@@ -177,6 +189,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    			var center_panel_temp = result[0]['center_panel_temp']
 		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 		    			var form_view = result[0]['form_view']
+		    			var floor_id = result[0]['floor_id']
 		    			//floor_id = $(this).find('.floor-selector .button .active').attr('data-id');
 		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    				form_name: form_name, form_view: form_view,
@@ -201,7 +214,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.off('click','.floor-selector .button');
 	        contents.on('click','.floor-selector .button',function(){
 	        	contents.find('.active').removeClass("active");
-	        		floor_id = $(this).attr('data-id');
+	        		var floor_id = $(this).attr('data-id');
 	        		self.render_rooms(floor_id,contents); //
 	        		$(this).addClass('active');	        		
 	        });
@@ -790,14 +803,22 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.on('click','.hm-room-service',function(e){
 	        	var room_id = $(this).attr('room_id');
 	        	var room_table_id = $(this).attr('table_id');
-	        	self._rpc({
-	        		model: 'pos.order',
-		 	 	    method:'get_room_order',
-		 	 	    args: [0, room_id],
-		 	 	}).then(function(result){
-		 	 		//self.pos.set_service_order(true);
-		 	 		self.pos.set_service_table(result['partner_id'], result['source_order_id'], result['room_name'], room_table_id, true);
-		 	 	});
+	        	var folio_id = $(this).attr('folio_id');
+	        	if(parseInt(folio_id) > 0){
+	        		self._rpc({
+		        		model: 'pos.order',
+			 	 	    method:'get_room_order',
+			 	 	    args: [0, room_id],
+			 	 	}).then(function(result){
+			 	 		//self.pos.set_service_order(true);
+			 	 		self.pos.set_service_table(result['partner_id'], result['source_order_id'], result['room_name'], room_table_id, true);
+			 	 	});
+	        	}else{
+	        		self.pos.gui.show_popup('popup_hm_warning',{
+	            		'title': 'Warning',
+	            		'msg': 'There is no Guest',
+	            	});
+	        	}
 	        	//self.pos.set_service_table(partner_id);
 	        });
 	        /** Room Service Action */

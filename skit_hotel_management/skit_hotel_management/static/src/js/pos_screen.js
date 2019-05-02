@@ -8,15 +8,53 @@ var PopupWidget = require('point_of_sale.popups');
 var FirstScreenWidget = screens.ScreenWidget.extend({
     template: 'POSFirstPageWidget',
     events: _.extend({}, PopupWidget.prototype.events, {	        
-        'click .hotel': 'show_hotel',	
+       /* 'click .hotel': 'show_hotel',	
         'click .checkin': 'show_checkin',
         'click .checkout': 'show_checkout',
         'click .roomstatus': 'show_roomstatus',
         'click .night_audit': 'show_night_audit',
-        'click .reservation': 'show_reservationscreen',
+        'click .reservation': 'show_reservationscreen',*/
+    	'click .hm-restaurent': 'show_restaurent',
+    	'click .hm-reservation': 'show_reservation',
+    	'click .hm-vendor-selection': 'show_vendor_selection',
+    	'click .hm-night-audit': 'show_night_audit',
+    	'click .hm-checkin': 'show_checkin',
+    	'click .hm-reports': 'show_reports',
+    	'click .hm-room-status': 'show_room_status',
        
     }),
-    show_reservationscreen:function(){
+    show_restaurent:function(){
+    	var self = this;
+    },
+    
+    show_reservation:function(){
+    	var self = this;
+    	this.gui.show_screen('room_reservation');
+    },
+    
+    show_vendor_selection:function(){
+    	var self = this;
+    	this.gui.show_screen('vendor_dashboard');
+    },
+    
+    show_night_audit:function(){
+    	var self = this;
+    	$('.night_audit_session').trigger("click");
+    },
+    
+    show_checkin:function(){
+    	var self = this;
+    	this.gui.show_screen('vendor_payment');
+    },
+    
+    show_reports:function(){
+    	var self = this;
+    },
+    
+    show_room_status:function(){
+    	var self = this;
+    },
+   /* show_reservationscreen:function(){
     	var self = this;
     	self.pos.gui.show_screen('reservation2');
     },
@@ -37,7 +75,7 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     },
     show_checkout:function(){
     	this.gui.show_screen('vendor_payment');
-    },
+    },*/
     init: function(parent, options) {
         this._super(parent, options);
         this.editing = false;

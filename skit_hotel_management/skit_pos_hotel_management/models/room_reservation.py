@@ -52,6 +52,8 @@ class FormTemplate(models.Model):
         result = []
         form_name = ''
         form_view = ''
+        floor = self.env['restaurant.floor'].sudo().search([
+                                ('is_room_service', '=', True)], limit=1)
         if(sub_template_id != 'false'):
             sub_form_temp = self.env['hm.sub.form.template'].sudo().search([
                                     ('id', '=', int(sub_template_id))])
@@ -65,7 +67,8 @@ class FormTemplate(models.Model):
                        'form_name': form_name,
                        'form_view': form_view,
                        'center_panel_temp': center_panel_design,
-                       'center_panel_sub_id': center_panel_sub_id
+                       'center_panel_sub_id': center_panel_sub_id,
+                       'floor_id': floor.id
                        })
         return result;
 
@@ -82,7 +85,15 @@ class FormTemplate(models.Model):
                 service_order = self.env['pos.order'].sudo().search([
                                     ('is_service_order', '=', True),
                                     ('service_status', '!=', 'close'),
-                                    ('table_id', '=', floor_table.id)], limit=1)
+                                    ('table_id', '=', floor_table.id)],
+                                                        limit=1)
+                product = self.env['product.product'].sudo().search([
+                                ('product_tmpl_id', '=',
+                                 floor_table.product_id.id)], limit=1)
+                folio_order = self.env['pos.order.line'].sudo().search([
+                                ('product_id', '=', product.id),
+                                ('order_id.reservation_status', '=', 'checkin')],
+                                                        limit=1)
                 tables.append({'id': floor_table.id,
                                'floor_id': floor_table.floor_id.id,
                                'name': floor_table.name,
@@ -98,7 +109,8 @@ class FormTemplate(models.Model):
                                'rm_id': room_manage_id.id,
                                'room_no': room_manage_id.room_no.id,
                                'state': room_manage_id.state,
-                               'orderid': service_order.id or 0
+                               'orderid': service_order.id or 0,
+                               'folioid': folio_order.order_id.id or 0
                                })
         return tables
 

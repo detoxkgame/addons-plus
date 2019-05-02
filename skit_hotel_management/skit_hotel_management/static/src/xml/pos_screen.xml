@@ -7,7 +7,7 @@
 	    <ol id="hexGrid" class="hexgrid_even">
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink hotel" href="#">
+	          <a class="hexLink hm-restaurent" href="#">
 	          
 	            <img  src="/skit_hotel_management/static/src/img/restaurent.jpg" alt="" />
 	            <h1>RESTAURENT</h1>
@@ -17,7 +17,7 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink reservation" href="#">
+	          <a class="hexLink hm-reservation" href="#">
 	            <img src="/skit_hotel_management/static/src/img/reservation.jpg" alt="" />
 	            <h1>RESERVATION</h1>
 	            <p></p>
@@ -28,7 +28,7 @@
 		<ol id="hexGrid" class="hexgrid_odd">
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink checkin" href="#">
+	          <a class="hexLink hm-vendor-selection" href="#">
 	            <img src="/skit_hotel_management/static/src/img/vendor_selection.jpg" alt="" />
 	            <h1>VENDOR SELECTION</h1>
 	            <p></p>
@@ -37,7 +37,7 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="night_audit hexLink" href="#">
+	          <a class="night_audit hexLink hm-night-audit" href="#">
 	            <img src="/skit_hotel_management/static/src/img/night_audit.jpg" alt="" />
 	            <h1>NIGHT AUDIT</h1>
 	            <p></p>
@@ -46,7 +46,7 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink checkout" href="#">
+	          <a class="hexLink hm-checkin" href="#">
 	            <img src="/skit_hotel_management/static/src/img/check_inout.jpg" alt="" />
 	            <h1>CHECKIN / CHECKOUT</h1>
 	            <p></p>
@@ -57,7 +57,7 @@
 		<ol id="hexGrid" class="hexgrid_even">
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink roomstatus" href="#">
+	          <a class="hexLink hm-reports" href="#">
 	            <img src="/skit_hotel_management/static/src/img/reports.jpg" alt="" />
 	            <h1>REPORTS</h1>
 	            <p></p>
@@ -66,7 +66,7 @@
 	      </li>
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink" href="#">
+	          <a class="hexLink hm-room-status" href="#">
 	            <img src="/skit_hotel_management/static/src/img/room_status.jpg" alt="" />
 	            <h1>ROOM STATUS</h1>
 	            <p></p>

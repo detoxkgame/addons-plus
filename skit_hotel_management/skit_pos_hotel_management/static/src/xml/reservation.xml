@@ -960,7 +960,7 @@
 					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 			          left: #{table.position_h + table.width/2}px; 
 			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
-			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" >
+			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" t-attf-folio_id="#{table.folioid}">
 					<span class='label'>
 				    	<t t-esc='table.name' />
 				    </span>
@@ -983,6 +983,22 @@
                     </div>
                     <div class="button confirm">
                         Yes 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="HMWaringPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm">
+                <p class="title"><t t-esc=" widget.options.title || 'Warning' " /></p>
+                <div class="body copy_pre_body">
+                	<p><t t-esc=" widget.options.msg" /> </p>
+                </div>
+                <div class="footer">                   
+                    <div class="button cancel">
+                        Ok 
                     </div>
                 </div>
             </div>
