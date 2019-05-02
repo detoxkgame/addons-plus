@@ -135,7 +135,7 @@ class pos_session(models.Model):
             product_history = self.env['product.history'].sudo().search(
                 [('order_id', '=', order.id),
                  ('product_id.categ_id.is_room', '=', True),
-                 ('state', '=', ('check_in', 'check_out'))
+                 ('state', 'in', ('checkin', 'checkout'))
                  ])
             for history in product_history:
                 val = {
@@ -146,9 +146,9 @@ class pos_session(models.Model):
                      'journal_id': history.order_id.statement_ids.journal_id.name,
                      'payment': history.order_id.invoice_id.state
                 }
-                if history.state == 'check_in':
+                if history.state == 'checkin':
                     checkin_val.append(val)
-                elif history.state == 'check_out':
+                elif history.state == 'checkout':
                     checkout_val.append(val)
         room_details = {"checkin_val": checkin_val,
                         "checkout_val": checkout_val,

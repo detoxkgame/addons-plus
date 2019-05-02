@@ -6,10 +6,10 @@
     text-align: center;
     height: 40px;
     padding: 0;
-    background: rgb(129, 68, 107); /* #7c7bad; */
+    background: #6EC89B; /*rgb(129, 68, 107);  #7c7bad; */
     color: #fff;
     width:15%;
-    border:1px solid #7c7bad;
+    border:1px solid #6EC89B;
 }
 .pos .validate{
 	width:35%;
