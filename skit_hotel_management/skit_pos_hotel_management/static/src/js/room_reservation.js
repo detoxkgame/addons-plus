@@ -816,7 +816,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        	}else{
 	        		self.pos.gui.show_popup('popup_hm_warning',{
 	            		'title': 'Warning',
-	            		'msg': 'There is no Guest',
+	            		'msg': 'Selected room is not reserved.',
 	            	});
 	        	}
 	        	//self.pos.set_service_table(partner_id);
