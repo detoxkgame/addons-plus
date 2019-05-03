@@ -379,7 +379,8 @@
  
  
 	<t t-name="SessionDataWidget">
-		<t t-if="session">     
+		<t t-if="session">    
+			<span id="night_audit_table" t-attf-na_sub_id="#{sub_id}" style="display:none"></span> 
 			<t t-if="session.cash_control == true">  	                	                   	                      
 				<div class="pos_button_section">
 		   			<button class="session-button endsessionbutton PutMoneyIn">

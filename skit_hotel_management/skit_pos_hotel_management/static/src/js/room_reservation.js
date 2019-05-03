@@ -11,7 +11,7 @@ var PopupWidget = require('point_of_sale.popups');
 var is_room_confirmed = false;
 var is_service_confirmed = false;
 var is_purchase_confirmed = false;
-
+var night_audit_subid=0;
 var QWeb = core.qweb;
 var _t = core._t;
 
@@ -194,35 +194,38 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        	var menu_name = $(this).attr('menu_name');
 	        	$(this).addClass("hm_menu_inner_selected");
 	        		var subid = $(this).attr('subid');
-		        	$(this).addClass("hm_menu_inner_selected");
-		        	self._rpc({
-		    			model: 'hm.form.template',
-		    			method: 'get_center_panel_form',
-		    			args: [0, subid, 0],
-		    		}).then(function(result){
-		    			var form_name = result[0]['form_name']
-		    			var center_panel_temp = result[0]['center_panel_temp']
-		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
-		    			var form_view = result[0]['form_view']
-		    			var floor_id = result[0]['floor_id']
-		    			//floor_id = $(this).find('.floor-selector .button .active').attr('data-id');
-		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
-		    				form_name: form_name, form_view: form_view,
-		    				center_panel_temp: center_panel_temp,
-							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id,
-							});
-		    			//var centerform = document.createElement('div');
-		    			//centerform.innerHTML = center_panel_html;
-		    			//centerform = reservationform.childNodes[1];
-		    			contents.find('.hm-center-form-design').html(center_panel_html);
-		    			if(form_view == "restaurant_table"){
-		    				self.render_rooms(floor_id,contents, 0); 
-		    			}
-		    			if(form_view == "night_audit"){
-		    				self.render_night_audit(contents); 
-		    			}
-		    		});       	
+	        		if (night_audit_subid == 0 || (night_audit_subid == subid))
+	        		{
+			        	$(this).addClass("hm_menu_inner_selected");
+			        	self._rpc({
+			    			model: 'hm.form.template',
+			    			method: 'get_center_panel_form',
+			    			args: [0, subid, 0],
+			    		}).then(function(result){
+			    			var form_name = result[0]['form_name']
+			    			var center_panel_temp = result[0]['center_panel_temp']
+			    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+			    			var form_view = result[0]['form_view']
+			    			var floor_id = result[0]['floor_id']
+			    			//floor_id = $(this).find('.floor-selector .button .active').attr('data-id');
+			    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+			    				form_name: form_name, form_view: form_view,
+			    				center_panel_temp: center_panel_temp,
+								center_panel_sub_id: center_panel_sub_id,
+								floor_id: floor_id,
+								});
+			    			//var centerform = document.createElement('div');
+			    			//centerform.innerHTML = center_panel_html;
+			    			//centerform = reservationform.childNodes[1];
+			    			contents.find('.hm-center-form-design').html(center_panel_html);
+			    			if(form_view == "restaurant_table"){
+			    				self.render_rooms(floor_id,contents, 0); 
+			    			}
+			    			if(form_view == "night_audit"){
+			    				self.render_night_audit(subid,contents);
+			    			}
+			    		});
+	        		}
 	        });
 
 	        /** Tab click */
@@ -636,7 +639,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	       	            			'body': JSON.stringify(result),				                    
 	       	            		});
 	       	            	else{
+	       	            		night_audit_subid = $('#night_audit_table').attr('na_sub_id');
 	       	            		$('.menu_form_btn').trigger('click');
+	       	            		night_audit_subid = 0;
 	      	            		//self.gui.show_screen('sessionscreen',null,'refresh');	
 	       	            	}
 	       	            });                	
@@ -669,7 +674,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
         	            			'body': JSON.stringify(result),	                   
         	            		});
         	            	else{
-        	            		$('.menu_form_btn').trigger('click');
+        	            		night_audit_subid = $('#night_audit_table').attr('na_sub_id');
+	       	            		$('.menu_form_btn').trigger('click');
+	       	            		night_audit_subid = 0;
         	            		//self.gui.show_screen('sessionscreen',null,'refresh');	
         	            	}       	            		
         	            });               	
@@ -733,7 +740,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
                 						'title': _t( 'Cash Control !!!!'),
                 						'body': JSON.stringify(result),	
                 						'cancel' : function() {	
-                							self.gui.show_screen('sessionscreen',null,'refresh');	
+                							night_audit_subid = $('#night_audit_table').attr('na_sub_id');
+            	       	            		$('.menu_form_btn').trigger('click');
+            	       	            		night_audit_subid = 0;
+                							//self.gui.show_screen('sessionscreen',null,'refresh');	
                 						}
                 					}); 
                 				}
@@ -756,7 +766,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	           		 method: 'action_pos_session_closing_control',
 	           		 args: [id],
 	           	 }).then(function(result){  
-	           		 self.gui.show_screen('sessionscreen',null,'refresh');	
+	           		 	night_audit_subid = $('#night_audit_table').attr('na_sub_id');
+	            		$('.menu_form_btn').trigger('click');
+	            		night_audit_subid = 0;
+	           		 	//self.gui.show_screen('sessionscreen',null,'refresh');	
 	           	 },function(err,event){
 	           		 event.preventDefault();
 	           		 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
@@ -1126,7 +1139,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			});
     	}
     },
-    render_night_audit:function(contents){
+    render_night_audit:function(subid,contents){
     	//Night audit render function
     	var self = this;
     	var partner_list = []
@@ -1142,7 +1155,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             args: [0, self.pos.pos_session.id],
     	}).then(function(result){ 
     		var session  = result;
-    		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, session:session, partner_list:partner_list,partners_all:partners_all});
+    		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, session:session, 
+																	sub_id: subid,
+																	partner_list:partner_list,
+																	partners_all:partners_all}
+																	);
 			contents.find('.nightaudit_container .rs_night_audit_session').html(night_audit_html); //set night audit form in service window
 			contents.find('.pos_button_section .SetClosingBalance').addClass('na_session_width');//set widht for closing balance button
     	});
