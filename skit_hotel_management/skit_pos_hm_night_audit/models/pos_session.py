@@ -165,29 +165,26 @@ class pos_session(models.Model):
         """
         service_val = []
         session = self.browse(int(session_id))
-        sale_order = self.env['sale.order'].sudo().search(
+        service_order = self.env['pos.order'].sudo().search(
             [('session_id', '=', session.id),
-             ('partner_id.category_id.name', '=', 'Taxi')]
+             ('is_service_order', '=', True)
+             ]
         )
-        invoice_ids = sale_order.invoice_ids
-        account_invoice = self.env['account.invoice'].sudo().search(
-            [('id', '=', invoice_ids.id)]
-        )
-        invoice_state = account_invoice.state
-        for s_order in sale_order:
-            category_name = s_order.partner_id.category_id.name
-            time = s_order.date_order.time()
-            pos_order = self.env['pos.order'].sudo().search(
-                [('id', '=', s_order.pos_order_id.id)]
-            )
+        for s_order in service_order:
+            time = str(s_order.date_order.hour)+':'+str(s_order.date_order.minute)
             pos_order_line = self.env['pos.order.line'].sudo().search([
-                ('order_id', '=', pos_order.id)
+                ('order_id', '=', s_order.id)
             ])
+            source_folio_order = s_order.source_folio_id
+            source_order_line = self.env['pos.order.line'].sudo().search([
+                ('order_id', '=', source_folio_order.id)
+            ])
+            invoice_state = s_order.invoice_id.state
             for line in pos_order_line:
                 val = {
-                    "category_name": category_name,
-                    "product_name": line.product_id.name,
-                    "partner_name": line.order_id.partner_id.name,
+                    "category_name": line.product_id.categ_id.name,
+                    "product_name": source_order_line.product_id.name,
+                    "partner_name": s_order.partner_id.name,
                     'time': time,
                     'user_name': session.user_id.name,
                     'order_state': s_order.state,
@@ -208,32 +205,24 @@ class pos_session(models.Model):
         purchase_val = []
         session = self.browse(int(session_id))
         purchase_order = self.env['purchase.order'].sudo().search(
-            [('session_id', '=', session.id),
-             ('partner_id.category_id.name', '=', 'Vegetables')]
+            [('session_id', '=', session.id)]
         )
-        purchase_order_line = self.env['purchase.order.line'].sudo().search(
-            [('order_id', '=', purchase_order.id)]
-        )
-        category_name = purchase_order.partner_id.category_id.name
-        # if purchase_order:
-        # time = purchase_order.date_order.time()
-        invoice_ids = purchase_order.invoice_ids
-        account_invoice = self.env['account.invoice'].sudo().search(
-            [('id', '=', invoice_ids.id)]
-        )
-        invoice_state = account_invoice.state
-        for line in purchase_order_line:
-            val = {
-                "category_name": category_name,
-                "qty": line.product_qty,
-                "product_name": line.product_id.name,
-                "partner_name": line.order_id.partner_id.name,
-                'time': purchase_order.date_order.time() if purchase_order else '',
-                'price_total': line.price_total,
-                'order_state': purchase_order.state,
-                'invoice_state': invoice_state,
-            }
-            purchase_val.append(val)
+        for p_order in purchase_order:
+            invoice_state = p_order.invoice_status
+            purchase_order_line = self.env['purchase.order.line'].sudo().search(
+                                                [('order_id', '=', p_order.id)]
+                                                        )
+            for line in purchase_order_line:
+                val = {
+                    "category_name": line.product_id.categ_id.name,
+                    "qty": line.product_qty,
+                    "product_name": line.product_id.name,
+                    "partner_name": p_order.partner_id.name,
+                    'time': p_order.date_order.time() if p_order else '',
+                    'price_total': line.price_total,
+                    'invoice_state': invoice_state if invoice_state else '',
+                }
+                purchase_val.append(val)
         purchase_details = {"purchase_val": purchase_val}
         return purchase_details
 

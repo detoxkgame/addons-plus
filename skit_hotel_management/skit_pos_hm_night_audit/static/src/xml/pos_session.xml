@@ -161,7 +161,7 @@
 									    <div class="col col-3" >Time</div>
 									    <div class="col col-4" >Amount</div>
 									    <div class="col col-4" >Payment mode</div>
-									    <div class="col col-4" >Payment</div>
+									    <!-- <div class="col col-4" >Payment</div> -->
 								    </li>
 						   			<t t-foreach='room_details["checkin_val"]' t-as='checkin_details'>  
 									    <li class="night_audit_table_row night_audit_li">
@@ -171,7 +171,7 @@
 									      	<div class="col col-3" ><t t-esc="checkin_details.checkin_date" /></div>
 									      	<div class="col col-4" ><t t-esc="checkin_details.price_subtotal" /></div>
 									      	<div class="col col-4" ><t t-esc="checkin_details.journal_id" /></div>
-									      	<div class="col col-4" ><t t-esc="checkin_details.payment" /></div>
+									      	<!-- <div class="col col-4" ><t t-esc="checkin_details.payment" /></div> -->
 									    </li>
 						   			</t>
 								</ul>
@@ -187,7 +187,7 @@
 									    <div class="col col-2" >Guest</div>
 									    <div class="col col-3" >Time</div>
 									    <div class="col col-4" >Amount</div>
-									    <div class="col col-4" >Payment mode</div>
+									    <!-- <div class="col col-4" >Payment mode</div> -->
 									    <div class="col col-4" >Payment</div>
 								    </li>
    									<t t-foreach='room_details["checkout_val"]' t-as='checkout_details'>  
@@ -197,7 +197,7 @@
 								      		<div class="col col-2" ><t t-esc="checkout_details.partner_name" /></div>
 								      		<div class="col col-3" ><t t-esc="checkout_details.checkin_date" /></div>
 								      		<div class="col col-4" ><t t-esc="checkout_details.price_subtotal" /></div>
-								      		<div class="col col-4" ><t t-esc="checkout_details.journal_id" /></div>
+								      		<!-- <div class="col col-4" ><t t-esc="checkout_details.journal_id" /></div> -->
 								      		<div class="col col-4" ><t t-esc="checkout_details.payment" /></div>
 								    	</li>
    									</t>
@@ -240,26 +240,26 @@
                 <div class="session_form">  
 	           		<t t-if="widget.options.service_details"> 
 					    <div class="night_audit_box">  	     	
-					  		<div class="hm_night_audit_container night_audit_overflow">
+					  		<div class="hm_night_audit_container night_audit_overflow details_height">
   								<ul class="hm_night_audit_table">
 									<li class="night_audit_table_row night_audit_li night_audit_li_background_color" >
-										<div class="col col-1" >Service</div>
-									   	<div class="col col-1" >Room No.</div> 
-									    <div class="col col-2" >Guest</div>
-									    <div class="col col-3" >Time</div>
-									    <div class="col col-4" >Responsible</div>
-									    <div class="col col-4" >Status</div>
-									    <div class="col col-4" >Payment</div>
+										<div class="col col-1 ser_col" >Service</div>
+									   	<div class="col col-1 ser_col" >Room No.</div> 
+									    <div class="col col-2 ser_col" >Guest</div>
+									    <div class="col col-3 ser_col" >Time</div>
+									    <div class="col col-4 ser_col" >Responsible</div>
+									    <div class="col col-4 ser_col" >Status</div>
+									    <div class="col col-4 ser_col" >Payment</div>
 									</li>
 									<t t-foreach='widget.options.service_details["service_val"]' t-as='service'>  
 										<li class="night_audit_table_row night_audit_li">
-											<div class="col col-1" ><t t-esc="service.category_name" /></div>
-											<div class="col col-1" ><t t-esc="service.product_name" /></div>
-										    <div class="col col-2" ><t t-esc="service.partner_name" /></div>
-										     <div class="col col-3" ><t t-esc="service.time" /></div>
-										    <div class="col col-3" ><t t-esc="service.user_name" /></div>
-										   	<div class="col col-4" ><t t-esc="service.order_state" /></div>
-										  	<div class="col col-4" ><t t-esc="service.invoice_state" /></div>
+											<div class="col col-1 ser_col" ><t t-esc="service.category_name" /></div>
+											<div class="col col-1 ser_col" ><t t-esc="service.product_name" /></div>
+										    <div class="col col-2 ser_col" ><t t-esc="service.partner_name" /></div>
+										     <div class="col col-3 ser_col" ><t t-esc="service.time" /></div>
+										    <div class="col col-3 ser_col" ><t t-esc="service.user_name" /></div>
+										   	<div class="col col-4 ser_col" ><t t-esc="service.order_state" /></div>
+										  	<div class="col col-4 ser_col" ><t t-esc="service.invoice_state" /></div>
 									   	</li>
    									</t>
   								</ul>
@@ -303,27 +303,27 @@
                 <div class="session_form">  
 	           		<t t-if="widget.options.purchase_details"> 
 					    <div class="night_audit_box">  	     	
-					  		<div class="hm_night_audit_container night_audit_overflow">
+					  		<div class="hm_night_audit_container night_audit_overflow details_height">
   								<ul class="hm_night_audit_table">
 									<li class="night_audit_table_row night_audit_li night_audit_li_background_color" >
-										<div class="col col-1" >Product</div>
-										<div class="col col-1" >Qty.</div>  
-									    <div class="col col-2" >Vendor</div>
-									    <div class="col col-3" >Time</div>
-									    <div class="col col-4" >Amount</div>
-									    <div class="col col-4" >Status</div>
-									    <div class="col col-4" >Payment</div>
+										<div class="col col-1 ser_col" >Product</div>
+										<div class="col col-1 ser_col" >Qty.</div> 
+										<div class="col col-3 ser_col" >Time</div> 
+									    <div class="col col-2 ser_col" >Vendor</div>
+									    <div class="col col-4 ser_col" >Amount</div>
+									   <!--  <div class="col col-4" >Status</div> -->
+									    <div class="col col-4 ser_col" >Payment</div>
 									</li>
 									    
 									<t t-foreach='widget.options.purchase_details["purchase_val"]' t-as='purchase'>  
 										<li class="night_audit_table_row night_audit_li" >
-											<div class="col col-1"><t t-esc="purchase.category_name" /></div>
-											<div class="col col-1"><t t-esc="purchase.qty" /></div>
-										    <div class="col col-2"><t t-esc="purchase.partner_name" /></div>
-										    <div class="col col-3"><t t-esc="purchase.time" /></div>
-										    <div class="col col-3"><t t-esc="purchase.price_total" /></div>
-										   	<div class="col col-4"><t t-esc="purchase.order_state" /></div>
-										  	<div class="col col-4"><t t-esc="purchase.invoice_state" /></div>
+											<div class="col col-1 ser_col"><t t-esc="purchase.product_name" /></div>
+											<div class="col col-1 ser_col"><t t-esc="purchase.qty" /></div>
+											<div class="col col-3 ser_col"><t t-esc="purchase.time" /></div>
+										    <div class="col col-2 ser_col"><t t-esc="purchase.partner_name" /></div>
+										    <div class="col col-3 ser_col"><t t-esc="purchase.price_total" /></div>
+										   	<!-- <div class="col col-4"><t t-esc="purchase.order_state" /></div> -->
+										  	<div class="col col-4 ser_col"><t t-esc="purchase.invoice_state" /></div>
 									   	</li>
    									</t>
   								</ul>
