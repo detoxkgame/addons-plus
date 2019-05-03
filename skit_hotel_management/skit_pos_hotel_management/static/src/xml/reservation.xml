@@ -618,23 +618,40 @@
 			    					<!-- Same Row -->
 			    					<t t-foreach="center_temp['line_group'][line_key]" t-as="same_row">
 			    						<t t-if="same_row.sameline">
-			    							<td class="hm-form-td">
-			    								<t t-if="(same_row.form_field_type)=='header_label'">
-					    							<span class="hm-form-headerlabel" t-attf-style="#{same_row.field_styles};font-size:#{same_row.font_size}px;"><t t-esc="same_row.form_label" /></span>
-					    						</t>
-					    						<t t-if="(same_row.form_field_type)=='input_char'">
-					    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
-					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}" />
-					    						</t>
-					    						<t t-if="(same_row.form_field_type)=='input_int'">
-					    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
-					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}" />
-					    						</t>
-					    						<t t-if="(same_row.form_field_type)=='date'">
-					    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
-					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}" />
-					    						</t>
-			    							</td>
+			    							<!-- <t t-if="(same_row.form_field_type)=='button'">
+			    								<td class="hm-form-td">
+			    									<span>TEST</span>
+			    								</td>
+			    							</t>
+			    							<t t-else=""> -->
+			    							<t t-if="(same_row.form_field_type)=='button'">
+			    								<td class="hm-form-td hm-right-td">
+			    									<i class="fa fa-arrow-left hm-form-back-icon" t-attf-sub_id="#{same_row.sub_template_id}" aria-hidden="true"></i>
+			    								</td>
+			    							</t>
+			    							<t t-else="">
+				    							<td class="hm-form-td">
+				    								<t t-if="(same_row.form_field_type)=='header_label'">
+						    							<span class="hm-form-headerlabel" t-attf-style="#{same_row.field_styles};font-size:#{same_row.font_size}px;"><t t-esc="same_row.form_label" /></span>
+						    						</t>
+						    						<t t-if="(same_row.form_field_type)=='input_char'">
+						    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+						    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}" />
+						    						</t>
+						    						<t t-if="(same_row.form_field_type)=='input_int'">
+						    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+						    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}" />
+						    						</t>
+						    						<t t-if="(same_row.form_field_type)=='date'">
+						    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+						    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}" />
+						    						</t>
+						    						<t t-if="(same_row.form_field_type)=='button'">
+						    							<span>TESTsdgs</span>
+						    						</t>
+				    							</td>
+			    							</t>
+			    							<!-- </t> -->
 			    							<!-- Sub Form Template -->
 			    							<t t-if="((same_row.form_field_type)=='sub_form') and ((same_row.ttype)=='one2many')">
 			    								<t t-foreach="center_temp['current_order_lines']" t-as="c_orderline" >
@@ -1006,4 +1023,33 @@
             </div>
         </div>
     </t>
+    
+    <!-- Check Out Room Design -->
+	<t t-name="CheckOutRoomsWidget">
+		<t t-foreach="tables" t-as="table">
+			<t t-if="(table.folioid) > 0">
+				<div data-placement="right" class="res_table hm-booked-room hm-room-checkout" 
+					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+			          left: #{table.position_h + table.width/2}px; 
+			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" 
+			         t-attf-folio_id="#{table.folioid}" t-attf-sub_id="#{sub_temp_id}">
+					<span class='label'>
+				    	<t t-esc='table.name' />
+				    </span>
+			    </div>
+			</t>
+			<t t-else="">
+				<div data-placement="right" class="res_table"
+					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+			          left: #{table.position_h + table.width/2}px; 
+			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" >
+					<span class='label'>
+				    	<t t-esc='table.name' />
+				    </span>
+			    </div>
+		    </t>
+		</t>	
+	</t>
 </templates>

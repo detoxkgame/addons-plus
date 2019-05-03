@@ -24,16 +24,17 @@ class FormTemplate(models.Model):
         for key, value in datas.items():
             val = (key, '=', value)
             data_field.append(val)
-        if(model.model == 'pos.order'):
-            data_field.append(('reservation_status', '=', 'reserved'))
-            order = self.env[model.model].sudo().search(data_field, limit=1,
-                                                         order='id desc')
-            order_id = order.id
+        if(datas.get('mobile') != ''):
+            if(model.model == 'pos.order'):
+                data_field.append(('reservation_status', 'in', ('reserved', 'checkin')))
+                order = self.env[model.model].sudo().search(data_field, limit=1,
+                                                            order='id desc')
+                order_id = order.id
         if(sub_template_id != 'false'):
             sub_form_temp = self.env['hm.sub.form.template'].sudo().search([
                                     ('id', '=', int(sub_template_id))])
             form_name = sub_form_temp.name
-            for sub_line in sub_form_temp.form_template_line_ids:
+            for sub_line in sorted(sub_form_temp.form_template_line_ids, key=lambda x: x.sequence):
                 temp_design = self.get_sub_form(sub_line.form_template_id.id, sub_line.color, order_id)
                 center_panel_design.append(temp_design)
                 form_view = sub_line.form_template_id.form_view
@@ -46,7 +47,7 @@ class FormTemplate(models.Model):
         return result
 
     @api.multi
-    def get_center_panel_form(self, sub_template_id):
+    def get_center_panel_form(self, sub_template_id, order_id):
         center_panel_sub_id = sub_template_id
         center_panel_design = []
         result = []
@@ -58,8 +59,8 @@ class FormTemplate(models.Model):
             sub_form_temp = self.env['hm.sub.form.template'].sudo().search([
                                     ('id', '=', int(sub_template_id))])
             form_name = sub_form_temp.name
-            for sub_line in sub_form_temp.form_template_line_ids:
-                temp_design = self.get_sub_form(sub_line.form_template_id.id, sub_line.color, 0)
+            for sub_line in sorted(sub_form_temp.form_template_line_ids, key=lambda x: x.sequence):
+                temp_design = self.get_sub_form(sub_line.form_template_id.id, sub_line.color, order_id)
                 center_panel_design.append(temp_design)
                 form_view = sub_line.form_template_id.form_view
 
@@ -179,12 +180,14 @@ class FormTemplate(models.Model):
         current_order = []
         current_order_lines = []
         model_method_datas = {}
-        for form_line in panel_form_temp.form_template_line_ids:
+        res_table_sub_id = 0
+        for form_line in sorted(panel_form_temp.form_template_line_ids, key=lambda x: x.sequence):
             if form_line.form_field_id:
                 fields.append(form_line.form_field_id.name)
                 field_type.append(form_line.form_field_id.ttype)
             if form_line.form_field_type == 'sub_form' or form_line.form_field_type == 'view_buttons' or form_line.form_field_type == 'button' or form_line.form_field_type == 'menu':
                 sub_form_temp_ids.append(form_line.sub_template_id.id)
+                res_table_sub_id = form_line.sub_template_id.id
             selection_items = []
             if form_line.form_template_selection_fields:
                 sql = "select hm_form_selection_item_id from hm_form_selection_item_hm_form_template_line_rel where hm_form_template_line_id = "+str(line.id)+""
@@ -472,6 +475,7 @@ class FormTemplate(models.Model):
                        'model_method_datas': model_method_datas,
                        'floors': floors,
                        'floor_count': floor_count,
+                       'res_table_sub_id': res_table_sub_id
                        })
         return result
 
@@ -572,7 +576,7 @@ class FormTemplate(models.Model):
             if line.model_method and line.model_name:
                 model_object = self.env[line.model_name]
                 model_datas = getattr(model_object, line.model_method)(line.id)
-                model_method_datas[form_line.id] = model_datas
+                model_method_datas[line.id] = model_datas
                 #model_method_datas.append(model_datas)
                 #model_method_datas[line.id] = model_datas
 

@@ -656,22 +656,35 @@ div.bhoechie-tab-container{
  	background: #fff !important;
 }
 
+.hm-right-td{
+	float: right !important;
+}
+
+.hm-form-back-icon{
+	font-size: 20px;
+	color: white;
+	cursor: pointer;
+	float: right;
+	margin-right: 20%;
+	background: #29c107;
+	width: 16%;
+	border-radius: 23px;
+	padding: 1%;
+}
 /** Back Icon */
 .hm-float-icon{
 	position: fixed;
-    width: 5%;
-    height: 12%;
-    left: -4%;
+    width: 8%;
+    height: 16%;
+    left: -7%;
     right: 40px;
-    margin-top: 22%;
+    margin-top: 20%;
     background-color: gray;
     color: #FFF;
     border-radius: 60%;
     text-align: center;
-    /* box-shadow: 2px 2px 3px #999; */
     margin-bottom: 25%;
     opacity: 0.6;
-	filter: alpha(opacity=60);
 }
 .hm-float-icon:hover{
 	position: fixed;
@@ -679,15 +692,14 @@ div.bhoechie-tab-container{
     height: 16%;
     left: -4%;
     right: 40px;
-    margin-top: 22%;
+    margin-top: 20%;
     background-color: gray;
     color: #FFF;
     border-radius: 100%;
     text-align: center;
-   /*  box-shadow: 2px 2px 3px #999; */
     margin-bottom: 25%;
     opacity: 0.6;
-	filter: alpha(opacity=60);
+    transition-duration: 0.5s;
 }
 
 .hm-back-float{
