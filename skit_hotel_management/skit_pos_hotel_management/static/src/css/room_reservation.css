@@ -647,7 +647,13 @@ div.bhoechie-tab-container{
 }
 .hm-booked-service{
 	border: 1px solid #32CD32;
- 	background: #ffff !important;
+ 	background: #32CD32 !important;
+	color: white !important;
+}
+
+.hm-booked-room{
+	border: 1px solid #32CD32;
+ 	background: #fff !important;
 }
 
 /** Back Icon */

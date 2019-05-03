@@ -958,7 +958,7 @@
 			    </div>
 			</t>
 			<t t-else="">
-				<div data-placement="right" class="res_table hm-room-service" 
+				<div data-placement="right" t-attf-class="#{(table.folioid) == 0 ? 'res_table hm-room-service' : 'res_table hm-room-service hm-booked-room' }"
 					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 			          left: #{table.position_h + table.width/2}px; 
 			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
