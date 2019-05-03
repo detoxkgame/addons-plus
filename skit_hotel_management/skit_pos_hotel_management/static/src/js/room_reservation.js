@@ -27,13 +27,13 @@ var ServiceOrderPopupWidget = PopupWidget.extend({
     		method:'create_pos_service_order',
     		args: [datas],
  		}).then(function(result){
- 			self.gui.show_screen('firstpage');
+ 			self.gui.show_screen('room_reservation');
     	});
     },
    
     click_cancel: function(){
     	this.gui.close_popup();
-    	this.gui.show_screen('firstpage');
+    	this.gui.show_screen('room_reservation');
     }
 });
 
@@ -129,6 +129,13 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        reservationform = reservationform.childNodes[1];
 	        contents.empty();
 	        contents.append(reservationform);
+	        
+	        /** Back Icon Action */
+	        contents.off('click','.hm-back-float');
+	        contents.on('click','.hm-back-float',function(){
+	        	self.gui.show_screen('firstpage');
+	        });
+	        
 	        /** Set the Default Form (Reservation Form) */
 	        var center_sub_id = contents.find('#center_sub_form').attr('subid');
 	        contents.find('#top_panel'+center_sub_id).addClass("hm-top-inner-selected");

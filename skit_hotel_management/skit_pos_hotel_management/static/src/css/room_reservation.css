@@ -649,3 +649,42 @@ div.bhoechie-tab-container{
 	border: 1px solid #32CD32;
  	background: #ffff !important;
 }
+
+/** Back Icon */
+.hm-float-icon{
+	position: fixed;
+    width: 5%;
+    height: 12%;
+    left: -4%;
+    right: 40px;
+    margin-top: 22%;
+    background-color: gray;
+    color: #FFF;
+    border-radius: 60%;
+    text-align: center;
+    /* box-shadow: 2px 2px 3px #999; */
+    margin-bottom: 25%;
+    opacity: 0.6;
+	filter: alpha(opacity=60);
+}
+.hm-float-icon:hover{
+	position: fixed;
+    width: 8%;
+    height: 16%;
+    left: -4%;
+    right: 40px;
+    margin-top: 22%;
+    background-color: gray;
+    color: #FFF;
+    border-radius: 100%;
+    text-align: center;
+   /*  box-shadow: 2px 2px 3px #999; */
+    margin-bottom: 25%;
+    opacity: 0.6;
+	filter: alpha(opacity=60);
+}
+
+.hm-back-float{
+	margin-top:25%;
+	margin-left: 25%;
+}

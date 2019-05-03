@@ -165,7 +165,9 @@
 		                    Back
 		                </span> 
 	            </section>	 -->			
-				
+				<div class="hm-float-icon">
+	            	<i class="fa fa-angle-left back-icon hm-back-float" style="font-size: 50px;color: white;cursor: pointer;" aria-hidden="true"></i>
+	            </div>
 				<!-- Start Top Panel -->
 				<div class="hm-top-container">
 					<t t-if="(top_panel_temp).length > 0">
