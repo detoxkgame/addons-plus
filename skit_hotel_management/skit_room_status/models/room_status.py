@@ -11,7 +11,8 @@ class ProductHistory(models.Model):
     
     product_id = fields.Many2one('product.product', string='Product id', ondelete='cascade')
     product_tmpl_id = fields.Many2one('product.template', string='Product template id', ondelete='cascade')
-    date = fields.Datetime(string=' Date')
+    date = fields.Datetime(string='In Date')
+    out_date = fields.Datetime(string='Out Date')
     order_id = fields.Many2one('pos.order', string='Product id', ondelete='cascade')
     status = fields.Char(string='status')
     created_by = fields.Many2one('res.users', string='Created user', ondelete='cascade')
@@ -46,6 +47,16 @@ class RoomStatus(models.Model):
             d2 = to_date.date()  # end date
             delta = d2 - d1         # timedelta
             N = delta.days + 1
+            
+#         product_temp_ids = self.env['product.category'].search([ ('is_room', '=', True)])
+#         product_temp = self.env['product.template'].search([ ('categ_id', 'in', (product_temp_ids.ids))])
+#         list_product_arrays = {}
+#         room_status_list_arrays = {} 
+#         if product_temp:  
+#             for history in product_temp:
+#                 product = history.id
+#                 product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
+#                 list_product_arrays[product] = history.name
 
         product_history_ids_list = self.env['product.history'].sudo().search([])
         list_product_array = {}
@@ -54,12 +65,20 @@ class RoomStatus(models.Model):
                 for history in product_history_ids_list:
                     product = history.product_id.id
                     product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
-                    rowdate = ""+datetime.strftime(history.date, "%b %d %Y")#""+history.date.strftime('%Y-%m-%d %H:%M:%S')
-                    key = str(product)+"-"+rowdate
-                    room_status_list_array[key] = history.state
-                    list_product_array[product] = product_arr.name
+                    rowdate = ""+datetime.strftime(history.date, "%b %d %Y")
+                    rowdate1 = ""+datetime.strftime(history.out_date, "%b %d %Y")
+                    d1 = datetime.strptime(rowdate, "%b %d %Y")
+                    d2 = datetime.strptime(rowdate1, "%b %d %Y")
+                    days = (abs((d2 - d1).days)+1)
                     
-        
+                    for i in range(days):
+                        if rowdate and rowdate1:
+                            range_dates = history.date + timedelta(i)
+                            d2 = datetime.strftime(range_dates, "%b %d %Y")
+                            key = str(product)+"-"+d2
+                            room_status_list_array[key] = history.state
+                            list_product_array[product] = product_arr.name
+                    
         for i in range(N):
             if from_date and to_date:
                 range_date = from_date + timedelta(i)
@@ -67,5 +86,5 @@ class RoomStatus(models.Model):
                 range_date = datetime.now() - timedelta(i)
             date = datetime.strftime(range_date, "%b %d %Y")            
             date_array.append(date)
-        
-        return {'date_key':date_array,'room_status_list_array':room_status_list_array,'list_product_array':list_product_array}
+        return {'date_key':date_array,'room_status_list_array':room_status_list_array,'list_product_array':list_product_array,}
+#                 'list_product_arrays':list_product_arrays, 'room_status_list_arrays':room_status_list_arrays}

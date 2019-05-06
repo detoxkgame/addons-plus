@@ -26,7 +26,7 @@
 
     ],
     'qweb': ['static/src/xml/pos_screen.xml',
-             'static/src/xml/room_status.xml'],
+             ],
     'installable': True,
     'auto_install': False,
     'application': True,

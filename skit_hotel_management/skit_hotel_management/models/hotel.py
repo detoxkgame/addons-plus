@@ -787,9 +787,7 @@ class ProductTemplate(models.Model):
                              'Status', default='available')
     block_room_ids = fields.One2many('hm.block.room', 'room_id',
                                      string="Block Room", copy=True)
-    # Room Status Report
-    product_history_line_ids = fields.One2many('product.history', 'product_tmpl_id', string='Product template history')
-    room_status = fields.Char(string='status')
+    
 
 
 class ProductPriceList(models.Model):
@@ -870,22 +868,4 @@ class POSorder(models.Model):
           ('paid', 'Paid'),
           ('done', 'Posted'),
           ('invoiced', 'Invoiced')],
-        'Status',  copy=False, default='draft')
-     
-# Room Status Report     
-class ProductHistory(models.Model):
-    """ Product history"""
-    
-    _name ='product.history'
-    _description ='Maintain Product history'
-    
-    product_id = fields.Many2one('product.product', string='Product id', ondelete='cascade')
-    product_tmpl_id = fields.Many2one('product.template', string='Product template id', ondelete='cascade')
-    date = fields.Datetime(string='Date')
-    out_date = fields.Datetime(string='ODate')
-    order_id = fields.Many2one('pos.order', string='Product id', ondelete='cascade')
-    status = fields.Char(string='status')
-    created_by = fields.Many2one('res.users', string='Created user', ondelete='cascade')
-    state = fields.Selection(
-        [('draft', 'New'),('reserved', 'Reserved'),('noshow', 'No show'), ('checkin', 'CheckIn'),('checkout', 'CheckOut'),('cancel', 'Cancelled'), ('paid', 'Paid'), ('done', 'Posted'), ('invoiced', 'Invoiced')],
         'Status',  copy=False, default='draft')

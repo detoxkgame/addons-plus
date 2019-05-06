@@ -30,6 +30,7 @@
 								<field name="product_tmpl_id" />
 								<field name="state" />
 								<field name="date" />
+								<field name="out_date" />
 								<!-- <field name="created_by" /> -->
 								<!-- <field name="state"></field> -->
 
@@ -40,6 +41,7 @@
 									<field name="product_tmpl_id" />
 									<field name="state" />
 									<field name="date" />
+									<field name="out_date" />
 									<!-- <field name="created_by" /> -->
 									<!-- <field name="state"></field> -->
 								</group>
