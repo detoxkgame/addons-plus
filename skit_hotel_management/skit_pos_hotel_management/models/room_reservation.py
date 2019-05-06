@@ -167,12 +167,12 @@ class FormTemplate(models.Model):
     def get_product_roomtype(self, room_id):
         """ Get Room type while select room"""
         room_type = []
-        product = self.env['product.template'].sudo().search([
+        product = self.env['product.product'].sudo().search([
                                 ('id', '=', int(room_id))])
-        if product.categ_id.is_room:
+        if product.product_tmpl_id.categ_id.is_room:
             room_type.append({
-                              'id': product.categ_id.id,
-                              'name': product.categ_id.name,
+                              'id': product.product_tmpl_id.categ_id.id,
+                              'name': product.product_tmpl_id.categ_id.name,
                             })
         return room_type
 
@@ -185,7 +185,9 @@ class FormTemplate(models.Model):
                                 ('available_in_pos', '=', True),
                                 ('state', 'in', ('available', 'reserved')),
                                 ])
-        for product in product_ids:
+        for product_temp in product_ids:
+            product = self.env['product.product'].sudo().search([
+                                ('product_tmpl_id', '=', product_temp.id)])
             if product.id:
                 room_ids.append({
                                   'id': product.id,
