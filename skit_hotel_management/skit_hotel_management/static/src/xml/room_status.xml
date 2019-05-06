@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="skit_product_history_view" model="ir.ui.view">
+			<field name="name">product.product.history</field>
+			<field name="model">product.history</field>
+			<field name="arch" type="xml">
+				<form string="History">
+					<field name="product_id"></field>
+					<field name="order_id"></field>
+					<!-- <field name="status"></field> -->
+					<field name="state"></field>
+				</form>
+			</field>
+		</record>
+
+	
+		<!-- Form view of product history -->
+		<record id="view_product_history_form_y" model="ir.ui.view">
+			<field name="name">product.template.history.form.inherit</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="point_of_sale.product_template_form_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//page[@name='sales']" position="after">
+					<page string="History" name="history">
+						<field name="product_history_line_ids" colspan="4"
+							nolabel="1">
+							<tree string="Product History" editable="bottom">
+								<field name="product_id" />
+								<field name="product_tmpl_id" />
+								<field name="state" />
+								<field name="date" />
+								<field name="out_date" />
+								<!-- <field name="created_by" /> -->
+								<!-- <field name="state"></field> -->
+
+							</tree>
+							<form string="Product History">
+								<group col="4">
+									<field name="product_id" />
+									<field name="product_tmpl_id" />
+									<field name="state" />
+									<field name="date" />
+									<!-- <field name="created_by" /> -->
+									<!-- <field name="state"></field> -->
+								</group>
+							</form>
+						</field>
+					</page>
+				</xpath>
+			</field>
+		</record>
+		
+	</data>
+</odoo>
