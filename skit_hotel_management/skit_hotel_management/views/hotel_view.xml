@@ -24,7 +24,7 @@
         <!-- ==== Reservation ===== -->
         
         <!-- Search option of hotel reservation -->
-        <record id="view_hotel_reservation_filter" model="ir.ui.view">
+        <!-- <record id="view_hotel_reservation_filter" model="ir.ui.view">
             <field name="name">hm.reservation.filter</field>
             <field name="model">hm.reservation</field>
             <field name="priority" eval="15"/>
@@ -34,10 +34,10 @@
 	                <field name="guest_name_id" />
                 </search>
             </field>
-        </record>
+        </record> -->
         
         <!-- Form view of hotel reservation -->
-	    <record id="view_hotel_reservation_form" model="ir.ui.view">
+	    <!-- <record id="view_hotel_reservation_form" model="ir.ui.view">
 	        <field name="name">hm.reservation.form</field>
 	        <field name="model">hm.reservation</field>
 	        <field name="arch" type="xml">
@@ -82,10 +82,10 @@
 	                </sheet>
 	            </form>
 	        </field>
-	    </record>
+	    </record> -->
         
          <!-- Tree view of hotel reservation -->
-	    <record id="view_hotel_reservation_tree" model="ir.ui.view">
+	    <!-- <record id="view_hotel_reservation_tree" model="ir.ui.view">
 	        <field name="name">hm.reservation.tree</field>
 	        <field name="model">hm.reservation</field>
 	        <field name="arch" type="xml">
@@ -97,15 +97,27 @@
 	                <field name="state" />
 	            </tree>
 	        </field>
-	    </record>
+	    </record> -->
         
         <!-- Action for hotel reservation -->
-	    <record id="open_hotel_reservation" model="ir.actions.act_window">
+	   <!--  <record id="open_hotel_reservation" model="ir.actions.act_window">
 	        <field name="name">Reservation</field>
 	        <field name="res_model">hm.reservation</field>
 	        <field name="view_type">form</field>
 	        <field name="context">{}</field>
 	        <field name="view_mode">tree,form</field>
+	    </record> -->
+	    <record id="open_hotel_reservation" model="ir.actions.act_window">
+	        <field name="name">Reservation</field>
+	        <field name="res_model">pos.order</field>
+	        <field name="view_type">form</field>
+	        <field name="context">{}</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="domain">[('reservation_status','=','reserved')]</field>
+	        <field name="view_ids"
+				eval="[(5, 0, 0),
+				    (0, 0, {'view_mode': 'tree', 'view_id': ref('point_of_sale.view_pos_order_tree')}),
+	                (0, 0, {'view_mode': 'form', 'view_id': ref('view_hotel_folio_form')})]" />
 	    </record>
 	    
 	    <menuitem id="menu_hotel_reservation_form_tree" name="Reservation"
@@ -135,6 +147,8 @@
             			<field name="child" />
             			<field name="driver_name" />
             			<field name="car_no" />
+            			<field name="referred_by_id" />
+            			<field name="referred_by_name" />
             			<field name="source_folio_id" readonly="1"/>
             		</group>
             	</xpath>
@@ -195,7 +209,7 @@
 	        <field name="view_type">form</field>
 	        <field name="context">{}</field>
 	        <field name="view_mode">tree,form</field>
-	        <field name="domain">[('is_service_order','=',False)]</field>
+	        <field name="domain">[('is_service_order','=',False),('reservation_status','!=','reserved')]</field>
 	        <field name="view_ids"
 				eval="[(5, 0, 0),
 				    (0, 0, {'view_mode': 'tree', 'view_id': ref('point_of_sale.view_pos_order_tree')}),
