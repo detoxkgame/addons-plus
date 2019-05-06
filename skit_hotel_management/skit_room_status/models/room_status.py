@@ -48,36 +48,38 @@ class RoomStatus(models.Model):
             delta = d2 - d1         # timedelta
             N = delta.days + 1
             
-#         product_temp_ids = self.env['product.category'].search([ ('is_room', '=', True)])
-#         product_temp = self.env['product.template'].search([ ('categ_id', 'in', (product_temp_ids.ids))])
-#         list_product_arrays = {}
-#         room_status_list_arrays = {} 
-#         if product_temp:  
-#             for history in product_temp:
-#                 product = history.id
-#                 product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
-#                 list_product_arrays[product] = history.name
-
-        product_history_ids_list = self.env['product.history'].sudo().search([])
-        list_product_array = {}
-        room_status_list_array = {}        
-        if product_history_ids_list:
-                for history in product_history_ids_list:
-                    product = history.product_id.id
-                    product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
-                    rowdate = ""+datetime.strftime(history.date, "%b %d %Y")
-                    rowdate1 = ""+datetime.strftime(history.out_date, "%b %d %Y")
-                    d1 = datetime.strptime(rowdate, "%b %d %Y")
-                    d2 = datetime.strptime(rowdate1, "%b %d %Y")
-                    days = (abs((d2 - d1).days)+1)
-                    
-                    for i in range(days):
-                        if rowdate and rowdate1:
-                            range_dates = history.date + timedelta(i)
-                            d2 = datetime.strftime(range_dates, "%b %d %Y")
-                            key = str(product)+"-"+d2
-                            room_status_list_array[key] = history.state
-                            list_product_array[product] = product_arr.name
+        product_temp_ids = self.env['product.category'].search([ ('is_room', '=', True)])
+        product_temp = self.env['product.template'].search([ ('categ_id', 'in', (product_temp_ids.ids))])
+        list_product_arrays = {}
+        room_status_list_arrays = {} 
+        if product_temp:  
+            for products in product_temp:
+                product = products.id
+                key = ''
+                protemp_id = self.env['product.history'].sudo().search([('product_tmpl_id', 'in', products.ids)])
+                if protemp_id:
+                    product_history_ids_list = self.env['product.history'].sudo().search([])
+                    if product_history_ids_list:
+                        for history in product_history_ids_list:
+                            product = history.product_id.id
+                            if product != False:
+                                product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
+                                rowdate = ""+datetime.strftime(history.date, "%b %d %Y")
+                                rowdate1 = ""+datetime.strftime(history.out_date, "%b %d %Y")
+                                d1 = datetime.strptime(rowdate, "%b %d %Y")
+                                d2 = datetime.strptime(rowdate1, "%b %d %Y")
+                                days = (abs((d2 - d1).days)+1)
+                                    
+                                for i in range(days):
+                                    if rowdate and rowdate1:
+                                        range_dates = history.date + timedelta(i)
+                                        d2 = datetime.strftime(range_dates, "%b %d %Y")
+                                        key = str(product)+"-"+d2
+                                        room_status_list_arrays[key] = history.state
+                                        list_product_arrays[product] = product_arr.name
+                else:
+                    list_product_arrays[product] = products.name
+                        
                     
         for i in range(N):
             if from_date and to_date:
@@ -86,5 +88,5 @@ class RoomStatus(models.Model):
                 range_date = datetime.now() - timedelta(i)
             date = datetime.strftime(range_date, "%b %d %Y")            
             date_array.append(date)
-        return {'date_key':date_array,'room_status_list_array':room_status_list_array,'list_product_array':list_product_array,}
-#                 'list_product_arrays':list_product_arrays, 'room_status_list_arrays':room_status_list_arrays}
+
+        return {'date_key':date_array,'room_status_list_array':room_status_list_arrays,'list_product_array':list_product_arrays,}
