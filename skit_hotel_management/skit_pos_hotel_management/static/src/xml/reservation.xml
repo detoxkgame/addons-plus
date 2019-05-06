@@ -27,7 +27,7 @@
 									 <t t-set="cellcolor" t-value="'ff9933'" />
 								</t>
 								<t t-if="state=='checkout'">
-									 <t t-set="cellcolor" t-value="'ffcc99'" />
+									 <t t-set="cellcolor" t-value="'ff9933'" />
 								</t>
 								<t t-if="state=='reserved'">
 									 <t t-set="cellcolor" t-value="'ff1a1a'" />
@@ -55,7 +55,7 @@
             <div class="screen-content roomstatusreport-screen-content"  style="top: 26% !important; left: 26% !important; position: fixed;">
                 <section class="full-content">
                     <div class='window'>
-                        <section class='subwindow' style="position: fixed !important; width: 49% !important; height: 50%; bottom: 14%;">  
+                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 40%;">  
                              <div class="container">
 									<div class="row">
 								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">
@@ -70,7 +70,7 @@
 												</div>
 												</div>
 							                	<div><br></br></div>
-							                	<div class="dl_otable"></div>
+							                	<div class="dl_otable" style="height: 20rem; overflow: scroll;"></div>
 								             </div> 
 								            </div>
 								        </div>

@@ -697,6 +697,8 @@ class PosOrder(models.Model):
                                             'order_id': orders.id,
                                             'state': orders.reservation_status,
                                             'date': orders.checkin_date,
+                                            'out_date': orders.checkout_date,
+                                            
                                      })
             product_history_ids.append(room_detail.id)
             if product_history_ids:
@@ -879,7 +881,8 @@ class ProductHistory(models.Model):
     
     product_id = fields.Many2one('product.product', string='Product id', ondelete='cascade')
     product_tmpl_id = fields.Many2one('product.template', string='Product template id', ondelete='cascade')
-    date = fields.Datetime(string=' Date')
+    date = fields.Datetime(string='Date')
+    out_date = fields.Datetime(string='ODate')
     order_id = fields.Many2one('pos.order', string='Product id', ondelete='cascade')
     status = fields.Char(string='status')
     created_by = fields.Many2one('res.users', string='Created user', ondelete='cascade')
