@@ -364,7 +364,42 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	     	    	} 
  	   		   	});
 	        });
-	        
+	        /** On change room action */
+	        contents.off('change','#product_id');
+	        contents.on('change','#product_id',function(){
+	        	var product_id = contents.find("#product_id option:selected").val();
+	        	self._rpc({
+	    			model: 'hm.form.template',
+	    			method: 'get_product_roomtype',
+	    			args: [0, product_id],
+	    		}).then(function(result){
+	    			var room_type = result[0].id;
+	    			//set respective categ_id in room type
+	    			contents.find("#room_type_id").val(room_type);
+	    		});
+            });
+	        /** On change room_type action */
+	        contents.off('change','#room_type_id');
+            contents.on('change','#room_type_id',function(){
+            	var categ_id = contents.find("#room_type_id option:selected").val();
+            	self._rpc({
+	    			model: 'hm.form.template',
+	    			method: 'get_categ_products',
+	    			args: [0, categ_id],
+	    		}).then(function(result){
+	    			var len = result.length;
+	    			var selectbox = contents.find("#product_id");
+	    		    selectbox.empty();
+	    		    var list = '<option id="" disabled="disabled"  selected="selected" class="placeholder">Room No</option>';
+	    		    for (var i = 0; i < len; i++)
+		      		{
+	    		        list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+	    		    }
+	    		    //replace selection option in room based on room type
+	    		    selectbox.html(list); 
+	    		});
+            });
+            	
 	        /** Check In Button Action */
 	        var order_post = {};
 	        var order_line = [];

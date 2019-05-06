@@ -164,6 +164,36 @@ class FormTemplate(models.Model):
         return room_supply
 
     @api.multi
+    def get_product_roomtype(self, room_id):
+        """ Get Room type while select room"""
+        room_type = []
+        product = self.env['product.template'].sudo().search([
+                                ('id', '=', int(room_id))])
+        if product.categ_id.is_room:
+            room_type.append({
+                              'id': product.categ_id.id,
+                              'name': product.categ_id.name,
+                            })
+        return room_type
+
+    @api.multi
+    def get_categ_products(self, categ_id):
+        """ Get respective products while select room type"""
+        room_ids = []
+        product_ids = self.env['product.template'].sudo().search([
+                                ('categ_id', '=', int(categ_id)),
+                                ('available_in_pos', '=', True),
+                                ('state', 'in', ('available', 'reserved')),
+                                ])
+        for product in product_ids:
+            if product.id:
+                room_ids.append({
+                                  'id': product.id,
+                                  'name': product.name,
+                                })
+        return room_ids
+
+    @api.multi
     def get_sub_form(self, form_template_id, color, order_id):
         panel_form_temp = self.env['hm.form.template'].sudo().search([
                                 ('id', '=', form_template_id)])
