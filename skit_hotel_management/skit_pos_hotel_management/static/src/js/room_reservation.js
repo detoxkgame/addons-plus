@@ -15,6 +15,22 @@ var night_audit_subid=0;
 var QWeb = core.qweb;
 var _t = core._t;
 
+var _super = models.Order.prototype;
+models.Order = models.Order.extend({
+	initialize: function(attributes,options){
+		_super.initialize.apply(this,arguments);
+		 this.is_sessionclose = false;
+		 this.save_to_db();
+	},
+	/* Session close */
+	set_is_sessionclose: function(is_orderlists) {
+        this.is_sessionclose = is_orderlists;
+        this.trigger('change');
+    },
+    get_is_sessionclose: function(){
+        return this.is_sessionclose;
+    },
+  });
 var ServiceOrderPopupWidget = PopupWidget.extend({
     template: 'ServiceOrderPopupWidget',
     click_confirm: function(){
@@ -786,7 +802,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.off('click','.pos_button_section .vcpentries');
 	        contents.on('click','.pos_button_section .vcpentries',function(event){
 	        	var id = self.pos.pos_session.id;
-	           	 if(is_room_confirmed && is_service_confirmed && is_purchase_confirmed){
+	        	var order = self.pos.get_order();
+	        	if(order.get_is_sessionclose()){
+	           	 //if(is_room_confirmed && is_service_confirmed && is_purchase_confirmed){
 	           		 self._rpc({
 	           		 model: 'pos.session',
 	           		 method: 'action_pos_session_validate',

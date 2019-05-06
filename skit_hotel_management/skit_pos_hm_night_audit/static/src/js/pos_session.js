@@ -483,8 +483,10 @@ odoo.define('skit_pos_hm_night_audit.pos_session', function(require) {
 	    	var self = this;
 	    	var title_msg;
 	    	var confirm_msg = [];
+	    	var order = self.pos.get_order();
 	    	if(is_room_confirmed && is_service_confirmed && is_purchase_confirmed){
 	    		confirm_msg.push("All stages are confirmed");
+	    		order.set_is_sessionclose(true);	    		
 	    	}
 	    	else{
 	    		title_msg = "Please confirm the below details";
