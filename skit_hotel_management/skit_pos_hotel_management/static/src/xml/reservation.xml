@@ -5,6 +5,7 @@
    	<table id="rs_table" class="rs_table stripe hover row-border order-column">   
    	<t t-set="date_array" t-value="lines['date_key']" />
    	<t t-set="room_list_array" t-value="lines['room_status_list_array']" />
+   	<t t-set="order_list_array" t-value="lines['list_order_array']" />
    	<t t-set="product_rows" t-value="lines['list_product_array']" />
 		   	<thead class="table-thead">
 		    	<tr>
@@ -43,7 +44,7 @@
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
 							</t>			
-							 <td t-attf-style="background-color:##{cellcolor}" class="rows_item"><t t-esc="state" /></td>		 
+							 <td t-attf-style="background-color:##{cellcolor}" class="rows_item" t-att-data-id="order_list_array[key]"><t t-esc="state" /></td>		 
 						 </t>
 					 </tr>
 				</t>

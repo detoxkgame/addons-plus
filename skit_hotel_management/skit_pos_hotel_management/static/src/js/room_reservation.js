@@ -198,6 +198,69 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			// Room Status Report
 	    			if(form_view == "room_status_report"){
 	    				self.status_report(contents);  
+	    				//To display reservation form while onclick in the status
+	    				contents.on('click', '.rows_item', function(){
+	    					var order_id = $(this).attr('data-id');
+    		    			var linegroup = center_panel_temp[0]
+    		    			//alert('temp_id'+JSON.stringify(linegroup[0]['line_group'][1][0]['sub_template_id']))
+    		    			var sub_id = linegroup[0]['line_group'][1][0]['sub_template_id']
+    			        	$(this).addClass("hm-top-inner-selected");
+    		    			// To Display current date in checkin_date field
+	    					var today = new Date();
+	    					var dd = String(today.getDate()).padStart(2, '0');
+	    					var mm = String(today.getMonth() + 1).padStart(2, '0');
+	    					var yyyy = today.getFullYear();
+	    					var hours = today.getHours();
+							var minutes = today.getMinutes();
+							var ampm = hours >= 12 ? 'pm' : 'am';
+							hours = hours % 12;
+							hours = hours ? hours : 12; // the hour '0' should be '12'
+							minutes = minutes < 10 ? '0'+minutes : minutes;
+							var strTime = hours + ':' + minutes + ' ' + ampm;
+							var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+							var dayName = days[today.getDay()];
+							today = dayName + ' ' + mm + '-' + dd + '-' + yyyy + ' ' + strTime;
+    		    			
+	    					if(order_id == undefined){//without order_id
+	    						self._rpc({
+		    		    			model: 'hm.form.template',
+		    		    			method: 'get_center_panel_form',
+		    		    			args: [0, sub_id, 0],
+		    		    		}).then(function(result){
+		    		    			var form_name = result[0]['form_name']
+		    		    			var center_panel_temp = result[0]['center_panel_temp']
+		    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+		    		    			var form_view = result[0]['form_view']
+		    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = today;
+		    		    			
+		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+		    		    				form_name: form_name, form_view: form_view,
+		    		    				center_panel_temp: center_panel_temp,
+		    							center_panel_sub_id: center_panel_sub_id
+		    							});
+		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+		    		    		});
+	    					}
+	    					else{//With order_id
+		    					self._rpc({
+		    		    			model: 'hm.form.template',
+		    		    			method: 'get_center_panel_form',
+		    		    			args: [0, sub_id, order_id],
+		    		    		}).then(function(result){
+		    		    			var form_name = result[0]['form_name']
+		    		    			var center_panel_temp = result[0]['center_panel_temp']
+		    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+		    		    			var form_view = result[0]['form_view']
+		    		    			
+		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+		    		    				form_name: form_name, form_view: form_view,
+		    		    				center_panel_temp: center_panel_temp,
+		    							center_panel_sub_id: center_panel_sub_id
+		    							});
+		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+		    		    		});
+	    					}
+	    				})
 	    			}
 	    		});
 	        });
@@ -999,10 +1062,6 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    			 }
 		    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
 		    		 }
-		    		 // Room Status Report
-		    		 if(form_view == "room_status_report"){
-		    			self.status_report(contents);  
-		    		 }
 		    	 });
 	         });
 	         
@@ -1036,10 +1095,6 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    				 contents.find('#restaurant_table').text('true');
 		    			 }
 		    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
-		    		 }
-		    		 // Room Status Report
-		    		 if(form_view == "room_status_report"){
-		    			self.status_report(contents);  
 		    		 }
 		    	 });
 	         });

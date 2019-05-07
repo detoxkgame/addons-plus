@@ -51,6 +51,7 @@ class RoomStatus(models.Model):
         product_temp_ids = self.env['product.category'].search([ ('is_room', '=', True)])
         product_temp = self.env['product.template'].search([ ('categ_id', 'in', (product_temp_ids.ids))])
         list_product_arrays = {}
+        list_order_arrays = {}
         room_status_list_arrays = {} 
         if product_temp:  
             for products in product_temp:
@@ -77,6 +78,7 @@ class RoomStatus(models.Model):
                                         key = str(product)+"-"+d2
                                         room_status_list_arrays[key] = history.state
                                         list_product_arrays[product] = product_arr.name
+                                        list_order_arrays[key] = history.order_id.id
                 else:
                     list_product_arrays[product] = products.name
                         
@@ -89,4 +91,4 @@ class RoomStatus(models.Model):
             date = datetime.strftime(range_date, "%b %d %Y")            
             date_array.append(date)
 
-        return {'date_key':date_array,'room_status_list_array':room_status_list_arrays,'list_product_array':list_product_arrays,}
+        return {'date_key':date_array,'room_status_list_array':room_status_list_arrays,'list_product_array':list_product_arrays,'list_order_array':list_order_arrays}
