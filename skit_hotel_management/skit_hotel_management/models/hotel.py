@@ -57,12 +57,17 @@ class HotelReferred(models.Model):
 
     _name = "hm.referred"
     _description = "Hotel Referred By"
+    _rec_name = 'referred_by'
 
     referred_by = fields.Char(string=" Reffered By")
     referred_line_ids = fields.One2many('hm.referred.line',
                                         'referred_by_id',
                                         string='Referred By Line',
                                         copy=True)
+    commission = fields.Float(string='Commission', digits=0)
+    commision_type = fields.Selection([('fixed', 'Fixed'),
+                                       ('percentage', 'Percentage')],
+                                      default='fixed')
 
 
 class HotelReferredLine(models.Model):
@@ -73,6 +78,13 @@ class HotelReferredLine(models.Model):
     name = fields.Char(string="Name")
     referred_by_id = fields.Many2one('hm.referred',
                                      string="Reffered By")
+    agent_name = fields.Many2one('res.partner', required=True,
+                                 domain=[('supplier', '=', True)],
+                                 string="Agent Name")
+    commission = fields.Float(string='Commission', digits=(16, 2))
+    commision_type = fields.Selection([('fixed', 'Fixed'),
+                                       ('percentage', 'Percentage')],
+                                      default='fixed')
 
 
 class HotelReservation(models.Model):
@@ -613,7 +625,8 @@ class PosOrder(models.Model):
     checkout_date = fields.Datetime(string="CheckOut Date")
     is_reservation = fields.Boolean(string="Is Reservation")
     referred_by_id = fields.Many2one('hm.referred', string="Referred By")
-    referred_by_name = fields.Char(string="Referred By Name")
+    referred_by_name = fields.Many2one('hm.referred.line',
+                                       string="Referred By Name")
     adult = fields.Integer('Adult')
     child = fields.Integer('Child')
     mobile = fields.Char(string="Mobile")
@@ -659,6 +672,22 @@ class PosOrder(models.Model):
                                       copy=False, default='draft')
     service_line_ids = fields.One2many('pos.order.line', 'source_order_id',
                                        string="Service Line", copy=True)
+    is_commissionpaid = fields.Boolean(string="IsCommission Paid")
+
+    @api.onchange('referred_by_name')
+    def _onchange_referred_by_name(self):
+        referred_by_name = self.env['hm.referred.line']
+        referred_name_val = referred_by_name.search([
+                         ('id', '=', self.referred_by_name.id)])
+        if referred_name_val:
+            self.name = referred_name_val.name
+
+    @api.onchange('referred_by_id')
+    def _onchange_reffered_by(self):
+        if self.referred_by_id:
+            return {'domain': {'referred_by_name': [('referred_by_id', '=',
+                                                     self.referred_by_id.id)],
+                               }}
 
     @api.model
     def _process_order(self, pos_order):
@@ -698,7 +727,6 @@ class PosOrder(models.Model):
                                             'state': orders.reservation_status,
                                             'date': orders.checkin_date,
                                             'out_date': orders.checkout_date,
-                                            
                                      })
             product_history_ids.append(room_detail.id)
             if product_history_ids:

@@ -8,4 +8,13 @@
         <field name="name">Doctor Service</field>
         <field name="type">service</field>
     </record>
+    
+    <!-- Sequence number for ACI -->
+	<record id="seq_number_for_ict" model="ir.sequence">
+		<field name="name">Agent Commission Invoice</field>
+		<field name="code">hm.agent.commission.invoice</field>
+		<field name="prefix">ACI</field>
+		<field name="padding">6</field>
+		<field name="company_id" eval="False" />
+	</record>
 </odoo>

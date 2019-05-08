@@ -18,8 +18,10 @@
         sequence="10" parent="hotel_management_menu" />
         <menuitem id="hotel_folio_menu" name="Folio"
         sequence="20" parent="hotel_management_menu" />
-    	<menuitem id="hotel_configuration_menu" name="Configuration"
+        <menuitem id="hotel_agent_commission_menu" name="Agent Commission Invoice"
         sequence="30" parent="hotel_management_menu" />
+    	<menuitem id="hotel_configuration_menu" name="Configuration"
+        sequence="40" parent="hotel_management_menu" />
         
         <!-- ==== Reservation ===== -->
         
@@ -1171,14 +1173,33 @@
 	                		<group>
 	                			<field name="referred_by"></field>
 	                		</group>
+	                		<group>
+	                			<field name="commission"></field>
+	                			<field name="commision_type" widget="radio"></field>
+	                		</group>
 	                	</group>
 	                	<notebook>
 	                        <page string="Referred Names" name="referred_line">
 	                        	<field name="referred_line_ids">
-		                            <tree string='Referred Names' editable="bottom" >
-		                                <field name="name" />                                
-		                                <field name="referred_by_id" readonly="1"/> 
+		                            <tree string='Referred Names'>
+		                                <field name="name"/>
+		                                <field name="agent_name" /> 
+		                                <field name="commision_type"/>                           
+		                                <field name="referred_by_id" readonly="1"/>
 		                            </tree>
+		                            <form string='Referred Names'>
+		                            	<group>
+		                            		<group>
+		                            			<field name="name"/>
+		                            			<field name="agent_name"/>
+		                            			<field name="referred_by_id" readonly="1"/>
+		                            		</group>
+		                            		<group>
+		                            			<field name="commission"/>    
+		                                		<field name="commision_type" widget="radio"/>   
+		                            		</group>
+		                            	</group>                    
+		                            </form>
 		                        </field>
 	                        </page>
                         </notebook>

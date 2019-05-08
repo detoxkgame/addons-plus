@@ -3,3 +3,4 @@
 
 from . import hotel
 from . import pos_config
+from . import agent_commission
