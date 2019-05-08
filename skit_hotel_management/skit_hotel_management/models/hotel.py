@@ -166,7 +166,7 @@ class HotelComplaint(models.Model):
     complaint = fields.Text(string="Complaint")
     state = fields.Selection([('inprogress', 'In Progress'),
                               ('completed', 'Completed')],
-                             'Status', default='available')
+                             'Status', default='inprogress')
     pos_order_id = fields.Many2one('pos.order', string="Folio No")
     service_line_id = fields.Many2one('pos.order.line', string="Service")
 

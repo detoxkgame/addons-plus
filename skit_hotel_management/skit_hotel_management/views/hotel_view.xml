@@ -642,10 +642,10 @@
 	        <field name="model">hm.complaint</field>
 	        <field name="arch" type="xml">
 	            <form string="Complaint">
-	               <sheet>
-	               		<header>
-	               			<field name="state" widget="statusbar" statusbar_visible="inprogress,complated"/>
-	               		</header>
+	            	<header>
+	               			<field name="state" widget="statusbar" statusbar_visible="inprogress,completed"/>
+	               	</header>
+	               	<sheet>
 	               		<group>
 	               			<group>
 	               				<field name="room_id" />

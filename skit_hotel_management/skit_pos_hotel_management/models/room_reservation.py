@@ -1221,4 +1221,29 @@ class PosOrder(models.Model):
                 journal_ids.add(account_journal.id)
                 pos_order.update({'service_status': 'close'})
         return True
-    
+
+    @api.model
+    def checkout_complaint(self, folio_id):
+        check_out_order = self.env['pos.order'].sudo().search([('id', '=', int(folio_id))])
+        current_date = (datetime.today()).strftime('%Y-%m-%d')
+        checkout_date = check_out_order.checkout_date.strftime('%Y-%m-%d')
+        if(checkout_date > current_date):
+            return False
+        else:
+            return True
+
+
+class Complaint(models.Model):
+    _inherit = 'hm.complaint'
+
+    @api.model
+    def create_complaint(self, folio_id, reason):
+        folio = self.env['pos.order'].sudo().search([('id', '=', int(folio_id))])
+        folio_line = self.env['pos.order.line'].sudo().search([('order_id', '=', folio.id)], limit=1)
+        complaint = self.env['hm.complaint']
+        complaint.create({'room_id': folio_line.product_id.id,
+                          'pos_order_id': folio.id,
+                          'service_line_id': folio_line.id,
+                          'guest_name_id': folio.partner_id.id,
+                          'complaint': reason})
+        return True

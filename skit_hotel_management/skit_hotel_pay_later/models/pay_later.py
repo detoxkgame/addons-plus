@@ -270,7 +270,7 @@ class Skit_AccountInvoice(models.Model):
     @api.model
     def get_hotel_invoice_details(self, invoice_ids, payment_lines,
                                   pos_session):
-        """ Multiple Invoice with singlr payment. """
+        """ Multiple Invoice with single payment. """
         for invoice_id in invoice_ids:
             invoice = self.env['account.invoice'].sudo().search([('id', '=', int(invoice_id)),
                                                                  ('state', '!=', 'paid')])

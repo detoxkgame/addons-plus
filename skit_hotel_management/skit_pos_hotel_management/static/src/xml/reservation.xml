@@ -1143,4 +1143,27 @@
 		    </t>
 		</t>	
 	</t>
+	
+	<!-- Room Complaint Popup -->
+	<t t-name="HMComplaintPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm" style="height: 300px;">
+                <p class="title"><t t-esc=" widget.options.title || 'Warning' " /></p>
+                <div class="body copy_pre_body" style="height: 140px;">
+                	<span id="room_folio_id" style="display:none"><t t-esc=" widget.options.folio_id" /></span>
+                	<span id="room_sub_id" style="display:none"><t t-esc=" widget.options.sub_id" /></span>
+                	<p><t t-esc=" widget.options.msg" /> </p><br></br>
+                	<textarea id="complaint" placeholder="Reason..." rows="2" cols="30"></textarea>
+                </div>
+                <div class="footer">                   
+                    <div class="button hm-ok">
+                        Ok 
+                    </div>
+                    <div class="button hm-cancel">
+                        Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
 </templates>

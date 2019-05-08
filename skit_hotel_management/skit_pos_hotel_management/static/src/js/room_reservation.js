@@ -65,6 +65,64 @@ var HMWaringPopupWidget = PopupWidget.extend({
 
 gui.define_popup({name:'popup_hm_warning', widget: HMWaringPopupWidget});
 
+var HMComplaintPopupWidget = PopupWidget.extend({
+    template: 'HMComplaintPopupWidget',
+    events: _.extend({}, PopupWidget.prototype.events, {
+    	'click .button.hm-cancel':  'click_cancel',
+        'click .button.hm-ok': 'click_ok',
+	}),
+    
+    click_cancel: function(){
+    	this.gui.close_popup();
+    },
+    
+    click_ok: function(){
+    	var self = this;
+    	var reason = $('#complaint').val();
+    	var folio_id = $('#room_folio_id').text();
+    	var sub_id = $('#room_sub_id').text();
+    	this._rpc({
+			model: 'hm.complaint',
+			method: 'create_complaint',
+			args: [folio_id, reason],
+		}).then(function(result){
+	    	var contents = $('.hm-reservation-content');
+	    	self._rpc({
+		   		 model: 'hm.form.template',
+		   		 method: 'get_center_panel_form',
+		   		 args: [0, sub_id, folio_id],
+		   	 }).then(function(result){
+		   		 var form_name = result[0]['form_name']
+		   		 var center_panel_temp = result[0]['center_panel_temp']
+		   		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+		   		 var form_view = result[0]['form_view']
+		   		 var floor_id = result[0]['floor_id']
+		   		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+		   		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+		   				form_name: form_name, form_view: form_view,
+		   				center_panel_temp: center_panel_temp,
+							center_panel_sub_id: center_panel_sub_id,
+							floor_id: floor_id,
+							});
+		   		 contents.find('.hm-center-form-design').html(center_panel_html);
+		   			
+		   		 if(form_view == "restaurant_table"){
+		   			 sub_template_id = res_table_sub_id;
+		   			 if(sub_template_id > 0){
+		   				 contents.find('#restaurant_table').text('checkout');
+		   			 }else{
+		   				 contents.find('#restaurant_table').text('true');
+		   			 }
+		   			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+		   		 }
+		   	 });
+			self.gui.close_popup();
+		});
+	}
+});
+
+gui.define_popup({name:'popup_hm_complaint', widget: HMComplaintPopupWidget});
+
 var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     template: 'RoomReservationScreenWidget',
     init: function(parent, options){
@@ -1048,34 +1106,50 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        	 var sub_id = $(this).attr('sub_id');
 	        	 var folio_id = $(this).attr('folio_id');
 	        	 self._rpc({
-	        		 model: 'hm.form.template',
-		    		 method: 'get_center_panel_form',
-		    		 args: [0, sub_id, folio_id],
+	        		 model: 'pos.order',
+		    		 method: 'checkout_complaint',
+		    		 args: [folio_id],
 		    	 }).then(function(result){
-		    		 var form_name = result[0]['form_name']
-		    		 var center_panel_temp = result[0]['center_panel_temp']
-		    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
-		    		 var form_view = result[0]['form_view']
-		    		 var floor_id = result[0]['floor_id']
-		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
-		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
-		    				form_name: form_name, form_view: form_view,
-		    				center_panel_temp: center_panel_temp,
-							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id,
-							});
-		    		 contents.find('.hm-center-form-design').html(center_panel_html);
-		    			
-		    		 if(form_view == "restaurant_table"){
-		    			 sub_template_id = res_table_sub_id;
-		    			 if(sub_template_id > 0){
-		    				 contents.find('#restaurant_table').text('checkout');
-		    			 }else{
-		    				 contents.find('#restaurant_table').text('true');
-		    			 }
-		    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+		    		 if(result){
+		    			 self._rpc({
+			        		 model: 'hm.form.template',
+				    		 method: 'get_center_panel_form',
+				    		 args: [0, sub_id, folio_id],
+				    	 }).then(function(result){
+				    		 var form_name = result[0]['form_name']
+				    		 var center_panel_temp = result[0]['center_panel_temp']
+				    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+				    		 var form_view = result[0]['form_view']
+				    		 var floor_id = result[0]['floor_id']
+				    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+				    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+				    				form_name: form_name, form_view: form_view,
+				    				center_panel_temp: center_panel_temp,
+									center_panel_sub_id: center_panel_sub_id,
+									floor_id: floor_id,
+									});
+				    		 contents.find('.hm-center-form-design').html(center_panel_html);
+				    			
+				    		 if(form_view == "restaurant_table"){
+				    			 sub_template_id = res_table_sub_id;
+				    			 if(sub_template_id > 0){
+				    				 contents.find('#restaurant_table').text('checkout');
+				    			 }else{
+				    				 contents.find('#restaurant_table').text('true');
+				    			 }
+				    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+				    		 }
+				    	 });
+		    		 }else{
+		    			 self.pos.gui.show_popup('popup_hm_complaint',{
+		    	        		'title': 'Check Out Reason',
+		    	        		'msg': 'Reason for prior check out.',
+		    	        		'folio_id': folio_id,
+		    	        		'sub_id': sub_id,
+		    	         });
 		    		 }
 		    	 });
+	        	
 	         });
 	         
 	         contents.off('click','.hm-form-back-icon');
@@ -1117,6 +1191,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	         contents.on('click','#checkout',function(e){
 	        	 var sub_id = $(this).attr('sub_id');
 	        	 var order_id = $('#order_id').text();
+	        	 contents.find('.hm-top-inner-selected').removeClass("hm-top-inner-selected");
+	        	 $("[subid="+sub_id+"]").addClass("hm-top-inner-selected");
 	        	 self._rpc({
 	        		 model: 'hm.form.template',
 		    		 method: 'get_center_panel_form',
@@ -1226,6 +1302,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		});
 
     },
+    
     render_rooms:function(floor_id, contents, sub_temp_id){
     	//Room supply floor render function
     	var self = this;
