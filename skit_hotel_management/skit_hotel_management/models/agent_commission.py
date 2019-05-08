@@ -178,3 +178,36 @@ class AgentCommissionInvoiceLine(models.Model):
                                     string="Customer Name")
     folio_id = fields.Many2one('pos.order', required=True,
                                string="Booking Ref")
+
+
+class AccountPayment(models.Model):
+    _inherit = "account.payment"
+
+    @api.multi
+    def post(self):
+        """ Update agent commission invoice state 'done' for paid vendor bill
+            and update is_commissionpaid True for respective folio order
+        """
+        res = super(AccountPayment, self).post()
+        if self.invoice_ids.state == 'paid':
+            agent_commission_invoice = self.env['hm.agent.commission.invoice']
+            agent_commission_line = self.env['hm.agent.commission.invoice.line']
+            commission_id = agent_commission_invoice.sudo().search([
+                                                 ('agent_invoice_ids', 'in',
+                                                  self.invoice_ids.id),
+                                                 ])
+            if commission_id:
+                commission_line_ids = agent_commission_line.sudo().search([
+                                                         ('agent_id', '=',
+                                                          commission_id.id),
+                                                         ])
+                for line in commission_line_ids:
+                    order_id = self.env['pos.order'].search([
+                                     ('id', '=', line.folio_id.id),
+                                     ])
+                    order_id.write({'is_commissionpaid': True})
+                # Update agent commission invoice state is "Done"
+                commission_id.write({
+                                 'state': 'done',
+                                 })
+        return res
