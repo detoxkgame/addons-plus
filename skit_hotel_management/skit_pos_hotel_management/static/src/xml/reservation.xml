@@ -6,6 +6,7 @@
    	<t t-set="date_array" t-value="lines['date_key']" />
    	<t t-set="room_list_array" t-value="lines['room_status_list_array']" />
    	<t t-set="order_list_array" t-value="lines['list_order_array']" />
+   	<t t-set="categ_name" t-value="lines['categ_name']" />
    	<t t-set="product_rows" t-value="lines['list_product_array']" />
 		   	<thead class="table-thead">
 		    	<tr>
@@ -44,7 +45,8 @@
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
 							</t>			
-							 <td t-attf-style="background-color:##{cellcolor}" class="rows_item" t-att-data-id="order_list_array[key]"><t t-esc="state" /></td>		 
+							 <td t-attf-style="background-color:##{cellcolor}" class="rows_item" t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
+							 	 t-attr-data-name="#{categ_name[product_row]}" ><t t-esc="state" /></td>		 
 						 </t>
 					 </tr>
 				</t>
@@ -56,7 +58,7 @@
             <div class="screen-content roomstatusreport-screen-content"  style="top: 26% !important; left: 26% !important; position: fixed;">
                 <section class="full-content">
                     <div class='window'>
-                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 40%;">  
+                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 34%;">  
                              <div class="container">
 									<div class="row">
 								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">

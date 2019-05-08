@@ -207,8 +207,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			if(form_view == "room_status_report"){
 	    				self.status_report(contents);  
 	    				//To display reservation form while onclick in the status
+	    				contents.off('click','.rows_item');
 	    				contents.on('click', '.rows_item', function(){
 	    					var order_id = $(this).attr('data-id');
+	    					var prod_id = $(this).attr('data-prod_id');
+	    					var categ_name = $(this).attr('data-name');
     		    			var linegroup = center_panel_temp[0]
     		    			//alert('temp_id'+JSON.stringify(linegroup[0]['line_group'][1][0]['sub_template_id']))
     		    			var sub_id = linegroup[0]['line_group'][1][0]['sub_template_id']
@@ -220,7 +223,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    					var yyyy = today.getFullYear();
 	    					var hours = today.getHours();
 							var minutes = today.getMinutes();
-							var ampm = hours >= 12 ? 'pm' : 'am';
+							var ampm = hours >= 12 ? 'PM' : 'AM';
 							hours = hours % 12;
 							hours = hours ? hours : 12; // the hour '0' should be '12'
 							minutes = minutes < 10 ? '0'+minutes : minutes;
@@ -240,6 +243,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 		    		    			var form_view = result[0]['form_view']
 		    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = today;
+		    		    			center_panel_temp[0][0]['current_order_lines'][0]['product_id'] = prod_id;
+		    		    			center_panel_temp[0][0]['current_order_lines'][0]['room_type_id'] = categ_name;
 		    		    			
 		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    		    				form_name: form_name, form_view: form_view,
