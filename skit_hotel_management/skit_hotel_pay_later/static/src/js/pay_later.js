@@ -43,6 +43,8 @@ models.Order = models.Order.extend({
 		 this.is_hm_pending = false;
 		 this.is_purchase = false;
 		 this.vendor = '';
+		 this.hm_invoice_ids = [];
+		 this.hm_order_ids = [];
 		 this.save_to_db();
 	},
     
@@ -104,6 +106,20 @@ models.Order = models.Order.extend({
     },
     get_vendor: function(){
         return this.vendor;
+    },
+    set_hm_invoices: function(hm_invoice_ids) {
+        this.hm_invoice_ids = hm_invoice_ids;
+        this.trigger('change');
+    },
+    get_hm_invoices: function(){
+        return this.hm_invoice_ids;
+    },
+    set_hm_orders: function(hm_order_ids) {
+        this.hm_order_ids = hm_order_ids;
+        this.trigger('change');
+    },
+    get_hm_orders: function(){
+        return this.hm_order_ids;
     },
     
     /* Journal */
@@ -184,9 +200,19 @@ screens.PaymentScreenWidget.include({
         // can go back ...
     	this._super();
     	var order = this.pos.get_order();
-    	if(order.get_pending()){
-    		order.set_is_pending(false);
-    		this.gui.show_screen('paylater');
+    	if((order.get_pending() == true) && (order.get_purchase() == true)){
+    		order.set_is_purchase(false);
+    		this.gui.show_screen('vendor_dashboard');
+    	}else{
+	    	if(order.get_pending()){
+	    		order.set_is_pending(false);
+	    		if(order.get_hm_pending() == true){
+	    			order.set_is_hm_pending(false);
+	        		this.gui.show_screen('room_reservation');
+	        	}else{
+	        		this.gui.show_screen('paylater');
+	        	}
+	    	}
     	}
     },
     order_changes: function(){
@@ -295,9 +321,54 @@ screens.PaymentScreenWidget.include({
             });
         });
     },
-	 validate_order: function(force_validation) {
-		    var order = this.pos.get_order();
-	    	var plines = order.get_paymentlines();
+    /** HM Payment */
+    click_hm_payment: function() {
+    	var self = this;
+    	var order = this.pos.get_order();
+    	//var invoice_id = order.p_invoice_id;
+    	var invoice_amt = order.p_invoice_amt;
+    	//var porder_id = order.p_porder_id;
+    	var payment_lines = order.paymentlines;
+    	var porder_type = order.p_order_type;
+    	var invoice_ids = order.hm_invoice_ids;
+    	var order_ids = order.hm_order_ids;
+    	var i = 0;
+    	var paylines = [];
+    	_.every(payment_lines.models, function(line){	
+    		var lchange = self.pos.get_order().get_change(line)
+    		return paylines.push({"amount":line.amount,"paymethod":line.cashregister,"name":line.name, "change":lchange});
+    	});
+    	this._rpc({
+            model: 'account.invoice',
+            method: 'get_hotel_invoice_details',
+            args: [invoice_ids,paylines,self.pos.pos_session.id],
+        }).then(function (result) {
+	    		self.chrome.do_action('point_of_sale.pos_invoice_report',{additional_context:{ 
+                    active_ids:[order_ids],
+                }}).done(function () {
+                	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
+                	$('.paylater').trigger('click');
+                });
+        },function(err,event){
+        	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
+            event.preventDefault();
+            var err_msg = 'Please check the Internet Connection.';
+            if(err.data.message)
+            	err_msg = err.data.message;
+            self.gui.show_popup('alert',{
+                'title': _t('Error: Could not get order details.'),
+                'body': _t(err_msg),
+            });
+        });
+    },
+    
+    validate_order: function(force_validation) {
+	    var order = this.pos.get_order();
+    	var plines = order.get_paymentlines();
+    	if((order.get_pending() == true) && (order.get_purchase() == true)){
+    		this.purchase_payment();
+			order.set_is_purchase(false);
+    	}else{
 	    	if(order.get_pending() == true){
 	    		var client = order.get_client();
 	    		if(!client){
@@ -312,8 +383,12 @@ screens.PaymentScreenWidget.include({
         		}
 	    		else{
 	    			if(this.pending_is_valid()){
-	    				$('.next').css("pointer-events", "none");// restrict to click once again.
-		    			this.click_pending();
+	    				if(order.get_hm_pending()){
+	    					this.click_hm_payment();
+	    				}else{
+	    					this.click_pending();
+	    				}
+		    			//this.click_pending();
 		    			order.set_is_pending(false);
 		    		}
 	    		}
@@ -324,10 +399,10 @@ screens.PaymentScreenWidget.include({
 	                this._super(force_validation);
 	                $('.PayLaterButton').css({"display":"none"});
 	                $('.customerlog-button').css({"display":"none"});
-	                $('.OrderListButton').css({"display":"none"});
 	            }
 	    	}
-	    },
+    	}
+    },
 	
 });
 

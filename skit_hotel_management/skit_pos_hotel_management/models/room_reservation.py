@@ -199,6 +199,37 @@ class FormTemplate(models.Model):
     def get_sub_form(self, form_template_id, color, order_id):
         panel_form_temp = self.env['hm.form.template'].sudo().search([
                                 ('id', '=', form_template_id)])
+        porder = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
+        invoice_ids = [0]
+        if panel_form_temp.form_view == 'list':
+            if(porder):
+                invoice_ids.append(porder.invoice_id.id)
+            if panel_form_temp.form_model_id.model == 'account.invoice':
+                if(porder):
+                    service_order = self.env['pos.order'].sudo().search([
+                                                ('is_service_order', '=', True),
+                                                ('source_folio_id', '=', porder.id)])
+                    for sorder in service_order:
+                        invoice_ids.append(sorder.invoice_id.id)
+                model_datas = self.env[panel_form_temp.form_model_id.model].search(
+                                                    [('id', 'in', invoice_ids)])
+            #===================================================================
+            # if is_pay:
+            #     if panel_form_temp.form_model_id.model == 'account.invoice':
+            #         service_order = self.env['pos.order'].sudo().search([
+            #                                     ('is_service_order', '=', True),
+            #                                     ('source_folio_id', '=', porder.id)])
+            #         for sorder in service_order:
+            #             invoice_ids.append(sorder.invoice_id.id)
+            #         model_datas = self.env[panel_form_temp.form_model_id.model].search(
+            #                                             [('id', 'in', invoice_ids)])
+            # else:
+            #     if porder.invoice_id:
+            #         #invoice_ids = eval('[' + invoice_ids + ']')
+            #         model_datas = self.env[panel_form_temp.form_model_id.model].search(
+            #                                             [('id', 'in', porder.invoice_id.ids)])
+            #===================================================================
+
         fields = []
         field_type = []
         sub_form_temp_ids = []
@@ -213,6 +244,7 @@ class FormTemplate(models.Model):
         current_order_lines = []
         model_method_datas = {}
         res_table_sub_id = 0
+        result_datas = []
         for form_line in sorted(panel_form_temp.form_template_line_ids, key=lambda x: x.sequence):
             if form_line.form_field_id:
                 fields.append(form_line.form_field_id.name)
@@ -461,6 +493,55 @@ class FormTemplate(models.Model):
                 orderline_data['id'] = ''
                 orderline_data['state'] = ''
                 current_order_lines.append(orderline_data)
+        """ List View """
+        if panel_form_temp.form_view == 'list':
+            order_data = {}
+            for data in model_datas:
+                order_data = {}
+                count = 0
+                for field in fields:
+                    if field_type[count] == 'many2one':
+                        order_data[field] = data[field].name
+                    else:
+                        order_data[field] = data[field]
+                    count = count + 1
+                order_data['id'] = data['id']
+                if panel_form_temp.form_model_id.model == 'account.invoice':
+                    order = self.env['pos.order'].sudo().search([('invoice_id', '=', data['id'])])
+                    order_data['order_id'] = order.id
+                    order_data['cust_id'] = data.partner_id.id
+                    #===========================================================
+                    # paid_amount1 = 0
+                    # paid_amount2 = 0
+                    # if pos_order.statement_ids:
+                    #     paid_amount1 = sum([x.amount for x in pos_order.statement_ids if not x.journal_id.is_pay_later])
+                    # account_payment = self.env['account.payment'].sudo().search(
+                    #                        [('invoice_ids', 'in', data.id)])
+                    # if account_payment:
+                    #     paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
+                    # paid_amount = paid_amount1 + paid_amount2
+                    # diff = (data.amount_total - paid_amount)
+                    # amt = round(diff, 2)
+                    # if diff == 0:
+                    #     amt = 0
+                    # order_data['residual'] = amt
+                    #===========================================================
+                    order_data['residual'] = data.residual
+                result_datas.append(order_data)
+            sub_temp = self.env['hm.sub.form.template'].sudo().search([
+                                ('id', 'in', sub_form_temp_ids)])
+            for temp in sub_temp:
+                sub_temp_line = self.env['hm.sub.form.template.line'].sudo().search(
+                            [('sub_form_template_id', '=', temp.id)],
+                            order='sequence asc')
+
+                temp_array = []
+                for sline in sub_temp_line:
+                    temp_array.append({'id': sline.id,
+                                       'name': sline.name,
+                                       'color': sline.color
+                                    })
+                sub_form_template[temp.id] = temp_array
         floor_count = 0
         if panel_form_temp.form_view == 'restaurant_table':
             floor_count = self.env['restaurant.floor'].sudo().search_count([
@@ -475,7 +556,7 @@ class FormTemplate(models.Model):
                        'form_view': panel_form_temp.form_view,
                        #'form_name': panel_form_temp.vendor_dashboard_line_id.dashboard_menu.name or panel_form_temp.name,
                       # 'text_color': form_template.vendor_dashboard_id.color or room_reservation.color,
-                       #'result_datas': result_datas,
+                       'result_datas': result_datas,
                        'sub_form_template': sub_form_template,
                        'template_lines': template_lines,
                        #'available_rooms': available_rooms,

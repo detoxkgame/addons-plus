@@ -22,7 +22,9 @@ class Skit_PosSession(models.Model):
         for session in self:
             porder = self.env['pos.order'].search([
                             ('is_service_order', '=', True),
-                            ('session_id', '=', session.id)])
+                            ('session_id', '=', session.id),
+                            ('service_status', '!=', 'close')])
+            
             for order in porder:
                 current_date = (datetime.today()).strftime('%Y-%m-%d %H:%M:%S')
                 prec_acc = order.pricelist_id.currency_id.decimal_places
@@ -36,7 +38,7 @@ class Skit_PosSession(models.Model):
                     paid_amount = sum([x.amount for x in order.statement_ids])
                     invoice_amount = order.invoice_id.amount_total - paid_amount
                     if not float_is_zero(invoice_amount, precision_digits=prec_acc):
-                        order.add_payment(self._payment_fields({'name': current_date, 
+                        order.add_payment(order._payment_fields({'name': current_date, 
                                                                 'partner_id': order.partner_id.id,
                                                                 'statement_id': account_statement.id, 
                                                                 'account_id': account_journal.default_debit_account_id, 
@@ -79,6 +81,14 @@ class Skit_PosSession(models.Model):
                             ('id', '=', int(line.pos_statement_id.id)),
                             ('session_id', '!=', session_id)])
                     self._confirm_paylater_orders(pay_later_order)
+                else:
+                    bank_line = self.env['account.bank.statement.line'].search([('id', 'in', line.pos_statement_id.statement_ids.ids),
+                                                                                ('journal_id.is_pay_later', '=', True)])
+                    if(bank_line):
+                        pay_later_order = self.env['pos.order'].search([
+                            ('id', '=', int(line.pos_statement_id.id)),
+                            ('session_id', '=', session_id)])
+                        self._confirm_paylater_orders(pay_later_order)
             return res
 
     @api.model

@@ -266,3 +266,95 @@ class Skit_AccountInvoice(models.Model):
                     order.add_payment(args)
             invoice.update({'is_pending_invoice': True})
         return True
+
+    @api.model
+    def get_hotel_invoice_details(self, invoice_ids, payment_lines,
+                                  pos_session):
+        """ Multiple Invoice with singlr payment. """
+        for invoice_id in invoice_ids:
+            invoice = self.env['account.invoice'].sudo().search([('id', '=', int(invoice_id)),
+                                                                 ('state', '!=', 'paid')])
+            if(invoice):
+                order = self.env['pos.order'].search([
+                        ('invoice_id', '=', invoice.id)])
+                checkout_order = self.env['pos.order'].sudo().search([
+                                            ('id', '=', order.id),
+                                            ('is_service_order', '=', False)])
+                for order in checkout_order:
+                    order.write({'reservation_status': 'checkout'})
+                    prod_history = self.env['product.history'].sudo().search([
+                                        ('order_id', '=', checkout_order.id)])
+                    prod_history.write({'state': 'checkout'})
+                    order_line = self.env['pos.order.line'].sudo().search([('order_id', '=', order.id)], limit=1)
+                    prod_prod = self.env['product.product'].sudo().search([('id', '=', order_line.product_id.id)])
+                    prod_temp = self.env['product.template'].sudo().search([('id', '=', prod_prod.product_tmpl_id.id)])
+                    prod_temp.write({'state': 'available'})
+                invoice_amount = 0
+                for pl in payment_lines:
+                    amount = (pl['amount'] - pl['change'])
+                    invoice_continue = False
+                    if(amount > 0):
+                        journal_id = pl['paymethod']['journal']['id']
+                        session = self.env['pos.session'].browse(int(pos_session))
+                        """  add payment methods for POS order under Payment tab
+                                create account.bank.statement.line  """
+                        journal_id = pl['paymethod']['journal']['id']
+                        session = self.env['pos.session'].browse(int(pos_session))
+                        current_date = fields.Date.from_string(fields.Date.today())
+                        if(amount >= invoice.residual):
+                            #print(invoice.residual)
+                            for statement in session.statement_ids:
+                                if statement.journal_id.id == journal_id:
+                                    statement_id = statement.id
+                                    if(invoice_amount <= 0):
+                                        amt = invoice.residual
+                                        pl['amount'] = (pl['amount'] - invoice.residual)
+                                    else:
+                                        amt = invoice_amount
+                                        pl['amount'] = (pl['amount'] - invoice_amount)
+                                    args = {
+                                            'amount': amt,
+                                            'date': current_date,
+                                            'name': pl['name'] + ': ',
+                                            'partner_id': invoice.partner_id.id or False,
+                                            'statement_id': statement_id,
+                                            'pos_statement_id': order.id,
+                                            'journal': journal_id,
+                                            'ref': pl['name'],
+                                            'open_inv': True
+                                    }
+                                    order.add_payment(args)
+                            invoice.update({'is_pending_invoice': True})
+                            invoice_continue = True
+                            break
+                        else:
+                            for statement in session.statement_ids:
+                                if statement.journal_id.id == journal_id:
+                                    statement_id = statement.id
+                                    if(invoice_amount <= 0):
+                                        amt = amount
+                                        invoice_amount = invoice.residual
+                                        pl['amount'] = (pl['amount'] - amount)
+                                    else:
+                                        amt = invoice_amount
+                                        pl['amount'] = (pl['amount'] - invoice_amount)
+                                    args = {
+                                            'amount': amt,
+                                            'date': current_date,
+                                            'name': pl['name'] + ': ',
+                                            'partner_id': invoice.partner_id.id or False,
+                                            'statement_id': statement_id,
+                                            'pos_statement_id': order.id,
+                                            'journal': journal_id,
+                                            'ref': pl['name'],
+                                            'open_inv': True
+                                    }
+                                    order.add_payment(args)
+                            invoice.update({'is_pending_invoice': True})
+                            invoice_amount = invoice_amount - amount
+                            #print(invoice_amount)
+                            pl['amount'] = (pl['amount'] - amount)
+                        if(invoice_continue):
+                            continue
+        return True
+

@@ -416,7 +416,8 @@
 								    						<td class="hm-footer-td">
 								    							<div class="hm-footer-div">
 								    								<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key]" t-as="data" >
-								    									<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    									<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+								    									t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
 								    								</t>
 								    							</div>
 								    						<!-- <t t-set="first_col" t-value="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key][0]" />
@@ -737,7 +738,8 @@
 								    					<td class="hm-footer-td">
 								    						<div class="hm-footer-div">
 								    							<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key]" t-as="data" >
-								    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+								    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
 								    							</t>
 								    						</div>
 								    					</td>
@@ -852,6 +854,92 @@
 							</table>
 						</div>
 					</t> 
+					
+					<!-- List View -->
+					<t t-if="form_view == 'list'">
+						<div class="hm-payment-list">
+							<div class="hm-pay-div">
+								<button class="multi-pay" style="display: none;">Pay Now</button>
+							</div>	
+							<table id="vendor_order_list" class="table stripe hover row-border order-column dataTable no-footer">
+						    	<thead>
+						    		<t t-set="head_count" t-value="1" />
+						    		<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
+						    			<t t-if="head_count == 1" >
+								    		<tr style="background-color: #875A7B;color: white;">
+												<t t-foreach="center_temp['line_group'][line_key]" t-as="label">
+											    	<t t-if="(label.form_field_type)=='sub_form'">
+											    		<t t-foreach="center_temp['sub_form_template'][label.sub_template_id]" t-as="temp" >
+											    			<th><t t-esc="temp.name" /></th>
+											    		</t>
+											    	</t>
+											    	<t t-else="" >
+											    		<t t-if="(label.form_field_type)=='checkbox'">
+											    			<th><input type="checkbox" name="select_all" value="1" class="data-select-all" /></th>
+											    		</t>
+											    		<t t-else="">
+											    			<th><t t-esc="label.form_label" /></th>
+											    		</t>
+											    	</t>
+											    </t>
+										    </tr>
+										    <t t-set="head_count" t-value="head_count + 1" />
+									    </t>
+								    </t>
+						    	</thead>
+						    	<tbody>
+						    		<t t-set="count" t-value="1" />
+						    		<t t-foreach="center_temp['result_datas']" t-as="order" >
+							    		<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
+							    			<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
+							    			<tr>
+							    				<t t-if="(first_col.form_field_type)=='sub_form'">
+								    				<t t-foreach="center_temp['sub_form_template'][first_col.sub_template_id]" t-as="temp" >
+									    				<td>
+									    					<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" class="edit-datatable" ><img t-att-src='widget.sub_template_line_icon_url(temp.id)' width="20" height="17" /></span>
+									    				</td>
+								    				</t>
+								    			</t>
+								    			<t t-else="" >
+								    				<td>
+								    					<t t-if="(first_col.form_field_type)=='label'">
+								    						<span><t t-esc="order[first_col.form_fields]" /></span>
+								    					</t>
+								    					<t t-if="(first_col.form_field_type)=='checkbox'">
+								    						<input type="checkbox" name="select_all" value=""  />
+								    					</t>
+								    				</td>
+							    				</t>
+							    				<t t-set="same_row_count" t-value="((center_temp['line_group'][line_key]).length) - 1" />
+												<t t-set="sameline_count" t-value="0" />
+							    				<t t-foreach="center_temp['line_group'][line_key]" t-as="same_row">
+							    					<t t-if="same_row.sameline">
+							    						<td>
+									    					<t t-if="(same_row.form_field_type)=='label'">
+									    						<span><t t-esc="order[same_row.form_fields]" /></span>
+									    						<t t-if="sameline_count == same_row_count">
+									    							<span t-attf-amt="#{order.residual}" t-attf-invid="#{order.id}" t-attf-custid="#{order.cust_id}" t-attf-orderid="#{order.order_id}"
+									    							 style="display:none" class="folio-payment">Pay</span>
+									    						</t>
+									    					</t>
+									    					<t t-if="((same_row.form_field_type)=='button') and ((same_row.sub_template_id))">
+									    						<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="temp" >
+									    							<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" t-attf-style="#{same_row.field_styles}" class="view-datatable"><t t-esc="same_row.form_label" /></span>
+									    						</t>
+									    					</t>
+									    					
+									    				</td>
+							    					</t>
+							    				<t t-set="sameline_count" t-value="sameline_count + 1" />
+							    				</t>
+							    			</tr>
+							    		</t>
+							    		<t t-set="count" t-value="count + 1" />
+						    		</t>
+						    	</tbody>
+							</table>
+						</div>
+					</t>
 				</t>
 				<t t-set="tcount" t-value="(tcount + 1)" />
 				</t>

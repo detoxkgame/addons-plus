@@ -123,6 +123,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			var center_panel_sub_id = result[0]['center_panel_sub_id']
 			var model_method_datas = result[0]['model_method_datas']
 			var sub_template_id = 0;
+			
+			var vendor_table = null;
 			//var floor_id = 1;
 			//console.log("Check:"+JSON.stringify(model_method_datas))
 			var contents = self.$('.hm-reservation-content');
@@ -173,6 +175,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 	    			var form_view = result[0]['form_view']
 	    			var floor_id = result[0]['floor_id']
+	    			//alert(JSON.stringify(center_panel_temp))
 	    			
 	    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 	    				form_name: form_name, form_view: form_view,
@@ -184,7 +187,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			//centerform.innerHTML = center_panel_html;
 	    			//centerform = reservationform.childNodes[1];
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
-	    			
+	    			vendor_table = self.$('#vendor_order_list').DataTable({
+        		        bSort: false,
+        		        bFilter: false,
+        		        bPaginate: true, 
+        		        pageLength: 10,
+        			});
 	    			if(form_view == "restaurant_table"){
 	    				var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
 	    				sub_template_id = res_table_sub_id;
@@ -1098,6 +1106,118 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		 }
 		    	 });
 	         });
+	         
+	         /** Check Out Button Action */
+	         contents.off('click','#checkout');
+	         contents.on('click','#checkout',function(e){
+	        	 var sub_id = $(this).attr('sub_id');
+	        	 var order_id = $('#order_id').text();
+	        	 self._rpc({
+	        		 model: 'hm.form.template',
+		    		 method: 'get_center_panel_form',
+		    		 args: [0, sub_id, order_id],
+		    	 }).then(function(result){
+		    		 var form_name = result[0]['form_name']
+		    		 var center_panel_temp = result[0]['center_panel_temp']
+		    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+		    		 var form_view = result[0]['form_view']
+		    		 var floor_id = result[0]['floor_id']
+		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+		    				form_name: form_name, form_view: form_view,
+		    				center_panel_temp: center_panel_temp,
+							center_panel_sub_id: center_panel_sub_id,
+							floor_id: floor_id,
+							});
+		    		 contents.find('.hm-center-form-design').html(center_panel_html);
+		    		 
+		    		 vendor_table = self.$('#vendor_order_list').DataTable({
+	        		        bSort: false,
+	        		        bFilter: false,
+	        		        bPaginate: true, 
+	        		        pageLength: 10,
+	        		});
+		    			
+		    		 if(form_view == "restaurant_table"){
+		    			 sub_template_id = res_table_sub_id;
+		    			 if(sub_template_id > 0){
+		    				 contents.find('#restaurant_table').text('checkout');
+		    			 }else{
+		    				 contents.find('#restaurant_table').text('true');
+		    			 }
+		    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+		    		 }
+		    	 });
+	          
+	         });
+	         
+	         contents.off('click','.data-select-all');
+	         contents.on('click','.data-select-all',function(e){
+	        	// Check/uncheck all checkboxes in the table
+ 	        	if(this.checked){
+ 	        		contents.find('.multi-pay').css({'display':'block'});
+ 	        	}else{
+ 	        		contents.find('.multi-pay').css({'display':'none'});
+ 	        	}
+ 	            var rows = vendor_table.rows({ 'search': 'applied' }).nodes();
+ 	            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+	         });
+	        
+	         contents.on('change','#vendor_order_list tbody input[type="checkbox"]',function(){
+	        	// If checkbox is not checked
+  	           if(!this.checked){
+  	              var el = $('.data-select-all').get(0);
+  	              // If "Select all" control is checked and has 'indeterminate' property
+  	              if(el && el.checked && ('indeterminate' in el)){
+  	            	  contents.find('.multi-pay').css({'display':'none'});
+  	                 // Set visual state of "Select all" control 
+  	                 // as 'indeterminate'
+  	                 el.indeterminate = true;
+  	              }
+  	           }
+  	           var $checkboxes = vendor_table.$('input[type="checkbox"]');
+  	           var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+  	           if(countCheckedCheckboxes > 0){
+  	        	   contents.find('.multi-pay').css({'display':'block'});
+  	           }else{
+  	        	   contents.find('.multi-pay').css({'display':'none'});
+  	           }
+	         });
+	         
+	        contents.off('click','.multi-pay'); 
+ 	        contents.on('click','.multi-pay',function(){
+ 	        	var invoice_ids = [];
+             	var amount = 0;
+             	var partner_id = 0;
+             	var order_ids = [];
+             	
+ 	        	$('#vendor_order_list tbody tr').each(function(){
+ 	        		if($(this).find('input[type="checkbox"]').prop("checked")){
+ 	        			var invoice_id = $(this).find("span.folio-payment").attr('invid');
+                     	amount = amount + parseFloat($(this).find("span.folio-payment").attr('amt'));
+                     	partner_id = $(this).find("span.folio-payment").attr('custid');
+                     	var order_id = $(this).find("span.folio-payment").attr('orderid');
+                     	invoice_ids.push(invoice_id);
+                     	order_ids.push(order_id);
+    	        	}
+ 	        	});
+ 	        	if(amount > 0){
+ 	        		var order = self.pos.get_order();
+     				order.set_client(self.pos.db.get_partner_by_id(partner_id));
+     				self.pos.proxy.open_cashbox();
+     	        	order.set_is_pending(true);
+     	        	//order.set_pending_invoice(invoice_id);
+     	 	    	order.set_pending_amt(amount);
+     	 	    	//order.set_pending_porder(order_id);
+     	 	    	order.set_pending_order_type('POS');
+     	 	    	order.set_is_hm_pending(true);
+     	 	    	order.set_hm_invoices(invoice_ids);
+     	 	    	order.set_hm_orders(order_ids);
+     	 	    	//order.set_to_invoice(false);
+     				self.gui.show_screen('payment');
+ 	        	}
+ 	        });
+	         
 		});
 
     },
@@ -1438,7 +1558,6 @@ models.PosModel = models.PosModel.extend({
            // this.set_order(orders[0]); // and go to the first one ...
         	this.set_service_room(orders[0]);
         } else {
-        	alert('empty')
             this.add_new_order();  // or create a new order with the current table
         }
     },

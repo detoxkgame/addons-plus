@@ -706,3 +706,14 @@ div.bhoechie-tab-container{
 	margin-top:25%;
 	margin-left: 25%;
 }
+
+.hm-payment-list{
+	width: 100%;
+	height: 85%;
+	overflow: hidden;
+}
+.hm-pay-div{
+	display: inline-block;
+	width: 100%;
+	margin-top: 1%;
+}
