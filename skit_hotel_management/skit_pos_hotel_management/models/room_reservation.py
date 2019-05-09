@@ -269,10 +269,8 @@ class FormTemplate(models.Model):
                     if(form_line.form_field_id.relation == 'product.category'):
                         records = self.env[form_line.form_field_id.relation].search([('is_room', '=', True)])
                     elif(form_line.form_field_id.relation == 'product.product'):
-                        records = self.env[form_line.form_field_id.relation].search([
-                                                                    ('categ_id.is_room', '=', True),
-                                                                    ('available_in_pos', '=', True),
-                                                                    ('state', 'in', ('available', 'reserved'))])
+                        records = self.env[form_line.form_field_id.relation].search([('categ_id.is_room', '=', True),
+                                                                                     ('available_in_pos', '=', True)])
                     else:
                         records = self.env[form_line.form_field_id.relation].search([])
                     records_model_fields = self.env['ir.model.fields'].search(
@@ -409,10 +407,8 @@ class FormTemplate(models.Model):
                                     if(line.form_field_id.relation == 'product.category'):
                                         records = self.env[line.form_field_id.relation].search([('is_room', '=', True)])
                                     elif(line.form_field_id.relation == 'product.product'):
-                                        records = self.env[line.form_field_id.relation].search([
-                                                                        ('categ_id.is_room', '=', True),
-                                                                        ('available_in_pos', '=', True),
-                                                                        ('state', 'in', ('available', 'reserved'))])
+                                        records = self.env[line.form_field_id.relation].search([('categ_id.is_room', '=', True),
+                                                                                                ('available_in_pos', '=', True)])
                                     else:
                                         records = self.env[line.form_field_id.relation].search([])
                                     records_model_fields = self.env['ir.model.fields'].search(
@@ -649,10 +645,8 @@ class FormTemplate(models.Model):
                     if(line.form_field_id.relation == 'product.category'):
                         records = self.env[line.form_field_id.relation].search([('is_room', '=', True)])
                     elif(line.form_field_id.relation == 'product.product'):
-                        records = self.env[line.form_field_id.relation].search([
-                                                            ('categ_id.is_room', '=', True),
-                                                            ('available_in_pos', '=', True),
-                                                            ('state', 'in', ('available', 'reserved'))])
+                        records = self.env[line.form_field_id.relation].search([('categ_id.is_room', '=', True),
+                                                                                ('available_in_pos', '=', True)])
                     else:
                         records = self.env[line.form_field_id.relation].search([])
                     records_model_fields = self.env['ir.model.fields'].search(
@@ -820,10 +814,8 @@ class FormTemplate(models.Model):
                                     if(line.form_field_id.relation == 'product.category'):
                                         records = self.env[line.form_field_id.relation].search([('is_room', '=', True)])
                                     elif(line.form_field_id.relation == 'product.product'):
-                                        records = self.env[line.form_field_id.relation].search([
-                                                                            ('categ_id.is_room', '=', True),
-                                                                            ('available_in_pos', '=', True),
-                                                                            ('state', 'in', ('available', 'reserved'))])
+                                        records = self.env[line.form_field_id.relation].search([('categ_id.is_room', '=', True),
+                                                                                                ('available_in_pos', '=', True)])
                                     else:
                                         records = self.env[line.form_field_id.relation].search([])
                                     records_model_fields = self.env['ir.model.fields'].search(
