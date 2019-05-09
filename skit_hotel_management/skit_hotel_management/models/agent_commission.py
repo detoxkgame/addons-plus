@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # See LICENSE file for full copyright and licensing details.
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 class AgentCommissionInvoice(models.Model):
@@ -75,23 +76,15 @@ class AgentCommissionInvoice(models.Model):
             commission_line_ids = []
             if order_ids:
                 for order in order_ids:
-                    commision_type = ''
                     if order.referred_by_name.commission:
                         commission = order.referred_by_name.commission
-                        commision_type = order.referred_by_name.commision_type
                     else:
                         commission = order.referred_by_id.commission
-                        commision_type = order.referred_by_id.commision_type
-                    if commision_type == 'fixed':
-                        commission_amount = commission
-                    else:
-                        commission_amount = ((order.amount_total * commission)/100)
                     commission_line = self.agent_line_ids.create({
                                         'folio_id': order.id,
                                         'customer_name': order.partner_id.id,
                                         'total_cost': order.amount_total,
                                         'commission': commission,
-                                        'commission_amount': commission_amount,
                                         })
                     commission_line_ids.append(commission_line.id)
         return commission_line_ids
@@ -108,6 +101,8 @@ class AgentCommissionInvoice(models.Model):
                                                commission_line_ids)
                                               ],
                            })
+        else:
+            raise UserError(_('There is no Commission Line for this Agent.'))
         return partner
 
     @api.multi
@@ -124,6 +119,8 @@ class AgentCommissionInvoice(models.Model):
                                                 commission_line_ids)
                                                ],
                             })
+            else:
+                raise UserError(_('There is no Commission Line for this Agent.'))
         return
 
     @api.multi
@@ -137,7 +134,7 @@ class AgentCommissionInvoice(models.Model):
                                  ], limit=1)
         invoice_val = {'partner_id': self.agent_id.id,
                        'date_invoice': fields.Date.context_today(self),
-                       'reference': 'Commission Invoice',
+                       'reference': self.name,
                        'type': 'in_invoice',
                        'journal_id': journal_id.id,
                        'origin': self.name}
@@ -166,13 +163,53 @@ class AgentCommissionInvoiceLine(models.Model):
     _name = "hm.agent.commission.invoice.line"
     _description = "Agent Commission Invoice Line"
 
+    @api.depends('commission_amount')
+    def _commission_amount(self):
+        """
+        Compute the commission_amount of commission line.
+        """
+        for line in self:
+            commission_amount = line.commission
+            commision_type = ''
+            if line.folio_id.referred_by_name:
+                commision_type = line.folio_id.referred_by_name.commision_type
+            else:
+                commision_type = line.folio_id.referred_by_id.commision_type
+            if commision_type == 'fixed':
+                commission_amount = commission_amount
+            else:
+                commission_amount = ((line.folio_id.amount_total * commission_amount)/100)
+            line.update({
+                'commission_amount': commission_amount,
+            })
+
+    @api.onchange('commission')
+    def onchange_commission(self):
+        """ Onchange commission update commission amount in line"""
+        for line in self:
+            commission_amount = line.commission
+            commision_type = ''
+            if line.folio_id.referred_by_name:
+                commision_type = line.folio_id.referred_by_name.commision_type
+            else:
+                commision_type = line.folio_id.referred_by_id.commision_type
+            if commision_type == 'fixed':
+                commission_amount = commission_amount
+            else:
+                commission_amount = ((line.folio_id.amount_total * commission_amount)/100)
+            line.update({
+                'commission_amount': commission_amount,
+            })
+
     agent_id = fields.Many2one('hm.agent.commission.invoice',
                                string="Agent Commission Invoice")
     total_cost = fields.Float(string='Total Cost', required=True,
                               digits=(16, 2))
     commission = fields.Float(string='Commission', required=True,
                               digits=(16, 2))
-    commission_amount = fields.Float(string='Commission Amount', required=True,
+    commission_amount = fields.Float(string='Commission Amount',
+                                     compute='_commission_amount',
+                                     required=True,
                                      digits=(16, 2))
     customer_name = fields.Many2one('res.partner', required=True,
                                     string="Customer Name")

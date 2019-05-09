@@ -152,6 +152,7 @@
             			<field name="referred_by_id" />
             			<field name="referred_by_name" />
             			<field name="source_folio_id" readonly="1"/>
+            			<field name="is_commissionpaid" readonly="1"/>
             		</group>
             	</xpath>
             	<page name="extra" position="after">  
