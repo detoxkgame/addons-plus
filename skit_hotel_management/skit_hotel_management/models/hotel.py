@@ -714,25 +714,20 @@ class PosOrder(models.Model):
                 orders.lines.update({'source_order_id': pos_order.get('source_folio_id')})
             pos_order_line = self.env['pos.order.line'].sudo().search([
                                         ('order_id', '=', orders.id)])
-            product_id = pos_order_line.product_id
+            product_tmpl_id = pos_order_line.product_id.product_tmpl_id
             if (orders.reservation_status == 'reserved'):
-                product_id.write({'state': 'reserved'})
+                product_tmpl_id.write({'state': 'reserved'})
             if (orders.reservation_status == 'checkin'):
-                product_id.write({'state': 'occupied'})
-            room_details = self.env['product.history'].sudo().search([])
-            product_history_ids = []
-            room_detail = room_details.create({
-                                            'product_id': product_id.id,
-                                            'order_id': orders.id,
-                                            'state': orders.reservation_status,
-                                            'date': orders.checkin_date,
-                                            'out_date': orders.checkout_date,
-                                     })
-            product_history_ids.append(room_detail.id)
-            if product_history_ids:
-                product_id.write({'product_history_line_ids': [(6, 0,
-                                                                product_history_ids)
-                                                               ]})
+                product_tmpl_id.write({'state': 'occupied'})
+            # create line product_history
+            room_detail = product_tmpl_id.product_history_line_ids.create({
+                            'product_id': pos_order_line.product_id.id,
+                            'product_tmpl_id': product_tmpl_id.id,
+                            'order_id': orders.id,
+                            'state': orders.reservation_status,
+                            'date': orders.checkin_date,
+                            'out_date': orders.checkout_date,
+                            })
         print(orders)
         return orders
 
