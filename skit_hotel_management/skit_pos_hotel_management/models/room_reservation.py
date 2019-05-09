@@ -988,8 +988,55 @@ class ResPartner(models.Model):
 class PosOrder(models.Model):
     _inherit = 'pos.order'
 
-    def update_order(self, post, order_id):
+    def update_order(self, post, order_id, reason):
+        post = eval(post)
         order = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
+        order_check_out_date = order.checkout_date.strftime('%Y-%m-%d')
+        edate = datetime.strptime(post.get('checkout_date'), '%Y-%m-%d %H:%M:%S')
+        extend_date = edate.strftime('%Y-%m-%d')
+        order_room = self.env['pos.order.line'].sudo().search([('order_id', '=', order.id)], limit=1)
+        if(order_check_out_date != extend_date):
+            self.env['hm.checkout.date.extend'].sudo().create({'pos_order_id': order.id,
+                                                               'room_id': order_room.product_id.id,
+                                                               'checkin_date': order.checkin_date,
+                                                               'checkout_date': order.checkout_date,
+                                                               'extend_checkout_date': post.get('checkout_date'),
+                                                               'remark': reason})
+        if post.get('order_line'):
+            if(order_room.product_id.id != post.get('order_line')[0]['product_id']):
+                """ Old Room Details """
+                prod_history = self.env['product.history'].sudo().search([
+                                        ('order_id', '=', order.id),
+                                        ('state', '=', 'checkin')])
+                prod_history.write({'state': 'draft'})
+                prod_prod = self.env['product.product'].sudo().search([
+                                        ('id', '=', order_room.product_id.id)])
+                prod_temp = self.env['product.template'].sudo().search([
+                                        ('id', '=', prod_prod.product_tmpl_id.id)])
+                prod_temp.write({'state': 'available'})
+                """ New Room Details """
+                new_prod_prod = self.env['product.product'].sudo().search([
+                                        ('id', '=', post.get('order_line')[0]['product_id'])])
+                new_prod_temp = self.env['product.template'].sudo().search([
+                                        ('id', '=', new_prod_prod.product_tmpl_id.id)])
+                new_prod_temp.write({'state': 'occupied'})
+                self.env['product.history'].sudo().create({
+                            'product_id': new_prod_prod.id,
+                            'product_tmpl_id': new_prod_temp.id,
+                            'order_id': order.id,
+                            'state': order.reservation_status,
+                            'date': order.checkin_date,
+                            'out_date': order.checkout_date,
+                            })
+                self.env['hm.shift.room'].sudo().create({'pos_order_id': order.id,
+                                                         'checkin_date': order.checkin_date,
+                                                         'guest_name_id': order.partner_id.id,
+                                                         'referred_by_id': order.referred_by_id,
+                                                         'old_room_id': order_room.product_id.id,
+                                                         'new_room_id': post.get('order_line')[0]['product_id'],
+                                                         'old_room_type_id': order_room.room_type_id.id,
+                                                         'remark': reason
+                                                         })
         if(order):
             if post:
                 if post.get('order_line'):

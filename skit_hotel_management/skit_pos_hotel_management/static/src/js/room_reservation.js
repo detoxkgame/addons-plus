@@ -81,43 +81,59 @@ var HMComplaintPopupWidget = PopupWidget.extend({
     	var reason = $('#complaint').val();
     	var folio_id = $('#room_folio_id').text();
     	var sub_id = $('#room_sub_id').text();
-    	this._rpc({
-			model: 'hm.complaint',
-			method: 'create_complaint',
-			args: [folio_id, reason],
-		}).then(function(result){
-	    	var contents = $('.hm-reservation-content');
-	    	self._rpc({
-		   		 model: 'hm.form.template',
-		   		 method: 'get_center_panel_form',
-		   		 args: [0, sub_id, folio_id],
-		   	 }).then(function(result){
-		   		 var form_name = result[0]['form_name']
-		   		 var center_panel_temp = result[0]['center_panel_temp']
-		   		 var center_panel_sub_id = result[0]['center_panel_sub_id']
-		   		 var form_view = result[0]['form_view']
-		   		 var floor_id = result[0]['floor_id']
-		   		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
-		   		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
-		   				form_name: form_name, form_view: form_view,
-		   				center_panel_temp: center_panel_temp,
-							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id,
-							});
-		   		 contents.find('.hm-center-form-design').html(center_panel_html);
-		   			
-		   		 if(form_view == "restaurant_table"){
-		   			 sub_template_id = res_table_sub_id;
-		   			 if(sub_template_id > 0){
-		   				 contents.find('#restaurant_table').text('checkout');
-		   			 }else{
-		   				 contents.find('#restaurant_table').text('true');
-		   			 }
-		   			 self.render_rooms(floor_id,contents, res_table_sub_id); 
-		   		 }
-		   	 });
-			self.gui.close_popup();
-		});
+    	var room_datas = $('#room_datas').text();
+    	if(sub_id > 0){
+	    	this._rpc({
+				model: 'hm.complaint',
+				method: 'create_complaint',
+				args: [folio_id, reason],
+			}).then(function(result){
+		    	var contents = $('.hm-reservation-content');
+		    	self._rpc({
+			   		 model: 'hm.form.template',
+			   		 method: 'get_center_panel_form',
+			   		 args: [0, sub_id, folio_id],
+			   	 }).then(function(result){
+			   		 var form_name = result[0]['form_name']
+			   		 var center_panel_temp = result[0]['center_panel_temp']
+			   		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+			   		 var form_view = result[0]['form_view']
+			   		 var floor_id = result[0]['floor_id']
+			   		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+			   		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+			   				form_name: form_name, form_view: form_view,
+			   				center_panel_temp: center_panel_temp,
+								center_panel_sub_id: center_panel_sub_id,
+								floor_id: floor_id,
+								});
+			   		 contents.find('.hm-center-form-design').html(center_panel_html);
+			   			
+			   		 if(form_view == "restaurant_table"){
+			   			 sub_template_id = res_table_sub_id;
+			   			 if(sub_template_id > 0){
+			   				 contents.find('#restaurant_table').text('checkout');
+			   			 }else{
+			   				 contents.find('#restaurant_table').text('true');
+			   			 }
+			   			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+			   		 }
+			   	 });
+				self.gui.close_popup();
+			});
+    	}
+    	else{
+    		self.gui.close_popup();
+			self._rpc({
+	     			model: 'pos.order',
+	     			method:'update_order',
+	     			args: [0, room_datas, folio_id, reason],
+	     		}).then(function(result){
+	     			self.pos.gui.show_popup('alert',{
+                     'title': _t('Success'),
+                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
+                });
+	     		});
+		}
 	}
 });
 
@@ -259,7 +275,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    				}else{
 	    					contents.find('#restaurant_table').text('true');
 	    				}
-	    				self.render_rooms(floor_id,contents, res_table_sub_id); 
+	    				self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
 	    			}
 	    			// Room Status Report
 	    			if(form_view == "room_status_report"){
@@ -369,7 +385,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    			//centerform = reservationform.childNodes[1];
 			    			contents.find('.hm-center-form-design').html(center_panel_html);
 			    			if(form_view == "restaurant_table"){
-			    				self.render_rooms(floor_id,contents, 0); 
+			    				self.render_rooms(floor_id,contents, 0, form_name); 
 			    			}
 			    			if(form_view == "night_audit"){
 			    				self.render_night_audit(subid,contents);
@@ -383,7 +399,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.on('click','.floor-selector .button',function(){
 	        	contents.find('.active').removeClass("active");
 	        		var floor_id = $(this).attr('data-id');
-	        		self.render_rooms(floor_id, contents, sub_template_id); //
+	        		self.render_rooms(floor_id, contents, sub_template_id, ''); //
 	        		$(this).addClass('active');	        		
 	        });
 
@@ -439,7 +455,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	$(this).removeClass("warning");
             	
             });
-            
+
 	        /** Calendar - Set the date time */
 	        contents.off('focus','#checkin_date');
 	        contents.on('focus','#checkin_date',function(){
@@ -539,8 +555,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        /** Check In Button Action */
 	        var order_post = {};
 	        var order_line = [];
-	        contents.off('click','#checkin, #reserve');
-            contents.on('click','#checkin, #reserve',function(e){
+	        contents.off('click','#checkin, #reserve, #date_extend, #shift_room');
+            contents.on('click','#checkin, #reserve, #date_extend, #shift_room',function(e){
             	var isProceed =true;
             	var id = $(this).attr('id');
             	var order_id = contents.find('#order_id').text();
@@ -627,16 +643,31 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	            	order_post['order_line'] = order_line;
 	            	order_post['reservation_status'] = order_status;
 	            	if(order_id != ''){
-	            		self._rpc({
-		 	     			model: 'pos.order',
-		 	     			method:'update_order',
-		 	     			args: [0, order_post, order_id],
-		 	     		}).then(function(result){
-		 	     			self.pos.gui.show_popup('alert',{
-			                     'title': _t('Success'),
-			                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
-			                });
-		 	     		});
+	            		if((id == 'date_extend') || (id == 'shift_room')){
+	            			var title = 'Date Extend'
+	            			if(id == 'shift_room')
+	            				title = 'Shift Room'
+	            			self.pos.gui.show_popup('popup_hm_complaint',{
+		    	        		'title': title,
+		    	        		'msg': '',
+		    	        		'folio_id': order_id,
+		    	        		'sub_id': 0,
+		    	        		'order_post': JSON.stringify(order_post),
+		    	        		
+	            			});
+	            		}else{
+	            			self._rpc({
+			 	     			model: 'pos.order',
+			 	     			method:'update_order',
+			 	     			args: [0, order_post, order_id, ''],
+			 	     		}).then(function(result){
+			 	     			self.pos.gui.show_popup('alert',{
+				                     'title': _t('Success'),
+				                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
+				                });
+			 	     		});
+	            		}
+	            		
 	            	}else{
 	            		_.every(product_array, function(line){	
 								var product =  self.pos.db.get_product_by_id(line);
@@ -1103,6 +1134,42 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		         }
 	         });
 	         
+	         /** Check Out Date Extend */
+	         contents.off('click','.hm-date-extend');
+	         contents.on('click','.hm-date-extend',function(e){
+	        	 var sub_id = $(this).attr('sub_id');
+	        	 var folio_id = $(this).attr('folio_id');
+	        	 self._rpc({
+	        		 model: 'hm.form.template',
+		    		 method: 'get_center_panel_form',
+		    		 args: [0, sub_id, folio_id],
+		    	 }).then(function(result){
+		    		 var form_name = result[0]['form_name']
+		    		 var center_panel_temp = result[0]['center_panel_temp']
+		    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+		    		 var form_view = result[0]['form_view']
+		    		 var floor_id = result[0]['floor_id']
+		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+		    				form_name: form_name, form_view: form_view,
+		    				center_panel_temp: center_panel_temp,
+							center_panel_sub_id: center_panel_sub_id,
+							floor_id: floor_id,
+							});
+		    		 contents.find('.hm-center-form-design').html(center_panel_html);
+		    			
+		    		 if(form_view == "restaurant_table"){
+		    			 sub_template_id = res_table_sub_id;
+		    			 if(sub_template_id > 0){
+		    				 contents.find('#restaurant_table').text('checkout');
+		    			 }else{
+		    				 contents.find('#restaurant_table').text('true');
+		    			 }
+		    			 self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
+		    		 }
+		    	 });
+	         });         
+	         
 	         /** Room Check Out Action */
 	         contents.off('click','.hm-room-checkout');
 	         contents.on('click','.hm-room-checkout',function(e){
@@ -1140,7 +1207,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				    			 }else{
 				    				 contents.find('#restaurant_table').text('true');
 				    			 }
-				    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+				    			 self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
 				    		 }
 				    	 });
 		    		 }else{
@@ -1149,6 +1216,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    	        		'msg': 'Reason for prior check out.',
 		    	        		'folio_id': folio_id,
 		    	        		'sub_id': sub_id,
+		    	        		'order_post': '',
 		    	         });
 		    		 }
 		    	 });
@@ -1184,7 +1252,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    			 }else{
 		    				 contents.find('#restaurant_table').text('true');
 		    			 }
-		    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+		    			 self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
 		    		 }
 		    	 });
 	         });
@@ -1229,7 +1297,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    			 }else{
 		    				 contents.find('#restaurant_table').text('true');
 		    			 }
-		    			 self.render_rooms(floor_id,contents, res_table_sub_id); 
+		    			 self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
 		    		 }
 		    	 });
 	          
@@ -1306,7 +1374,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 
     },
     
-    render_rooms:function(floor_id, contents, sub_temp_id){
+    render_rooms:function(floor_id, contents, sub_temp_id, form_name){
     	//Room supply floor render function
     	var self = this;
     	var room_service = $('#restaurant_table').text();
@@ -1317,6 +1385,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				args: [0, floor_id],
 			}).then(function(result){
 				var tables = result;
+				var hm_class = 'hm-date-extend';
+				if(form_name == 'Check Out'){
+					hm_class = 'hm-room-checkout';
+				}
 				if(room_service == 'true'){
     				var restaurant_rooms_html = QWeb.render('RestaurantRoomsService',{widget: self, 
 	    				tables: tables, 
@@ -1328,6 +1400,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    				tables: tables, 
 						floor_id: floor_id,
 						sub_temp_id: sub_temp_id,
+						hm_class: hm_class,
 					});
     			}
 				else{

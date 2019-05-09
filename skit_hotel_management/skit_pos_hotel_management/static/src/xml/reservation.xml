@@ -1119,7 +1119,7 @@
 	<t t-name="CheckOutRoomsWidget">
 		<t t-foreach="tables" t-as="table">
 			<t t-if="(table.folioid) > 0">
-				<div data-placement="right" class="res_table hm-booked-room hm-room-checkout" 
+				<div data-placement="right" t-attf-class="res_table hm-booked-room #{hm_class}" 
 					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 			          left: #{table.position_h + table.width/2}px; 
 			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
@@ -1152,6 +1152,7 @@
                 <div class="body copy_pre_body" style="height: 140px;">
                 	<span id="room_folio_id" style="display:none"><t t-esc=" widget.options.folio_id" /></span>
                 	<span id="room_sub_id" style="display:none"><t t-esc=" widget.options.sub_id" /></span>
+                	<span id="room_datas" style="display:none"><t t-esc="widget.options.order_post" /></span>
                 	<p><t t-esc=" widget.options.msg" /> </p><br></br>
                 	<textarea id="complaint" placeholder="Reason..." rows="2" cols="30"></textarea>
                 </div>
