@@ -138,13 +138,20 @@ class pos_session(models.Model):
                  ('state', 'in', ('checkin', 'checkout'))
                  ])
             for history in product_history:
+                journal_names = ''
+                if history.order_id.statement_ids:
+                    for statement_line in history.order_id.statement_ids:
+                        if journal_names:
+                            journal_names = journal_names+', '+statement_line.journal_id.name
+                        else:
+                            journal_names = statement_line.journal_id.name
                 val = {
                      "partner_name": history.order_id.partner_id.name,
                      'product_name': history.product_id.name,
                      'price_subtotal': history.order_id.amount_total,
                      'checkin_date': history.date.time(),
-                     'journal_id': history.order_id.statement_ids.journal_id.name,
-                     'payment': history.order_id.invoice_id.state
+                     'journal_id': journal_names,
+                     'payment': history.order_id.invoice_id.state or 'No Invoice'
                 }
                 if history.state == 'checkin':
                     checkin_val.append(val)

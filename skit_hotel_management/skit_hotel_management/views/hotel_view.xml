@@ -780,6 +780,7 @@
 		                <field name="name"/>
 		                <field name="categ_id" string="Room Category"/>
 		                <field name="list_price" string="Room Rate"/>
+		                <field name="state"/>
 		            </tree>
 				 </xpath>
             </field>

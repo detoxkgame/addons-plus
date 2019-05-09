@@ -510,6 +510,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var room_type = result[0].id;
 	    			//set respective categ_id in room type
 	    			contents.find("#room_type_id").val(room_type);
+	    			contents.find("#room_type_id").removeClass('hm-placeholder');
 	    		});
             });
 	        /** On change room_type action */
@@ -524,13 +525,14 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var len = result.length;
 	    			var selectbox = contents.find("#product_id");
 	    		    selectbox.empty();
-	    		    var list = '<option id="" disabled="disabled"  selected="selected" class="placeholder">Room No</option>';
+	    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
 	    		    for (var i = 0; i < len; i++)
 		      		{
 	    		        list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
 	    		    }
 	    		    //replace selection option in room based on room type
 	    		    selectbox.html(list); 
+	    		    contents.find("#product_id").addClass('hm-placeholder');
 	    		});
             });
             	
@@ -696,10 +698,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	       contents.off('click','.room_service');
   	        contents.on('click','.room_service',function(){
   	        	var room_id = $(this).attr('room_id');
+  	        	var floor_id = $(this).attr('floor_id');
   	        	/** Render supply popup **/
   	        	if(room_id && room_id != 'false'){
   	        		$(this).addClass('select_room');
-  	        		self.render_supply_items(room_id,contents); //display items inside the popover
+  	        		self.render_supply_items(room_id,floor_id,contents); //display items inside the popover
 	  	        	$('.popper').popover({	  	        		
 	  	        		container: "body",
 	  	  	          	html: true,
@@ -1431,14 +1434,14 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        pageLength: 10,
 		});
    },
-    render_supply_items:function(room_id,contents){
+    render_supply_items:function(room_id,floor_id,contents){
     	//display items inside the popover
     	var self = this;
     	if(room_id){
 	    	self._rpc({
 				model: 'hm.form.template',
 				method: 'get_roomsupply_items',
-				args: [0, room_id],
+				args: [0, room_id,floor_id],
 			}).then(function(result){
 				var tables = result;
 				var supply_items_html = QWeb.render('RoomSupplyPopover',{widget: self, 
