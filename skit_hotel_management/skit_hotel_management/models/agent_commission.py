@@ -171,7 +171,7 @@ class AgentCommissionInvoiceLine(models.Model):
         for line in self:
             commission_amount = line.commission
             commision_type = ''
-            if line.folio_id.referred_by_name:
+            if line.folio_id.referred_by_name.commission:
                 commision_type = line.folio_id.referred_by_name.commision_type
             else:
                 commision_type = line.folio_id.referred_by_id.commision_type
@@ -189,7 +189,7 @@ class AgentCommissionInvoiceLine(models.Model):
         for line in self:
             commission_amount = line.commission
             commision_type = ''
-            if line.folio_id.referred_by_name:
+            if line.folio_id.referred_by_name.commission:
                 commision_type = line.folio_id.referred_by_name.commision_type
             else:
                 commision_type = line.folio_id.referred_by_id.commision_type
