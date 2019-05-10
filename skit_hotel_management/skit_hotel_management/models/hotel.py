@@ -702,9 +702,18 @@ class PosOrder(models.Model):
                     i = 0
                     for line in orders.lines:
                         line.update(order_lines[i])
+                        taxes = line.product_id.taxes_id.compute_all(line.price_unit, line.order_id.pricelist_id.currency_id, line.qty, product=line.product_id, partner=False)
+                        line.price_subtotal = taxes['total_excluded']
+                        line.price_subtotal_incl = taxes['total_included']
                         i = i + 1
                 del post_order_details['order_line']
                 orders.update(post_order_details)
+                currency = orders.pricelist_id.currency_id
+                orders.amount_paid = sum(payment.amount for payment in orders.statement_ids)
+                orders.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in orders.statement_ids)
+                orders.amount_tax = currency.round(sum(self._amount_line_tax(line, orders.fiscal_position_id) for line in orders.lines))
+                amount_untaxed = currency.round(sum(line.price_subtotal for line in orders.lines))
+                orders.amount_total = orders.amount_tax + amount_untaxed
             if pos_order.get('source_folio_id'):
                 orders.update({'source_folio_id': pos_order.get('source_folio_id')})
             if pos_order.get('room_table_id'):

@@ -601,7 +601,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
      			}else{
 	            	var product_array=[];
 	            	var order = self.pos.get_order();
-	            	
+	            	var no_night = 1;
 	            	$('table.hm-form-table tr.hm-order-details').each(function() {	
 	 					$(this).find('input').each(function(index, element) {  
 	 						if($(this).attr('ftype')=='date'){
@@ -616,6 +616,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
      							order_post[element.name]=dateTime;
      						}else{
      							order_post[element.name]=element.value;
+     							if(element.name == 'no_night'){
+     								no_night = element.value;
+     							}
      						}
 	 						
 	 					});
@@ -626,8 +629,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	            	});
 	            	$('table.hm-form-table tr.hm-orderline-details').each(function() {	
 	            		var order_line_array ={};
+	            		order_line_array['qty'] = no_night;
 	 					$(this).find('input').each(function(index, element) {  
 	 						order_line_array[element.name]=element.value;
+	 						if(element.name == 'adult'){
+	 							order_post[element.name]=element.value;
+	 						}
 	 					});
 	 					
 	 					$(this).find('select').each(function(index, element) {     						
