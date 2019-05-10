@@ -11,17 +11,25 @@
                
                
     	<!-- ===== Hotel Management Main Menu ==== -->
-    	<menuitem id="hotel_management_menu" name="Hotel Management" />
+    	<menuitem id="hotel_management_menu" name="Hotel Management" />    	
     	
     	<!-- ===== Hotel Management Sub Menu ==== -->
+ 
+        <menuitem id="hotel_pos_session_menu" name="Dashboard"
+	        action="point_of_sale.action_pos_config_kanban" sequence="5"
+	        parent="hotel_management_menu" />
     	<menuitem id="hotel_reservation_menu" name="Reservation"
         sequence="10" parent="hotel_management_menu" />
         <menuitem id="hotel_folio_menu" name="Folio"
         sequence="20" parent="hotel_management_menu" />
         <menuitem id="hotel_agent_commission_menu" name="Agent Commission Invoice"
         sequence="30" parent="hotel_management_menu" />
-    	<menuitem id="hotel_configuration_menu" name="Configuration"
+        <menuitem id="hotel_room_details_menu" name="Room Details"
         sequence="40" parent="hotel_management_menu" />
+    	<menuitem id="hotel_configuration_menu" name="Configuration"
+        sequence="50" parent="hotel_management_menu" />
+        
+       
         
         <!-- ==== Reservation ===== -->
         
@@ -143,17 +151,25 @@
             	</xpath> -->
             	<xpath expr="//group[@name='order_fields']" position="after">
             		<group col="4" colspan="4" name="folio_fields">
+            			<field name="mobile" />
+            			<field name="location" />
             			<field name="checkin_date" />
             			<field name="checkout_date" />
             			<field name="adult" />
             			<field name="child" />
-            			<field name="driver_name" />
-            			<field name="car_no" />
+            			<!-- <field name="driver_name" />
+            			<field name="car_no" /> -->
             			<field name="referred_by_id" attrs="{'readonly':[('is_commissionpaid','=',True)]}"/>
             			<field name="referred_by_name" attrs="{'readonly':[('is_commissionpaid','=',True)]}"/>
+            			<field name="guest_proof_id" />
+						<field name="id_proof_no" string="Proof Id No" />
             			<field name="source_folio_id" readonly="1"/>
             			<field name="is_commissionpaid" readonly="1"/>
             		</group>
+            	</xpath>
+            	<xpath expr="//field[@name='table_id']" position="replace">
+            	</xpath>
+            	<xpath expr="//field[@name='fiscal_position_id']" position="replace">
             	</xpath>
             	<page name="extra" position="after">  
             		<page string="CheckOut Date Extend">
@@ -243,14 +259,16 @@
 				</xpath>
             	<xpath expr="//group[@name='order_fields']" position="after">
             		<group col="4" colspan="4" name="folio_fields">
-            			<field name="checkin_date" />
+            			<!-- <field name="checkin_date" />
             			<field name="checkout_date" />
             			<field name="adult" />
-            			<field name="child" />
+            			<field name="child" /> -->
             			<field name="driver_name" />
             			<field name="car_no" />
             			<field name="source_folio_id" readonly="1"/>
             		</group>
+            	</xpath>
+            	<xpath expr="//field[@name='fiscal_position_id']" position="replace">
             	</xpath>
             	<page name="extra" position="after">  
             		<page string="CheckOut Date Extend">
@@ -831,7 +849,7 @@
 	    
 	    <!-- Menu for Hotel Rooms -->
 	    <menuitem id="menu_hotel_room" name="Rooms"
-        parent="skit_hotel_management.hotel_configuration_menu" sequence="2" />
+        parent="skit_hotel_management.hotel_room_details_menu" sequence="2" />
         
         <menuitem id="menu_hotel_room_form_tree" name="Room"
 	        action="open_hotel_room" sequence="6"
@@ -958,7 +976,7 @@
 	        
 	    <!-- Menu for Hotel Services -->
 	    <menuitem id="menu_hotel_service" name="Service"
-        parent="skit_hotel_management.hotel_configuration_menu" sequence="2" />
+        parent="skit_hotel_management.hotel_room_details_menu" sequence="2" />
         
 	    <menuitem id="menu_hotel_service_form_tree" name="Services"
 	        action="open_hotel_service" sequence="6"
@@ -1087,7 +1105,7 @@
 	        
 	    <!-- Menu for Hotel Amenity -->
 	    <menuitem id="menu_hotel_amenity" name="Amenity"
-        parent="skit_hotel_management.hotel_configuration_menu" sequence="2" />
+        parent="skit_hotel_management.hotel_room_details_menu" sequence="2" />
         
 	    <menuitem id="menu_hotel_amenity_form_tree" name="Amenities"
 	        action="open_hotel_amenity" sequence="6"
@@ -1234,7 +1252,7 @@
 	    <!-- Menu for Referred By -->
 	    <menuitem id="menu_hotel_referred_by_form_tree" name="Referred By"
 	        action="open_hotel_referred" sequence="6"
-	        parent="skit_hotel_management.hotel_configuration_menu" />
+	        parent="skit_hotel_management.hotel_agent_commission_menu" />
 	        
 	    <!-- Search option of guest id proof -->
         <record id="view_guest_id_proof_filter" model="ir.ui.view">
