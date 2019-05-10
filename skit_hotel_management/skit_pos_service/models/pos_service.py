@@ -224,9 +224,10 @@ class HMRoomManage(models.Model):
                                         ('is_service_order', '=', False)],
                                         )
             pos_order_line = self.env['pos.order.line'].sudo().search([
-                                                ('product_id', '=', int(vals[0]['room_no'])),
-                                                ('order_id', 'in', pos_order.ids)],
-                                                limit=1, order='id desc')
+                                    ('product_id.product_tmpl_id.id', '=',
+                                     int(vals[0]['room_no'])),
+                                    ('order_id', 'in', pos_order.ids)],
+                                    limit=1, order='id desc')
             if vals[0]['supplier_id']:
                 supplier_id = self.env['res.partner'].sudo().search([
                                                 ('id', '=',
