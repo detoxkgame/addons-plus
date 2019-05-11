@@ -663,6 +663,8 @@ class PosOrder(models.Model):
     location = fields.Char(string="Location")
     capacity = fields.Integer(string="Person")
     car_type_id = fields.Many2one('hm.car.type', string="Car Type")
+    charge = fields.Float(string='Charge',
+                          digits=dp.get_precision('Product Price'))
     no_night = fields.Integer(string="No of Night")
     source_folio_id = fields.Many2one("pos.order", string='Source Folio')
     is_service_order = fields.Boolean(string="Is Service", default=False)
@@ -729,14 +731,15 @@ class PosOrder(models.Model):
             if (orders.reservation_status == 'checkin'):
                 product_tmpl_id.write({'state': 'occupied'})
             # create line product_history
-            room_detail = product_tmpl_id.product_history_line_ids.create({
-                            'product_id': pos_order_line.product_id.id,
-                            'product_tmpl_id': product_tmpl_id.id,
-                            'order_id': orders.id,
-                            'state': orders.reservation_status,
-                            'date': orders.checkin_date,
-                            'out_date': orders.checkout_date,
-                            })
+            if not orders.is_service_order:
+                room_detail = product_tmpl_id.product_history_line_ids.create({
+                                'product_id': pos_order_line.product_id.id,
+                                'product_tmpl_id': product_tmpl_id.id,
+                                'order_id': orders.id,
+                                'state': orders.reservation_status,
+                                'date': orders.checkin_date,
+                                'out_date': orders.checkout_date,
+                                })
         print(orders)
         return orders
 
@@ -777,7 +780,7 @@ class SaleOrder(models.Model):
     location = fields.Char(string="Location")
     capacity = fields.Integer(string="Person")
     car_type_id = fields.Many2one('hm.car.type', string="Car Type")
-    charge = fields.Float(string='Charge', required=True, digits=dp.get_precision('Product Price'))
+    charge = fields.Float(string='Charge', digits=dp.get_precision('Product Price'))
     pos_order_id = fields.Many2one('pos.order', string="Folio")
     order_state = fields.Selection([
         ('draft', 'Draft'),
