@@ -57,7 +57,7 @@
 		<ol id="hexGrid" class="hexgrid_even">
 	      <li class="hex">
 	        <div class="hexIn">
-	          <a class="hexLink hm-reports" href="#">
+	          <a class="hexLink hm-reports kpi-report-button" href="#">
 	            <img src="/skit_hotel_management/static/src/img/reports.jpg" alt="" />
 	            <h1>REPORTS</h1>
 	            <p></p>

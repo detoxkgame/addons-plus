@@ -39,7 +39,8 @@ class RoomStatus(models.Model):
  
         N = 2
         
-        date_array=[]      
+        date_array=[]    
+        date_format={}
         if(from_date and to_date):
             from_date = datetime.strptime(from_date, '%m/%d/%Y')
             to_date = datetime.strptime(to_date, '%m/%d/%Y')
@@ -83,13 +84,17 @@ class RoomStatus(models.Model):
                 else:
                     list_product_arrays[product] = products.name
                     categ_name[product] = products.categ_id.name
-                        
+                    
                     
         for i in range(N):
             if from_date and to_date:
                 range_date = from_date + timedelta(i)
             else:
                 range_date = datetime.now() - timedelta(i)
-            date = datetime.strftime(range_date, "%b %d %Y")            
+            date = datetime.strftime(range_date, "%b %d %Y") 
+            date_value = datetime.strftime(range_date, "%a %m-%d-%Y")       
             date_array.append(date)
-        return {'date_key':date_array,'room_status_list_array':room_status_list_arrays,'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name}
+            date_format[date] = date_value
+            
+        return {'date_key':date_array, 'date_format':date_format, 'room_status_list_array':room_status_list_arrays,
+                'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name}

@@ -8,6 +8,7 @@
    	<t t-set="order_list_array" t-value="lines['list_order_array']" />
    	<t t-set="categ_name" t-value="lines['categ_name']" />
    	<t t-set="product_rows" t-value="lines['list_product_array']" />
+   	<t t-set="date_format" t-value="lines['date_format']" />
 		   	<thead class="table-thead">
 		    	<tr>
 						<th>Room Name</th>
@@ -24,6 +25,7 @@
 						<t t-foreach="date_array" t-as="date_col">
 							<t t-set="key" t-value="product_row+'-'+date_col" />
 							<t t-set="state" t-value="room_list_array[key]" />
+							<t t-set="format_date" t-value="date_format[date_col]"/>
 							<t t-if="state">
 								 <t t-if="state=='checkin'">
 									 <t t-set="cellcolor" t-value="'ff9933'" />
@@ -44,9 +46,11 @@
 							<t t-else="">				
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
-							</t>			
-							 <td t-attf-style="background-color:##{cellcolor}" class="rows_item" t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
-							 	 t-attr-data-name="#{categ_name[product_row]}" ><t t-esc="state" /></td>		 
+							</t>
+							<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
+								t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
+							 	t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
+							 	t-attr-format-date="#{format_date}"><t t-esc="state" /></td>		 
 						 </t>
 					 </tr>
 				</t>
@@ -55,7 +59,7 @@
   	</t>
    	<t t-name="RoomstatusReportScreen">
         <div class="report roomstatusreport clientlist-screenscreen ">
-            <div class="screen-content roomstatusreport-screen-content"  style="top: 26% !important; left: 26% !important; position: fixed;">
+            <div class="screen-content roomstatusreport-screen-content"  style="left: 26% !important; position: fixed;">
                 <section class="full-content">
                     <div class='window'>
                         <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 34%;">  
@@ -66,10 +70,10 @@
 								             <div class="bhoechie-tab-content active">	
 							                	<div class="span5 col-md-5 date-picker"	id="sandbox-container">
 							                	<div class="input-daterange input-group" id="datepicker">
-							                		<span class="input-group-addon datepicker-span">From</span>
-												    <input type="text"	class="input-sm form-control rdate_from datepicker-input" name="start" />
-												    <span class="input-group-addon datepicker-span">To</span>
-												    <input type="text"	class="input-sm form-control rdate_to datepicker-input" name="end" />
+							                		<span class="input-group-addon datepicker-span" style="float: left; margin-right: 2%;">From</span>
+												    <input type="text"	class="input-sm form-control rdate_from datepicker-input" style="float: left;" name="start" />
+												    <span class="input-group-addon datepicker-span" style="float: left; margin-left: 10px;">To</span>
+												    <input type="text"	class="input-sm form-control rdate_to datepicker-input" style="margin-right: 30%;" name="end" />
 												</div>
 												</div>
 							                	<div><br></br></div>

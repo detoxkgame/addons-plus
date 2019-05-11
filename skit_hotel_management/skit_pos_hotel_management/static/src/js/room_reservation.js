@@ -286,25 +286,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    					var order_id = $(this).attr('data-id');
 	    					var prod_id = $(this).attr('data-prod_id');
 	    					var categ_name = $(this).attr('data-name');
+	    					var date = $(this).attr('format-date');
     		    			var linegroup = center_panel_temp[0]
     		    			//alert('temp_id'+JSON.stringify(linegroup[0]['line_group'][1][0]['sub_template_id']))
     		    			var sub_id = linegroup[0]['line_group'][1][0]['sub_template_id']
     			        	$(this).addClass("hm-top-inner-selected");
-    		    			// To Display current date in checkin_date field
-	    					var today = new Date();
-	    					var dd = String(today.getDate()).padStart(2, '0');
-	    					var mm = String(today.getMonth() + 1).padStart(2, '0');
-	    					var yyyy = today.getFullYear();
-	    					var hours = today.getHours();
-							var minutes = today.getMinutes();
-							var ampm = hours >= 12 ? 'PM' : 'AM';
-							hours = hours % 12;
-							hours = hours ? hours : 12; // the hour '0' should be '12'
-							minutes = minutes < 10 ? '0'+minutes : minutes;
-							var strTime = hours + ':' + minutes + ' ' + ampm;
-							var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-							var dayName = days[today.getDay()];
-							today = dayName + ' ' + mm + '-' + dd + '-' + yyyy + ' ' + strTime;
     		    			
 	    					if(order_id == undefined){//without order_id
 	    						self._rpc({
@@ -316,7 +302,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		    			var center_panel_temp = result[0]['center_panel_temp']
 		    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 		    		    			var form_view = result[0]['form_view']
-		    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = today;
+		    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = date + ' ' + '12:00 AM';
 		    		    			center_panel_temp[0][0]['current_order_lines'][0]['product_id'] = prod_id;
 		    		    			center_panel_temp[0][0]['current_order_lines'][0]['room_type_id'] = categ_name;
 		    		    			
@@ -1445,12 +1431,6 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     		var to_date;
     		contents.on('change','.rdate_from',function(){
     			from_date = $(this).val();
-    		});
-    		contents.on('change','.rdate_to',function(){
-    			to_date = $(this).val();
-    		});
-        	//To display details while changing the date
-    		contents.on('change','.rooms_status_report',function(){
     			self._rpc({
     	            model: 'product.template',
     	            method: 'get_roomstatus',
@@ -1462,38 +1442,19 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     	        	self.render_order(val);  
     	        });
     		});
-    	/*var self = this;
-    	var center_panel_html = QWeb.render('RoomstatusReportScreen',{widget: self});
-		var statusreport = document.createElement('div');
-		statusreport.innerHTML = center_panel_html;
-		statusreport = statusreport.childNodes[1];
-	    contents.append(statusreport);
-    //Datepicker
-    $('#sandbox-container .input-daterange').datepicker({
-   		todayHighlight: true
-   	});
-    //Display records based on strt and end date
-    var from_date;
-	var to_date;
-	contents.on('change','.rdate_from',function(){
-		from_date = $(this).val();
-	});
-	contents.on('change','.rdate_to',function(){
-		to_date = $(this).val();
-	});
-	contents.on('change','.report',function(){
-		self._rpc({
-            model: 'product.template',
-            method: 'get_roomstatus',
-            args: [0, from_date, to_date],
-        })
-        .then(function(val) {
-        	console.log(JSON.stringify(val));
-        	var table = $("#rs_table").DataTable()
-        	table.destroy();
-        	self.render_order(val);  
-        });
-	});*/
+    		contents.on('change','.rdate_to',function(){
+    			to_date = $(this).val();
+    			self._rpc({
+    	            model: 'product.template',
+    	            method: 'get_roomstatus',
+    	            args: [0, from_date, to_date],
+    	        })
+    	        .then(function(val) {
+    	        	var table = $("#rs_table").DataTable()
+    	        	table.destroy();
+    	        	self.render_order(val);  
+    	        });
+    		});
     },
     render_order: function(result){
     	//alert('result'+JSON.stringify(result))
