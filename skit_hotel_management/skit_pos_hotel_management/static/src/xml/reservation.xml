@@ -62,7 +62,7 @@
             <div class="screen-content roomstatusreport-screen-content"  style="left: 26% !important; position: fixed;">
                 <section class="full-content">
                     <div class='window'>
-                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 34%;">  
+                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 38%;">  
                              <div class="container">
 									<div class="row">
 								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">
@@ -73,7 +73,7 @@
 							                		<span class="input-group-addon datepicker-span" style="float: left; margin-right: 2%;">From</span>
 												    <input type="text"	class="input-sm form-control rdate_from datepicker-input" style="float: left; border-radius: 0px !important; border: 1px solid;" name="start" />
 												    <span class="input-group-addon datepicker-span" style="float: left; margin-left: 10px;">To</span>
-												    <input type="text"	class="input-sm form-control rdate_to datepicker-input" style="margin-right: 30%; border-radius: 0px !important; border: 1px solid;" name="end" />
+												    <input type="text"	class="input-sm form-control rdate_to datepicker-input" style="margin-right: -6%;; border-radius: 0px !important; border: 1px solid;" name="end" />
 												</div>
 												</div>
 							                	<div><br></br></div>
