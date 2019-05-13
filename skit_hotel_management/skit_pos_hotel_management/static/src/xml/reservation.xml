@@ -71,9 +71,9 @@
 							                	<div class="span5 col-md-5 date-picker"	id="sandbox-container">
 							                	<div class="input-daterange input-group" id="datepicker">
 							                		<span class="input-group-addon datepicker-span" style="float: left; margin-right: 2%;">From</span>
-												    <input type="text"	class="input-sm form-control rdate_from datepicker-input" style="float: left; border-radius: 0px !important;" name="start" />
+												    <input type="text"	class="input-sm form-control rdate_from datepicker-input" style="float: left; border-radius: 0px !important; border: 1px solid;" name="start" />
 												    <span class="input-group-addon datepicker-span" style="float: left; margin-left: 10px;">To</span>
-												    <input type="text"	class="input-sm form-control rdate_to datepicker-input" style="margin-right: 30%; border-radius: 0px !important;" name="end" />
+												    <input type="text"	class="input-sm form-control rdate_to datepicker-input" style="margin-right: 30%; border-radius: 0px !important; border: 1px solid;" name="end" />
 												</div>
 												</div>
 							                	<div><br></br></div>

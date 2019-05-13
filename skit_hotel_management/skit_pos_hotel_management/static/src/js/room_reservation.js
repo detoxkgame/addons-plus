@@ -277,64 +277,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    				}
 	    				self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
 	    			}
-	    			// Room Status Report
-	    			if(form_view == "room_status_report"){
-	    				self.status_report(contents);  
-	    				//To display reservation form while onclick in the status
-	    				contents.off('click','.rows_item');
-	    				contents.on('click', '.rows_item', function(){
-	    					var order_id = $(this).attr('data-id');
-	    					var prod_id = $(this).attr('data-prod_id');
-	    					var categ_name = $(this).attr('data-name');
-	    					var date = $(this).attr('format-date');
-    		    			var linegroup = center_panel_temp[0]
-    		    			//alert('temp_id'+JSON.stringify(linegroup[0]['line_group'][1][0]['sub_template_id']))
-    		    			var sub_id = linegroup[0]['line_group'][1][0]['sub_template_id']
-    			        	$(this).addClass("hm-top-inner-selected");
-    		    			
-	    					if(order_id == undefined){//without order_id
-	    						self._rpc({
-		    		    			model: 'hm.form.template',
-		    		    			method: 'get_center_panel_form',
-		    		    			args: [0, sub_id, 0],
-		    		    		}).then(function(result){
-		    		    			var form_name = result[0]['form_name']
-		    		    			var center_panel_temp = result[0]['center_panel_temp']
-		    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
-		    		    			var form_view = result[0]['form_view']
-		    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = date + ' ' + '12:00 AM';
-		    		    			center_panel_temp[0][0]['current_order_lines'][0]['product_id'] = prod_id;
-		    		    			center_panel_temp[0][0]['current_order_lines'][0]['room_type_id'] = categ_name;
-		    		    			
-		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
-		    		    				form_name: form_name, form_view: form_view,
-		    		    				center_panel_temp: center_panel_temp,
-		    							center_panel_sub_id: center_panel_sub_id
-		    							});
-		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
-		    		    		});
-	    					}
-	    					else{//With order_id
-		    					self._rpc({
-		    		    			model: 'hm.form.template',
-		    		    			method: 'get_center_panel_form',
-		    		    			args: [0, sub_id, order_id],
-		    		    		}).then(function(result){
-		    		    			var form_name = result[0]['form_name']
-		    		    			var center_panel_temp = result[0]['center_panel_temp']
-		    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
-		    		    			var form_view = result[0]['form_view']
-		    		    			
-		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
-		    		    				form_name: form_name, form_view: form_view,
-		    		    				center_panel_temp: center_panel_temp,
-		    							center_panel_sub_id: center_panel_sub_id
-		    							});
-		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
-		    		    		});
-	    					}
-	    				})
-	    			}
+	    			
 	    		});
 	        });
 	        
@@ -375,6 +318,64 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    			}
 			    			if(form_view == "night_audit"){
 			    				self.render_night_audit(subid,contents);
+			    			} 
+			    			// Room Status Report
+			    			if(form_view == "room_status_report"){
+			    				self.status_report(contents);  
+			    				//To display reservation form while onclick in the status
+			    				contents.off('click','.rows_item');
+			    				contents.on('click', '.rows_item', function(){
+			    					var order_id = $(this).attr('data-id');
+			    					var prod_id = $(this).attr('data-prod_id');
+			    					var categ_name = $(this).attr('data-name');
+			    					var date = $(this).attr('format-date');
+		    		    			var linegroup = center_panel_temp[0]
+		    		    			//alert('temp_id'+JSON.stringify(linegroup[0]['line_group'][1][0]['sub_template_id']))
+		    		    			var sub_id = linegroup[0]['line_group'][1][0]['sub_template_id']
+		    			        	$(this).addClass("hm-top-inner-selected");
+		    		    			
+			    					if(order_id == undefined){//without order_id
+			    						self._rpc({
+				    		    			model: 'hm.form.template',
+				    		    			method: 'get_center_panel_form',
+				    		    			args: [0, sub_id, 0],
+				    		    		}).then(function(result){
+				    		    			var form_name = result[0]['form_name']
+				    		    			var center_panel_temp = result[0]['center_panel_temp']
+				    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+				    		    			var form_view = result[0]['form_view']
+				    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = date + ' ' + '12:00 AM';
+				    		    			center_panel_temp[0][0]['current_order_lines'][0]['product_id'] = prod_id;
+				    		    			center_panel_temp[0][0]['current_order_lines'][0]['room_type_id'] = categ_name;
+				    		    			
+				    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+				    		    				form_name: form_name, form_view: form_view,
+				    		    				center_panel_temp: center_panel_temp,
+				    							center_panel_sub_id: center_panel_sub_id
+				    							});
+				    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+				    		    		});
+			    					}
+			    					else{//With order_id
+				    					self._rpc({
+				    		    			model: 'hm.form.template',
+				    		    			method: 'get_center_panel_form',
+				    		    			args: [0, sub_id, order_id],
+				    		    		}).then(function(result){
+				    		    			var form_name = result[0]['form_name']
+				    		    			var center_panel_temp = result[0]['center_panel_temp']
+				    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+				    		    			var form_view = result[0]['form_view']
+				    		    			
+				    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+				    		    				form_name: form_name, form_view: form_view,
+				    		    				center_panel_temp: center_panel_temp,
+				    							center_panel_sub_id: center_panel_sub_id
+				    							});
+				    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+				    		    		});
+			    					}
+			    				})
 			    			}
 			    		});
 	        		}
