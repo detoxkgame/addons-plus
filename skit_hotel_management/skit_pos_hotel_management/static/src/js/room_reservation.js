@@ -448,8 +448,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.on('focus','#checkin_date',function(){
 	        	$(this).datetimepicker({
  	   				todayHighlight: true,
- 	   				format : 'D mm-dd-yyyy HH:ii P',     	   		    	
- 	   		   	}).on('changeDate', function(e){ 
+ 	   				format : 'D mm-dd-yyyy HH:ii P',  
+ 	   				autoclose: true,
+ 	   		   	}).off('changeDate').on('changeDate', function(e){ 
  	   		   		var in_date =contents.find('#checkin_date').val();
  	   		   		var out_date =contents.find('#checkout_date').val();
  	   		   		var checkin_date = in_date.replace('-', '/').replace('-', '/');
@@ -476,8 +477,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        contents.on('focus','#checkout_date',function(){
 	        	$(this).datetimepicker({
  	   				todayHighlight: true,
- 	   				format : 'D mm-dd-yyyy HH:ii P',     	   		    	
- 	   		   	}).on('changeDate', function(e){ 
+ 	   				format : 'D mm-dd-yyyy HH:ii P', 
+ 	   				autoclose: true,
+ 	   		   	}).off('changeDate').on('changeDate', function(e){ 
  	   		   		var in_date =contents.find('#checkin_date').val();
  	   		   		var out_date =contents.find('#checkout_date').val();
  	   		   		var checkin_date = in_date.replace('-', '/').replace('-', '/');
