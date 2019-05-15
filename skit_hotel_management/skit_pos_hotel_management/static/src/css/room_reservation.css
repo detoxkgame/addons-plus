@@ -221,7 +221,7 @@
 
 .hm-left-tree-img{
 	width: 70%;
-	height: 70%;
+	/* height: 70%; */
 	float: left;
 }
 
@@ -236,8 +236,8 @@
 }
 
 .hm-logo-img{
-	width: 80%;
-	height: 80%;
+	width: 60%;
+	/* height: 80%; */
 	display: inline-block;
 }
 /** Right Panel */
