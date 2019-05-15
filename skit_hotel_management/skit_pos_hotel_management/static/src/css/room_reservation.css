@@ -657,7 +657,8 @@ div.bhoechie-tab-container{
 }
 
 .hm-right-td{
-	float: right !important;
+	/* float: right !important; */
+	width: 10%;
 }
 
 .hm-form-back-icon{
@@ -667,7 +668,7 @@ div.bhoechie-tab-container{
 	float: right;
 	margin-right: 20%;
 	background: #29c107;
-	width: 16%;
+	width: 50%;
 	border-radius: 23px;
 	padding: 1%;
 }
@@ -716,4 +717,8 @@ div.bhoechie-tab-container{
 	display: inline-block;
 	width: 100%;
 	margin-top: 1%;
+}
+.hm-textarea{
+	border: 1px solid gray !important;
+	box-shadow: none !important;
 }

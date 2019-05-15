@@ -99,12 +99,13 @@ var HMComplaintPopupWidget = PopupWidget.extend({
 			   		 var center_panel_sub_id = result[0]['center_panel_sub_id']
 			   		 var form_view = result[0]['form_view']
 			   		 var floor_id = result[0]['floor_id']
+			   		 var column_count = result[0]['column_count']
 			   		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
 			   		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 			   				form_name: form_name, form_view: form_view,
 			   				center_panel_temp: center_panel_temp,
-								center_panel_sub_id: center_panel_sub_id,
-								floor_id: floor_id,
+							center_panel_sub_id: center_panel_sub_id,
+							floor_id: floor_id, column_count: column_count
 								});
 			   		 contents.find('.hm-center-form-design').html(center_panel_html);
 			   			
@@ -121,7 +122,7 @@ var HMComplaintPopupWidget = PopupWidget.extend({
 				self.gui.close_popup();
 			});
     	}
-    	else{
+    	/*else{
     		self.gui.close_popup();
 			self._rpc({
 	     			model: 'pos.order',
@@ -133,7 +134,7 @@ var HMComplaintPopupWidget = PopupWidget.extend({
                      'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
                 });
 	     		});
-		}
+		}*/
 	}
 });
 
@@ -197,6 +198,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			var center_panel_sub_id = result[0]['center_panel_sub_id']
 			var model_method_datas = result[0]['model_method_datas']
 			var sub_template_id = 0;
+			var column_count = result[0]['column_count']
 			
 			var vendor_table = null;
 			//var floor_id = 1;
@@ -214,7 +216,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        						top_panel_temp: top_panel_temp, center_panel_temp: center_panel_temp,
 	        						left_panel_temp: left_panel_temp, right_panel_temp: right_panel_temp,
 	        						center_panel_sub_id: center_panel_sub_id,
-	        						model_method_datas: model_method_datas
+	        						model_method_datas: model_method_datas, column_count: column_count
 	        						});
 	      
 	        var reservationform = document.createElement('div');
@@ -249,13 +251,14 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 	    			var form_view = result[0]['form_view']
 	    			var floor_id = result[0]['floor_id']
+	    			var column_count = result[0]['column_count']
 	    			//alert(JSON.stringify(center_panel_temp))
 	    			
 	    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 	    				form_name: form_name, form_view: form_view,
 	    				center_panel_temp: center_panel_temp,
 						center_panel_sub_id: center_panel_sub_id,
-						floor_id: floor_id,
+						floor_id: floor_id, column_count: column_count
 						});
 	    			//var centerform = document.createElement('div');
 	    			//centerform.innerHTML = center_panel_html;
@@ -302,12 +305,13 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 			    			var form_view = result[0]['form_view']
 			    			var floor_id = result[0]['floor_id']
+			    			var column_count = result[0]['column_count']
 			    			//floor_id = $(this).find('.floor-selector .button .active').attr('data-id');
 			    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 			    				form_name: form_name, form_view: form_view,
 			    				center_panel_temp: center_panel_temp,
 								center_panel_sub_id: center_panel_sub_id,
-								floor_id: floor_id,
+								floor_id: floor_id, column_count: column_count
 								});
 			    			//var centerform = document.createElement('div');
 			    			//centerform.innerHTML = center_panel_html;
@@ -344,6 +348,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				    		    			var center_panel_temp = result[0]['center_panel_temp']
 				    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 				    		    			var form_view = result[0]['form_view']
+				    		    			var column_count = result[0]['column_count']
 				    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = date + ' ' + '12:00 AM';
 				    		    			center_panel_temp[0][0]['current_order_lines'][0]['product_id'] = prod_id;
 				    		    			center_panel_temp[0][0]['current_order_lines'][0]['room_type_id'] = categ_name;
@@ -351,7 +356,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 				    		    				form_name: form_name, form_view: form_view,
 				    		    				center_panel_temp: center_panel_temp,
-				    							center_panel_sub_id: center_panel_sub_id
+				    							center_panel_sub_id: center_panel_sub_id, column_count: column_count
 				    							});
 				    		    			contents.find('.hm-center-form-design').html(center_panel_html);
 				    		    		});
@@ -366,11 +371,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				    		    			var center_panel_temp = result[0]['center_panel_temp']
 				    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 				    		    			var form_view = result[0]['form_view']
+				    		    			var column_count = result[0]['column_count']
 				    		    			
 				    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 				    		    				form_name: form_name, form_view: form_view,
 				    		    				center_panel_temp: center_panel_temp,
-				    							center_panel_sub_id: center_panel_sub_id
+				    							center_panel_sub_id: center_panel_sub_id, column_count: column_count
 				    							});
 				    		    			contents.find('.hm-center-form-design').html(center_panel_html);
 				    		    		});
@@ -414,11 +420,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			var center_panel_temp = result[0]['center_panel_temp']
 	    			var center_panel_sub_id = result[0]['center_panel_sub_id']
 	    			var form_view = result[0]['form_view']
+	    			var column_count = result[0]['column_count']
 	    			
 	    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 	    				form_name: form_name, form_view: form_view,
 	    				center_panel_temp: center_panel_temp,
-						center_panel_sub_id: center_panel_sub_id
+						center_panel_sub_id: center_panel_sub_id, column_count: column_count
 						});
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
 	    		});
@@ -432,8 +439,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        
 	        
 	        /** Remove Required */
-            contents.off('focus','input');
-            contents.on('focus','input',function(){
+            contents.off('focus','input, textarea');
+            contents.on('focus','input, textarea',function(){
             	$(this).removeClass("warning");
             	
             });
@@ -503,6 +510,38 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	     	    	} 
  	   		   	});
 	        });
+	        
+	        contents.off('focus','#extend_checkout_date');
+	        contents.on('focus','#extend_checkout_date',function(){
+	        	$(this).datetimepicker({
+ 	   				todayHighlight: true,
+ 	   				format : 'D mm-dd-yyyy HH:ii P', 
+ 	   				autoclose: true,
+ 	   		   	}).off('changeDate').on('changeDate', function(e){ 
+ 	   		   		var old_out_date =contents.find('#checkout_date').val();
+ 	   		   		var out_date =contents.find('#extend_checkout_date').val();
+ 	   		   		var old_checkout_date = old_out_date.replace('-', '/').replace('-', '/');
+ 	   		   		var checkout_date = out_date.replace('-', '/').replace('-', '/');
+ 	   		   		
+	 	   		   	var date1 = new Date(old_checkout_date);
+	     	   		var date2 = new Date(checkout_date);
+	     	   		if(old_out_date.length <= 0){
+		     	   		alert('Please enter checkout date');
+		     	   		return false;
+	     	   		}
+		     	   	if(date2 < date1){
+		     	   		alert('Extend Checkout date must be greater than check out date');
+		     	   		return false;
+		     	   	}
+		     	   	/*var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+	     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+	     	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
+	     	    	{
+	     	    		contents.find('#no_night').val(numberOfNights);
+	     	    	} */
+ 	   		   	});
+	        });
+	        
 	        /** On change room action */
 	        contents.off('change','#product_id');
 	        contents.on('change','#product_id',function(){
@@ -516,6 +555,21 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			//set respective categ_id in room type
 	    			contents.find("#room_type_id").val(room_type);
 	    			contents.find("#room_type_id").removeClass('hm-placeholder');
+	    		});
+            });
+	        
+	        contents.off('change','#new_room_id');
+	        contents.on('change','#new_room_id',function(){
+	        	var product_id = contents.find("#new_room_id option:selected").val();
+	        	self._rpc({
+	    			model: 'hm.form.template',
+	    			method: 'get_product_roomtype',
+	    			args: [0, product_id],
+	    		}).then(function(result){
+	    			var room_type = result[0].id;
+	    			//set respective categ_id in room type
+	    			contents.find("#new_room_type_id").val(room_type);
+	    			contents.find("#new_room_type_id").removeClass('hm-placeholder');
 	    		});
             });
 	        /** On change room_type action */
@@ -540,6 +594,28 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    		    contents.find("#product_id").addClass('hm-placeholder');
 	    		});
             });
+            
+            contents.off('change','#new_room_type_id');
+            contents.on('change','#new_room_type_id',function(){
+            	var categ_id = contents.find("#new_room_type_id option:selected").val();
+            	self._rpc({
+	    			model: 'hm.form.template',
+	    			method: 'get_categ_products',
+	    			args: [0, categ_id],
+	    		}).then(function(result){
+	    			var len = result.length;
+	    			var selectbox = contents.find("#new_room_id");
+	    		    selectbox.empty();
+	    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
+	    		    for (var i = 0; i < len; i++)
+		      		{
+	    		        list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+	    		    }
+	    		    //replace selection option in room based on room type
+	    		    selectbox.html(list); 
+	    		    contents.find("#new_room_id").addClass('hm-placeholder');
+	    		});
+            });
             	
 	        /** Check In Button Action */
 	        var order_post = {};
@@ -555,6 +631,20 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	}
             	/** Start Check the Mandatory field */
             	$('input[ismandatory="true"]').each(function(index, element) {
+					if (!$(this).val().length > 0) {										
+						if(!(typeof attr !== typeof undefined)){
+							$(this).addClass('warning');
+							//$(this).removeClass('hide');
+							isProceed = false;
+						}else{
+							$(this).removeClass('warning');
+						}										
+					}
+					else{
+						$(this).removeClass('warning');
+					}
+            	});
+            	$('textarea[ismandatory="true"]').each(function(index, element) {
 					if (!$(this).val().length > 0) {										
 						if(!(typeof attr !== typeof undefined)){
 							$(this).addClass('warning');
@@ -611,7 +701,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
      						}
 	 						
 	 					});
-	 					
+	 					$(this).find('textarea').each(function(index, element) {     						
+	 						order_post[element.name]=element.value;
+	         			});
 	 					$(this).find('select').each(function(index, element) {     						
 	 						order_post[element.name]=element.value;
 	         			});
@@ -639,7 +731,22 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	            	order_post['order_line'] = order_line;
 	            	order_post['reservation_status'] = order_status;
 	            	if(order_id != ''){
-	            		if((id == 'date_extend') || (id == 'shift_room')){
+	            		self._rpc({
+		 	     			model: 'pos.order',
+		 	     			method:'update_order',
+		 	     			args: [0, order_post, order_id],
+		 	     		}).then(function(result){
+		 	     			var msg = 'Thanks for Booking. Your Reservation is confirmed.';
+		 	     			if(id == 'shift_room')
+		 	     				msg = 'Your room changed.';
+		 	     			if(id == 'date_extend')
+		 	     				msg = 'Your check out date extended.'
+		 	     			self.pos.gui.show_popup('alert',{
+			                     'title': _t('Success'),
+			                     'body': msg,
+			                });
+		 	     		});
+	            		/*if((id == 'date_extend') || (id == 'shift_room')){
 	            			var title = 'Date Extend'
 	            			if(id == 'shift_room')
 	            				title = 'Shift Room'
@@ -662,7 +769,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
 				                });
 			 	     		});
-	            		}
+	            		}*/
 	            		
 	            	}else{
 	            		_.every(product_array, function(line){	
@@ -1146,11 +1253,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		 var form_view = result[0]['form_view']
 		    		 var floor_id = result[0]['floor_id']
 		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+		    		 var column_count = result[0]['column_count']
 		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id,
+							floor_id: floor_id, column_count: column_count
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    			
@@ -1188,11 +1296,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				    		 var form_view = result[0]['form_view']
 				    		 var floor_id = result[0]['floor_id']
 				    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+				    		 var column_count = result[0]['column_count']
 				    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 				    				form_name: form_name, form_view: form_view,
 				    				center_panel_temp: center_panel_temp,
 									center_panel_sub_id: center_panel_sub_id,
-									floor_id: floor_id,
+									floor_id: floor_id, column_count: column_count
 									});
 				    		 contents.find('.hm-center-form-design').html(center_panel_html);
 				    			
@@ -1233,11 +1342,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		 var form_view = result[0]['form_view']
 		    		 var floor_id = result[0]['floor_id']
 		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+		    		 var column_count = result[0]['column_count']
 		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id,
+							floor_id: floor_id, column_count: column_count
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    			
@@ -1271,11 +1381,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		 var form_view = result[0]['form_view']
 		    		 var floor_id = result[0]['floor_id']
 		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+		    		 var column_count = result[0]['column_count']
 		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id,
+							floor_id: floor_id, column_count: column_count
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    		 

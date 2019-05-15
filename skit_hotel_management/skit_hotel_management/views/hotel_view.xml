@@ -197,6 +197,7 @@
                                 <field name="old_room_id"/>
                                 <field name="new_room_id"/>
                                 <field name="old_room_type_id"/>
+                                <field name="new_room_type_id"/>
                                 <field name="old_plan_type_id"/>
                                 <field name="new_plan_type_id"/>
                             </tree>
@@ -375,6 +376,7 @@
 		                		<field name="referred_by_id" />
 		                		<field name="new_room_id" />
 		                		<field name="new_plan_type_id" />
+		                		<field name="new_room_type_id" />
 		                	</group>
 	                	</group>
 	                	<group string="Remark">
@@ -1425,6 +1427,7 @@
 	            			<group>
 	            				<field name="vendor_dashboard_id"  />
 	            				<field name="vendor_dashboard_line_id" domain="[('vendor_dashboard_id', '=', vendor_dashboard_id)]" />
+	            				<field name="column_count" required="1"/>
 	            			</group>
 	            		</group>
 	            		<notebook>
@@ -1449,6 +1452,7 @@
 		                               	<field name="model_name" />
 		                               	<field name="model_method" />
 		                               	<field name="description" />
+		                               	<field name="readonly" />
 		                               	<!-- <field name="field_domain" /> -->
 		                               
 		                                

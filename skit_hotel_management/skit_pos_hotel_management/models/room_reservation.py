@@ -19,6 +19,7 @@ class FormTemplate(models.Model):
         result = []
         form_name = ''
         form_view = ''
+        column_count = 3
         model = self.env['ir.model'].sudo().search([
                                     ('id', '=', int(model_id))])
         for key, value in datas.items():
@@ -38,11 +39,13 @@ class FormTemplate(models.Model):
                 temp_design = self.get_sub_form(sub_line.form_template_id.id, sub_line.color, order_id)
                 center_panel_design.append(temp_design)
                 form_view = sub_line.form_template_id.form_view
+                column_count = sub_line.form_template_id.column_count
         result.append({
                     'form_name': form_name,
                     'form_view': form_view,
                     'center_panel_temp': center_panel_design,
-                    'center_panel_sub_id': center_panel_sub_id
+                    'center_panel_sub_id': center_panel_sub_id,
+                    'column_count': column_count
                     })
         return result
 
@@ -53,6 +56,7 @@ class FormTemplate(models.Model):
         result = []
         form_name = ''
         form_view = ''
+        column_count = 3
         floor = self.env['restaurant.floor'].sudo().search([
                                 ('is_room_service', '=', True)], limit=1)
         if(sub_template_id != 'false'):
@@ -63,13 +67,15 @@ class FormTemplate(models.Model):
                 temp_design = self.get_sub_form(sub_line.form_template_id.id, sub_line.color, order_id)
                 center_panel_design.append(temp_design)
                 form_view = sub_line.form_template_id.form_view
+                column_count = sub_line.form_template_id.column_count
 
         result.append({
                        'form_name': form_name,
                        'form_view': form_view,
                        'center_panel_temp': center_panel_design,
                        'center_panel_sub_id': center_panel_sub_id,
-                       'floor_id': floor.id
+                       'floor_id': floor.id,
+                       'column_count': column_count
                        })
         return result;
 
@@ -306,7 +312,8 @@ class FormTemplate(models.Model):
                      'field_group': form_line.field_group,
                      'description': form_line.description,
                      'model_name': form_line.model_name,
-                     'model_method': form_line.model_method
+                     'model_method': form_line.model_method,
+                     'readonly': form_line.readonly
                      }
             template_lines.append(datas)
             if count == 0:
@@ -350,6 +357,51 @@ class FormTemplate(models.Model):
                     order_data['state'] = order['state']
                     order_data['name'] = order['name']
                     current_order.append(order_data)
+            elif(panel_form_temp.form_model_id.model == 'hm.checkout.date.extend' or panel_form_temp.form_model_id.model == 'hm.shift.room'):
+                orders = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
+                order_line = self.env['pos.order.line'].sudo().search([
+                                        ('order_id', '=', int(order_id))],
+                                                order='id desc', limit=1)
+                if orders:
+                    for order in orders:
+                        order_data = {}
+                        count = 0
+                        for field in fields:
+                            if field_type[count] == 'many2one':
+                                if(field == 'room_id' or field == 'old_room_id'):
+                                    order_data[field] = order_line['product_id'].display_name or ''
+                                elif(field == 'old_room_type_id'):
+                                    order_data[field] = order_line['room_type_id'].display_name or ''
+                                elif(field == 'pos_order_id'):
+                                    order_data[field] = order['name'] or ''
+                                elif(field == 'guest_name_id'):
+                                    order_data[field] = order['partner_id'].display_name or ''
+                                elif(field == 'new_room_id'):
+                                    order_data[field] = ''
+                                elif(field == 'old_plan_type_id' or field == 'new_plan_type_id'):
+                                    order_data[field] = ''
+                                elif(field == 'new_room_type_id'):
+                                    order_data[field] = ''
+                                else:
+                                    order_data[field] = order[field].display_name or ''
+                            elif field_type[count] == 'datetime':
+                                odate = False
+                                if(field == 'extend_checkout_date'):
+                                    odate = ''
+                                else:
+                                    if order[field]:
+                                        odate = datetime.strftime(order[field], '%a %m-%d-%Y %H:%M %p')
+                                order_data[field] = odate
+                            else:
+                                if(field == 'remark'):
+                                    order_data[field] = ''
+                                else:
+                                    order_data[field] = order[field] or ''
+                            count = count + 1
+                        order_data['id'] = order['id']
+                        order_data['state'] = order['state']
+                        order_data['name'] = order['name']
+                        current_order.append(order_data)
             else:
                 order_data = {}
                 count = 0
@@ -444,7 +496,8 @@ class FormTemplate(models.Model):
                                      'field_group': line.field_group,
                                      'description': line.description,
                                      'model_name': line.model_name,
-                                     'model_method': line.model_method
+                                     'model_method': line.model_method,
+                                     'readonly': line.readonly
                                      }
                             temp_order_lines.append(datas)
                             if count == 0:
@@ -589,7 +642,8 @@ class FormTemplate(models.Model):
                        'model_method_datas': model_method_datas,
                        'floors': floors,
                        'floor_count': floor_count,
-                       'res_table_sub_id': res_table_sub_id
+                       'res_table_sub_id': res_table_sub_id,
+                       'column_count': panel_form_temp.column_count,
                        })
         return result
 
@@ -714,7 +768,8 @@ class FormTemplate(models.Model):
                      'field_group': line.field_group,
                      'description': line.description,
                      'model_name': line.model_name,
-                     'model_method': line.model_method
+                     'model_method': line.model_method,
+                     'readonly': line.readonly
                      }
             template_lines.append(datas)
             if count == 0:
@@ -851,7 +906,8 @@ class FormTemplate(models.Model):
                                      'field_group': line.field_group,
                                      'description': line.description,
                                      'model_name': line.model_name,
-                                     'model_method': line.model_method
+                                     'model_method': line.model_method,
+                                     'readonly': line.readonly
                                      }
                             temp_order_lines.append(datas)
                             if count == 0:
@@ -932,7 +988,8 @@ class FormTemplate(models.Model):
                        'left_panel_temp': left_panel_design,
                        'right_panel_temp': right_panel_design,
                        'center_panel_sub_id': center_panel_sub_id,
-                       'model_method_datas': model_method_datas
+                       'model_method_datas': model_method_datas,
+                       'column_count': form_template.column_count,
                        })
 
         return result
@@ -980,22 +1037,29 @@ class ResPartner(models.Model):
 class PosOrder(models.Model):
     _inherit = 'pos.order'
 
-    def update_order(self, post, order_id, reason):
-        post = eval(post)
+    def update_order(self, post, order_id):
+        #post = eval(post)
         order = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
         order_check_out_date = order.checkout_date.strftime('%Y-%m-%d')
-        edate = datetime.strptime(post.get('checkout_date'), '%Y-%m-%d %H:%M:%S')
-        extend_date = edate.strftime('%Y-%m-%d')
+        reason = post.get('remark') or ''
         order_room = self.env['pos.order.line'].sudo().search([('order_id', '=', order.id)], limit=1)
-        if(order_check_out_date != extend_date):
-            self.env['hm.checkout.date.extend'].sudo().create({'pos_order_id': order.id,
-                                                               'room_id': order_room.product_id.id,
-                                                               'checkin_date': order.checkin_date,
-                                                               'checkout_date': order.checkout_date,
-                                                               'extend_checkout_date': post.get('checkout_date'),
-                                                               'remark': reason})
-        if post.get('order_line'):
-            if(order_room.product_id.id != post.get('order_line')[0]['product_id']):
+        if(post.get('extend_checkout_date')):
+            edate = datetime.strptime(post.get('extend_checkout_date'), '%Y-%m-%d %H:%M:%S')
+            extend_date = edate.strftime('%Y-%m-%d')
+            post['checkout_date'] = post.get('extend_checkout_date')
+            if(order_check_out_date != extend_date):
+                self.env['hm.checkout.date.extend'].sudo().create({'pos_order_id': order.id,
+                                                                   'room_id': order_room.product_id.id,
+                                                                   'checkin_date': order.checkin_date,
+                                                                   'checkout_date': order.checkout_date,
+                                                                   'extend_checkout_date': post.get('extend_checkout_date'),
+                                                                   'remark': reason})
+            del post['room_id']
+            del post['pos_order_id']
+            del post['extend_checkout_date']
+            del post['remark']
+        if post.get('new_room_id'):
+            if(order_room.product_id.id != post.get('new_room_id')):
                 """ Old Room Details """
                 prod_history = self.env['product.history'].sudo().search([
                                         ('order_id', '=', order.id),
@@ -1008,7 +1072,7 @@ class PosOrder(models.Model):
                 prod_temp.write({'state': 'available'})
                 """ New Room Details """
                 new_prod_prod = self.env['product.product'].sudo().search([
-                                        ('id', '=', post.get('order_line')[0]['product_id'])])
+                                        ('id', '=', post.get('new_room_id'))])
                 new_prod_temp = self.env['product.template'].sudo().search([
                                         ('id', '=', new_prod_prod.product_tmpl_id.id)])
                 new_prod_temp.write({'state': 'occupied'})
@@ -1025,10 +1089,22 @@ class PosOrder(models.Model):
                                                          'guest_name_id': order.partner_id.id,
                                                          'referred_by_id': order.referred_by_id,
                                                          'old_room_id': order_room.product_id.id,
-                                                         'new_room_id': post.get('order_line')[0]['product_id'],
+                                                         'new_room_id': int(post.get('new_room_id')),
                                                          'old_room_type_id': order_room.room_type_id.id,
+                                                         'new_room_type_id': int(post.get('new_room_type_id')),
                                                          'remark': reason
                                                          })
+                line_data = {}
+                line_data['product_id'] = int(post.get('new_room_id'))
+                line_data['room_type_id'] = int(post.get('new_room_type_id'))
+                post['order_line'].append(line_data)
+                del post['old_room_id']
+                del post['new_room_id']
+                del post['old_room_type_id']
+                del post['new_room_type_id']
+                del post['pos_order_id']
+                del post['guest_name_id']
+                del post['remark']
         if(order):
             if post:
                 if post.get('order_line'):
@@ -1039,6 +1115,14 @@ class PosOrder(models.Model):
                         i = i + 1
                 del post['order_line']
                 order.update(post)
+                order.lines._onchange_product_id()
+                order.lines._onchange_amount_line_all()
+                currency = order.pricelist_id.currency_id
+                order.amount_paid = sum(payment.amount for payment in order.statement_ids)
+                order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in order.statement_ids)
+                order.amount_tax = currency.round(sum(self._amount_line_tax(line, order.fiscal_position_id) for line in order.lines))
+                amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines))
+                order.amount_total = order.amount_tax + amount_untaxed
         return True
 
     @api.multi

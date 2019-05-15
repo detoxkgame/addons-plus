@@ -26,9 +26,11 @@ class HotelRoomShift(models.Model):
     checkin_date = fields.Datetime(string="CheckIn Date")
     referred_by_id = fields.Many2one('hm.referred', string="Referred")
     old_room_type_id = fields.Many2one('product.category',
-                                       string="Room Type")
+                                       string="Old Room Type")
+    new_room_type_id = fields.Many2one('product.category',
+                                       string="New Room Type")
     old_plan_type_id = fields.Many2one('hm.plan.type', string="Old Plan Type")
-    new_plan_type_id = fields.Many2one('hm.plan.type', string="Old Plan Type")
+    new_plan_type_id = fields.Many2one('hm.plan.type', string="New Plan Type")
     pos_order_id = fields.Many2one('pos.order', string="Folio")
     remark = fields.Text(string="Remark")
 
@@ -383,6 +385,7 @@ class FormTemplate(models.Model):
                     ('room_status_report', _('Room Status Report')),
                     ('search_view', _('Search View'))], string="Form View",
                                   default='')
+    column_count = fields.Integer(string="Column Per Row", default=3)
     #===========================================================================
     # sub_form_template_ids = fields.One2many('hm.sub.form.template',
     #                                         'form_template_id',
@@ -541,6 +544,7 @@ class FormTemplateLine(models.Model):
     model_name = fields.Char(string="Model Name")
     model_method = fields.Char(string="Model Method")
     description = fields.Char(string="Description")
+    readonly = fields.Boolean(string='ReadOnly', default=False)
 
     @api.onchange('form_field_type')
     def change_form_field_type(self):
