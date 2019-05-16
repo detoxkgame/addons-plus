@@ -90,7 +90,7 @@ class FormTemplate(models.Model):
                                 ('room_no', '=', floor_table.product_id.id),
                                 ('state', '=', 'inprogress')])
                 service_order = self.env['pos.order'].sudo().search([
-                                    ('is_service_order', '=', True),
+                                    ('is_room_service', '=', True),
                                     ('service_status', '!=', 'close'),
                                     ('table_id', '=', floor_table.id)],
                                                         limit=1)
@@ -214,7 +214,7 @@ class FormTemplate(models.Model):
             if panel_form_temp.form_model_id.model == 'account.invoice':
                 if(porder):
                     service_order = self.env['pos.order'].sudo().search([
-                                                ('is_service_order', '=', True),
+                                                ('is_room_service', '=', True),
                                                 ('source_folio_id', '=', porder.id)])
                     for sorder in service_order:
                         invoice_ids.append(sorder.invoice_id.id)
@@ -1193,7 +1193,7 @@ class PosOrder(models.Model):
         #=======================================================================
         #cr = self.cr
         #cr.execute(sql)
-        sql = """ select id from pos_order where is_service_order = true and service_status != 'close' """
+        sql = """ select id from pos_order where is_room_service = true and service_status != 'close' """
         self._cr.execute(sql)
         services = self.env.cr.fetchall()
         service_room = []
@@ -1313,6 +1313,8 @@ class PosOrder(models.Model):
                 order.update({'source_folio_id': pos_order.get('source_folio_id')})
             if pos_order.get('room_table_id'):
                 order.update({'table_id': pos_order.get('room_table_id')})
+            if(pos_order.get('is_room_service')):
+                order.update({'is_room_service': pos_order.get('is_room_service')})
             if(pos_order.get('is_service_order')):
                 order.update({'is_service_order': pos_order.get('is_service_order')})
                 order.lines.update({'source_order_id': pos_order.get('source_folio_id')})

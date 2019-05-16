@@ -57,6 +57,7 @@ models.Order = models.Order.extend({
         this.reservation_details    = {};
         this.to_invoice     = true;
         this.is_service_order = false;
+        this.is_room_service = false;
         this.source_folio_id = 0;
         this.room_table_id = 0;
         this.exit_order_id = 0;
@@ -67,6 +68,7 @@ models.Order = models.Order.extend({
         var json = _super_order.export_as_JSON.apply(this,arguments);
         json.reservation_details = this.reservation_details;
         json.is_service_order = this.is_service_order;
+        json.is_room_service = this.is_room_service;
         json.source_folio_id = this.source_folio_id;
         json.room_table_id = this.room_table_id;
         json.exit_order_id = this.exit_order_id;
@@ -77,6 +79,7 @@ models.Order = models.Order.extend({
         _super_order.init_from_JSON.apply(this,arguments);
         this.reservation_details = json.reservation_details;
         this.is_service_order = json.is_service_order;
+        this.is_room_service = json.is_room_service;
         this.source_folio_id = json.source_folio_id;
         this.room_table_id = json.room_table_id;
         this.exit_order_id = json.exit_order_id;
@@ -154,6 +157,13 @@ models.Order = models.Order.extend({
     get_service_order: function(){
         return this.is_service_order;
     },
+    /* Room Service Details */
+    set_room_service: function(is_room_service) {
+        this.is_room_service = is_room_service;
+    },
+    get_room_service: function(){
+        return this.is_room_service;
+    },
     
     set_source_folio_id: function(source_folio_id) {
         this.source_folio_id = source_folio_id;
@@ -175,7 +185,7 @@ models.Order = models.Order.extend({
     get_exit_order_id: function(){
         return this.exit_order_id;
     },
-    /* ---- reservation_details  --- */
+    /* ---- vendor_details  --- */
     set_vendor_order_details: function(vendor_order_details) {
         this.vendor_order_details = vendor_order_details;
         this.trigger('change');
