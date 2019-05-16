@@ -81,6 +81,7 @@ class RoomStatus(models.Model):
                                         room_status_list_arrays[key] = history.state
                                         list_product_arrays[product] = product_arr.name
                                         list_order_arrays[key] = history.order_id.id
+                                        categ_name[product] = products.categ_id.name
                 else:
                     list_product_arrays[product] = products.name
                     categ_name[product] = products.categ_id.name

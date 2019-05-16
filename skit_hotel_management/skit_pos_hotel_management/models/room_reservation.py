@@ -1107,6 +1107,16 @@ class PosOrder(models.Model):
                 del post['remark']
         if(order):
             if post:
+#                 To update state for product_history and product_template
+                product_id = post['order_line'][0]['product_id']
+                product_history = self.env['product.history'].sudo().search([
+                                        ('order_id', '=', order.id)])
+                product_tmpl_id = product_history.product_tmpl_id
+                product_template = self.env['product.template'].sudo().search([('id', '=', product_tmpl_id.id)])
+                product_history.write({'state':'checkin',})
+                product_template.write({'state':'occupied'})
+                
+                
                 if post.get('order_line'):
                     order_lines = post.get('order_line')
                     i = 0
