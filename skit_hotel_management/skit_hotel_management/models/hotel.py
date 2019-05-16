@@ -678,7 +678,16 @@ class PosOrder(models.Model):
                                       copy=False, default='draft')
     service_line_ids = fields.One2many('pos.order.line', 'source_order_id',
                                        string="Service Line", copy=True)
+    order_state = fields.Selection([
+        ('draft', 'Draft'),
+        ('booked', 'Booked'),
+        ('departure', 'Departure'),
+        ('drop', 'Drop'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled')
+    ], string='Order Status', readonly=True, index=True, copy=False, default='draft')
     is_commissionpaid = fields.Boolean(string="IsCommission Paid")
+    room_id = fields.Many2one('product.product', string="Room No")
 
     @api.onchange('referred_by_name')
     def _onchange_referred_by_name(self):
@@ -908,3 +917,9 @@ class POSorder(models.Model):
           ('done', 'Posted'),
           ('invoiced', 'Invoiced')],
         'Status',  copy=False, default='draft')
+
+
+class StockLocationRoute(models.Model):
+    _inherit = "stock.location.route"
+
+    pos_selectable = fields.Boolean("Selectable on POS Order Line")

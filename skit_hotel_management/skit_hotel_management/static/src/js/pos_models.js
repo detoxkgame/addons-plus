@@ -60,6 +60,7 @@ models.Order = models.Order.extend({
         this.source_folio_id = 0;
         this.room_table_id = 0;
         this.exit_order_id = 0;
+        this.vendor_order_details = {};
         this.save_to_db();
     },
     export_as_JSON: function() {
@@ -69,6 +70,7 @@ models.Order = models.Order.extend({
         json.source_folio_id = this.source_folio_id;
         json.room_table_id = this.room_table_id;
         json.exit_order_id = this.exit_order_id;
+        json.vendor_order_details = this.vendor_order_details;
         return json;
     },
     init_from_JSON: function(json) {
@@ -78,6 +80,7 @@ models.Order = models.Order.extend({
         this.source_folio_id = json.source_folio_id;
         this.room_table_id = json.room_table_id;
         this.exit_order_id = json.exit_order_id;
+        this.vendor_order_details = json.vendor_order_details;
     },
     add_product: function(product, options){
     	console.log('producvxbvjhj')
@@ -171,6 +174,14 @@ models.Order = models.Order.extend({
     },
     get_exit_order_id: function(){
         return this.exit_order_id;
+    },
+    /* ---- reservation_details  --- */
+    set_vendor_order_details: function(vendor_order_details) {
+        this.vendor_order_details = vendor_order_details;
+        this.trigger('change');
+    },
+    get_vendor_order_details: function(){
+        return this.vendor_order_details;
     },
 });
 

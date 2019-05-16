@@ -24,6 +24,7 @@
             'views/pos_config.xml',
             'views/pos_order_view.xml',
             'views/agent_commission_view.xml',
+            'views/stock_views.xml',
 
     ],
     'qweb': ['static/src/xml/pos_screen.xml',
