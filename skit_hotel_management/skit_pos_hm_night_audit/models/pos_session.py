@@ -215,6 +215,7 @@ class pos_session(models.Model):
             [('session_id', '=', session.id)]
         )
         for p_order in purchase_order:
+            time = str(p_order.date_order.hour)+':'+str(p_order.date_order.minute)
             invoice_state = p_order.invoice_status
             purchase_order_line = self.env['purchase.order.line'].sudo().search(
                                                 [('order_id', '=', p_order.id)]
@@ -225,9 +226,9 @@ class pos_session(models.Model):
                     "qty": line.product_qty,
                     "product_name": line.product_id.name,
                     "partner_name": p_order.partner_id.name,
-                    'time': p_order.date_order.time() if p_order else '',
+                    'time': time,
                     'price_total': line.price_total,
-                    'invoice_state': invoice_state if invoice_state else '',
+                    'invoice_state': invoice_state or '',
                 }
                 purchase_val.append(val)
         purchase_details = {"purchase_val": purchase_val}
