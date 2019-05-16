@@ -354,6 +354,7 @@
 			    					<span id="vendor_id" style="display:none;"><t t-esc="vendor_id" /></span>
 			    					<span id="invoice_ids" style="display:none;"><t t-esc="c_order['invoice_ids']" /></span>
 			    					<span id="picking_ids" style="display:none;"><t t-esc="c_order['picking_ids']" /></span>
+			    					<span id='taxi_product' style="display:none;"><t t-esc="taxi_product"/></span>
 		    					</div>
 		    					<div style="float: right;">
 		    						<ul class="state-breadcrumb">
@@ -464,10 +465,10 @@
 																		<option disabled="disabled" selected="selected" class="placeholder">Rooms</option>
 																	 	<t t-foreach='available_rooms' t-as='room'> 
 																		 	<t t-if="(c_order[room_id] == room.name)">
-																		 		<option class="drop-down-select" t-att-selected="true" t-att-id='room.id' t-att-folio="room.folio" t-att-guest="room.guest"><t t-esc="room.name" /></option>
+																		 		<option class="drop-down-select" t-att-selected="true" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id"  t-att-guest="room.guest"><t t-esc="room.name" /></option>
 																		 	</t>
 																		 	<t t-else="">
-																		 		<option class="drop-down-select" t-att-id='room.id' t-att-folio="room.folio" t-att-guest="room.guest"><t t-esc="room.name" /></option>
+																		 		<option class="drop-down-select" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id" t-att-guest="room.guest"><t t-esc="room.name" /></option>
 																		 	</t>
 																	 	</t>
 																	</select>

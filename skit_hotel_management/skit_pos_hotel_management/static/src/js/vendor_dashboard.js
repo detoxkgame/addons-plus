@@ -140,6 +140,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     			var all_location = result[0]['all_location']
     			var stock_move_datas = result[0]['stock_move_datas']
     			var vendor_list = result[0]['vendor_list']
+    			var taxi_product = result[0]['taxi_product']
     			
     			var contents = el_node.find('.vendor-contents');
                 contents.innerHTML = "";
@@ -152,7 +153,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
                 						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
                 						temp_order_lines: temp_order_lines, is_other: is_other,
-                						all_location: all_location, stock_move_datas: stock_move_datas, vendor_list: vendor_list});
+                						all_location: all_location, stock_move_datas: stock_move_datas, vendor_list: vendor_list,taxi_product:taxi_product});
                 var vendorlist = document.createElement('div');
                 vendorlist.innerHTML = vendor_html;
                 vendorlist = vendorlist.childNodes[1];
@@ -206,7 +207,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
             			var is_other = result[0]['is_other']
-
+            			var taxi_product = result[0]['taxi_product']
             			
             			form_fields_records = template_lines;
             			line_form_fields = temp_order_lines;
@@ -221,7 +222,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     						line_group: line_group, line_group_key: line_group_key,
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
     						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-    						temp_order_lines: temp_order_lines, is_other: is_other});
+    						temp_order_lines: temp_order_lines, is_other: is_other,taxi_product:taxi_product});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -237,7 +238,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
         				});
                         
                         /** Disabled the Order details for [order, done, cancel, return] state */
-                        if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
+                        if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || (current_order[0]['state'] == 'invoiced')||
                         		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return') || (current_order[0]['state'] == 'purchase')){
                         	$('table.order-form-detail').each(function() {
                         		$(this).find("input").attr('disabled',true);
@@ -282,6 +283,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
             			var is_other = result[0]['is_other']
+            			var taxi_product = result[0]['taxi_product']
             			//alert('dashboard_id'+dashboard_id);
             			var contents = el_node.find('.vendor-contents');
                         contents.innerHTML = "";
@@ -293,7 +295,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                         						line_group: line_group, line_group_key: line_group_key,
                         						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
                         						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-                        						temp_order_lines: temp_order_lines, is_other: is_other});
+                        						temp_order_lines: temp_order_lines, is_other: is_other, taxi_product:taxi_product});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -350,7 +352,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             			var line_form_temp_id = result[0]['line_form_temp_id']
             			var line_model_name = result[0]['line_model_name']
             			var is_other = result[0]['is_other']
-            			
+            			var taxi_product = result[0]['taxi_product']
             			form_fields_records = template_lines;
             			line_form_fields = temp_order_lines;
             			
@@ -364,7 +366,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     						line_group: line_group, line_group_key: line_group_key, 
     						sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
     						//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
-    						temp_order_lines: temp_order_lines, is_other: is_other});
+    						temp_order_lines: temp_order_lines, is_other: is_other,taxi_product:taxi_product});
                         var vendorlist = document.createElement('div');
                         vendorlist.innerHTML = vendor_html;
                         vendorlist = vendorlist.childNodes[1];
@@ -495,9 +497,13 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	var form_temp_id = contents.find('#form_temp_id').text();
                 	var model_name = contents.find('#model_name').text();
                 	var vendor_id = contents.find('#vendor_id').text();
+                	var taxi_product_id = contents.find('#taxi_product').text();
+                	//alert('taxi_product_id '+taxi_product_id);
                 	var line_form_temp_id = contents.find('#line_form_temp_id').text();
                 	var line_model_name = contents.find('#line_model_name').text();
-                	
+                	var source_folio_id = 0;
+                	order_datas['session_id']= self.pos.pos_session.id;
+    				//console.log('session id'+order_datas['session_id']);
                 	/** Order Details */
                 	
                 	$('table.order-form-detail').each(function() {
@@ -513,6 +519,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			order_datas[field] = value;
 	                			if(form_fields_records[i].form_fields == 'guest_name'){
 	                				var value1 =  $(this).find('#room_id option:selected').attr("id");
+	                				source_folio_id =  $(this).find('#room_id option:selected').attr("folio_id");
 	                				order_datas['room_id'] = value1;
 	                				
 	                			}
@@ -610,27 +617,52 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 		}
                 		tr_count = tr_count + 1;
                 	});
-                	//console.log('Order Datas'+ JSON.stringify(line_order_datas));
-                	//console.log('error'+ error);
+                	var product_array=[];
+                	var vendordatas = []
+                	var order = self.pos.get_order();
+                	var lines = order.get_orderlines();	
+                	product_array.push(parseInt(taxi_product_id))
                 	if(!error){
-                		//console.log('inner')
-	                	self._rpc({
-	            			model: 'hm.form.template',
-	            			method: 'create_order',
-	            			args: [0,order_datas, order_id, form_temp_id, model_name, vendor_id, line_order_datas, line_form_temp_id, line_model_name],
-	            		}).then(function(result){
-	            			console.log('result'+result)
-	            			/*contents.find('#order_id').text(result);
-	            			contents.find('#order-confirm').removeClass('btn-active');
-	            			contents.find('#order-cancel').addClass('btn-active');
-	            			contents.find('#order-draft').css({'display': 'none'});
-	            			
-	            			contents.find('#open').removeClass('active');
-	                    	contents.find('#done').addClass('active');
-	                    	contents.find('#cancel').css({'display': 'none'});*/
-	            			//console.log('span:'+contents.find('#order_id').text())
-	            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
-	            		});
+                		if (model_name == 'pos.order'){
+                			order.set_vendor_order_details(order_datas);
+                			order.set_service_order(true);
+                			order.set_source_folio_id(source_folio_id);
+                			_.every(product_array, function(line){	             			
+    							var product =  self.pos.db.get_product_by_id(line);
+    							if(product!=undefined){
+    								order.add_product(product, {price: product.price});
+    							}
+                    		});
+                			var cashregister=self.pos.cashregisters[0];				
+    				        for (var i = 0; i < self.pos.cashregisters.length; i++) { 		        	  
+    				        	var is_paylater = self.pos.cashregisters[i].journal['is_pay_later'];
+    				        	if(is_paylater){
+    				        		cashregister=self.pos.cashregisters[i];
+    				        	}
+    				        }
+                			var client = self.pos.db.get_partner_by_id(vendor_id);
+		     				order.set_client(client);
+		     				vendordatas = order.export_as_JSON();
+                		}
+                		self._rpc({
+    	            			model: 'hm.form.template',
+    	            			method: 'create_order',
+    	            			args: [0,order_datas, vendordatas, order_id, form_temp_id, model_name, vendor_id, line_order_datas, line_form_temp_id, line_model_name],
+    	            	}).then(function(result){
+    	            			/*contents.find('#order_id').text(result);
+    	            			contents.find('#order-confirm').removeClass('btn-active');
+    	            			contents.find('#order-cancel').addClass('btn-active');
+    	            			contents.find('#order-draft').css({'display': 'none'});
+    	            			
+    	            			contents.find('#open').removeClass('active');
+    	                    	contents.find('#done').addClass('active');
+    	                    	contents.find('#cancel').css({'display': 'none'});*/
+    	            			//console.log('span:'+contents.find('#order_id').text())
+    	            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)
+    	            			order.remove_orderline(lines);
+    	            			order.set_vendor_order_details();
+    	            	});
+                		
                 	}
                 });
                 
@@ -1041,8 +1073,8 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 			var all_location = result[0]['all_location']
 			var stock_move_datas = result[0]['stock_move_datas']
 			var vendor_list = result[0]['vendor_list']
-			
-			
+			var taxi_product = result[0]['taxi_product']
+
 			var fcontents = el_node.find('.vendor-contents');
         	fcontents.innerHTML = "";
         	var vendor_html = QWeb.render('VendorListContent',{widget: self, result_datas: result_datas, form_view: form_view,
@@ -1054,7 +1086,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 				sub_line_group: sub_line_group, sub_line_group_key: sub_line_group_key,
 				//sub_line_group_array: sub_line_group_array, sub_line_group_key_array: sub_line_group_key_array,
 				temp_order_lines: temp_order_lines, is_other: is_other,
-				all_location: all_location, stock_move_datas: stock_move_datas, vendor_list: vendor_list});
+				all_location: all_location, stock_move_datas: stock_move_datas, vendor_list: vendor_list,taxi_product:taxi_product});
             var vendorlist = document.createElement('div');
             vendorlist.innerHTML = vendor_html;
             vendorlist = vendorlist.childNodes[1];
@@ -1078,7 +1110,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             
             /** Disabled the Order details for [order, done, cancel, return] state */
             if(current_order.length > 0){
-	            if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || 
+	            if((current_order[0]['state'] == 'order') || (current_order[0]['state'] == 'done') || (current_order[0]['state'] == 'invoiced')||
 	            		(current_order[0]['state'] == 'cancel') || (current_order[0]['state'] == 'return') || (current_order[0]['state'] == 'purchase')){
 	            	$('table.order-form-detail').each(function() {
 	            		$(this).find("input").attr('disabled',true);

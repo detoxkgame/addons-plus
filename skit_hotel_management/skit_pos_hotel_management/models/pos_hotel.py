@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 from odoo import SUPERUSER_ID
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
+from odoo.tools import float_is_zero
 
 
 class FormTemplate(models.Model):
@@ -424,6 +425,7 @@ class ResPartner(models.Model):
                     available_rooms.append({'id': room.product_id.id,
                                             'name': room.product_id.name,
                                             'folio': folio.display_name,
+                                            'folio_id': folio.id,
                                             'guest': folio.partner_id.name})
             #===================================================================
             # for prod in prod_temp:
@@ -449,6 +451,10 @@ class ResPartner(models.Model):
                         order_data['invoice_ids'] = order.sale_obj.invoice_ids.ids
                     if form_template.form_model_id.model == 'sale.order':
                         order_data['invoice_ids'] = order.invoice_ids.ids
+                        order_data['order_state'] = order.order_state
+                        order_data['room_id'] = order.room_id.name
+                    if form_template.form_model_id.model == 'pos.order':
+                        order_data['invoice_ids'] = order.invoice_id.id
                         order_data['order_state'] = order.order_state
                         order_data['room_id'] = order.room_id.name
                     if form_template.form_model_id.model == 'purchase.order':
@@ -619,6 +625,7 @@ class ResPartner(models.Model):
         #     line_tmp = line.form_template.id
         #     line_model = line.form_model_id.model
         #=======================================================================
+        taxi_product = self.env.ref('skit_hotel_management.car_service')
 
         result.append({'line_group': line_group,
                        'line_group_key': sorted(line_group.keys()),
@@ -644,7 +651,8 @@ class ResPartner(models.Model):
                        'is_other': is_other,
                        'all_location': all_location,
                        'stock_move_datas': stock_move_datas,
-                       'vendor_list': vendor_list
+                       'vendor_list': vendor_list,
+                       'taxi_product': taxi_product.id
                        })
 
         return result
@@ -681,9 +689,9 @@ class ResPartner(models.Model):
         return result
 
     @api.multi
-    def create_order(self, order_datas, order_id, form_temp_id, model_name,
+    def create_order(self, order_datas, pos_order, order_id, form_temp_id, model_name,
                      vendor_id, line_order_datas, line_form_temp_id, line_model_name):
-        #partner_id = int(vendor_id)
+        # partner_id = int(vendor_id)
         if order_id == '':
             order_id = 0
         if line_form_temp_id == '':
@@ -752,7 +760,34 @@ class ResPartner(models.Model):
             #===================================================================
         else:
             datas['partner_id'] = int(vendor_id)
-            order = self.env[model_name].create(datas)
+            if model_name == 'pos.order':
+                POSOrder = self.env[model_name]
+                order = POSOrder.create(POSOrder._order_fields(pos_order))
+                if pos_order.get('source_folio_id'):
+                    order.update({'source_folio_id': pos_order.get('source_folio_id')})
+                if(pos_order.get('is_service_order')):
+                    order.update({'is_service_order': pos_order.get('is_service_order')})
+                    order.lines.update({'source_order_id': pos_order.get('source_folio_id')})
+                if order:
+                    self.create_vendor_invoice(order)
+                    order.update({'order_state': 'done'})
+                if pos_order.get('vendor_order_details'):
+                    vendor_order_details = pos_order.get('vendor_order_details')
+                    del vendor_order_details['session_id']
+                    del vendor_order_details['date_order']
+                    order.update(vendor_order_details)
+                    route_ids = 0
+                    for line in order.lines:
+                        product_route = line.product_id.route_ids
+                        route_ids = self.env['stock.location.route'].sudo().search([
+                                                        ('id', 'in', product_route.ids),
+                                                        ('pos_selectable', '=', True)],
+                                                        limit=1)
+                    if route_ids:
+                        source_folio_id = pos_order.get('source_folio_id')
+                        self._pos_purchase_create_order(order, source_folio_id)
+            else:
+                order = self.env[model_name].create(datas)
             if model_name == 'sale.order':
                 amount = order_datas.get('charge')
                 if order_datas.get('car_type_id'):
@@ -805,6 +840,66 @@ class ResPartner(models.Model):
 
         return result
 
+    @api.model
+    def _pos_purchase_create_order(self, order, source_folio_id):
+        """Create Purchase Order for POS order from vendor dashboard """
+        purchase_order = self.env['purchase.order'].create({
+                                  'partner_id': order.partner_id.id,
+                                  'origin': order.name,
+                                  'date_order': order.date_order,
+                                  'session_id': order.session_id.id,
+                                  'pos_order_id': source_folio_id
+                                                            })
+        for line in order.lines:
+            #if line.product_id.seller_ids:
+            order_lines = {'product_id': line.product_id.id,
+                           'name': line.product_id.name,
+                           'product_qty': line.qty,
+                           'product_uom': line.product_id.uom_po_id.id,
+                           'price_unit': line.price_unit,
+                           'date_planned': fields.Date.from_string(purchase_order.date_order),
+                           'taxes_id': line.tax_ids_after_fiscal_position,
+                           'order_id': purchase_order.id,
+                           }
+        purchase_line = self.env['purchase.order.line'].create(order_lines)
+        return
+
+    @api.multi
+    def create_vendor_invoice(self, order):
+        account_journal = self.env['account.journal'].sudo().search([
+                                                ('is_pay_later', '=', True)],
+                                                            limit=1)
+        account_statement = self.env['account.bank.statement'].sudo().search(
+                                [('pos_session_id', '=', order.session_id.id),
+                                 ('journal_id', '=', account_journal.id)])
+        current_date = (datetime.today()).strftime('%Y-%m-%d %H:%M:%S')
+        prec_acc = order.pricelist_id.currency_id.decimal_places
+        journal_ids = set()
+        if(order.invoice_id):
+            paid_amount = sum([x.amount for x in order.statement_ids])
+            invoice_amount = order.invoice_id.amount_total - paid_amount
+            if not float_is_zero(invoice_amount, precision_digits=prec_acc):
+                order.add_payment(order._payment_fields({
+                                            'name': current_date,
+                                            'partner_id': order.partner_id.id,
+                                            'statement_id': account_statement.id,
+                                            'account_id': account_journal.default_debit_account_id,
+                                            'journal_id': account_journal.id,
+                                            'amount': invoice_amount}))
+        else:
+            order.action_pos_order_invoice()
+            order.invoice_id.sudo().action_invoice_open()
+            order.account_move = order.invoice_id.move_id
+            if not float_is_zero(order.invoice_id.residual, precision_digits=prec_acc):
+                order.add_payment(order._payment_fields({
+                                            'name': current_date,
+                                            'partner_id': order.partner_id.id,
+                                            'statement_id': account_statement.id,
+                                            'account_id': account_journal.default_debit_account_id,
+                                            'journal_id': account_journal.id,
+                                            'amount': order.invoice_id.residual}))
+            journal_ids.add(account_journal.id)
+        return True
     @api.multi
     def create_invoice(self, order_id, form_temp_id, model_name):
         order = self.env[model_name].search([('id', '=', int(order_id))])
