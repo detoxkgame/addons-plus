@@ -42,18 +42,25 @@
 								<t t-if="state=='noshow'">
 								 	 <t t-set="cellcolor" t-value="'ddea0f'" />
 								</t>
-								<t t-if="state=='draft'">
-								 	 <t t-set="cellcolor" t-value="'214f9e'" />
-								</t>			 
 							</t>
 							<t t-else="">				
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
 							</t>
-							<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
-								t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
-							 	t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
-							 	t-attr-format-date="#{format_date}"><t t-esc="state" /></td>		 
+							<t t-if="state=='draft'">
+								<t t-set="cellcolor" t-value="'214f9e'" />
+								<t t-set="state" t-value="'free'" />
+								<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
+									t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
+									t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
+									t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
+							</t>
+							<t t-else="">
+								<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
+									t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
+									 t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
+									 t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
+							</t>
 						 </t>
 					 </tr>
 				</t>

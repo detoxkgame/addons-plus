@@ -1584,7 +1584,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        sScrollX: true,
 	        sScrollXInner: "100%",
 	        bScrollCollapse: true,
-	        bSort: false,
+	        bSort: true,
 	        bPaginate: true, 
 	        pageLength: 10,
 		});

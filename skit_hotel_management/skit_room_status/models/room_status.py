@@ -95,7 +95,7 @@ class RoomStatus(models.Model):
             date = datetime.strftime(range_date, "%b %d %Y") 
             date_value = datetime.strftime(range_date, "%a %m-%d-%Y")       
             date_array.append(date)
-            date_format[date] = date_value
-            
-        return {'date_key':date_array, 'date_format':date_format, 'room_status_list_array':room_status_list_arrays,
+            date_format[date] = date_value       
+
+        return {'date_key':sorted(date_array), 'date_format':sorted(date_format), 'room_status_list_array':room_status_list_arrays,
                 'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name}
