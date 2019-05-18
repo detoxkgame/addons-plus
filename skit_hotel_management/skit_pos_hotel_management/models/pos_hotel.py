@@ -147,7 +147,11 @@ class ResPartner(models.Model):
                         model_datas = self.env[form_template.form_model_id.model].search(
                                                     [('partner_id', 'in', other_vendors.ids)])
                     else:
-                        model_datas = self.env[form_template.form_model_id.model].search(
+                        if (form_template.form_model_id.model == 'pos.order'):
+                            model_datas = self.env[form_template.form_model_id.model].search(
+                                                        [('vendor_id', 'in', vendors.ids)])
+                        else:
+                            model_datas = self.env[form_template.form_model_id.model].search(
                                                         [('partner_id', 'in', vendors.ids)])
         line_group = {}
         temp_id = []
@@ -770,6 +774,7 @@ class ResPartner(models.Model):
                     order.update({'source_folio_id': pos_order.get('source_folio_id')})
                 if(pos_order.get('is_service_order')):
                     order.update({'order_zone': 'taxi'})
+                    order.update({'vendor_id': int(vendor_id)})
                     order.update({'is_service_order': pos_order.get('is_service_order')})
                     order.lines.update({'source_order_id': pos_order.get('source_folio_id')})
                 if order:
