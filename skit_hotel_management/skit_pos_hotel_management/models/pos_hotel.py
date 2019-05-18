@@ -861,12 +861,20 @@ class ResPartner(models.Model):
                                   'pos_order_id': order.source_folio_id.id
                                                             })
         for line in order.lines:
-            # if line.product_id.seller_ids:
+            # get vendor id
+            seller_id = self.env['product.supplierinfo'].sudo().search([
+                                    ('product_tmpl_id', '=',
+                                     line.product_id.product_tmpl_id.id),
+                                    ('name', '=', order.vendor_id.id)])
+            if seller_id:
+                price_unit = seller_id.price
+            else:
+                price_unit = line.price_unit
             order_lines = {'product_id': line.product_id.id,
                            'name': line.product_id.name,
                            'product_qty': line.qty,
                            'product_uom': line.product_id.uom_po_id.id,
-                           'price_unit': line.price_unit,
+                           'price_unit': price_unit,
                            'date_planned': fields.Date.from_string(purchase_order.date_order),
                            'taxes_id': line.tax_ids_after_fiscal_position,
                            'order_id': purchase_order.id,
