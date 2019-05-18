@@ -202,6 +202,16 @@ class FormTemplate(models.Model):
                                 })
         return room_ids
 
+    def get_sub_ids(self, form_view):
+        if(form_view == 'room_reservation'):
+            return ''
+        else:
+            form_template = self.env['hm.form.template'].sudo().search([
+                ('form_view', '=', form_view)])
+            sub_form_template = self.env['hm.sub.form.template.line'].sudo().search([
+                ('form_template_id', '=', form_template.id)])
+            return sub_form_template.sub_form_template_id.id
+
     @api.multi
     def get_sub_form(self, form_template_id, color, order_id):
         panel_form_temp = self.env['hm.form.template'].sudo().search([

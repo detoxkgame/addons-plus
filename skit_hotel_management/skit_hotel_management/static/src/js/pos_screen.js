@@ -29,7 +29,7 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     
     show_reservation:function(){
     	var self = this;
-    	this.gui.show_screen('room_reservation');
+    	self.get_sub_id("room_reservation");
     },
     
     show_vendor_selection:function(){
@@ -39,12 +39,12 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     
     show_night_audit:function(){
     	var self = this;
-    	$('.night_audit_session').trigger("click");
+    	self.get_sub_id("night_audit");
     },
     
     show_checkin:function(){
     	var self = this;
-    	this.gui.show_screen('vendor_payment');
+    	self.get_sub_id("search_view");
     },
     
     show_reports:function(){
@@ -53,6 +53,20 @@ var FirstScreenWidget = screens.ScreenWidget.extend({
     
     show_room_status:function(){
     	var self = this;
+    	self.get_sub_id("room_status_report");
+    },
+    
+    get_sub_id: function(form_view){
+    	var self = this;
+    	var subidno = null;
+    	self._rpc({
+			model: 'hm.form.template',
+			method: 'get_sub_ids',
+			args: [0, form_view],
+		}).then(function(result){
+			subidno = result;
+			self.gui.show_screen('room_reservation', {subidno:subidno});
+		});
     },
    /* show_reservationscreen:function(){
     	var self = this;
