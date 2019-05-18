@@ -502,6 +502,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	var line_form_temp_id = contents.find('#line_form_temp_id').text();
                 	var line_model_name = contents.find('#line_model_name').text();
                 	var source_folio_id = 0;
+                	var guest_partner_id = 0;
                 	order_datas['session_id']= self.pos.pos_session.id;
     				//console.log('session id'+order_datas['session_id']);
                 	/** Order Details */
@@ -520,6 +521,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			if(form_fields_records[i].form_fields == 'guest_name'){
 	                				var value1 =  $(this).find('#room_id option:selected').attr("id");
 	                				source_folio_id =  $(this).find('#room_id option:selected').attr("folio_id");
+	                				guest_partner_id =  $(this).find('#room_id option:selected').attr("partner_id");
 	                				order_datas['room_id'] = value1;
 	                				
 	                			}
@@ -640,7 +642,12 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
     				        		cashregister=self.pos.cashregisters[i];
     				        	}
     				        }
-                			var client = self.pos.db.get_partner_by_id(vendor_id);
+    				        if (guest_partner_id){
+    				        	var client = self.pos.db.get_partner_by_id(guest_partner_id);
+    				        }
+    				        else{
+    				        	var client = self.pos.db.get_partner_by_id(vendor_id);
+    				        }               			
 		     				order.set_client(client);
 		     				vendordatas = order.export_as_JSON();
                 		}
@@ -875,7 +882,9 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 contents.on('change','#room_id',function(e){
                 	var guest = $(this).closest('td').find("option:selected").attr('guest');
                 	var folio = $(this).closest('td').find("option:selected").attr('folio');
+                	var folio_id = $(this).closest('td').find("option:selected").attr('folio_id');
                 	$(this).closest('tr').find('#guest_name').val(guest);
+                	contents.find('select#source_folio_id').val(folio);
                 	contents.find('select#pos_order_id').attr('class', 'drop-down-select');
                 	contents.find('select#pos_order_id').val(folio);
                 });

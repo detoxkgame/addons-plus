@@ -174,7 +174,7 @@ class pos_session(models.Model):
         session = self.browse(int(session_id))
         service_order = self.env['pos.order'].sudo().search(
             [('session_id', '=', session.id),
-             ('is_room_service', '=', True)
+             ('order_zone', '=', 'room_service')
              ]
         )
         for s_order in service_order:

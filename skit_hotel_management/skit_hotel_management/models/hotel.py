@@ -672,21 +672,30 @@ class PosOrder(models.Model):
     no_night = fields.Integer(string="No of Night")
     source_folio_id = fields.Many2one("pos.order", string='Source Folio')
     is_service_order = fields.Boolean(string="Is Service", default=False)
-    is_room_service = fields.Boolean(string="Is Room Service", default=False)
     service_status = fields.Selection([('draft', 'Draft'),
                                        ('delivered', 'Delivered'),
                                        ('close', 'Close')], 'Service Status',
                                       copy=False, default='draft')
     service_line_ids = fields.One2many('pos.order.line', 'source_order_id',
                                        string="Service Line", copy=True)
+    order_zone = fields.Selection([
+                        ('taxi', 'Taxi Service'),
+                        ('laundry', 'Laundry Service'),
+                        ('doctors', 'Doctor Service'),
+                        ('vegetables', 'Vegetable Service'),
+                        ('others', 'Other Service'),
+                        ('room_service', 'Room Service')
+                        ], string='Order Zone', readonly=True, index=True,
+                                  copy=False)
     order_state = fields.Selection([
-        ('draft', 'Draft'),
-        ('booked', 'Booked'),
-        ('departure', 'Departure'),
-        ('drop', 'Drop'),
-        ('done', 'Done'),
-        ('cancel', 'Cancelled')
-    ], string='Order Status', readonly=True, index=True, copy=False, default='draft')
+                        ('draft', 'Draft'),
+                        ('booked', 'Booked'),
+                        ('departure', 'Departure'),
+                        ('drop', 'Drop'),
+                        ('done', 'Done'),
+                        ('cancel', 'Cancelled')
+                    ], string='Order Status', readonly=True, index=True,
+                                   copy=False, default='draft')
     is_commissionpaid = fields.Boolean(string="IsCommission Paid")
     room_id = fields.Many2one('product.product', string="Room No")
 
@@ -734,8 +743,6 @@ class PosOrder(models.Model):
                 orders.update({'source_folio_id': pos_order.get('source_folio_id')})
             if pos_order.get('room_table_id'):
                 orders.update({'table_id': pos_order.get('room_table_id')})
-            if(pos_order.get('is_room_service')):
-                orders.update({'is_room_service': pos_order.get('is_room_service')})
             if(pos_order.get('is_service_order')):
                 orders.update({'is_service_order': pos_order.get('is_service_order')})
                 orders.lines.update({'source_order_id': pos_order.get('source_folio_id')})

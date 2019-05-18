@@ -202,7 +202,8 @@ class ResPartner(models.Model):
                      'ttype': line.form_field_id.ttype,
                      'form_template_selection_fields': selection_items,
                      'form_template_model_fields': many2one_list,
-                     'field_styles': line.field_styles
+                     'field_styles': line.field_styles,
+                     'readonly': line.readonly
                                    }
             template_lines.append(datas)
             if count == 0:
@@ -426,6 +427,7 @@ class ResPartner(models.Model):
                                             'name': room.product_id.name,
                                             'folio': folio.display_name,
                                             'folio_id': folio.id,
+                                            'partner_id': folio.partner_id.id,
                                             'guest': folio.partner_id.name})
             #===================================================================
             # for prod in prod_temp:
@@ -554,7 +556,8 @@ class ResPartner(models.Model):
                                      'ttype': line.form_field_id.ttype,
                                      'form_template_selection_fields': selection_items,
                                      'form_template_model_fields': many2one_list,
-                                     'field_styles': line.field_styles
+                                     'field_styles': line.field_styles,
+                                     'readonly': line.readonly
                                      }
                             temp_order_lines.append(datas)
                             if count == 0:
@@ -766,6 +769,7 @@ class ResPartner(models.Model):
                 if pos_order.get('source_folio_id'):
                     order.update({'source_folio_id': pos_order.get('source_folio_id')})
                 if(pos_order.get('is_service_order')):
+                    order.update({'order_zone': 'taxi'})
                     order.update({'is_service_order': pos_order.get('is_service_order')})
                     order.lines.update({'source_order_id': pos_order.get('source_folio_id')})
                 if order:
@@ -774,6 +778,7 @@ class ResPartner(models.Model):
                 if pos_order.get('vendor_order_details'):
                     vendor_order_details = pos_order.get('vendor_order_details')
                     del vendor_order_details['session_id']
+                    del vendor_order_details['source_folio_id']
                     del vendor_order_details['date_order']
                     order.update(vendor_order_details)
                     route_ids = 0
@@ -784,8 +789,8 @@ class ResPartner(models.Model):
                                                         ('pos_selectable', '=', True)],
                                                         limit=1)
                     if route_ids:
-                        source_folio_id = pos_order.get('source_folio_id')
-                        self._pos_purchase_create_order(order, source_folio_id)
+                        supplier_id = int(vendor_id)
+                        self._pos_purchase_create_order(order, supplier_id)
             else:
                 order = self.env[model_name].create(datas)
             if model_name == 'sale.order':
@@ -841,17 +846,17 @@ class ResPartner(models.Model):
         return result
 
     @api.model
-    def _pos_purchase_create_order(self, order, source_folio_id):
+    def _pos_purchase_create_order(self, order, supplier_id):
         """Create Purchase Order for POS order from vendor dashboard """
         purchase_order = self.env['purchase.order'].create({
-                                  'partner_id': order.partner_id.id,
-                                  'origin': order.name,
+                                  'partner_id': supplier_id,
+                                  'origin': order.source_folio_id.name,
                                   'date_order': order.date_order,
                                   'session_id': order.session_id.id,
-                                  'pos_order_id': source_folio_id
+                                  'pos_order_id': order.source_folio_id.id
                                                             })
         for line in order.lines:
-            #if line.product_id.seller_ids:
+            # if line.product_id.seller_ids:
             order_lines = {'product_id': line.product_id.id,
                            'name': line.product_id.name,
                            'product_qty': line.qty,
@@ -900,6 +905,7 @@ class ResPartner(models.Model):
                                             'amount': order.invoice_id.residual}))
             journal_ids.add(account_journal.id)
         return True
+
     @api.multi
     def create_invoice(self, order_id, form_temp_id, model_name):
         order = self.env[model_name].search([('id', '=', int(order_id))])

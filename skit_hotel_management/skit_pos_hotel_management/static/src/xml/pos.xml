@@ -465,17 +465,17 @@
 																		<option disabled="disabled" selected="selected" class="placeholder">Rooms</option>
 																	 	<t t-foreach='available_rooms' t-as='room'> 
 																		 	<t t-if="(c_order[room_id] == room.name)">
-																		 		<option class="drop-down-select" t-att-selected="true" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id"  t-att-guest="room.guest"><t t-esc="room.name" /></option>
+																		 		<option class="drop-down-select" t-att-selected="true" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id" t-att-partner_id="room.partner_id" t-att-guest="room.guest"><t t-esc="room.name" /></option>
 																		 	</t>
 																		 	<t t-else="">
-																		 		<option class="drop-down-select" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id" t-att-guest="room.guest"><t t-esc="room.name" /></option>
+																		 		<option class="drop-down-select" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id" t-att-partner_id="room.partner_id" t-att-guest="room.guest"><t t-esc="room.name" /></option>
 																		 	</t>
 																	 	</t>
 																	</select>
 			    												</td>
 			    												<td>
 			    													<input type="text"  style="float:left;" t-attf-id="#{first_col.form_fields}"
-			    													t-attf-placeholder="#{first_col.form_placeholder}" t-attf-value="#{c_order[first_col.form_fields]}"
+			    													t-attf-placeholder="#{first_col.form_placeholder}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" t-attf-value="#{c_order[first_col.form_fields]}"
 				    												/>
 			    												</td>
 			    											</tr>
@@ -484,7 +484,7 @@
 			    								</t>
 			    								<t t-else="">
 				    								<input type="text" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
-				    								t-attf-value="#{c_order[first_col.form_fields]}"/>
+				    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}"/>
 			    								</t>
 			    								<span style="display:none;"><t t-esc="first_col.form_fields" /></span>
 			    							</t>
@@ -497,7 +497,7 @@
 													    <option t-att-value='car.name' /> 
 												    </t>
 												 </datalist> -->
-												 <select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_order[first_col.form_fields]) != '' ? (first_col.form_fields) == 'car_type_id' ? 'selection-type' : 'drop-down-select' : (first_col.form_fields) == 'car_type_id' ? 'selection-type placeholder' : 'drop-down-select placeholder'}" t-attf-id="#{first_col.form_fields}">
+												 <select onchange="this.className=this.options[this.selectedIndex].className" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" t-attf-class="#{(c_order[first_col.form_fields]) != '' ? (first_col.form_fields) == 'car_type_id' ? 'selection-type' : 'drop-down-select' : (first_col.form_fields) == 'car_type_id' ? 'selection-type placeholder' : 'drop-down-select placeholder'}" t-attf-id="#{first_col.form_fields}">
 												 	<option disabled="disabled" selected="selected" class="placeholder"><t t-esc="first_col.form_placeholder" /></option>
 												 	<t t-foreach='first_col.form_template_model_fields' t-as='user'> 
 														<t t-if="c_order[first_col.form_fields] == user.display_name">
@@ -541,7 +541,7 @@
 			    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
 				    								<div class="input-daterange" id="datepicker">
 					    								<i class="fa fa-calendar icon"></i>
-					    								<input type="text" class="datepicker-input-time"  t-attf-placeholder="#{first_col.form_placeholder}" 
+					    								<input type="text" class="datepicker-input-time"  t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" t-attf-placeholder="#{first_col.form_placeholder}" 
 					    								t-attf-id="#{first_col.form_fields}" t-attf-value="#{c_order[first_col.form_fields]}"
 					    								/>
 				    								</div>
@@ -567,13 +567,13 @@
 					    								</t>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='input_char'">
-					    								<input type="text" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								<input type="text" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" t-attf-id="#{same_row.form_fields}"
 					    								t-attf-value="#{c_order[same_row.form_fields]}" />
 					    								<span style="display:none;"><t t-esc="same_row.form_fields" /></span>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='many2one'">
 					    								<t t-if="(same_row.form_fields) == 'pos_order_id'">
-					    									<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_order[same_row.form_fields]) != '' ? (same_row.form_fields) == 'car_type_id' ? 'selection-type' : 'drop-down-select' : (same_row.form_fields) == 'car_type_id' ? 'selection-type placeholder' : 'drop-down-select placeholder'}"  t-attf-id="#{same_row.form_fields}" disabled="disabled">
+					    									<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" t-attf-class="#{(c_order[same_row.form_fields]) != '' ? (same_row.form_fields) == 'car_type_id' ? 'selection-type' : 'drop-down-select' : (same_row.form_fields) == 'car_type_id' ? 'selection-type placeholder' : 'drop-down-select placeholder'}"  t-attf-id="#{same_row.form_fields}" disabled="disabled">
 						    									 <option disabled="disabled" selected="selected" class="placeholder"><t t-esc="same_row.form_placeholder" /></option>
 																 <t t-foreach='same_row.form_template_model_fields' t-as='user'> 
 																 	<t t-if="c_order[same_row.form_fields] == user.display_name">
@@ -586,7 +586,7 @@
 															</select>
 					    								</t>
 					    								<t t-else="">
-						    								<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_order[same_row.form_fields]) != '' ? (same_row.form_fields) == 'car_type_id' ? 'selection-type' : 'drop-down-select' : (same_row.form_fields) == 'car_type_id' ? 'selection-type placeholder' : 'drop-down-select placeholder'}"  t-attf-id="#{same_row.form_fields}">
+						    								<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" t-attf-class="#{(c_order[same_row.form_fields]) != '' ? (same_row.form_fields) == 'car_type_id' ? 'selection-type' : 'drop-down-select' : (same_row.form_fields) == 'car_type_id' ? 'selection-type placeholder' : 'drop-down-select placeholder'}"  t-attf-id="#{same_row.form_fields}">
 						    									 <option disabled="disabled" selected="selected" class="placeholder"><t t-esc="same_row.form_placeholder" /></option>
 																 <t t-foreach='same_row.form_template_model_fields' t-as='user'> 
 																 	<t t-if="c_order[same_row.form_fields] == user.display_name">
@@ -633,7 +633,7 @@
 					    								<div class="span5 col-md-5 date-picker" id="sandbox-container">
 				    										<div class="input-daterange" id="datepicker">
 							    								<i class="fa fa-calendar icon" style="margin-right: 31%;"></i>
-							    								<input type="text" class="datepicker-input-time" t-attf-placeholder="#{same_row.form_placeholder}" 
+							    								<input type="text" class="datepicker-input-time" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" t-attf-placeholder="#{same_row.form_placeholder}" 
 							    								t-attf-id="#{same_row.form_fields}" t-attf-value="#{c_order[same_row.form_fields]}"
 							    								/>
 						    								</div>

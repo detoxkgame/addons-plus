@@ -1788,7 +1788,6 @@ models.PosModel = models.PosModel.extend({
     	order.remove_orderline(lines);
 		order.set_client(client);
 		order.set_service_order(is_service);
-		order.set_room_service(is_service);
 		order.set_source_folio_id(source_order_id);
 		order.set_room_table_id(room_table_id);
 		console.log('Orders'+JSON.stringify(orders))
