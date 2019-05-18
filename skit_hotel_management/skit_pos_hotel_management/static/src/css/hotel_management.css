@@ -296,6 +296,7 @@
 }
 .state-breadcrumb li { 
   float: left; 
+  text-indent: 0em !important;
 }
 .state-breadcrumb li span {
   color: white;

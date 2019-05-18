@@ -237,8 +237,54 @@
 	    					<t t-if="form_view == 'form'">
 	    						<t t-foreach="center_temp['current_order']" t-as="c_order" >
 	    						<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
+	    						<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
 	    						<table class="hm-form-table">
 	    						<tbody class="hm-form-body">
+	    						<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
+					    			<t t-foreach="center_temp['line_group'][line_key]" t-as="data">
+										<t t-if="(data.form_field_type)=='statusbar'">
+											<t t-set="state_count" t-value="0" />
+											<tr style="width: 100%;display: inline-block;">
+												<td style="width: 100%;display: inline-block;">
+													<div style="float: right;">
+				    									<ul class="state-breadcrumb">
+				    										<t t-foreach="data.form_template_selection_fields" t-as="state">
+																<t t-if="c_order['id']">
+																	<t t-if="(c_order['state'] == state.value) or (c_order['order_state'] == state.value)" >
+																		<li><span t-att-id="state.value" class="active"><t t-esc="state.name" /></span></li>
+																	</t>
+																	<t t-else="">
+																		<t t-if="state.value == 'cancel'">
+																			<li style="display:none"><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																		</t>
+																		<t t-else="">
+																			<li><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																		</t>
+																	</t>
+																	<t t-set="state_count" t-value="state_count + 1" />
+																</t>
+																<t t-else="" >
+																	<t t-if="state_count == 0" >
+																		<li><span t-att-id="state.value" class="active"><t t-esc="state.name" /></span></li>
+																	</t>
+																	<t t-else="">
+																		<t t-if="state.value == 'cancel'">
+																			<li style="display:none"><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																		</t>
+																		<t t-else="">
+																			<li><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																		</t>
+																	</t>
+																	<t t-set="state_count" t-value="state_count + 1" />
+																</t>
+															</t>
+				    									</ul>
+				    								</div>
+												</td>
+											</tr>
+										</t>
+									</t>
+								</t>	
 								 <t t-foreach="center_temp['line_group_key']" t-as="line_key">
 								 	<t t-set="datalen" t-value="(94/((center_temp['line_group'][line_key]).length))" />
 								 	<t t-set="column_size" t-value="(100/(column_count))" />
@@ -260,10 +306,28 @@
 				    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='date'">
-			    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+			    								<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
 				    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
 				    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
 			    							</t>
+			    							<!-- <t t-if="(first_col.form_field_type)=='datetime'">
+				    							<table style="width:100%;">
+				    								<tbody>
+				    									<tr>
+				    										<td style="width: 60%;">
+				    											<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;width:70%;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+								    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
+								    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
+				    										</td>
+				    										<td style="width: 40%;">
+				    											<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;width:57%;float:left;" t-attf-id="#{first_col.form_fields}_time" placeholder="Time" 
+								    								t-attf-name="#{first_col.form_fields}_time" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
+								    								t-attf-value="#{c_order[first_col.form_fields+'_time']}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
+				    										</td>
+				    									</tr>
+				    								</tbody>
+				    							</table>
+			    							</t> -->
 			    						</td>
 			    						<!-- Sub Form Template -->
 			    						<t t-if="((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')">
@@ -356,7 +420,7 @@
 					    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='date'">
-					    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
 					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" 
 					    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 					    							</t>
@@ -561,8 +625,54 @@
 	    			<t t-if="form_view == 'form'">
 	    				<t t-foreach="center_temp['current_order']" t-as="c_order" >
 	    				<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
+	    				<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
 	    				<table class="hm-form-table">
 	    				<tbody class="hm-form-body">
+	    					<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
+				    			<t t-foreach="center_temp['line_group'][line_key]" t-as="data">
+									<t t-if="(data.form_field_type)=='statusbar'">
+										<t t-set="state_count" t-value="0" />
+										<tr style="width: 100%;display: inline-block;">
+											<td style="width: 100%;display: inline-block;">
+												<div style="float: right;">
+			    									<ul class="state-breadcrumb">
+			    										<t t-foreach="data.form_template_selection_fields" t-as="state">
+															<t t-if="c_order['id']">
+																<t t-if="(c_order['state'] == state.value) or (c_order['order_state'] == state.value)" >
+																	<li><span t-att-id="state.value" class="active"><t t-esc="state.name" /></span></li>
+																</t>
+																<t t-else="">
+																	<t t-if="state.value == 'cancel'">
+																		<li style="display:none"><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																	</t>
+																	<t t-else="">
+																		<li><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																	</t>
+																</t>
+																<t t-set="state_count" t-value="state_count + 1" />
+															</t>
+															<t t-else="" >
+																<t t-if="state_count == 0" >
+																	<li><span t-att-id="state.value" class="active"><t t-esc="state.name" /></span></li>
+																</t>
+																<t t-else="">
+																	<t t-if="state.value == 'cancel'">
+																		<li style="display:none"><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																	</t>
+																	<t t-else="">
+																		<li><span t-att-id="state.value"><t t-esc="state.name" /></span></li>
+																	</t>
+																</t>
+																<t t-set="state_count" t-value="state_count + 1" />
+															</t>
+														</t>
+			    									</ul>
+			    								</div>
+											</td>
+										</tr>
+									</t>
+								</t>
+							</t>
 							<t t-foreach="center_temp['line_group_key']" t-as="line_key">
 								<t t-set="datalen" t-value="(94/((center_temp['line_group'][line_key]).length))" />
 								<t t-set="column_size" t-value="(100/(column_count))" />
@@ -598,7 +708,7 @@
 					    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
 				    						</t>
 				    						<t t-if="(first_col.form_field_type)=='date'">
-				    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+				    							<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
 					    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
 					    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled="#{first_col.readonly ? 'disabled' : undefined}" />
 				    						</t>
@@ -740,7 +850,7 @@
 						    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 						    						</t>
 						    						<t t-if="(same_row.form_field_type)=='date'">
-						    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+						    							<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
 						    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" 
 						    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 						    						</t>
@@ -1247,8 +1357,8 @@
         </div>
     </t>
     
-    <!-- Check Out Room Design -->
-	<t t-name="CheckOutRoomsWidget">
+    <!-- Check Out, Extend, Shift Room Design -->
+	<t t-name="PageViewRoomWidget">
 		<t t-foreach="tables" t-as="table">
 			<t t-if="(table.folioid) > 0">
 				<div data-placement="right" t-attf-class="res_table hm-booked-room #{hm_class}" 
@@ -1276,6 +1386,46 @@
 		</t>	
 	</t>
 	
+	<!-- House Keeping Design -->
+	<t t-name="PopupViewRoomWidget">
+		<t t-foreach="tables" t-as="table">
+			<t t-if="(table.model_data) > 0">
+				<div data-placement="right" class="res_table hm-form-data-popup" id="hm-form-data-popup"
+					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+			          left: #{table.position_h + table.width/2}px; 
+			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" 
+			         t-attf-model_id="#{table.model_data}" t-attf-sub_id="#{sub_temp_id}" t-attf-model_name="#{table.model_name}"
+			         t-attf-folio_id="#{table.folioid}" >
+					<span class='label'>
+				    	<t t-esc='table.name' />
+				    </span>
+			    </div>
+			</t>
+			<t t-else="">
+				<div data-placement="right" class="res_table hm-form-empty-popup" id="hm-form-empty-popup"
+					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+			          left: #{table.position_h + table.width/2}px; 
+			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+			         t-attf-room_id="#{table.product_id}"  t-attf-model_id="#{table.model_data}" t-attf-table_id="#{table.id}" 
+			         t-attf-sub_id="#{sub_temp_id}" t-attf-model_name="#{table.model_name}" t-attf-folio_id="#{table.folioid}" >
+					<span class='label'>
+				    	<t t-esc='table.name' />
+				    </span>
+			    </div>
+		    </t>
+		</t>	
+		<div id='room-service-action1' style='display: none;'>
+		       <div id="div_id_filters" class="form-group">
+		          	<div class="controls">
+		          		<div id="service-delivered" class="hm-service-div service-delivered" ><span class="hm-service-span">Delivered</span></div>
+		          		<div id="service-add" class="hm-service-div service-add" ><span class="hm-service-span">Add / Edit</span></div>
+		          		<div id="service-close" class="hm-service-div service-close"><span class="hm-service-span">Close</span></div>
+		        	</div>
+		   		</div>
+           </div>
+	</t>
+	
 	<!-- Room Complaint Popup -->
 	<t t-name="HMComplaintPopupWidget">
         <div class="modal-dialog">
@@ -1294,6 +1444,28 @@
                     </div>
                     <div class="button hm-cancel">
                         Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="HMFormPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm"  style="height: 80%;width: 50%;">
+            	<div class="modal-header">
+			        <i class="fa fa-times hm-model-close" aria-hidden="true" id="hm-model-close"></i>
+			        <span id="folio_id" style="display:none;"><t t-esc=" widget.options.folio_id" /></span>
+			        <span id="product_id" style="display:none;"><t t-esc=" widget.options.product_id" /></span>
+			     </div>
+            	<div class="body copy_pre_body" id="popup_form" style="height: 85%;">
+            	</div>
+                 <div class="footer">                   
+                    <div class="button hm-inspect">
+                        Inspect 
+                    </div>
+                    <div class="button hm-close">
+                        Done 
                     </div>
                 </div>
             </div>

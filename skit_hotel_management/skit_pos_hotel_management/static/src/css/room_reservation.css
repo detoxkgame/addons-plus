@@ -152,10 +152,11 @@
 }
 
 .hm-form-input{
-	width: 80%;
-	border: 1px solid gray;
-	border-radius: 20px;
+	width: 80% !important;
+	border: 1px solid gray !important;
+	border-radius: 20px !important;
 	padding: 15px !important;
+	box-shadow: none !important;
 }
 
 .hm-form-headerlabel{
@@ -721,4 +722,14 @@ div.bhoechie-tab-container{
 .hm-textarea{
 	border: 1px solid gray !important;
 	box-shadow: none !important;
+	width: 90% !important;
+}
+.hm-model-close{
+	float: right;
+	margin-right: 1%;
+	cursor: pointer;
+}
+.hm-form-data-popup{
+	border: 1px solid #32CD32;
+ 	background: #fff !important;
 }

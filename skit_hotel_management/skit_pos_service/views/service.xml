@@ -110,6 +110,33 @@
             	</xpath>
             </field>
        	</record> -->
+       	<record id="viewview_hotel_folio_form_inherited" model="ir.ui.view">
+            <field name="name">pos.order.form.inherit</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="skit_hotel_management.view_hotel_folio_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//form/sheet/notebook/page[6]" position="after">
+            		 <page string="House Keeping">
+                        <field name="house_keeping_ids" colspan="4" nolabel="1">
+                            <tree string="House Keeping" editable="bottom">
+                                <field name="supervisor" />
+								<field name="house_keeper" />
+								<field name="room_no" />
+								<field name="date" />
+								<field name="folio_no" />
+								<field name="activity" />
+								<field name="remarks" />
+								<field name="cleaning_start" />
+								<field name="cleaning_end" />
+								<field name="inspect_time" />
+								<field name="state" />
+                            </tree>
+                           
+                        </field>
+                    </page>
+            	</xpath>
+            </field>
+       	</record>
        	
        	<!-- Add checkbox under POS Configuration -->
        	

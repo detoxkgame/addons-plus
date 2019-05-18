@@ -56,6 +56,7 @@ class FormTemplate(models.Model):
         result = []
         form_name = ''
         form_view = ''
+        model_name = ''
         column_count = 3
         floor = self.env['restaurant.floor'].sudo().search([
                                 ('is_room_service', '=', True)], limit=1)
@@ -68,6 +69,7 @@ class FormTemplate(models.Model):
                 center_panel_design.append(temp_design)
                 form_view = sub_line.form_template_id.form_view
                 column_count = sub_line.form_template_id.column_count
+                model_name = sub_line.form_template_id.form_model_id.model
 
         result.append({
                        'form_name': form_name,
@@ -75,12 +77,13 @@ class FormTemplate(models.Model):
                        'center_panel_temp': center_panel_design,
                        'center_panel_sub_id': center_panel_sub_id,
                        'floor_id': floor.id,
-                       'column_count': column_count
+                       'column_count': column_count,
+                       'model_name': model_name,
                        })
         return result;
 
     @api.multi
-    def get_restaurant_table(self, floor_id):
+    def get_restaurant_table(self, floor_id, form_sub_id):
         tables = []
         if floor_id:
             floor_table_ids = self.env['restaurant.table'].sudo().search([
@@ -101,6 +104,25 @@ class FormTemplate(models.Model):
                                 ('product_id', '=', product.id),
                                 ('order_id.reservation_status', '=', 'checkin')],
                                                         limit=1)
+                sub_form_line = self.env['hm.sub.form.template.line'].sudo().search(
+                                [('sub_form_template_id', '=', int(form_sub_id))],
+                                limit=1)
+                form_template = self.env['hm.form.template'].sudo().search([
+                                ('id', '=', sub_form_line.form_template_id.id)])
+                if(form_template.form_model_id.model == 'hm.house.keeping'):
+                    model_data = self.env[form_template.form_model_id.model].sudo().search([
+                                    ('room_no', '=', floor_table.product_id.id),
+                                    ('state', '!=', 'done')], limit=1)
+                else:
+                    if(form_template.form_model_id.model != 'pos.order'):
+                        if(form_template.form_model_id.model):
+                            model_data = self.env[form_template.form_model_id.model].sudo().search([
+                                        ('pos_order_id', '=', folio_order.order_id.id)])
+                        else:
+                            model_data = self.env['pos.order']
+                    else:
+                        model_data = self.env[form_template.form_model_id.model].sudo().search([
+                                    ('id', '=', folio_order.order_id.id)])
                 tables.append({'id': floor_table.id,
                                'floor_id': floor_table.floor_id.id,
                                'name': floor_table.name,
@@ -117,7 +139,9 @@ class FormTemplate(models.Model):
                                'room_no': room_manage_id.room_no.id,
                                'state': room_manage_id.state,
                                'orderid': service_order.id or 0,
-                               'folioid': folio_order.order_id.id or 0
+                               'folioid': folio_order.order_id.id or 0,
+                               'model_data': model_data.id,
+                               'model_name': form_template.form_model_id.model
                                })
         return tables
 
@@ -271,7 +295,7 @@ class FormTemplate(models.Model):
                 res_table_sub_id = form_line.sub_template_id.id
             selection_items = []
             if form_line.form_template_selection_fields:
-                sql = "select hm_form_selection_item_id from hm_form_selection_item_hm_form_template_line_rel where hm_form_template_line_id = "+str(line.id)+""
+                sql = "select hm_form_selection_item_id from hm_form_selection_item_hm_form_template_line_rel where hm_form_template_line_id = "+str(form_line.id)+""
                 cr = self.env.cr
                 cr.execute(sql)
                 match_selection_recs = cr.dictfetchall()
@@ -356,7 +380,7 @@ class FormTemplate(models.Model):
                         if field_type[count] == 'many2one':
                             order_data[field] = order[field].display_name or ''
                         elif field_type[count] == 'datetime':
-                            odate = False
+                            odate = ''
                             if order[field]:
                                 odate = datetime.strftime(order[field], '%a %m-%d-%Y %H:%M %p')
                             order_data[field] = odate
@@ -365,7 +389,10 @@ class FormTemplate(models.Model):
                         count = count + 1
                     order_data['id'] = order['id']
                     order_data['state'] = order['state']
-                    order_data['name'] = order['name']
+                    if(panel_form_temp.form_model_id.model == 'hm.house.keeping'):
+                        order_data['name'] = ''
+                    else:
+                        order_data['name'] = order['name']
                     current_order.append(order_data)
             elif(panel_form_temp.form_model_id.model == 'hm.checkout.date.extend' or panel_form_temp.form_model_id.model == 'hm.shift.room'):
                 orders = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
@@ -528,35 +555,36 @@ class FormTemplate(models.Model):
                 sub_form_template[temp.id] = temp_array
                 sub_line_group_array[temp.id] = sub_line_group
                 sub_line_group_key_array[temp.id] = sorted(sub_line_group.keys())
-            if orders:
-                data_lines = []
-                data_lines = orders.lines
-                for oline in data_lines:
+            if(panel_form_temp.form_model_id.model == 'pos.order'):
+                if orders:
+                    data_lines = []
+                    data_lines = orders.lines
+                    for oline in data_lines:
+                        orderline_data = {}
+                        count = 0
+                        for field in line_fields:
+                            if line_field_type[count] == 'many2one':
+                                orderline_data[field] = oline[field].display_name or ''
+                            elif line_field_type[count] == 'many2many':
+                                orderline_data[field] = oline[field].ids
+                            else:
+                                orderline_data[field] = oline[field] or ''
+                            count = count + 1
+                        orderline_data['id'] = order['id']
+                        orderline_data['state'] = order['state']
+                        current_order_lines.append(orderline_data)
+                else:
                     orderline_data = {}
                     count = 0
                     for field in line_fields:
                         if line_field_type[count] == 'many2one':
-                            orderline_data[field] = oline[field].display_name or ''
-                        elif line_field_type[count] == 'many2many':
-                            orderline_data[field] = oline[field].ids
+                            orderline_data[field] = ''
                         else:
-                            orderline_data[field] = oline[field] or ''
+                            orderline_data[field] = ''
                         count = count + 1
-                    orderline_data['id'] = order['id']
-                    orderline_data['state'] = order['state']
+                    orderline_data['id'] = ''
+                    orderline_data['state'] = ''
                     current_order_lines.append(orderline_data)
-            else:
-                orderline_data = {}
-                count = 0
-                for field in line_fields:
-                    if line_field_type[count] == 'many2one':
-                        orderline_data[field] = ''
-                    else:
-                        orderline_data[field] = ''
-                    count = count + 1
-                orderline_data['id'] = ''
-                orderline_data['state'] = ''
-                current_order_lines.append(orderline_data)
         """ List View """
         if panel_form_temp.form_view == 'list':
             order_data = {}
@@ -627,7 +655,7 @@ class FormTemplate(models.Model):
                        'current_order': current_order,
                        'current_order_lines': current_order_lines,
                       # 'form_temp_id': form_template.id,
-                      # 'model_name': form_template.form_model_id.model,
+                       'model_name': panel_form_temp.form_model_id.model,
                        #========================================================
                        # 'vendor_id': vendor_id,
                        'sub_line_group': sub_line_group,
@@ -1003,6 +1031,17 @@ class FormTemplate(models.Model):
                        })
 
         return result
+
+    @api.model
+    def popup_create_order(self, post, order_id, model_name):
+        if(post.get('folio_no')):
+            if(post.get('folio_no') == 'Folio'):
+                post['folio_no'] = False
+        if(int(order_id) > 0):
+            model = self.env[model_name].sudo().search([('id', '=', int(order_id))])
+            model.update(post)
+        else:
+            self.env[model_name].create(post)
 
 
 class ResPartner(models.Model):

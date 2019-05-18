@@ -76,6 +76,7 @@ class PosOrder(models.Model):
                                           'pos_order_id',
                                           string="Service Line",
                                           copy=True)
+    house_keeping_ids = fields.One2many('hm.house.keeping', 'folio_no', string= "House Keeping", copy=True)
 
     @api.model
     def create_from_ui(self, orders):
@@ -296,8 +297,8 @@ class HoueseKeeping(models.Model):
     _name = 'hm.house.keeping'
     _description = "House Keeping"
 
-    supervisor = fields.Many2one('res.partner', "Supervisor")
-    house_keeper = fields.Many2one('res.partner', "House Keeper")
+    supervisor = fields.Many2one('res.users', "Supervisor")
+    house_keeper = fields.Many2one('res.users', "House Keeper")
     room_no = fields.Many2one('product.template', string="Room No")
     date = fields.Date("Date")
     folio_no = fields.Many2one('pos.order', "Folio")
@@ -307,7 +308,7 @@ class HoueseKeeping(models.Model):
     cleaning_end = fields.Datetime("End Cleaning")
     inspect_time = fields.Datetime("Inspect Time")
     state = fields.Selection([
-        ('clean', _('Clean')),
         ('dirty', _('Dirty')),
+        ('clean', _('Clean')),
         ('inspect', _('Inspected')),
-        ('done', _('Done'))], string='Status', default='', required=False)
+        ('done', _('Done'))], string='Status', default='dirty', required=False)
