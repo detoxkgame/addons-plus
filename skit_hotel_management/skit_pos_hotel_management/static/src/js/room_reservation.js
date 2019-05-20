@@ -150,8 +150,8 @@ var HMFormPopupWidget = PopupWidget.extend({
         'click .hm-date': 'hm_date',
         'click #hk_dirty': 'hk_dirty',
         'click #hk_clean': 'hk_clean',
-        'click #hm-inspect': 'hk_inspect',
-        'click #hk-close': 'hk_close',
+        'click .hm-inspect': 'hk_inspect',
+        'click .hk-close': 'hk_close',
 	}),
 	
 	hk_dirty: function(){
@@ -279,7 +279,7 @@ var HMFormPopupWidget = PopupWidget.extend({
                      'title': _t('Success'),
                      'body': msg,
                 });
-	     		self.gui.show_screen('room_reservation', {subidno:subidno});
+	     		//self.gui.show_screen('room_reservation', {subidno:subidno});
 	     	});
     	}
     },
