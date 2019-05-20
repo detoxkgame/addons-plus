@@ -151,7 +151,7 @@ var HMFormPopupWidget = PopupWidget.extend({
         'click #hk_dirty': 'hk_dirty',
         'click #hk_clean': 'hk_clean',
         'click .hm-inspect': 'hk_inspect',
-        'click .hk-close': 'hk_close',
+        'click .hm-close': 'hk_close',
 	}),
 	
 	hk_dirty: function(){
