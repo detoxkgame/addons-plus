@@ -7,6 +7,7 @@
    	<t t-set="room_list_array" t-value="lines['room_status_list_array']" />
    	<t t-set="order_list_array" t-value="lines['list_order_array']" />
    	<t t-set="categ_name" t-value="lines['categ_name']" />
+   	<t t-set="today_date" t-value="lines['today_date']" />
    	<t t-set="product_rows" t-value="lines['list_product_array']" />
    	<t t-set="date_format" t-value="lines['date_format']" />
 		   	<thead class="table-thead">
@@ -46,6 +47,9 @@
 							<t t-else="">				
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
+							</t>
+							<t t-if="today_date > date_col">
+								<t t-set="cellcolor" t-value="'939a93'" />
 							</t>
 							<t t-if="state=='draft'">
 								<t t-set="cellcolor" t-value="'214f9e'" />

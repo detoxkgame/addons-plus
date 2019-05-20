@@ -38,7 +38,7 @@ class RoomStatus(models.Model):
     def get_roomstatus(self, from_date, to_date):
  
         N = 2
-        
+        today = datetime.today()
         date_array=[]    
         date_format={}
         if(from_date and to_date):
@@ -57,13 +57,13 @@ class RoomStatus(models.Model):
         room_status_list_arrays = {} 
         if product_temp:  
             for products in product_temp:
-                product = products.id
+                product_id_val = products.id
                 key = ''
                 protemp_id = self.env['product.history'].sudo().search([('product_tmpl_id', 'in', products.ids)])
                 if protemp_id:
-                    product_history_ids_list = self.env['product.history'].sudo().search([])
-                    if product_history_ids_list:
-                        for history in product_history_ids_list:
+                    #product_history_ids_list = self.env['product.history'].sudo().search([])
+                    if protemp_id:
+                        for history in protemp_id:
                             product = history.product_id.id
                             if product != False:
                                 product_arr =  self.env['product.product'].sudo().search([('id','=',product)])
@@ -71,20 +71,20 @@ class RoomStatus(models.Model):
                                 rowdate1 = ""+datetime.strftime(history.out_date, "%b %d %Y")
                                 d1 = datetime.strptime(rowdate, "%b %d %Y")
                                 d2 = datetime.strptime(rowdate1, "%b %d %Y")
-                                days = (abs((d2 - d1).days)+1)
+                                days = (abs((d2 - d1).days))
                                     
                                 for i in range(days):
                                     if rowdate and rowdate1:
                                         range_dates = history.date + timedelta(i)
                                         d2 = datetime.strftime(range_dates, "%b %d %Y")
-                                        key = str(product)+"-"+d2
+                                        key = str(product_id_val)+"-"+d2
                                         room_status_list_arrays[key] = history.state
-                                        list_product_arrays[product] = product_arr.name
+                                        list_product_arrays[product_id_val] = products.name
                                         list_order_arrays[key] = history.order_id.id
-                                        categ_name[product] = products.categ_id.name
+                                        categ_name[product_id_val] = products.categ_id.name
                 else:
-                    list_product_arrays[product] = products.name
-                    categ_name[product] = products.categ_id.name
+                    list_product_arrays[product_id_val] = products.name
+                    categ_name[product_id_val] = products.categ_id.name
                     
                     
         for i in range(N):
@@ -93,9 +93,11 @@ class RoomStatus(models.Model):
             else:
                 range_date = datetime.now() - timedelta(i)
             date = datetime.strftime(range_date, "%b %d %Y") 
-            date_value = datetime.strftime(range_date, "%a %m-%d-%Y")       
+            date_value = datetime.strftime(range_date, "%a %m-%d-%Y")   
+            today_date_value = datetime.strftime(today, "%b %d %Y")
             date_array.append(date)
             date_format[date] = date_value       
 
-        return {'date_key':sorted(date_array), 'date_format':sorted(date_format), 'room_status_list_array':room_status_list_arrays,
-                'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name}
+        return {'date_key':sorted(date_array), 'date_format':date_format, 'room_status_list_array':room_status_list_arrays,
+                'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name,
+                'today_date':today_date_value,}
