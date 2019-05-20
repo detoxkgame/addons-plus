@@ -779,7 +779,7 @@ class ResPartner(models.Model):
                     order.lines.update({'source_order_id': pos_order.get('source_folio_id')})
                 if order:
                     self.create_vendor_invoice(order)
-                    order.update({'order_state': 'done'})
+                    order.update({'order_state': 'booked'})
                 if pos_order.get('vendor_order_details'):
                     vendor_order_details = pos_order.get('vendor_order_details')
                     del vendor_order_details['session_id']
