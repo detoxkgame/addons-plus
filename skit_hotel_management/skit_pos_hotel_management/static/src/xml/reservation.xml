@@ -361,8 +361,11 @@
 																			<t t-if="c_orderline[sub_first_col.form_fields] == prod.display_name">
 																				<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																			</t>
+																			<t t-elif="prod.is_booked">
+																				<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																			</t>
 																			<t t-else="">
-																				<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																				<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																			</t>
 																		</t>
 																	</select>
@@ -391,8 +394,11 @@
 																					<t t-if="c_orderline[sub_same_row.form_fields] == prod.display_name">
 																						<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t>
+																					<t t-elif="prod.is_booked">
+																						<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																					</t>
 																					<t t-else="">
-																						<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																						<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t>
 																				</t>
 																			</select>
@@ -457,8 +463,11 @@
 																					<t t-if="c_orderline[sub_first_col.form_fields] == prod.display_name">
 																						<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t>
+																					<t t-elif="prod.is_booked">
+																						<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																					</t>
 																					<t t-else="">
-																						<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																						<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t>
 																				</t>
 																			</select>
@@ -487,8 +496,11 @@
 																							<t t-if="c_orderline[sub_same_row.form_fields] == prod.display_name">
 																								<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																							</t>
+																							<t t-elif="prod.is_booked">
+																								<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																							</t>
 																							<t t-else="">
-																								<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																								<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																							</t>
 																						</t>
 																					</select>
@@ -725,8 +737,11 @@
 														<t t-if="c_order[first_col.form_fields] == prod.display_name">
 															<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 														</t>
+														<t t-elif="prod.is_booked">
+															<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+														</t>
 														<t t-else="">
-															<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+															<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 														</t>
 													</t>
 												</select>
@@ -761,8 +776,11 @@
 																		<t t-if="c_orderline[sub_first_col.form_fields] == prod.display_name">
 																			<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																		</t>
+																		<t t-elif="prod.is_booked">
+																			<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																		</t>
 																		<t t-else="">
-																			<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																			<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																		</t>
 																	</t>
 																</select>
@@ -800,8 +818,11 @@
 																					<t t-if="c_orderline[sub_same_row.form_fields] == prod.display_name">	
 																						<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t>
+																					<t t-elif="prod.is_booked">
+																						<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																					</t>
 																					<t t-else="">
-																						<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																						<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t> 
 																				</t>
 																			</select>
@@ -867,8 +888,11 @@
 																<t t-if="c_order[same_row.form_fields] == prod.display_name">
 																	<option t-att-id='prod.id' t-att-value="prod.id" t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																</t>
+																<t t-elif="prod.is_booked">
+																	<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																</t>
 																<t t-else="">
-																	<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																	<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																</t>
 															</t>
 														</select>
@@ -913,8 +937,11 @@
 																					<t t-if="c_orderline[sub_first_col.form_fields] == prod.display_name">	
 																						<option t-att-id='prod.id' t-att-value="prod.id"  t-att-selected="true" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t>
+																					<t t-elif="prod.is_booked">
+																						<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																					</t>
 																					<t t-else="">
-																						<option t-att-id='prod.id' t-att-value="prod.id"  class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																						<option t-att-id='prod.id' t-att-value="prod.id"  t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																					</t> 
 																				</t>
 																			</select>
@@ -953,8 +980,11 @@
 																							<t t-if="c_orderline[sub_same_row.form_fields] == prod.display_name">	
 																								<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" t-att-selected="true" style="color: black;"><t t-esc="prod.display_name" /></option>
 																							</t>
+																							<t t-elif="prod.is_booked">
+																								<option disabled="disabled" t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: #29c107;"><t t-esc="prod.display_name" /></option>
+																							</t>
 																							<t t-else="">
-																								<option t-att-id='prod.id' t-att-value="prod.id" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
+																								<option t-att-id='prod.id' t-att-value="prod.id" t-att-booked="prod.is_booked" class="hm-form-input" style="color: black;"><t t-esc="prod.display_name" /></option>
 																							</t>
 																						</t>
 																					</select>

@@ -849,6 +849,40 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	     	    	{
 	     	    		contents.find('#no_night').val(numberOfNights);
 	     	    	} 
+	     	    	var product_id = contents.find("#product_id").val();
+	     	    	var room_type_id = contents.find("#room_type_id").val();
+	     	    	if(product_id == null){
+	     	    		product_id = 0;
+	     	    	}
+	     	    	if(room_type_id == null){
+	     	    		room_type_id = 0;
+	     	    	}
+	     	    	var datein_date = moment(checkin_date).format("YYYY-MM-DD");
+	     	    	var dateout_date = moment(checkout_date).format("YYYY-MM-DD");
+	     	    	self._rpc({
+		    			model: 'hm.form.template',
+		    			method: 'get_product_room',
+		    			args: [0, room_type_id, datein_date, dateout_date],
+		    		}).then(function(result){
+		    			var len = result.length;
+		    			var selectbox = contents.find("#product_id");
+		    		    selectbox.empty();
+		    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
+		    		    for (var i = 0; i < len; i++)
+			      		{
+		    		    	if(result[i].is_booked){
+		    		    		list += "<option disabled='disabled' class='hm-form-input' style='color: #29c107;' id='"+result[i].id+"' booked='"+result[i].is_booked+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+		    		    	}else{
+		    		    		list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+		    		    	}
+		    		    }
+		    		    //replace selection option in room based on room type
+		    		    selectbox.html(list); 
+		    		    contents.find("#product_id").addClass('hm-placeholder');
+		    		    if(room_type_id > 0)
+		    		    	contents.find("#room_type_id").val(room_type_id);
+		    		    	contents.find("#room_type_id").removeClass('hm-placeholder');
+		    		});
  	   		   	});
 	        });
 	        
@@ -928,7 +962,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
 	    		    for (var i = 0; i < len; i++)
 		      		{
-	    		        list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+	    		    	if(result[i].is_booked){
+	    		    		list += "<option disabled='disabled' class='hm-form-input' style='color: #29c107;' id='"+result[i].id+"' booked='"+result[i].is_booked+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+	    		    	}else{
+	    		    		list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+	    		    	}
 	    		    }
 	    		    //replace selection option in room based on room type
 	    		    selectbox.html(list); 

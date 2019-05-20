@@ -214,16 +214,58 @@ class FormTemplate(models.Model):
         product_ids = self.env['product.template'].sudo().search([
                                 ('categ_id', '=', int(categ_id)),
                                 ('available_in_pos', '=', True),
-                                ('state', 'in', ('available', 'reserved')),
                                 ])
         for product_temp in product_ids:
             product = self.env['product.product'].sudo().search([
                                 ('product_tmpl_id', '=', product_temp.id)])
+            is_booked = False
+            prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', product.product_tmpl_id.id),
+                                                                      ('state', 'in', ('reserved', 'checkin'))])
+            if(prod_history):
+                is_booked = True
             if product.id:
                 room_ids.append({
                                   'id': product.id,
                                   'name': product.name,
+                                  'is_booked': is_booked
                                 })
+        return room_ids
+
+    @api.multi
+    def get_product_room(self, categ_id, in_date, out_date):
+        """ Get Product Room for particular Period """
+        room_ids = []
+        from_date = in_date+" 00:00:00"
+        to_date = out_date+" 23:59:59"
+        checkin_date = datetime.strptime(from_date, '%Y-%m-%d %H:%M:%S')
+        checkout_date = datetime.strptime(to_date, '%Y-%m-%d %H:%M:%S')
+        if(int(categ_id) > 0):
+            product_ids = self.env['product.template'].sudo().search([
+                                        ('categ_id', '=', int(categ_id)),
+                                        ('available_in_pos', '=', True),
+                                        ])
+        else:
+            product_ids = self.env['product.template'].sudo().search([
+                                        ('categ_id.is_room', '=', True),
+                                        ('available_in_pos', '=', True),
+                                        ])
+        for product_temp in product_ids:
+            product = self.env['product.product'].sudo().search([
+                                    ('product_tmpl_id', '=', product_temp.id)])
+            is_booked = False
+            prod_history = self.env['product.history'].sudo().search([
+                                    ('product_tmpl_id', '=', product_temp.id),
+                                    ('state', 'in', ('reserved', 'checkin')),
+                                    ('date', '>=', checkin_date),
+                                    ('out_date', '<=', checkout_date)])
+            if(prod_history):
+                is_booked = True
+            if product.id:
+                room_ids.append({
+                            'id': product.id,
+                            'name': product.name,
+                            'is_booked': is_booked
+                        })
         return room_ids
 
     def get_sub_ids(self, form_view):
@@ -320,6 +362,14 @@ class FormTemplate(models.Model):
                         for fields_rec in records_model_fields:
                             field_name = fields_rec.name
                             arr[str(field_name)] = rec[field_name]
+                        arr['is_booked'] = False
+                        if form_line.form_field_id.relation == 'product.product':
+                            prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
+                            arr['amount'] = prod_tmpl.list_price
+                            prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
+                                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                            if(prod_history):
+                                arr['is_booked'] = True
                         many2one_list.append(arr)
             if form_line.model_method and form_line.model_name:
                 model_object = self.env[form_line.model_name]
@@ -507,9 +557,14 @@ class FormTemplate(models.Model):
                                         for fields_rec in records_model_fields:
                                             field_name = fields_rec.name
                                             arr[str(field_name)] = rec[field_name]
+                                        arr['is_booked'] = False
                                         if line.form_field_id.relation == 'product.product':
                                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                                             arr['amount'] = prod_tmpl.list_price
+                                            prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
+                                                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                                            if(prod_history):
+                                                arr['is_booked'] = True
                                         many2one_list.append(arr)
                             line_tmp = line.form_template_id.id
                             line_model = line.form_template_id.form_model_id.model
@@ -748,6 +803,14 @@ class FormTemplate(models.Model):
                         for fields_rec in records_model_fields:
                             field_name = fields_rec.name
                             arr[str(field_name)] = rec[field_name]
+                        arr['is_booked'] = False
+                        if line.form_field_id.relation == 'product.product':
+                            prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
+                            arr['amount'] = prod_tmpl.list_price
+                            prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
+                                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                            if(prod_history):
+                                arr['is_booked'] = True
                         many2one_list.append(arr)
             """ Top Panel Design """
             if line.form_field_type == 'top_panel':
@@ -918,9 +981,14 @@ class FormTemplate(models.Model):
                                         for fields_rec in records_model_fields:
                                             field_name = fields_rec.name
                                             arr[str(field_name)] = rec[field_name]
+                                        arr['is_booked'] = False
                                         if line.form_field_id.relation == 'product.product':
                                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                                             arr['amount'] = prod_tmpl.list_price
+                                            prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
+                                                                                                ('state', 'in', ('reserved', 'checkin'))])
+                                            if(prod_history):
+                                                arr['is_booked'] = True
                                         many2one_list.append(arr)
                             line_tmp = line.form_template_id.id
                             line_model = line.form_template_id.form_model_id.model
@@ -1303,7 +1371,7 @@ class PosOrder(models.Model):
         to_date = current_date+" 23:59:59"
         folio_orders = self.search([('checkin_date', '>=', from_date),
                                     ('checkin_date', '<=', to_date),
-                                    ('reservation_status', '=', 'checkin')])
+                                    ('reservation_status', '=', 'reserved')])
         checkin_rooms = []
         for folio in folio_orders:
             for line in folio.lines:
