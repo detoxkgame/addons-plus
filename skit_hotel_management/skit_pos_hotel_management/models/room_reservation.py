@@ -115,7 +115,7 @@ class FormTemplate(models.Model):
                                     ('state', '!=', 'done')], limit=1)
                 else:
                     if(form_template.form_model_id.model != 'pos.order'):
-                        if(form_template.form_model_id.model):
+                        if(form_template.form_model_id.model == 'hm.house.keeping'):
                             model_data = self.env[form_template.form_model_id.model].sudo().search([
                                         ('pos_order_id', '=', folio_order.order_id.id)])
                         else:
@@ -1104,7 +1104,8 @@ class PosOrder(models.Model):
                                                                    'extend_checkout_date': post.get('extend_checkout_date'),
                                                                    'remark': reason})
             del post['room_id']
-            del post['pos_order_id']
+            if(post.get('pos_order_id')):
+                del post['pos_order_id']
             del post['extend_checkout_date']
             del post['remark']
         if post.get('new_room_id'):
@@ -1125,24 +1126,32 @@ class PosOrder(models.Model):
                 new_prod_temp = self.env['product.template'].sudo().search([
                                         ('id', '=', new_prod_prod.product_tmpl_id.id)])
                 new_prod_temp.write({'state': 'occupied'})
-                self.env['product.history'].sudo().create({
+                room_history = self.env['product.history'].sudo().search([
+                                        ('product_id', '=', new_prod_prod.id),
+                                        ('order_id', '=', order.id)])
+                room_data = {
                             'product_id': new_prod_prod.id,
                             'product_tmpl_id': new_prod_temp.id,
                             'order_id': order.id,
                             'state': order.reservation_status,
                             'date': order.checkin_date,
                             'out_date': order.checkout_date,
+                            }
+                if(room_history):
+                    self.env['product.history'].update(room_data)
+                else:
+                    self.env['product.history'].sudo().create(room_data)
+                self.env['hm.shift.room'].sudo().create({
+                                'pos_order_id': order.id,
+                                'checkin_date': order.checkin_date,
+                                'guest_name_id': order.partner_id.id,
+                                'referred_by_id': order.referred_by_id,
+                                'old_room_id': order_room.product_id.id,
+                                'new_room_id': int(post.get('new_room_id')),
+                                'old_room_type_id': order_room.room_type_id.id,
+                                'new_room_type_id': int(post.get('new_room_type_id')),
+                                'remark': reason
                             })
-                self.env['hm.shift.room'].sudo().create({'pos_order_id': order.id,
-                                                         'checkin_date': order.checkin_date,
-                                                         'guest_name_id': order.partner_id.id,
-                                                         'referred_by_id': order.referred_by_id,
-                                                         'old_room_id': order_room.product_id.id,
-                                                         'new_room_id': int(post.get('new_room_id')),
-                                                         'old_room_type_id': order_room.room_type_id.id,
-                                                         'new_room_type_id': int(post.get('new_room_type_id')),
-                                                         'remark': reason
-                                                         })
                 line_data = {}
                 line_data['product_id'] = int(post.get('new_room_id'))
                 line_data['room_type_id'] = int(post.get('new_room_type_id'))
@@ -1151,21 +1160,23 @@ class PosOrder(models.Model):
                 del post['new_room_id']
                 del post['old_room_type_id']
                 del post['new_room_type_id']
-                del post['pos_order_id']
+                if(post.get('pos_order_id')):
+                    del post['pos_order_id']
                 del post['guest_name_id']
                 del post['remark']
         if(order):
             if post:
-#                 To update state for product_history and product_template
-                product_id = post['order_line'][0]['product_id']
+                # To update state for product_history and product_template
+                # product_id = post['order_line'][0]['product_id']
                 product_history = self.env['product.history'].sudo().search([
-                                        ('order_id', '=', order.id)])
+                                        ('order_id', '=', order.id)],
+                                                order='id desc', limit=1)
                 product_tmpl_id = product_history.product_tmpl_id
-                product_template = self.env['product.template'].sudo().search([('id', '=', product_tmpl_id.id)])
-                product_history.write({'state':'checkin',})
-                product_template.write({'state':'occupied'})
-                
-                
+                product_template = self.env['product.template'].sudo().search(
+                                        [('id', '=', product_tmpl_id.id)])
+                if(product_history.state == 'draft'):
+                    product_history.write({'state': 'checkin'})
+                    product_template.write({'state': 'occupied'})
                 if post.get('order_line'):
                     order_lines = post.get('order_line')
                     i = 0
