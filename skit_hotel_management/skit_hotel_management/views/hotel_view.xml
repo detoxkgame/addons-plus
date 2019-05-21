@@ -163,22 +163,6 @@
 						<field name="id_proof_no" string="Proof Id No" />
             			<field name="source_folio_id" readonly="1"/>
             			<field name="is_commissionpaid" readonly="1"/>
-            			<field name="is_service_order" invisible="1"/>
-            			<field name="car_type_id" invisible="1"/>
-            		</group>
-            		<group string='Taxi Details' attrs="{'invisible': [('car_type_id', '=', False)]}">
-            			<group>
-	            			<field name="driver_name" />
-	            			<field name="vendor_mobile" /> 
-	            			<field name="pickup_date" /> 
-	            			<field name="location" />
-            			</group>
-            			<group>
-            				<field name="car_no" />
-            				<field name="car_type_id" />
-	            			<field name="return_date" />
-	            			<field name="capacity" string="No. of Person" />
-            			</group>
             		</group>
             	</xpath>
             	<xpath expr="//field[@name='table_id']" position="replace">
@@ -277,10 +261,25 @@
             			<!-- <field name="checkin_date" />
             			<field name="checkout_date" />
             			<field name="adult" />
-            			<field name="child" /> -->
+            			<field name="child" />
             			<field name="driver_name" />
-            			<field name="car_no" />
+            			<field name="car_no" /> -->
             			<field name="source_folio_id" readonly="1"/>
+            			<field name="car_type_id" invisible="1"/>
+            		</group>
+            		<group string='Taxi Details' attrs="{'invisible': [('car_type_id', '=', False)]}">
+            			<group>
+	            			<field name="driver_name" />
+	            			<field name="vendor_mobile" /> 
+	            			<field name="pickup_date" /> 
+	            			<field name="location" />
+            			</group>
+            			<group>
+            				<field name="car_no" />
+            				<field name="car_type_id" />
+	            			<field name="return_date" />
+	            			<field name="capacity" string="No. of Person" />
+            			</group>
             		</group>
             	</xpath>
             	<xpath expr="//field[@name='fiscal_position_id']" position="replace">
