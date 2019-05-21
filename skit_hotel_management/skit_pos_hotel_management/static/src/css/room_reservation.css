@@ -731,5 +731,10 @@ div.bhoechie-tab-container{
 }
 .hm-form-data-popup{
 	border: 1px solid #32CD32;
+ 	background: #32CD32 !important;
+ 	color: white !important;
+}
+.hm-hk-booked{
+	border: 1px solid #32CD32;
  	background: #fff !important;
 }

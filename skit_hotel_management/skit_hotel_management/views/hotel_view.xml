@@ -1452,7 +1452,7 @@
 		                                <field name="sequence" /> 
 		                                <field name="form_field_id"  context="{'view_model_fields': True}" domain="[('model_id', '=', context.get('default_model_id'))]" options="{'no_create_edit': True}"/> 
 		                                <field name="form_field_type"/> 
-		                                <field name="sub_template_id"  attrs="{'invisible': [('form_field_type','not in',('sub_form','view_buttons','button','menu','top_panel','left_panel','right_panel','center_panel','search'))]}"></field>
+		                                <field name="sub_template_id"  attrs="{'invisible': [('form_field_type','not in',('sub_form','view_buttons','button','menu','top_panel','left_panel','right_panel','center_panel','search','header_label'))]}"></field>
 		                                <field name="form_placeholder" />
 		                                <field name="field_group" />
 		                                <field name="field_styles" /> 

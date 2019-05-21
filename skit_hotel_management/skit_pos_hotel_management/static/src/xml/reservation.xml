@@ -601,7 +601,9 @@
 													</t>
 												</t>
 												<t t-else="">
-												 	<span class="hm-right-reserve-btn" ><t t-esc="code.room_name" /></span> 
+												 	<span class="hm-right-reserve-btn" t-attf-orderid="#{code.order_id}" t-attf-subid="#{data.sub_template_id}">
+												 		<t t-esc="code.room_name" />
+												 	</span> 
 												 </t>
 											</t>
 										</div>
@@ -1022,8 +1024,32 @@
 								    					<td class="hm-footer-td">
 								    						<div class="hm-footer-div">
 								    							<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key]" t-as="data" >
-								    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
-								    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    								<t t-if="c_order['id']">
+								    									<t t-if="c_order['reservation_status'] == 'checkin'">
+								    										<t t-if="data.form_label == 'Check In'">
+								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">Update</span>
+								    										</t>
+								    									</t>
+								    									<t t-elif="c_order['reservation_status'] == 'reserved'">
+								    										<t t-if="data.form_label == 'Reserve'">
+								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">Update</span>
+								    										</t>
+								    										<t t-else="">
+								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    										</t>
+								    									</t>
+								    									<t t-else="">
+								    										<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    									</t>
+								    								</t>
+								    								<t t-else="">
+									    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    								</t>
 								    							</t>
 								    						</div>
 								    					</td>
@@ -1443,7 +1469,7 @@
 			    </div>
 			</t>
 			<t t-else="">
-				<div data-placement="right" class="res_table hm-form-empty-popup" id="hm-form-empty-popup"
+				<div data-placement="right" t-attf-class="#{(table.folioid) > 0 ? 'res_table hm-form-empty-popup hm-hk-booked' : 'res_table hm-form-empty-popup' }"  id="hm-form-empty-popup"
 					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 			          left: #{table.position_h + table.width/2}px; 
 			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
@@ -1497,6 +1523,7 @@
 			        <i class="fa fa-times hm-model-close" aria-hidden="true" id="hm-model-close"></i>
 			        <span id="folio_id" style="display:none;"><t t-esc=" widget.options.folio_id" /></span>
 			        <span id="product_id" style="display:none;"><t t-esc=" widget.options.product_id" /></span>
+			        <span id="sub_id" style="display:none;"><t t-esc=" widget.options.sub_id" /></span>
 			     </div>
             	<div class="body copy_pre_body" id="popup_form" style="height: 85%;">
             	</div>

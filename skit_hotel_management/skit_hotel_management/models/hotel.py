@@ -476,6 +476,7 @@ class FormTemplateLine(models.Model):
         ('checkbox', _('CheckBox')),
         ('radio', _('Radio')),
         ('date', _('Date')),
+        ('datetime', _('Date Time')),
         ('textarea', _('Text Area')),
         ('header_label', _('Header label')),
         ('selection', _('Selection')),
@@ -766,7 +767,6 @@ class PosOrder(models.Model):
                                 'date': orders.checkin_date,
                                 'out_date': orders.checkout_date,
                                 })
-        print(orders)
         return orders
 
 
@@ -914,9 +914,9 @@ class POSorder(models.Model):
     _inherit = 'pos.order'
 
     reservation_status = fields.Selection(
-        [
+        [('draft', 'Draft'),
          ('reserved', 'Reserved'),
-         ('noshow', 'No show'), 
+         ('noshow', 'No show'),
          ('checkin', 'CheckIn'),
          ('checkout', 'CheckOut'),
          ('shift', 'Shifted'),
@@ -924,7 +924,7 @@ class POSorder(models.Model):
          ('block', 'Blocked'),
          ('cancel', 'Cancelled'),
          ('done', 'Posted')],
-        'Reservation Status',  copy=False, default='reserved')
+        'Reservation Status',  copy=False, default='draft')
 
     state = fields.Selection(
         [('draft', 'New'),

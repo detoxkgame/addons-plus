@@ -232,13 +232,13 @@ class FormTemplate(models.Model):
         return room_ids
 
     @api.multi
-    def get_product_room(self, categ_id, in_date, out_date):
+    def get_product_room(self, categ_id, checkin_date, checkout_date):
         """ Get Product Room for particular Period """
         room_ids = []
-        from_date = in_date+" 00:00:00"
-        to_date = out_date+" 23:59:59"
-        checkin_date = datetime.strptime(from_date, '%Y-%m-%d %H:%M:%S')
-        checkout_date = datetime.strptime(to_date, '%Y-%m-%d %H:%M:%S')
+        #from_date = in_date+" 00:00:00"
+        #to_date = out_date+" 23:59:59"
+        #checkin_date = datetime.strptime(from_date, '%Y-%m-%d %H:%M:%S')
+        #checkout_date = datetime.strptime(to_date, '%Y-%m-%d %H:%M:%S')
         if(int(categ_id) > 0):
             product_ids = self.env['product.template'].sudo().search([
                                         ('categ_id', '=', int(categ_id)),
@@ -253,12 +253,20 @@ class FormTemplate(models.Model):
             product = self.env['product.product'].sudo().search([
                                     ('product_tmpl_id', '=', product_temp.id)])
             is_booked = False
-            prod_history = self.env['product.history'].sudo().search([
-                                    ('product_tmpl_id', '=', product_temp.id),
-                                    ('state', 'in', ('reserved', 'checkin')),
-                                    ('date', '>=', checkin_date),
-                                    ('out_date', '<=', checkout_date)])
-            if(prod_history):
+            #===================================================================
+            # prod_history = self.env['product.history'].sudo().search([
+            #                         ('product_tmpl_id', '=', product_temp.id),
+            #                         ('state', 'in', ('reserved', 'checkin')),
+            #                         ('date', '>=', checkin_date),
+            #                         ('out_date', '<=', checkout_date)])
+            #===================================================================
+            sql = "select * from product_history ph where ph.product_tmpl_id = "+str(product_temp.id)+" \
+                    and (('"+checkin_date+"' between ph.date and ((ph.out_date) - INTERVAL '1 DAY')) \
+                    or ('"+checkout_date+"' between ph.date and ((ph.out_date) - INTERVAL '1 DAY')) )"
+            cr = self.env.cr
+            cr.execute(sql)
+            prod_history = cr.dictfetchall()
+            if(len(prod_history) > 0):
                 is_booked = True
             if product.id:
                 room_ids.append({
@@ -443,6 +451,10 @@ class FormTemplate(models.Model):
                         order_data['name'] = ''
                     else:
                         order_data['name'] = order['name']
+                    if(panel_form_temp.form_model_id.model == 'pos.order'):
+                        order_data['reservation_status'] = order['reservation_status']
+                    else:
+                        order_data['reservation_status'] = ''
                     current_order.append(order_data)
             elif(panel_form_temp.form_model_id.model == 'hm.checkout.date.extend' or panel_form_temp.form_model_id.model == 'hm.shift.room'):
                 orders = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
@@ -914,6 +926,10 @@ class FormTemplate(models.Model):
                     order_data['id'] = order['id']
                     order_data['state'] = order['state']
                     order_data['name'] = order['name']
+                    if(form_template.form_model_id.model == 'pos.order'):
+                        order_data['reservation_status'] = order['reservation_status']
+                    else:
+                        order_data['reservation_status'] = ''
                     current_order.append(order_data)
             else:
                 order_data = {}
@@ -926,6 +942,7 @@ class FormTemplate(models.Model):
                     count = count + 1
                 order_data['id'] = ''
                 order_data['state'] = ''
+                order_data['reservation_status'] = ''
                 current_order.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])
@@ -1178,7 +1195,7 @@ class PosOrder(models.Model):
                 prod_history.write({'out_date': post.get('extend_checkout_date'),
                                     'state': post.get('reservation_status'),
                                     })
-                
+
             del post['room_id']
             if(post.get('pos_order_id')):
                 del post['pos_order_id']
@@ -1284,7 +1301,8 @@ class PosOrder(models.Model):
         for folio in folio_orders:
             for line in folio.lines:
                 checkout_rooms.append({'room_id': line.product_id.id,
-                                       'room_name': line.product_id.name})
+                                       'room_name': line.product_id.name,
+                                       'order_id': folio.id})
 
         return checkout_rooms
 
@@ -1384,7 +1402,8 @@ class PosOrder(models.Model):
         for folio in folio_orders:
             for line in folio.lines:
                 checkin_rooms.append({'room_id': line.product_id.id,
-                                      'room_name': line.room_type_id.name})
+                                      'room_name': line.room_type_id.name,
+                                      'order_id': folio.id})
 
         return checkin_rooms
 
