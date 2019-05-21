@@ -423,21 +423,16 @@ class ResPartner(models.Model):
 
         if form_template.form_view == 'form':
             result_datas = []
-            #prod_temp = self.env['product.template'].sudo().search([])
-            folio_order = self.env['pos.order'].sudo().search([('reservation_status', '=', 'checkin')])
-            for folio in folio_order:
-                for room in folio.lines:
-                    available_rooms.append({'id': room.product_id.id,
-                                            'name': room.product_id.name,
-                                            'folio': folio.display_name,
-                                            'folio_id': folio.id,
-                                            'partner_id': folio.partner_id.id,
-                                            'guest': folio.partner_id.name})
-            #===================================================================
-            # for prod in prod_temp:
-            #     products.append({'id': prod.id,
-            #                      'name': prod.name})
-            #===================================================================
+            # get room ids
+            room_ids = self.env['product.product'].search([('categ_id.is_room',
+                                                            '=', True),
+                                                           ('available_in_pos',
+                                                            '=', True)])
+
+            for room in room_ids:
+                available_rooms.append({'id': room.id,
+                                        'name': room.name,
+                                        })
             orders = self.env[form_template.form_model_id.model].sudo().search([('id', '=', int(order_id))])
             if orders:
                 for order in orders:
@@ -671,6 +666,32 @@ class ResPartner(models.Model):
             order.action_draft()
         if model_name == 'purchase.order':
             order.button_draft()
+        edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
+                            ('form_template_id', '=', int(form_temp_id)),
+                            ('name', '=', 'Edit')])
+        result = {'order_id': order.id,
+                  'edit_form_id': edit_form_id.id}
+        return result
+
+    @api.multi
+    def set_drop_state(self, order_id, model_name, form_temp_id):
+        """ Change order state from departure to drop state """
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+        if (order.pickup_date and order.return_date):
+            order.update({'order_state': 'drop'})
+        edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
+                            ('form_template_id', '=', int(form_temp_id)),
+                            ('name', '=', 'Edit')])
+        result = {'order_id': order.id,
+                  'edit_form_id': edit_form_id.id}
+        return result
+
+    @api.multi
+    def set_departure_order(self, order_id, model_name, form_temp_id):
+        """ Change order state from booked to departure state"""
+        order = self.env[model_name].search([('id', '=', int(order_id))])
+        if order.pickup_date:
+            order.update({'order_state': 'departure'})
         edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
                             ('form_template_id', '=', int(form_temp_id)),
                             ('name', '=', 'Edit')])
@@ -1054,3 +1075,23 @@ class ResPartner(models.Model):
                   'partner': invoice.partner_id.name,
                   'amount': invoice.residual}
         return result
+
+    @api.multi
+    def get_room_orders(self, room_id):
+        """ Get order details while select room in vendor form"""
+        orders = []
+        folio_order = self.env['pos.order'].sudo().search([
+                                    ('reservation_status', '=', 'checkin')])
+        if folio_order:
+            folio_lines = self.env['pos.order.line'].sudo().search([
+                                        ('product_id', '=', int(room_id)),
+                                        ('order_id', 'in', folio_order.ids)
+                                        ])
+            for line in folio_lines:
+                orders.append({
+                              'folio': line.order_id.display_name,
+                              'folio_id': line.order_id.id,
+                              'partner_id': line.order_id.partner_id.id,
+                              'guest_name': line.order_id.partner_id.name
+                              })
+        return orders

@@ -313,6 +313,18 @@
 																<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
 															</t>
 														</t>
+														<t t-if="c_order['state'] == 'invoiced'">
+															<t t-if="c_order['order_state'] == 'booked'">
+																<t t-if="(btn.value == 'departure')">
+																	<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
+																</t>
+															</t>
+															<t t-if="c_order['order_state'] == 'departure'">
+																<t t-if="(btn.value == 'drop')">
+																	<button t-att-id="btn.value" class="header-btn btn-active"><t t-esc="btn.name" /></button>
+																</t>
+															</t>
+														</t>
 														<t t-if="c_order['state'] == 'purchase'">
 															<t t-if="!(c_order['is_shipped'])">
 																<t t-if="(btn.value == 'button_validate')">
@@ -463,12 +475,12 @@
 																	</datalist> -->
 																	<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_order[room_id]) !='' ? 'drop-down-select' : 'drop-down-select placeholder' }" id="room_id" style="float: right;">
 																		<option disabled="disabled" selected="selected" class="placeholder">Rooms</option>
-																	 	<t t-foreach='available_rooms' t-as='room'> 
-																		 	<t t-if="(c_order[room_id] == room.name)">
-																		 		<option class="drop-down-select" t-att-selected="true" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id" t-att-partner_id="room.partner_id" t-att-guest="room.guest"><t t-esc="room.name" /></option>
+																	 	<t t-foreach='available_rooms' t-as='room'>
+																		 	<t t-if="(c_order['room_id'] == room.name)">
+																		 		<option class="drop-down-select" t-att-selected="true" t-att-id='room.id'><t t-esc="room.name" /></option>
 																		 	</t>
 																		 	<t t-else="">
-																		 		<option class="drop-down-select" t-att-id='room.id' t-att-folio="room.folio" t-att-folio_id="room.folio_id" t-att-partner_id="room.partner_id" t-att-guest="room.guest"><t t-esc="room.name" /></option>
+																		 		<option class="drop-down-select" t-att-id='room.id'><t t-esc="room.name" /></option>
 																		 	</t>
 																	 	</t>
 																	</select>
@@ -478,6 +490,7 @@
 			    													t-attf-placeholder="#{first_col.form_placeholder}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" t-attf-value="#{c_order[first_col.form_fields]}"
 				    												/>
 			    												</td>
+			    												<span id='partner_id' style="display:none;">false</span>
 			    											</tr>
 			    										</tbody>
 			    									</table>

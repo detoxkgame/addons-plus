@@ -158,7 +158,7 @@
 								  		<div class="col col-1" >Check In</div>
 										<div class="col col-1" >Room No.</div>
 									    <div class="col col-2" >Guest</div>
-									    <div class="col col-3" >Time</div>
+									    <!-- <div class="col col-3" >Time</div> -->
 									    <div class="col col-4" >Amount</div>
 									    <div class="col col-4" >Payment mode</div>
 									    <!-- <div class="col col-4" >Payment</div> -->
@@ -168,7 +168,7 @@
 									    	<div class="col col-1" ></div>
 									      	<div class="col col-1" ><t t-esc="checkin_details.product_name" /></div>
 									      	<div class="col col-2" ><t t-esc="checkin_details.partner_name" /></div>
-									      	<div class="col col-3" ><t t-esc="checkin_details.checkin_date" /></div>
+									      	<!-- <div class="col col-3" ><t t-esc="checkin_details.checkin_date" /></div> -->
 									      	<div class="col col-4" ><t t-esc="checkin_details.price_subtotal" /></div>
 									      	<div class="col col-4" ><t t-esc="checkin_details.journal_id" /></div>
 									      	<!-- <div class="col col-4" ><t t-esc="checkin_details.payment" /></div> -->
@@ -185,7 +185,7 @@
 								  		<div class="col col-1" >Check Out</div>
 									   	<div class="col col-1" >Room No.</div>
 									    <div class="col col-2" >Guest</div>
-									    <div class="col col-3" >Time</div>
+									    <!-- <div class="col col-3" >Time</div> -->
 									    <div class="col col-4" >Amount</div>
 									    <div class="col col-4" >Payment mode</div>
 									    <div class="col col-4" >Payment</div>
@@ -195,7 +195,7 @@
 								    		<div class="col col-1" ></div>
 								      		<div class="col col-1" ><t t-esc="checkout_details.product_name" /></div>
 								      		<div class="col col-2" ><t t-esc="checkout_details.partner_name" /></div>
-								      		<div class="col col-3" ><t t-esc="checkout_details.checkin_date" /></div>
+								      		<!-- <div class="col col-3" ><t t-esc="checkout_details.checkin_date" /></div> -->
 								      		<div class="col col-4" ><t t-esc="checkout_details.price_subtotal" /></div>
 								      		<div class="col col-4" ><t t-esc="checkout_details.journal_id" /></div>
 								      		<div class="col col-4" ><t t-esc="checkout_details.payment" /></div>
@@ -246,7 +246,7 @@
 										<div class="col col-1 ser_col" >Service</div>
 									   	<div class="col col-1 ser_col" >Room No.</div> 
 									    <div class="col col-2 ser_col" >Guest</div>
-									    <div class="col col-3 ser_col" >Time</div>
+									    <!-- <div class="col col-3 ser_col" >Time</div> -->
 									    <div class="col col-4 ser_col" >Responsible</div>
 									    <div class="col col-4 ser_col" >Status</div>
 									    <div class="col col-4 ser_col" >Payment</div>
@@ -256,7 +256,7 @@
 											<div class="col col-1 ser_col" ><t t-esc="service.category_name" /></div>
 											<div class="col col-1 ser_col" ><t t-esc="service.product_name" /></div>
 										    <div class="col col-2 ser_col" ><t t-esc="service.partner_name" /></div>
-										     <div class="col col-3 ser_col" ><t t-esc="service.time" /></div>
+										     <!-- <div class="col col-3 ser_col" ><t t-esc="service.time" /></div> -->
 										    <div class="col col-3 ser_col" ><t t-esc="service.user_name" /></div>
 										   	<div class="col col-4 ser_col" ><t t-esc="service.order_state" /></div>
 										  	<div class="col col-4 ser_col" ><t t-esc="service.invoice_state" /></div>
@@ -308,7 +308,7 @@
 									<li class="night_audit_table_row night_audit_li night_audit_li_background_color" >
 										<div class="col col-1 ser_col" >Product</div>
 										<div class="col col-1 ser_col" >Qty.</div> 
-										<div class="col col-3 ser_col" >Time</div> 
+										<!-- <div class="col col-3 ser_col" >Time</div>  -->
 									    <div class="col col-2 ser_col" >Vendor</div>
 									    <div class="col col-4 ser_col" >Amount</div>
 									   <!--  <div class="col col-4" >Status</div> -->
@@ -319,7 +319,7 @@
 										<li class="night_audit_table_row night_audit_li" >
 											<div class="col col-1 ser_col"><t t-esc="purchase.product_name" /></div>
 											<div class="col col-1 ser_col"><t t-esc="purchase.qty" /></div>
-											<div class="col col-3 ser_col"><t t-esc="purchase.time" /></div>
+											<!-- <div class="col col-3 ser_col"><t t-esc="purchase.time" /></div> -->
 										    <div class="col col-2 ser_col"><t t-esc="purchase.partner_name" /></div>
 										    <div class="col col-3 ser_col"><t t-esc="purchase.price_total" /></div>
 										   	<!-- <div class="col col-4"><t t-esc="purchase.order_state" /></div> -->

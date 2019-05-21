@@ -415,10 +415,13 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 contents.off('focus','.datepicker-input-time');
                 contents.on('focus','.datepicker-input-time',function(){
                 	$(this).datetimepicker({
-            	   		//todayBtn: "linked"
-                		format: 'yyyy-mm-dd HH:mm:ss',
-            	   		todayHighlight: true
-            	   	});
+                		todayHighlight: true,
+     	   				format : 'D mm-dd-yyyy HH:ii P',  
+     	   				autoclose: true,
+     	   				orientation: "top",
+            	   	}).off('changeDate').on('changeDate', function(e){ 
+            	   		
+            		});
                 });
                 
                 /** Remove Required */
@@ -485,6 +488,38 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                     	
             		});
                 });
+                
+                /** Departure Action taxi*/
+                contents.off('click','#departure');
+                contents.on('click','#departure',function(){
+                	var order_id = contents.find('#order_id').text();
+                	var model_name = contents.find('#model_name').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
+                	
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'set_departure_order',
+            			args: [0, order_id, model_name, form_temp_id],
+            		}).then(function(result){
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)                   	
+            		});
+                });
+                
+                /** Drop Action taxi */
+                contents.off('click','#drop');
+                contents.on('click','#drop',function(){
+                	var order_id = contents.find('#order_id').text();
+                	var model_name = contents.find('#model_name').text();
+                	var form_temp_id = contents.find('#form_temp_id').text();
+                	
+                	self._rpc({
+            			model: 'hm.form.template',
+            			method: 'set_drop_state',
+            			args: [0, order_id, model_name, form_temp_id],
+            		}).then(function(result){
+            			self.update_records(self, el_node, vendor_categ_id, dashboard_id, line_id, true, result['edit_form_id'], result['order_id'], vendor_id)                   	
+            		});
+                });
                
                 /** Confirm Action */
                 contents.off('click','#order_confirm, #action_confirm, #save');
@@ -520,10 +555,9 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                			order_datas[field] = value;
 	                			if(form_fields_records[i].form_fields == 'guest_name'){
 	                				var value1 =  $(this).find('#room_id option:selected').attr("id");
-	                				source_folio_id =  $(this).find('#room_id option:selected').attr("folio_id");
-	                				guest_partner_id =  $(this).find('#room_id option:selected').attr("partner_id");
+	                				source_folio_id =  contents.find("#source_folio_id option:selected").attr('id');
+	                				guest_partner_id =  contents.find('#partner_id').val();
 	                				order_datas['room_id'] = value1;
-	                				
 	                			}
 	                			if(!value && mandatory){
 	                				error = true;
@@ -533,7 +567,14 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                		}
 	                		if(form_fields_records[i].form_field_type == 'date'){
 	                			var value = $(this).find('input#'+form_fields_records[i].form_fields).val();
-	                			order_datas[field] = value;
+	                			var datestring = value.split(" ");
+     							var sd = datestring[2]+' '+datestring[3];  
+     							var momentObj = moment(sd, ["h:mm A"]);
+     							var date = datestring[1]+' '+momentObj.format("HH:mm");  
+     							var dateval = date.replace('-', '/').replace('-', '/');
+     							var dateTime = new Date(dateval);
+     							dateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");   
+	                			order_datas[field] = dateTime;
 	                			if(!value && mandatory){
 	                				error = true;
 	                				$(this).find('input#'+form_fields_records[i].form_fields).css({'border': '1px solid red'});
@@ -877,9 +918,40 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 contents.on('click','.delete-line',function(e){
                 	$(this).closest('tr').remove();
                 });
-                
+
                 /** Set Folio Number and Guest Name */
-                contents.on('change','#room_id',function(e){
+    	        contents.off('change','#room_id');
+    	        contents.on('change','#room_id',function(){
+    	        	var product_id = $(this).closest('td').find("option:selected").attr('id');
+    	        	self._rpc({
+    	    			model: 'hm.form.template',
+    	    			method: 'get_room_orders',
+    	    			args: [0, product_id],
+    	    		}).then(function(result){
+    	    			if(result.length > 0){
+	    	    			var folio = result[0].folio;
+	    	    			var guest_name = result[0].guest_name;
+	    	    			var partner_id = result[0].partner_id;
+	    	    			//set respective folio order in source_folio
+	    	    			contents.find('select#source_folio_id').val(folio);
+	    	    			contents.find('#guest_name').val(guest_name);
+	    	    			contents.find('#partner_id').val(partner_id);
+    	    			}
+    	    			else{
+    	    				contents.find('select#source_folio_id').val('Source Folio');
+    	    				contents.find('#partner_id').val();
+	    	    			contents.find('#guest_name').val('');
+    		        		self.pos.gui.show_popup('popup_hm_warning',{
+    		            		'title': 'Warning',
+    		            		'msg': 'Selected room is not reserved.',
+    		            	});
+    		        		contents.find('select#room_id').val('Rooms');
+    		        		
+    		        	}
+    	    		});
+                });
+                
+                /* contents.on('change','#room_id',function(e){
                 	var guest = $(this).closest('td').find("option:selected").attr('guest');
                 	var folio = $(this).closest('td').find("option:selected").attr('folio');
                 	var folio_id = $(this).closest('td').find("option:selected").attr('folio_id');
@@ -887,7 +959,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 	contents.find('select#source_folio_id').val(folio);
                 	contents.find('select#pos_order_id').attr('class', 'drop-down-select');
                 	contents.find('select#pos_order_id').val(folio);
-                });
+                });*/
                 
                 /** Set amount for purchase order */
                 contents.on('change','#product_id',function(e){

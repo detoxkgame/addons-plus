@@ -221,6 +221,8 @@ class pos_session(models.Model):
                                                 [('order_id', '=', p_order.id)]
                                                         )
             for line in purchase_order_line:
+                if invoice_state == 'no':
+                    invoice_state = 'open'
                 val = {
                     "category_name": line.product_id.categ_id.name,
                     "qty": line.product_qty,
