@@ -919,6 +919,9 @@ class POSorder(models.Model):
          ('noshow', 'No show'), 
          ('checkin', 'CheckIn'),
          ('checkout', 'CheckOut'),
+         ('shift', 'Shifted'),
+         ('extend', 'Extended'),
+         ('block', 'Blocked'),
          ('cancel', 'Cancelled'),
          ('done', 'Posted')],
         'Reservation Status',  copy=False, default='reserved')

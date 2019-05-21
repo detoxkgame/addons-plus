@@ -17,7 +17,10 @@ class ProductHistory(models.Model):
     status = fields.Char(string='status')
     created_by = fields.Many2one('res.users', string='Created user', ondelete='cascade')
     state = fields.Selection(
-        [('draft', 'New'),('reserved', 'Reserved'),('noshow', 'No show'), ('checkin', 'CheckIn'),('checkout', 'CheckOut'),('cancel', 'Cancelled'), ('paid', 'Paid'), ('done', 'Posted'), ('invoiced', 'Invoiced')],
+        [('draft', 'New'),('reserved', 'Reserved'),('noshow', 'No show'),
+         ('checkin', 'CheckIn'),('checkout', 'CheckOut'),('cancel', 'Cancelled'),
+         ('paid', 'Paid'), ('done', 'Posted'), ('invoiced', 'Invoiced'), 
+         ('shift', 'Shifted'), ('extend', 'Extended'), ('block', 'Blocked'),],
         'Status',  copy=False, default='draft')
 
  

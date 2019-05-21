@@ -1169,8 +1169,16 @@ class PosOrder(models.Model):
                                                                    'room_id': order_room.product_id.id,
                                                                    'checkin_date': order.checkin_date,
                                                                    'checkout_date': order.checkout_date,
+                                                                   'state': post.get('reservation_status'),
                                                                    'extend_checkout_date': post.get('extend_checkout_date'),
                                                                    'remark': reason})
+                prod_history = self.env['product.history'].sudo().search([
+                                        ('order_id', '=', order.id),
+                                        ('state', '=', 'checkin')])
+                prod_history.write({'out_date': post.get('extend_checkout_date'),
+                                    'state': post.get('reservation_status'),
+                                    })
+                
             del post['room_id']
             if(post.get('pos_order_id')):
                 del post['pos_order_id']
@@ -1201,7 +1209,7 @@ class PosOrder(models.Model):
                             'product_id': new_prod_prod.id,
                             'product_tmpl_id': new_prod_temp.id,
                             'order_id': order.id,
-                            'state': order.reservation_status,
+                            'state': post.get('reservation_status'),
                             'date': order.checkin_date,
                             'out_date': order.checkout_date,
                             }

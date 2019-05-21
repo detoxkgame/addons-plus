@@ -1008,6 +1008,13 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	if(id == 'reserve'){
             		order_status="reserved";
             	}
+            	if(id == 'shift_room'){
+            		order_status="shift";
+            	}
+            	if(id == 'date_extend'){
+            		order_status="extend";
+            	}
+            	
             	/** Start Check the Mandatory field */
             	$('input[ismandatory="true"]').each(function(index, element) {
 					if (!$(this).val().length > 0) {										

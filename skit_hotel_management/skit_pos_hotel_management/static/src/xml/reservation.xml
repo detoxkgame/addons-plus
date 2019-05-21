@@ -43,6 +43,12 @@
 								<t t-if="state=='noshow'">
 								 	 <t t-set="cellcolor" t-value="'ddea0f'" />
 								</t>
+								<t t-if="state=='shift'">
+								 	 <t t-set="cellcolor" t-value="'ec4513'" />
+								</t>
+								<t t-if="state=='extend'">
+								 	 <t t-set="cellcolor" t-value="'4e2ed0'" />
+								</t>
 							</t>
 							<t t-else="">				
 							 	 <t t-set="cellcolor" t-value="'339933'" />
@@ -52,7 +58,7 @@
 								<t t-set="cellcolor" t-value="'939a93'" />
 							</t>
 							<t t-if="state=='draft'">
-								<t t-set="cellcolor" t-value="'214f9e'" />
+								<t t-set="cellcolor" t-value="'339933'" />
 								<t t-set="state" t-value="'free'" />
 								<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
 									t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
