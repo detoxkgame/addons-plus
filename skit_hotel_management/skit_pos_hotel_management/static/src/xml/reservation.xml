@@ -1025,12 +1025,12 @@
 								    						<div class="hm-footer-div">
 								    							<t t-foreach="center_temp['sub_line_group_array'][same_row.sub_template_id][line_key]" t-as="data" >
 								    								<t t-if="c_order['id']">
-								    									<t t-if="c_order['reservation_status'] == 'checkin'">
+								    									<t t-if="((c_order['reservation_status'] == 'checkin') or (c_order['reservation_status'] == 'shift') or (c_order['reservation_status'] == 'extend'))">
 								    										<t t-if="data.form_label == 'Check In'">
 								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">Update</span>
 								    										</t>
-								    										<t t-else="">
+								    										<t t-elif="data.form_label == 'Check Out'">
 								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
 								    										</t>
@@ -1420,6 +1420,29 @@
                 </div>
                 <div class="footer">                   
                     <div class="button cancel">
+                        Ok 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="HMConfirmPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm">
+                <p class="title"><t t-esc=" widget.options.title || 'Warning' " /></p>
+                <div class="body copy_pre_body">
+                	<span id="shift_room" style="display:none"><t t-esc="widget.options.shift_room" /></span>
+                	<span id="extend_room" style="display:none"><t t-esc="widget.options.extend_room" /></span>
+                	<span id="product_id" style="display:none"><t t-esc="widget.options.product_id" /></span>
+                	<span id="pos_order_id" style="display:none"><t t-esc="widget.options.order_id" /></span>
+                	<p><t t-esc=" widget.options.msg" /> </p>
+                </div>
+                <div class="footer">                   
+                    <div class="button hm-cancel">
+                        Cancel 
+                    </div>
+                    <div class="button hm-ok">
                         Ok 
                     </div>
                 </div>

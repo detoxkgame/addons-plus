@@ -232,7 +232,7 @@ class FormTemplate(models.Model):
         return room_ids
 
     @api.multi
-    def get_product_room(self, categ_id, checkin_date, checkout_date):
+    def get_product_room(self, categ_id, checkin_date, checkout_date, order_id):
         """ Get Product Room for particular Period """
         room_ids = []
         #from_date = in_date+" 00:00:00"
@@ -261,8 +261,10 @@ class FormTemplate(models.Model):
             #                         ('out_date', '<=', checkout_date)])
             #===================================================================
             sql = "select * from product_history ph where ph.product_tmpl_id = "+str(product_temp.id)+" \
-                    and (('"+checkin_date+"' between ph.date and ((ph.out_date) - INTERVAL '1 DAY')) \
-                    or ('"+checkout_date+"' between ph.date and ((ph.out_date) - INTERVAL '1 DAY')) )"
+                    and ((ph.date between '"+checkin_date+"' and '"+checkout_date+"') \
+                    or ((ph.out_date - INTERVAL '1 DAY') between '"+checkin_date+"' and '"+checkout_date+"')) and state in ('reserved', 'checkin', 'shift', 'extend')"
+            if(int(order_id) > 0):
+                sql += " and order_id !="+str(order_id)+""
             cr = self.env.cr
             cr.execute(sql)
             prod_history = cr.dictfetchall()
@@ -1177,32 +1179,52 @@ class PosOrder(models.Model):
         order_check_out_date = order.checkout_date.strftime('%Y-%m-%d')
         reason = post.get('remark') or ''
         order_room = self.env['pos.order.line'].sudo().search([('order_id', '=', order.id)], limit=1)
-        if(post.get('extend_checkout_date')):
-            edate = datetime.strptime(post.get('extend_checkout_date'), '%Y-%m-%d %H:%M:%S')
+        is_shift_room = False
+        is_extend_room = False
+        if post.get('order_line') and not post.get('new_room_id'):
+            if(order_room.product_id.id != post.get('order_line')[0]['product_id']):
+                is_shift_room = True
+        if post.get('order_line') and not post.get('extend_checkout_date'):
+            edate = datetime.strptime(post.get('checkout_date'), '%Y-%m-%d %H:%M:%S')
             extend_date = edate.strftime('%Y-%m-%d')
-            post['checkout_date'] = post.get('extend_checkout_date')
+            if(order_check_out_date != extend_date):
+                is_extend_room = True
+        if(post.get('extend_checkout_date') or is_extend_room):
+            if(post.get('extend_checkout_date')):
+                edate = datetime.strptime(post.get('extend_checkout_date'), '%Y-%m-%d %H:%M:%S')
+                extend_date = edate.strftime('%Y-%m-%d')
+                post['checkout_date'] = post.get('extend_checkout_date')
+                extend_checkout_date = post.get('extend_checkout_date')
+            else:
+                extend_checkout_date = post.get('checkout_date')
             if(order_check_out_date != extend_date):
                 self.env['hm.checkout.date.extend'].sudo().create({'pos_order_id': order.id,
                                                                    'room_id': order_room.product_id.id,
                                                                    'checkin_date': order.checkin_date,
                                                                    'checkout_date': order.checkout_date,
                                                                    'state': post.get('reservation_status'),
-                                                                   'extend_checkout_date': post.get('extend_checkout_date'),
+                                                                   'extend_checkout_date': extend_checkout_date,
                                                                    'remark': reason})
                 prod_history = self.env['product.history'].sudo().search([
                                         ('order_id', '=', order.id),
                                         ('state', '=', 'checkin')])
-                prod_history.write({'out_date': post.get('extend_checkout_date'),
+                prod_history.write({'out_date': extend_checkout_date,
                                     'state': post.get('reservation_status'),
                                     })
-
-            del post['room_id']
-            if(post.get('pos_order_id')):
-                del post['pos_order_id']
-            del post['extend_checkout_date']
-            del post['remark']
-        if post.get('new_room_id'):
-            if(order_room.product_id.id != post.get('new_room_id')):
+            if(post.get('extend_checkout_date')):
+                del post['room_id']
+                if(post.get('pos_order_id')):
+                    del post['pos_order_id']
+                del post['extend_checkout_date']
+                del post['remark']
+        if post.get('new_room_id') or is_shift_room:
+            if post.get('new_room_id'):
+                new_room_id = int(post.get('new_room_id'))
+                new_room_type_id = int(post.get('new_room_type_id'))
+            else:
+                new_room_id = int(post.get('order_line')[0]['product_id'])
+                new_room_type_id = int(post.get('order_line')[0]['room_type_id'])
+            if(order_room.product_id.id != new_room_id):
                 """ Old Room Details """
                 prod_history = self.env['product.history'].sudo().search([
                                         ('order_id', '=', order.id),
@@ -1215,7 +1237,7 @@ class PosOrder(models.Model):
                 prod_temp.write({'state': 'available'})
                 """ New Room Details """
                 new_prod_prod = self.env['product.product'].sudo().search([
-                                        ('id', '=', post.get('new_room_id'))])
+                                        ('id', '=', new_room_id)])
                 new_prod_temp = self.env['product.template'].sudo().search([
                                         ('id', '=', new_prod_prod.product_tmpl_id.id)])
                 new_prod_temp.write({'state': 'occupied'})
@@ -1240,23 +1262,24 @@ class PosOrder(models.Model):
                                 'guest_name_id': order.partner_id.id,
                                 'referred_by_id': order.referred_by_id,
                                 'old_room_id': order_room.product_id.id,
-                                'new_room_id': int(post.get('new_room_id')),
+                                'new_room_id': new_room_id,
                                 'old_room_type_id': order_room.room_type_id.id,
-                                'new_room_type_id': int(post.get('new_room_type_id')),
+                                'new_room_type_id': new_room_type_id,
                                 'remark': reason
                             })
-                line_data = {}
-                line_data['product_id'] = int(post.get('new_room_id'))
-                line_data['room_type_id'] = int(post.get('new_room_type_id'))
-                post['order_line'].append(line_data)
-                del post['old_room_id']
-                del post['new_room_id']
-                del post['old_room_type_id']
-                del post['new_room_type_id']
-                if(post.get('pos_order_id')):
-                    del post['pos_order_id']
-                del post['guest_name_id']
-                del post['remark']
+                if post.get('new_room_id'):
+                    line_data = {}
+                    line_data['product_id'] = new_room_id
+                    line_data['room_type_id'] = new_room_type_id
+                    post['order_line'].append(line_data)
+                    del post['old_room_id']
+                    del post['new_room_id']
+                    del post['old_room_type_id']
+                    del post['new_room_type_id']
+                    if(post.get('pos_order_id')):
+                        del post['pos_order_id']
+                    del post['guest_name_id']
+                    del post['remark']
         if(order):
             if post:
                 # To update state for product_history and product_template
@@ -1267,9 +1290,11 @@ class PosOrder(models.Model):
                 product_tmpl_id = product_history.product_tmpl_id
                 product_template = self.env['product.template'].sudo().search(
                                         [('id', '=', product_tmpl_id.id)])
-                if(product_history.state == 'draft'):
-                    product_history.write({'state': 'checkin'})
-                    product_template.write({'state': 'occupied'})
+                #===============================================================
+                # if(product_history.state == 'draft'):
+                #     product_history.write({'state': 'checkin'})
+                #     product_template.write({'state': 'occupied'})
+                #===============================================================
                 if post.get('order_line'):
                     order_lines = post.get('order_line')
                     i = 0

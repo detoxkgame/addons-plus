@@ -15,6 +15,8 @@ var night_audit_subid=0;
 var QWeb = core.qweb;
 var _t = core._t;
 var hm_widget = screens.RoomReservationScreenWidget;//require('skit_hotel_management.RoomReservationScreenWidget');
+var old_product_id = 0;
+var old_checout_date = '';
 
 var _super = models.Order.prototype;
 models.Order = models.Order.extend({
@@ -66,6 +68,132 @@ var HMWaringPopupWidget = PopupWidget.extend({
 
 gui.define_popup({name:'popup_hm_warning', widget: HMWaringPopupWidget});
 
+var HMConfirmPopupWidget = PopupWidget.extend({
+    template: 'HMConfirmPopupWidget',
+    events: _.extend({}, PopupWidget.prototype.events, {
+    	'click .button.hm-cancel':  'hm_cancel',
+        'click .button.hm-ok': 'hm_ok',
+	}),
+
+	hm_cancel: function(){
+		var shift_room = $('#shift_room').text();
+		var extend_room = $('#extend_room').text();
+		var contents = $('.hm-reservation-content');
+		if(shift_room == 'true'){
+			contents.find('#product_id').val(old_product_id);
+		}
+		if(extend_room == 'true'){
+			var datestring = old_checout_date.split(" ");     						
+			var sd = datestring[2]+' '+datestring[3];  
+			var momentObj = moment(sd, ["h:mm A"]);
+			var date = datestring[1]+' '+momentObj.format("HH:mm");  
+			var dateval = date.replace('-', '/').replace('-', '/');
+			var dateTime = new Date(dateval);
+			contents.find('#checkout_date').datetimepicker( "setDate", dateTime );
+		}
+    	this.gui.close_popup();
+    },
+    
+    hm_ok: function(){
+    	var self = this;
+    	var shift_room = $('#shift_room').text();
+    	var extend_room = $('#extend_room').text();
+    	var contents = $('.hm-reservation-content');
+    	if(shift_room == 'true'){
+	    	var product_id = contents.find('#product_id').val();
+	    	self._rpc({
+				model: 'hm.form.template',
+				method: 'get_product_roomtype',
+				args: [0, product_id],
+			}).then(function(result){
+				var room_type = result[0].id;
+				//set respective categ_id in room type
+				contents.find("#room_type_id").val(room_type);
+				contents.find("#room_type_id").removeClass('hm-placeholder');
+			});
+    	}
+    	if(extend_room == 'true'){
+    		var pos_order_id = $('#pos_order_id').text();
+    		var in_date = contents.find('#checkin_date').val();
+		   	var out_date = contents.find('#checkout_date').val();
+		   	var checkin_date = in_date.replace('-', '/').replace('-', '/');
+		   	var checkout_date = out_date.replace('-', '/').replace('-', '/');
+    		var date1 = new Date(checkin_date);
+ 	   		var date2 = new Date(checkout_date);
+ 	   		if(in_date.length <= 0){
+     	   		//alert('Please enter checkin date');
+	     	   	self.pos.gui.show_popup('popup_hm_warning',{
+            		'title': 'Warning',
+            		'msg': 'Please enter checkin date.',
+            	});
+     	   		return false;
+ 	   		}
+     	   	if(date2 < date1){
+     	   		//alert('Checkout date must be greater than check in date');
+	     	   	self.pos.gui.show_popup('popup_hm_warning',{
+            		'title': 'Warning',
+            		'msg': 'Checkout date must be greater than check in date.',
+            	});
+            	contents.find('#checkout_date').val('');
+     	   		return false;
+     	   	}
+     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+ 	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+ 	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
+ 	    	{
+ 	    		contents.find('#no_night').val(numberOfNights);
+ 	    	} 
+ 	    	var product_id = contents.find("#product_id").val();
+ 	    	var room_type_id = contents.find("#room_type_id").val();
+ 	    	if(product_id == null){
+ 	    		product_id = 0;
+ 	    	}
+ 	    	if(room_type_id == null){
+ 	    		room_type_id = 0;
+ 	    	}
+ 	    	var datein_date = moment(checkin_date).format("YYYY-MM-DD");
+ 	    	var dateout_date = moment(checkout_date).format("YYYY-MM-DD");
+ 	    	self._rpc({
+    			model: 'hm.form.template',
+    			method: 'get_product_room',
+    			args: [0, room_type_id, datein_date, dateout_date, pos_order_id],
+    		}).then(function(result){
+    			var len = result.length;
+    			var selectbox = contents.find("#product_id");
+    		    selectbox.empty();
+    		    var exit_prod = false;
+    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
+    		    for (var i = 0; i < len; i++)
+	      		{
+    		    	if((product_id == result[i].id) && (!result[i].is_booked) ){
+    		    		exit_prod = true;
+    		    	}
+    		    	if(result[i].is_booked){
+    		    		list += "<option disabled='disabled' class='hm-form-input' style='color: #29c107;' id='"+result[i].id+"' booked='"+result[i].is_booked+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+    		    	}else{
+    		    		list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+    		    	}
+    		    }
+    		    //replace selection option in room based on room type
+    		    selectbox.html(list); 
+    		    if(exit_prod){
+    		    	contents.find("#product_id").val(product_id);
+    		    	contents.find("#product_id").removeClass('hm-placeholder');
+    		    }else{
+    		    	contents.find("#product_id").addClass('hm-placeholder');
+    		    }
+    		    if(room_type_id > 0)
+    		    	contents.find("#room_type_id").val(room_type_id);
+    		    	contents.find("#room_type_id").removeClass('hm-placeholder');
+    		});
+    	}
+    	this.gui.close_popup();
+    }
+
+});
+
+gui.define_popup({name:'popup_hm_confirm', widget: HMConfirmPopupWidget});
+
 var HMComplaintPopupWidget = PopupWidget.extend({
     template: 'HMComplaintPopupWidget',
     events: _.extend({}, PopupWidget.prototype.events, {
@@ -110,6 +238,7 @@ var HMComplaintPopupWidget = PopupWidget.extend({
 							floor_id: floor_id, column_count: column_count, model_name: model_name
 								});
 			   		 contents.find('.hm-center-form-design').html(center_panel_html);
+			   		 old_product_id = contents.find('#product_id').val();	
 			   			
 			   		 if(form_view == "restaurant_table"){
 			   			 sub_template_id = res_table_sub_id;
@@ -225,7 +354,11 @@ var HMFormPopupWidget = PopupWidget.extend({
 		
     	if (!isProceed)
 		{
-				alert('Please fill mandatory fields.');
+				//alert('Please fill mandatory fields.');
+				self.pos.gui.show_popup('popup_hm_warning',{
+            		'title': 'Warning',
+            		'msg': 'Please fill mandatory fields.',
+            	});
 				return false;
 		}else{
 			$('table.hm-form-table tr.hm-order-details').each(function() {	
@@ -302,6 +435,7 @@ var HMFormPopupWidget = PopupWidget.extend({
 							floor_id: floor_id, column_count: column_count, model_name:model_name
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
+		    		 old_product_id = contents.find('#product_id').val();	
 		    			
 		    		 if(form_view == "restaurant_table"){
 		    			 if(res_table_sub_id > 0){
@@ -475,6 +609,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     			//centerform.innerHTML = center_panel_html;
     			//centerform = reservationform.childNodes[1];
     			contents.find('.hm-center-form-design').html(center_panel_html);
+    			old_product_id = contents.find('#product_id').val();	
     			vendor_table = self.$('#vendor_order_list').DataTable({
     		        bSort: false,
     		        bFilter: false,
@@ -543,6 +678,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    							center_panel_sub_id: center_panel_sub_id, column_count: column_count
 		    							});
 		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+		    		    			old_product_id = contents.find('#product_id').val();	
 		    		    		});
 	    					}
 	    					else{//With order_id
@@ -563,6 +699,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    							center_panel_sub_id: center_panel_sub_id, column_count: column_count
 		    							});
 		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+		    		    			old_product_id = contents.find('#product_id').val();	
 		    		    		});
 	    					}
 		     	   		}
@@ -600,6 +737,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    			//centerform.innerHTML = center_panel_html;
 	    			//centerform = reservationform.childNodes[1];
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
+	    			old_product_id = contents.find('#product_id').val();	
 	    			vendor_table = self.$('#vendor_order_list').DataTable({
         		        bSort: false,
         		        bFilter: false,
@@ -654,6 +792,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    			//centerform.innerHTML = center_panel_html;
 			    			//centerform = reservationform.childNodes[1];
 			    			contents.find('.hm-center-form-design').html(center_panel_html);
+			    			old_product_id = contents.find('#product_id').val();	
 			    			if(form_view == "restaurant_table"){
 			    				var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
 			    				sub_template_id = res_table_sub_id;
@@ -714,6 +853,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					    							model_name: model_name
 					    							});
 					    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+					    		    			old_product_id = contents.find('#product_id').val();	
 					    		    		});
 				    					}
 				    					else{//With order_id
@@ -736,6 +876,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					    							model_name: model_name
 					    							});
 					    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+					    		    			old_product_id = contents.find('#product_id').val();	
 					    		    		});
 				    					}
 		    		     	   		}
@@ -788,6 +929,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 						model_name: model_name
 						});
 	    			contents.find('.hm-center-form-design').html(center_panel_html);
+	    			old_product_id = contents.find('#product_id').val();	
+	    			old_checout_date = contents.find('#checkout_date').val();
 	    		});
 	        	
 	        });
@@ -839,7 +982,12 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	     	   		var date2 = new Date(checkout_date);
 	     	   		if((in_date.length > 0) && (out_date.length > 0)){
 			     	   	if(date2 < date1){
-			     	   		alert('Checkout date must be greater than check in date');
+			     	   		//alert('Checkout date must be greater than check in date');
+				     	   	self.pos.gui.show_popup('popup_hm_warning',{
+			            		'title': 'Warning',
+			            		'msg': 'Checkout date must be greater than check in date.',
+			            	});
+				     	    contents.find('#checkout_date').val('');
 			     	   		return false;
 			     	   	}
 			     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -852,77 +1000,97 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
  	   		   	});
 	        });
 	        
-	        contents.off('focus','#checkout_date');
+	        contents.off('focus', );
 	        contents.on('focus','#checkout_date',function(){
 	        	$(this).datetimepicker({
  	   				todayHighlight: true,
  	   				format : 'D mm-dd-yyyy HH:ii P', 
  	   				autoclose: true,
  	   		   	}).off('changeDate').on('changeDate', function(e){ 
- 	   		   		var in_date =contents.find('#checkin_date').val();
- 	   		   		var out_date =contents.find('#checkout_date').val();
+ 	   		   		var order_id = contents.find('#order_id').text();
+ 	   		   		var in_date = contents.find('#checkin_date').val();
+ 	   		   		var out_date = contents.find('#checkout_date').val();
  	   		   		var checkin_date = in_date.replace('-', '/').replace('-', '/');
  	   		   		var checkout_date = out_date.replace('-', '/').replace('-', '/');
- 	   		   		
-	 	   		   	var date1 = new Date(checkin_date);
-	     	   		var date2 = new Date(checkout_date);
-	     	   		if(in_date.length <= 0){
-		     	   		alert('Please enter checkin date');
-		     	   		return false;
-	     	   		}
-		     	   	if(date2 < date1){
-		     	   		alert('Checkout date must be greater than check in date');
-		     	   		return false;
-		     	   	}
-		     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-	     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-	     	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
-	     	    	{
-	     	    		contents.find('#no_night').val(numberOfNights);
-	     	    	} 
-	     	    	var product_id = contents.find("#product_id").val();
-	     	    	var room_type_id = contents.find("#room_type_id").val();
-	     	    	if(product_id == null){
-	     	    		product_id = 0;
-	     	    	}
-	     	    	if(room_type_id == null){
-	     	    		room_type_id = 0;
-	     	    	}
-	     	    	var datein_date = moment(checkin_date).format("YYYY-MM-DD");
-	     	    	var dateout_date = moment(checkout_date).format("YYYY-MM-DD");
-	     	    	self._rpc({
-		    			model: 'hm.form.template',
-		    			method: 'get_product_room',
-		    			args: [0, room_type_id, datein_date, dateout_date],
-		    		}).then(function(result){
-		    			var len = result.length;
-		    			var selectbox = contents.find("#product_id");
-		    		    selectbox.empty();
-		    		    var exit_prod = false;
-		    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
-		    		    for (var i = 0; i < len; i++)
-			      		{
-		    		    	if((product_id == result[i].id) && (!result[i].is_booked) ){
-		    		    		exit_prod = true;
-		    		    	}
-		    		    	if(result[i].is_booked){
-		    		    		list += "<option disabled='disabled' class='hm-form-input' style='color: #29c107;' id='"+result[i].id+"' booked='"+result[i].is_booked+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
-		    		    	}else{
-		    		    		list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
-		    		    	}
-		    		    }
-		    		    //replace selection option in room based on room type
-		    		    selectbox.html(list); 
-		    		    if(exit_prod){
-		    		    	contents.find("#product_id").val(product_id);
-		    		    	contents.find("#product_id").removeClass('hm-placeholder');
-		    		    }else{
-		    		    	contents.find("#product_id").addClass('hm-placeholder');
-		    		    }
-		    		    if(room_type_id > 0)
-		    		    	contents.find("#room_type_id").val(room_type_id);
-		    		    	contents.find("#room_type_id").removeClass('hm-placeholder');
-		    		});
+ 	   		   		if(order_id != ''){
+	 	   		   		self.pos.gui.show_popup('popup_hm_confirm',{
+	    	        		'title': 'Warning',
+	    	        		'msg': 'Are you sure want to change the CheckOut Date?',
+	    	        		'shift_room': 'false',
+	    	        		'extend_room': 'true',
+	    	        		'order_id': order_id,
+	        			});
+ 	   		   		}
+ 	   		   		else{
+		 	   		   	var date1 = new Date(checkin_date);
+		     	   		var date2 = new Date(checkout_date);
+		     	   		if(in_date.length <= 0){
+			     	   		//alert('Please enter checkin date');
+				     	   	self.pos.gui.show_popup('popup_hm_warning',{
+			            		'title': 'Warning',
+			            		'msg': 'Please enter checkin date.',
+			            	});
+			     	   		return false;
+		     	   		}
+			     	   	if(date2 < date1){
+			     	   		//alert('Checkout date must be greater than check in date');
+				     	   	self.pos.gui.show_popup('popup_hm_warning',{
+			            		'title': 'Warning',
+			            		'msg': 'Checkout date must be greater than check in date.',
+			            	});
+			            	contents.find('#checkout_date').val('');
+			     	   		return false;
+			     	   	}
+			     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+		     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+		     	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
+		     	    	{
+		     	    		contents.find('#no_night').val(numberOfNights);
+		     	    	} 
+		     	    	var product_id = contents.find("#product_id").val();
+		     	    	var room_type_id = contents.find("#room_type_id").val();
+		     	    	if(product_id == null){
+		     	    		product_id = 0;
+		     	    	}
+		     	    	if(room_type_id == null){
+		     	    		room_type_id = 0;
+		     	    	}
+		     	    	var datein_date = moment(checkin_date).format("YYYY-MM-DD");
+		     	    	var dateout_date = moment(checkout_date).format("YYYY-MM-DD");
+		     	    	self._rpc({
+			    			model: 'hm.form.template',
+			    			method: 'get_product_room',
+			    			args: [0, room_type_id, datein_date, dateout_date, 0],
+			    		}).then(function(result){
+			    			var len = result.length;
+			    			var selectbox = contents.find("#product_id");
+			    		    selectbox.empty();
+			    		    var exit_prod = false;
+			    		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Room No</option>';
+			    		    for (var i = 0; i < len; i++)
+				      		{
+			    		    	if((product_id == result[i].id) && (!result[i].is_booked) ){
+			    		    		exit_prod = true;
+			    		    	}
+			    		    	if(result[i].is_booked){
+			    		    		list += "<option disabled='disabled' class='hm-form-input' style='color: #29c107;' id='"+result[i].id+"' booked='"+result[i].is_booked+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+			    		    	}else{
+			    		    		list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+			    		    	}
+			    		    }
+			    		    //replace selection option in room based on room type
+			    		    selectbox.html(list); 
+			    		    if(exit_prod){
+			    		    	contents.find("#product_id").val(product_id);
+			    		    	contents.find("#product_id").removeClass('hm-placeholder');
+			    		    }else{
+			    		    	contents.find("#product_id").addClass('hm-placeholder');
+			    		    }
+			    		    if(room_type_id > 0)
+			    		    	contents.find("#room_type_id").val(room_type_id);
+			    		    	contents.find("#room_type_id").removeClass('hm-placeholder');
+			    		});
+ 	   		   		}
  	   		   	});
 	        });
 	        
@@ -941,11 +1109,20 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	 	   		   	var date1 = new Date(old_checkout_date);
 	     	   		var date2 = new Date(checkout_date);
 	     	   		if(old_out_date.length <= 0){
-		     	   		alert('Please enter checkout date');
+		     	   		//alert('Please enter checkout date');
+		     	   		self.pos.gui.show_popup('popup_hm_warning',{
+		            		'title': 'Warning',
+		            		'msg': 'Please enter checkout date.',
+		            	});
 		     	   		return false;
 	     	   		}
 		     	   	if(date2 < date1){
-		     	   		alert('Extend Checkout date must be greater than check out date');
+		     	   		//alert('Extend Checkout date must be greater than check out date');
+			     	   	self.pos.gui.show_popup('popup_hm_warning',{
+		            		'title': 'Warning',
+		            		'msg': 'Extend Checkout date must be greater than check out date.',
+		            	});
+			     	    contents.find('#extend_checkout_date').val('');
 		     	   		return false;
 		     	   	}
 		     	   	/*var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -960,17 +1137,34 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        /** On change room action */
 	        contents.off('change','#product_id');
 	        contents.on('change','#product_id',function(){
-	        	var product_id = contents.find("#product_id option:selected").val();
-	        	self._rpc({
-	    			model: 'hm.form.template',
-	    			method: 'get_product_roomtype',
-	    			args: [0, product_id],
-	    		}).then(function(result){
-	    			var room_type = result[0].id;
-	    			//set respective categ_id in room type
-	    			contents.find("#room_type_id").val(room_type);
-	    			contents.find("#room_type_id").removeClass('hm-placeholder');
-	    		});
+	        	var order_id = contents.find("#order_id").text();
+	        	if(order_id != ''){
+	        		var product_id = contents.find("#product_id option:selected").val();
+	        		if(old_product_id != product_id){
+	        			//contents.find("#product_id").val(old_product_id);
+	        			self.pos.gui.show_popup('popup_hm_confirm',{
+	    	        		'title': 'Warning',
+	    	        		'msg': 'Are you sure want to change the room?',
+	    	        		'shift_room': 'true',
+	    	        		'extend_room': 'false',
+	        			});
+	        		}
+	        	}
+	        	else{
+	        		var product_id = contents.find("#product_id option:selected").val();
+		        	self._rpc({
+		    			model: 'hm.form.template',
+		    			method: 'get_product_roomtype',
+		    			args: [0, product_id],
+		    		}).then(function(result){
+		    			var room_type = result[0].id;
+		    			//set respective categ_id in room type
+		    			contents.find("#room_type_id").val(room_type);
+		    			contents.find("#room_type_id").removeClass('hm-placeholder');
+		    		});
+	        		
+	        	}
+	        	
             });
 	        
 	        contents.off('change','#new_room_id');
@@ -1102,7 +1296,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				
             	if (!isProceed)
      			{
-     				alert('Please fill mandatory fields.');
+     				//alert('Please fill mandatory fields.');
+            		self.pos.gui.show_popup('popup_hm_warning',{
+	            		'title': 'Warning',
+	            		'msg': 'Please fill mandatory fields.',
+	            	});
      				return false;
      			}else{
 	            	var product_array=[];
@@ -1646,6 +1844,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 								floor_id: floor_id, column_count: column_count, model_name:model_name
 								});
 			    		 contents.find('.hm-center-form-design').html(center_panel_html);
+			    		 old_product_id = contents.find('#product_id').val();	
 			    			
 			    		 if(form_view == "restaurant_table"){
 			    			 sub_template_id = res_table_sub_id;
@@ -1724,6 +1923,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 							floor_id: floor_id, column_count: column_count, model_name:model_name
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
+		    		 old_product_id = contents.find('#product_id').val();	
 		    			
 		    		 if(form_view == "restaurant_table"){
 		    			 sub_template_id = res_table_sub_id;
@@ -1768,6 +1968,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 									floor_id: floor_id, column_count: column_count, model_name: model_name
 									});
 				    		 contents.find('.hm-center-form-design').html(center_panel_html);
+				    		 old_product_id = contents.find('#product_id').val();	
 				    			
 				    		 if(form_view == "restaurant_table"){
 				    			 sub_template_id = res_table_sub_id;
@@ -1817,6 +2018,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    		 contents.find('#top_panel'+sub_id).addClass("hm-top-inner-selected");
+		    		 old_product_id = contents.find('#product_id').val();	
 		    		 if(form_view == "restaurant_table"){
 		    			 sub_template_id = res_table_sub_id;
 		    			 if(sub_template_id > 0){
@@ -1856,6 +2058,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 							floor_id: floor_id, column_count: column_count, model_name:model_name
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
+		    		 old_product_id = contents.find('#product_id').val();	
 		    		 
 		    		 vendor_table = self.$('#vendor_order_list').DataTable({
 	        		        bSort: false,
