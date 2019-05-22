@@ -1030,6 +1030,10 @@
 								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">Update</span>
 								    										</t>
+								    										<t t-else="">
+								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    										</t>
 								    									</t>
 								    									<t t-elif="c_order['reservation_status'] == 'reserved'">
 								    										<t t-if="data.form_label == 'Reserve'">

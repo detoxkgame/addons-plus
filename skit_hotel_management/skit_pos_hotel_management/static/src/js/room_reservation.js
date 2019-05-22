@@ -266,12 +266,12 @@ var HMFormPopupWidget = PopupWidget.extend({
 			if(cid == 'hk_close'){
 				order_post['state'] = 'done'
 			}
-        	/*if(order_id != ''){
+        	if(order_id != ''){
         		var msg = 'House Keeping status changed.';
         	}else{
         		order_id = 0;
         		var msg = 'House Keeping created.';
-        	}*/
+        	}
         	self._rpc({
 	     		model: 'hm.form.template',
 	     		method:'popup_create_order',
@@ -1037,10 +1037,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             });
             	
 	        /** Check In Button Action */
-	        var order_post = {};
-	        var order_line = [];
+	       
 	        contents.off('click','#checkin, #reserve, #date_extend, #shift_room');
             contents.on('click','#checkin, #reserve, #date_extend, #shift_room',function(e){
+            	var order_post = {};
+     	        var order_line = [];
             	var isProceed =true;
             	var id = $(this).attr('id');
             	var order_id = contents.find('#order_id').text();
