@@ -53,7 +53,8 @@ class RoomStatus(models.Model):
             N = delta.days + 1
             
         product_temp_ids = self.env['product.category'].search([ ('is_room', '=', True)])
-        product_temp = self.env['product.template'].search([ ('categ_id', 'in', (product_temp_ids.ids))])
+        product_temp = self.env['product.template'].search([('categ_id', 'in', product_temp_ids.ids),
+                                                               ('available_in_pos', '=', 'true')])
         list_product_arrays = {}
         list_order_arrays = {}
         categ_name = {}
@@ -99,8 +100,10 @@ class RoomStatus(models.Model):
             date_value = datetime.strftime(range_date, "%a %m-%d-%Y")   
             today_date_value = datetime.strftime(today, "%b %d %Y")
             date_array.append(date)
+            dates = date_array
+            dates.sort(key=lambda date: datetime.strptime(date, "%b %d %Y"))
             date_format[date] = date_value       
 
-        return {'date_key':sorted(date_array), 'date_format':date_format, 'room_status_list_array':room_status_list_arrays,
+        return {'date_key':dates, 'date_format':date_format, 'room_status_list_array':room_status_list_arrays,
                 'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name,
                 'today_date':today_date_value,}

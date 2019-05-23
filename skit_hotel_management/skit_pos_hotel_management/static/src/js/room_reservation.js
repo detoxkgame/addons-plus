@@ -503,6 +503,212 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     get_data: function(){
         return this.gui.get_current_screen_param('subidno');
     },
+    
+    checkMandatory: function(isProceed, order_post, order_line, order_status, order_id, id) {
+    	var self = this;
+    	/** Start Check the Mandatory field */
+    	$('input[ismandatory="true"]').each(function(index, element) {
+			if (!$(this).val().length > 0) {										
+				if(!(typeof attr !== typeof undefined)){
+					$(this).addClass('warning');
+					//$(this).removeClass('hide');
+					isProceed = false;
+				}else{
+					$(this).removeClass('warning');
+				}										
+			}
+			else{
+				$(this).removeClass('warning');
+			}
+    	});
+    	$('textarea[ismandatory="true"]').each(function(index, element) {
+			if (!$(this).val().length > 0) {										
+				if(!(typeof attr !== typeof undefined)){
+					$(this).addClass('warning');
+					//$(this).removeClass('hide');
+					isProceed = false;
+				}else{
+					$(this).removeClass('warning');
+				}										
+			}
+			else{
+				$(this).removeClass('warning');
+			}
+    	});
+		$('select[ismandatory="true"]').each(function(index, element) {
+			if ($(this).val() == null) {										
+				if(!(typeof attr !== typeof undefined)){
+					$(this).addClass('warning');
+					isProceed = false;
+				}else{
+					$(this).removeClass('warning');
+				}										
+			}
+			else{
+				$(this).removeClass('warning');
+			}
+		});
+    	/** End Check the Mandatory field */
+    	if (!isProceed)
+			{
+				//alert('Please fill mandatory fields.');
+    		self.pos.gui.show_popup('popup_hm_warning',{
+        		'title': 'Warning',
+        		'msg': 'Please fill mandatory fields.',
+        	});
+				return false;
+			}else{
+        	var product_array=[];
+        	var order = self.pos.get_order();
+        	var no_night = 1;
+        	$('table.hm-form-table tr.hm-order-details').each(function() {	
+					$(this).find('input').each(function(index, element) {  
+						if($(this).attr('ftype')=='date'){
+							var value = element.value;
+							var datestring = value.split(" ");     						
+							var sd = datestring[2]+' '+datestring[3];  
+							var momentObj = moment(sd, ["h:mm A"]);
+							var date = datestring[1]+' '+momentObj.format("HH:mm");  
+							var dateval = date.replace('-', '/').replace('-', '/');
+							var dateTime = new Date(dateval);
+							dateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");     
+							order_post[element.name]=dateTime;
+						}else{
+							order_post[element.name]=element.value;
+							if(element.name == 'no_night'){
+								no_night = element.value;
+							}
+						}
+						
+					});
+					$(this).find('textarea').each(function(index, element) {     						
+						order_post[element.name]=element.value;
+     			});
+					$(this).find('select').each(function(index, element) {     						
+						order_post[element.name]=element.value;
+     			});
+        	});
+        	$('table.hm-form-table tr.hm-orderline-details').each(function() {	
+        		var order_line_array ={};
+        		order_line_array['qty'] = no_night;
+					$(this).find('input').each(function(index, element) {  
+						order_line_array[element.name]=element.value;
+						if(element.name == 'adult'){
+							//alert('contents'+JSON.stringify(element))
+							order_post[element.name]=element.value;
+						}
+					});
+					
+					$(this).find('select').each(function(index, element) {     						
+						order_line_array[element.name]=parseInt(element.value);
+						if(element.name =='product_id'){
+							product_array.push(parseInt(element.value));
+						}
+     			});
+					
+					order_line.push(order_line_array);
+        	});
+        	
+        	order_post['order_line'] = order_line;
+        	order_post['reservation_status'] = order_status;
+        	if(order_id != ''){
+        		self._rpc({
+ 	     			model: 'pos.order',
+ 	     			method:'update_order',
+ 	     			args: [0, order_post, order_id],
+ 	     		}).then(function(result){
+ 	     			var msg = 'Thanks for Booking. Your Reservation is confirmed.';
+ 	     			if(id == 'shift_room')
+ 	     				msg = 'Your room changed.';
+ 	     			if(id == 'date_extend')
+ 	     				msg = 'Your check out date extended.'
+ 	     			self.pos.gui.show_popup('alert',{
+	                     'title': _t('Success'),
+	                     'body': msg,
+	                });
+ 	     		});
+        		/*if((id == 'date_extend') || (id == 'shift_room')){
+        			var title = 'Date Extend'
+        			if(id == 'shift_room')
+        				title = 'Shift Room'
+        			self.pos.gui.show_popup('popup_hm_complaint',{
+    	        		'title': title,
+    	        		'msg': '',
+    	        		'folio_id': order_id,
+    	        		'sub_id': 0,
+    	        		'order_post': JSON.stringify(order_post),
+    	        		
+        			});
+        		}else{
+        			self._rpc({
+	 	     			model: 'pos.order',
+	 	     			method:'update_order',
+	 	     			args: [0, order_post, order_id, ''],
+	 	     		}).then(function(result){
+	 	     			self.pos.gui.show_popup('alert',{
+		                     'title': _t('Success'),
+		                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
+		                });
+	 	     		});
+        		}*/
+        		
+        	}else{
+        		_.every(product_array, function(line){	
+						var product =  self.pos.db.get_product_by_id(line);
+						if(product!=undefined){
+							order.add_product(product, {price: product.price});
+						}
+ 		    	}); 
+        	
+            	var cashregister=self.pos.cashregisters[0];				
+		        for (var i = 0; i < self.pos.cashregisters.length; i++) { 		        	  
+		        	var is_paylater = self.pos.cashregisters[i].journal['is_pay_later'];
+		        	if(is_paylater){
+		        		cashregister=self.pos.cashregisters[i];
+		        	}
+		        }
+		        
+		        var newPaymentline = new models.Paymentline({},{order: order, cashregister:cashregister, pos: self.pos});
+		        newPaymentline.set_amount(order.get_due());
+		        self._rpc({
+ 	     			model: 'res.partner',
+ 	     			method:'create_partner',
+ 	     			args: [0, order_post],
+ 	     		}).then(function(result){
+ 	     			if(result){     	     		
+	 		            order.paymentlines.add(newPaymentline);
+	 		            order.set_reservation_details(order_post);    
+	 		            if(result['is_exisit']){
+	 		            	var client = self.pos.db.get_partner_by_id(result['id']);
+		     				order.set_client(client);
+		     				self.pos.push_order(order,{to_invoice:true}).then(function(){
+		     					self.pos.get_order().finalize();         						 
+	     						//self.pos.gui.show_screen('room_reservation');
+	     						self.pos.gui.show_popup('alert',{
+				                     'title': _t('Success'),
+				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
+				                });
+		     				});
+	 		            }else{
+		 		            self.pos.load_new_partner_id(result['id']).then(function(){
+		 		            	var client = self.pos.db.get_partner_by_id(result['id']);
+			     				order.set_client(client);
+			     				self.pos.push_order(order,{to_invoice:true}).then(function(){
+			     					self.pos.get_order().finalize();         						 
+		     						//self.pos.gui.show_screen('room_reservation');
+		     						self.pos.gui.show_popup('alert',{
+					                     'title': _t('Success'),
+					                     'body': _t('Thanks for Booking. Your Reservation is booked'),
+					                });
+			     				});
+		 		            });
+	 		            }
+ 	     			}
+ 	     		});
+        	}
+    	}
+    },
+    
     show: function(){
     	var self = this;
     	var dashboard_id = 0;
@@ -1268,6 +1474,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	if(id == 'date_extend'){
             		order_status="extend";
             	}
+            	
+            	if(id == 'reserve'){
             	var product_id = contents.find("#product_id option:selected").val();
             	if (product_id == "" || product_id == "Room No"){
             			product_id = 0;
@@ -1301,210 +1509,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    		    	}
     		    			}
     		    		}
-    		    		/** Start Check the Mandatory field */
-    	            	$('input[ismandatory="true"]').each(function(index, element) {
-    						if (!$(this).val().length > 0) {										
-    							if(!(typeof attr !== typeof undefined)){
-    								$(this).addClass('warning');
-    								//$(this).removeClass('hide');
-    								isProceed = false;
-    							}else{
-    								$(this).removeClass('warning');
-    							}										
-    						}
-    						else{
-    							$(this).removeClass('warning');
-    						}
-    	            	});
-    	            	$('textarea[ismandatory="true"]').each(function(index, element) {
-    						if (!$(this).val().length > 0) {										
-    							if(!(typeof attr !== typeof undefined)){
-    								$(this).addClass('warning');
-    								//$(this).removeClass('hide');
-    								isProceed = false;
-    							}else{
-    								$(this).removeClass('warning');
-    							}										
-    						}
-    						else{
-    							$(this).removeClass('warning');
-    						}
-    	            	});
-    					$('select[ismandatory="true"]').each(function(index, element) {
-    						if ($(this).val() == null) {										
-    							if(!(typeof attr !== typeof undefined)){
-    								$(this).addClass('warning');
-    								isProceed = false;
-    							}else{
-    								$(this).removeClass('warning');
-    							}										
-    						}
-    						else{
-    							$(this).removeClass('warning');
-    						}
-    					});
-    	            	/** End Check the Mandatory field */
-    	            	if (!isProceed)
-    	     			{
-    	     				//alert('Please fill mandatory fields.');
-    	            		self.pos.gui.show_popup('popup_hm_warning',{
-    		            		'title': 'Warning',
-    		            		'msg': 'Please fill mandatory fields.',
-    		            	});
-    	     				return false;
-    	     			}else{
-    		            	var product_array=[];
-    		            	var order = self.pos.get_order();
-    		            	var no_night = 1;
-    		            	$('table.hm-form-table tr.hm-order-details').each(function() {	
-    		 					$(this).find('input').each(function(index, element) {  
-    		 						if($(this).attr('ftype')=='date'){
-    	     							var value = element.value;
-    	     							var datestring = value.split(" ");     						
-    	     							var sd = datestring[2]+' '+datestring[3];  
-    	     							var momentObj = moment(sd, ["h:mm A"]);
-    	     							var date = datestring[1]+' '+momentObj.format("HH:mm");  
-    	     							var dateval = date.replace('-', '/').replace('-', '/');
-    	     							var dateTime = new Date(dateval);
-    	     							dateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");     
-    	     							order_post[element.name]=dateTime;
-    	     						}else{
-    	     							order_post[element.name]=element.value;
-    	     							if(element.name == 'no_night'){
-    	     								no_night = element.value;
-    	     							}
-    	     						}
-    		 						
-    		 					});
-    		 					$(this).find('textarea').each(function(index, element) {     						
-    		 						order_post[element.name]=element.value;
-    		         			});
-    		 					$(this).find('select').each(function(index, element) {     						
-    		 						order_post[element.name]=element.value;
-    		         			});
-    		            	});
-    		            	$('table.hm-form-table tr.hm-orderline-details').each(function() {	
-    		            		var order_line_array ={};
-    		            		order_line_array['qty'] = no_night;
-    		 					$(this).find('input').each(function(index, element) {  
-    		 						order_line_array[element.name]=element.value;
-    		 						if(element.name == 'adult'){
-    		 							//alert('contents'+JSON.stringify(element))
-    		 							order_post[element.name]=element.value;
-    		 						}
-    		 					});
-    		 					
-    		 					$(this).find('select').each(function(index, element) {     						
-    		 						order_line_array[element.name]=parseInt(element.value);
-    		 						if(element.name =='product_id'){
-    		 							product_array.push(parseInt(element.value));
-    		 						}
-    		         			});
-    		 					
-    		 					order_line.push(order_line_array);
-    		            	});
-    		            	
-    		            	order_post['order_line'] = order_line;
-    		            	order_post['reservation_status'] = order_status;
-    		            	if(order_id != ''){
-    		            		self._rpc({
-    			 	     			model: 'pos.order',
-    			 	     			method:'update_order',
-    			 	     			args: [0, order_post, order_id],
-    			 	     		}).then(function(result){
-    			 	     			var msg = 'Thanks for Booking. Your Reservation is confirmed.';
-    			 	     			if(id == 'shift_room')
-    			 	     				msg = 'Your room changed.';
-    			 	     			if(id == 'date_extend')
-    			 	     				msg = 'Your check out date extended.'
-    			 	     			self.pos.gui.show_popup('alert',{
-    				                     'title': _t('Success'),
-    				                     'body': msg,
-    				                });
-    			 	     		});
-    		            		/*if((id == 'date_extend') || (id == 'shift_room')){
-    		            			var title = 'Date Extend'
-    		            			if(id == 'shift_room')
-    		            				title = 'Shift Room'
-    		            			self.pos.gui.show_popup('popup_hm_complaint',{
-    			    	        		'title': title,
-    			    	        		'msg': '',
-    			    	        		'folio_id': order_id,
-    			    	        		'sub_id': 0,
-    			    	        		'order_post': JSON.stringify(order_post),
-    			    	        		
-    		            			});
-    		            		}else{
-    		            			self._rpc({
-    				 	     			model: 'pos.order',
-    				 	     			method:'update_order',
-    				 	     			args: [0, order_post, order_id, ''],
-    				 	     		}).then(function(result){
-    				 	     			self.pos.gui.show_popup('alert',{
-    					                     'title': _t('Success'),
-    					                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
-    					                });
-    				 	     		});
-    		            		}*/
-    		            		
-    		            	}else{
-    		            		_.every(product_array, function(line){	
-    									var product =  self.pos.db.get_product_by_id(line);
-    									if(product!=undefined){
-    										order.add_product(product, {price: product.price});
-    									}
-    			 		    	}); 
-    		            	
-    			            	var cashregister=self.pos.cashregisters[0];				
-    					        for (var i = 0; i < self.pos.cashregisters.length; i++) { 		        	  
-    					        	var is_paylater = self.pos.cashregisters[i].journal['is_pay_later'];
-    					        	if(is_paylater){
-    					        		cashregister=self.pos.cashregisters[i];
-    					        	}
-    					        }
-    					        
-    					        var newPaymentline = new models.Paymentline({},{order: order, cashregister:cashregister, pos: self.pos});
-    					        newPaymentline.set_amount(order.get_due());
-    					        self._rpc({
-    			 	     			model: 'res.partner',
-    			 	     			method:'create_partner',
-    			 	     			args: [0, order_post],
-    			 	     		}).then(function(result){
-    			 	     			if(result){     	     		
-    				 		            order.paymentlines.add(newPaymentline);
-    				 		            order.set_reservation_details(order_post);    
-    				 		            if(result['is_exisit']){
-    				 		            	var client = self.pos.db.get_partner_by_id(result['id']);
-    					     				order.set_client(client);
-    					     				self.pos.push_order(order,{to_invoice:true}).then(function(){
-    					     					self.pos.get_order().finalize();         						 
-    				     						//self.pos.gui.show_screen('room_reservation');
-    				     						self.pos.gui.show_popup('alert',{
-    							                     'title': _t('Success'),
-    							                     'body': _t('Thanks for Booking. Your Reservation is booked'),
-    							                });
-    				     						self.pos.gui.show_screen('room_reservation', {subidno:c_sub_id});
-    					     				});
-    				 		            }else{
-    					 		            self.pos.load_new_partner_id(result['id']).then(function(){
-    					 		            	var client = self.pos.db.get_partner_by_id(result['id']);
-    						     				order.set_client(client);
-    						     				self.pos.push_order(order,{to_invoice:true}).then(function(){
-    						     					self.pos.get_order().finalize();         						 
-    					     						//self.pos.gui.show_screen('room_reservation');
-    					     						self.pos.gui.show_popup('alert',{
-    								                     'title': _t('Success'),
-    								                     'body': _t('Thanks for Booking. Your Reservation is booked'),
-    								                });
-    					     						self.pos.gui.show_screen('room_reservation', {subidno:c_sub_id});
-    						     				});
-    					 		            });
-    				 		            }
-    			 	     			}
-    			 	     		});
-    		            	}
-    	            	}
+    		    		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id);
     		    	});
+            	}else{
+            		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id);
+            	}
             });
             
             /* Room supply booking */
