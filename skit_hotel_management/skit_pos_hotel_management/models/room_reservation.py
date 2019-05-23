@@ -102,7 +102,7 @@ class FormTemplate(models.Model):
                                  floor_table.product_id.id)], limit=1)
                 folio_order = self.env['pos.order.line'].sudo().search([
                                 ('product_id', '=', product.id),
-                                ('order_id.reservation_status', '=', 'checkin')],
+                                ('order_id.reservation_status', 'in', ('checkin', 'shift', 'extend'))],
                                                         limit=1)
                 sub_form_line = self.env['hm.sub.form.template.line'].sudo().search(
                                 [('sub_form_template_id', '=', int(form_sub_id))],
@@ -204,6 +204,7 @@ class FormTemplate(models.Model):
             room_type.append({
                               'id': product.product_tmpl_id.categ_id.id,
                               'name': product.product_tmpl_id.categ_id.name,
+                              'capacity': product.product_tmpl_id.capacity,
                             })
         return room_type
 
