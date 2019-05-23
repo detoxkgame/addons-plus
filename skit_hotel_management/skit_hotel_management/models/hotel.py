@@ -768,6 +768,13 @@ class PosOrder(models.Model):
                                 'date': orders.checkin_date,
                                 'out_date': orders.checkout_date,
                                 })
+            product_history = self.env['product.history'].sudo().search([
+                                        ('order_id', '=', orders.id)],
+                                                order='id desc', limit=1)
+            if(orders.reservation_status == 'checkout'):
+                product_history.write({'state': 'draft'})
+            else:
+                product_history.write({'state': orders.reservation_status})
         return orders
 
 

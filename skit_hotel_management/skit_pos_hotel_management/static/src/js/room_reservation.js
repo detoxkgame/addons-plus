@@ -504,7 +504,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
         return this.gui.get_current_screen_param('subidno');
     },
     
-    checkMandatory: function(isProceed, order_post, order_line, order_status, order_id, id) {
+    checkMandatory: function(isProceed, order_post, order_line, order_status, order_id, id, c_sub_id) {
     	var self = this;
     	/** Start Check the Mandatory field */
     	$('input[ismandatory="true"]').each(function(index, element) {
@@ -688,6 +688,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				                     'title': _t('Success'),
 				                     'body': _t('Thanks for Booking. Your Reservation is booked'),
 				                });
+	     						self.pos.gui.show_screen('room_reservation', {subidno:c_sub_id});
 		     				});
 	 		            }else{
 		 		            self.pos.load_new_partner_id(result['id']).then(function(){
@@ -700,6 +701,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					                     'title': _t('Success'),
 					                     'body': _t('Thanks for Booking. Your Reservation is booked'),
 					                });
+		     						self.pos.gui.show_screen('room_reservation', {subidno:c_sub_id});
 			     				});
 		 		            });
 	 		            }
@@ -1509,10 +1511,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    		    	}
     		    			}
     		    		}
-    		    		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id);
+    		    		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id, c_sub_id);
     		    	});
             	}else{
-            		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id);
+            		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id, c_sub_id);
             	}
             });
             

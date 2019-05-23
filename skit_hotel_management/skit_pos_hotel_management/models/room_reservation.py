@@ -1296,6 +1296,7 @@ class PosOrder(models.Model):
                 #     product_history.write({'state': 'checkin'})
                 #     product_template.write({'state': 'occupied'})
                 #===============================================================
+                product_template.write({'state': 'occupied'})
                 if post.get('order_line'):
                     order_lines = post.get('order_line')
                     i = 0
@@ -1305,6 +1306,10 @@ class PosOrder(models.Model):
                         i = i + 1
                 del post['order_line']
                 order.update(post)
+                if(order.reservation_status == 'checkout'):
+                    product_history.write({'state': 'draft'})
+                else:
+                    product_history.write({'state': order.reservation_status})
                 order.lines._onchange_product_id()
                 order.lines._onchange_amount_line_all()
                 currency = order.pricelist_id.currency_id

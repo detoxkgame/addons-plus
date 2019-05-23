@@ -310,9 +310,8 @@ class Skit_AccountInvoice(models.Model):
                 for order in checkout_order:
                     order.write({'reservation_status': 'checkout'})
                     prod_history = self.env['product.history'].sudo().search([
-                                        ('order_id', '=', checkout_order.id),
-                                        ('state', '=', 'checkin')])
-                    prod_history.write({'state': 'checkout'})
+                                        ('order_id', '=', checkout_order.id)])
+                    prod_history.write({'state': 'draft'})
                     order_line = self.env['pos.order.line'].sudo().search([('order_id', '=', order.id)], limit=1)
                     prod_prod = self.env['product.product'].sudo().search([('id', '=', order_line.product_id.id)])
                     prod_temp = self.env['product.template'].sudo().search([('id', '=', prod_prod.product_tmpl_id.id)])
