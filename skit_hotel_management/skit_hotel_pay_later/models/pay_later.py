@@ -235,8 +235,35 @@ class Skit_AccountInvoice(models.Model):
 
     @api.model
     def get_pending_invoice_details(self, invoice_id, payment_lines,
-                                    pos_session):
+                                    pos_session, order_id=0):
         """ Get Invoice Details and payment process """
+        pos_order = self.env['pos.order'].sudo().search([
+                                    ('id', '=', int(order_id))])
+        if(order_id > 0):
+            statement_line = self.env['account.bank.statement.line'].sudo().search(
+                                    [('pos_statement_id', '=', pos_order.id)])
+            statement_line.unlink()
+        if(not pos_order.invoice_id):
+            pos_order = self.env['pos.order'].sudo().search([
+                                    ('id', '=', int(order_id))])
+            pos_order.action_pos_order_invoice()
+            pos_order.invoice_id.sudo().action_invoice_open()
+            pos_order.account_move = pos_order.invoice_id.move_id
+            invoice_id = pos_order.invoice_id.id
+        else:
+            pos_order.invoice_id.update({'state': 'draft'})
+            pos_order.invoice_id.invoice_line_ids.unlink()
+            for line in pos_order.lines:
+                pos_order._action_create_invoice_line(line, pos_order.invoice_id.id)
+            invoice_id = pos_order.invoice_id.id
+            for inv_line in pos_order.invoice_id.invoice_line_ids:
+                inv_line._compute_price()
+            pos_order.invoice_id._compute_amount()
+            pos_order.invoice_id.compute_taxes()
+            pos_order.invoice_id._compute_residual()
+            #pos_order.invoice_id.update({'state': 'open'})
+            pos_order.invoice_id.sudo().action_invoice_open()
+            pos_order.account_move = pos_order.invoice_id.move_id
         for pl in payment_lines:
             invoice = self.browse(int(invoice_id))
             order = self.env['pos.order'].search([

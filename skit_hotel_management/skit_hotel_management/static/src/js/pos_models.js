@@ -60,6 +60,7 @@ models.Order = models.Order.extend({
         this.source_folio_id = 0;
         this.room_table_id = 0;
         this.exit_order_id = 0;
+        this.sub_template_id = 0;
         this.vendor_order_details = {};
         this.save_to_db();
     },
@@ -70,6 +71,7 @@ models.Order = models.Order.extend({
         json.source_folio_id = this.source_folio_id;
         json.room_table_id = this.room_table_id;
         json.exit_order_id = this.exit_order_id;
+        json.sub_template_id = this.sub_template_id;
         json.vendor_order_details = this.vendor_order_details;
         return json;
     },
@@ -80,6 +82,7 @@ models.Order = models.Order.extend({
         this.source_folio_id = json.source_folio_id;
         this.room_table_id = json.room_table_id;
         this.exit_order_id = json.exit_order_id;
+        this.sub_template_id = json.sub_template_id;
         this.vendor_order_details = json.vendor_order_details;
     },
     add_product: function(product, options){
@@ -174,6 +177,13 @@ models.Order = models.Order.extend({
     },
     get_exit_order_id: function(){
         return this.exit_order_id;
+    },
+    
+    set_sub_template_id: function(sub_template_id) {
+        this.sub_template_id = sub_template_id;
+    },
+    get_sub_template_id: function(){
+        return this.sub_template_id;
     },
     /* ---- vendor_details  --- */
     set_vendor_order_details: function(vendor_order_details) {

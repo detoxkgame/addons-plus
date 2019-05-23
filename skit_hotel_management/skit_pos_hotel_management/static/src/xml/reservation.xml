@@ -247,6 +247,7 @@
 	    					<t t-if="form_view == 'form'">
 	    						<t t-foreach="center_temp['current_order']" t-as="c_order" >
 	    						<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
+	    						<span id="current_sub_id" style="display:none;"><t t-esc="current_sub_id" /></span>
 	    						<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
 	    						<table class="hm-form-table">
 	    						<tbody class="hm-form-body">
@@ -592,12 +593,14 @@
 													<t t-if="code.state == 'delivered'">
 														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn hm-delivery-service" 
 														t-attf-orderid="#{code.order_id}" t-attf-partnerid="#{code.partner_id}" t-attf-roomname="#{code.room_name}" 
-														t-attf-state="#{code.state}" t-attf-sourceid="#{code.source_folio_id}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
+														t-attf-state="#{code.state}" t-attf-sourceid="#{code.source_folio_id}" rel="hm-popover"
+														t-attf-subid="#{data.sub_template_id}" ><t t-esc="code.room_name" /></span> 
 													</t>
 													<t t-else="">
 														<span data-contentwrapper='#room-service-action' class="hm-right-reserve-btn" 
 														t-attf-orderid="#{code.order_id}" t-attf-partnerid="#{code.partner_id}" t-attf-roomname="#{code.room_name}" 
-														t-attf-state="#{code.state}" t-attf-sourceid="#{code.source_folio_id}" rel="hm-popover"><t t-esc="code.room_name" /></span> 
+														t-attf-state="#{code.state}" t-attf-sourceid="#{code.source_folio_id}" rel="hm-popover"
+														t-attf-subid="#{data.sub_template_id}" ><t t-esc="code.room_name" /></span> 
 													</t>
 												</t>
 												<t t-else="">
@@ -649,6 +652,7 @@
 	    			<t t-if="form_view == 'form'">
 	    				<t t-foreach="center_temp['current_order']" t-as="c_order" >
 	    				<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
+	    				<span id="current_sub_id" style="display:none;"><t t-esc="current_sub_id" /></span>
 	    				<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
 	    				<table class="hm-form-table">
 	    				<tbody class="hm-form-body">
@@ -1078,6 +1082,7 @@
 					<!-- Restaurant table -->
 					<t t-if="form_view == 'restaurant_table'">
 						<span id="restaurant_table" style="display:none">false</span>
+						<span id="current_sub_id" style="display:none"><t t-esc="current_sub_id" /></span>
 						<t t-if='floor_count > 1'>
 		                    <div class='floor-selector'>
 		                        <t t-foreach="floors" t-as="floor">
@@ -1173,6 +1178,7 @@
 					<t t-if="form_view == 'list'">
 						<div class="hm-payment-list">
 							<div class="hm-pay-div">
+								<span id="current_sub_id" style="display:none;"><t t-esc="checkout_sub_id" /></span>
 								<button class="multi-pay" style="display: none;">Pay Now</button>
 							</div>	
 							<table id="vendor_order_list" class="table stripe hover row-border order-column dataTable no-footer">

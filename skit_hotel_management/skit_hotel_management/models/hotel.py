@@ -720,7 +720,6 @@ class PosOrder(models.Model):
 
     @api.model
     def _process_order(self, pos_order):
-        print('Process Order')
         pos_order['to_invoice'] = True
         orders = super(PosOrder, self)._process_order(pos_order)
         if(orders):
@@ -730,11 +729,12 @@ class PosOrder(models.Model):
                     order_lines = post_order_details.get('order_line')
                     i = 0
                     for line in orders.lines:
-                        line.update(order_lines[i])
-                        taxes = line.product_id.taxes_id.compute_all(line.price_unit, line.order_id.pricelist_id.currency_id, line.qty, product=line.product_id, partner=False)
-                        line.price_subtotal = taxes['total_excluded']
-                        line.price_subtotal_incl = taxes['total_included']
-                        i = i + 1
+                        if(i < len(order_lines)):
+                            line.update(order_lines[i])
+                            taxes = line.product_id.taxes_id.compute_all(line.price_unit, line.order_id.pricelist_id.currency_id, line.qty, product=line.product_id, partner=False)
+                            line.price_subtotal = taxes['total_excluded']
+                            line.price_subtotal_incl = taxes['total_included']
+                            i = i + 1
                 del post_order_details['order_line']
                 orders.update(post_order_details)
                 currency = orders.pricelist_id.currency_id
@@ -745,13 +745,14 @@ class PosOrder(models.Model):
                 orders.amount_total = orders.amount_tax + amount_untaxed
             if pos_order.get('source_folio_id'):
                 orders.update({'source_folio_id': pos_order.get('source_folio_id')})
+                orders.update({'is_service_order': True})
             if pos_order.get('room_table_id'):
                 orders.update({'table_id': pos_order.get('room_table_id')})
             if(pos_order.get('is_service_order')):
                 orders.update({'is_service_order': pos_order.get('is_service_order')})
                 orders.lines.update({'source_order_id': pos_order.get('source_folio_id')})
             pos_order_line = self.env['pos.order.line'].sudo().search([
-                                        ('order_id', '=', orders.id)])
+                                        ('order_id', '=', orders.id)], limit=1)
             product_tmpl_id = pos_order_line.product_id.product_tmpl_id
             if (orders.reservation_status == 'reserved'):
                 product_tmpl_id.write({'state': 'reserved'})

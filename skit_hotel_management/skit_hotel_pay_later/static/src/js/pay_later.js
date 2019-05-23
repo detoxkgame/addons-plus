@@ -202,13 +202,24 @@ screens.PaymentScreenWidget.include({
     	var order = this.pos.get_order();
     	if((order.get_pending() == true) && (order.get_purchase() == true)){
     		order.set_is_purchase(false);
-    		this.gui.show_screen('vendor_dashboard');
+    		var sub_id = order.get_sub_template_id();
+ 	    	if(sub_id > 0){
+ 	    		this.gui.show_screen('room_reservation', {subidno:sub_id});
+ 	    	}else{
+ 	    		this.gui.show_screen('vendor_dashboard');
+ 	    	}
+    		
     	}else{
 	    	if(order.get_pending()){
 	    		order.set_is_pending(false);
 	    		if(order.get_hm_pending() == true){
 	    			order.set_is_hm_pending(false);
-	        		this.gui.show_screen('room_reservation');
+	    			var sub_id = order.get_sub_template_id();
+	     	    	if(sub_id > 0){
+	     	    		this.gui.show_screen('room_reservation', {subidno:sub_id});
+	     	    	}else{
+	     	    		this.gui.show_screen('room_reservation');
+	     	    	}
 	        	}else{
 	        		this.gui.show_screen('paylater');
 	        	}
@@ -276,7 +287,12 @@ screens.PaymentScreenWidget.include({
                 active_ids:[invoice_id],
             }}).done(function () {
             	order.set_is_purchase(false);
-            	self.gui.show_screen('vendor_dashboard');
+            	var sub_id = order.get_sub_template_id();
+     	    	if(sub_id > 0){
+     	    		self.gui.show_screen('room_reservation', {subidno:sub_id});
+     	    	}else{
+     	    		self.gui.show_screen('vendor_dashboard');
+     	    	}
             });
         	
         });
@@ -291,6 +307,7 @@ screens.PaymentScreenWidget.include({
     	var payment_lines = order.paymentlines;
     	var porder_type = order.p_order_type;
     	var i = 0;
+    	var sub_id = order.sub_template_id;
     	var paylines = [];
     	_.every(payment_lines.models, function(line){	
     		var lchange = self.pos.get_order().get_change(line)
@@ -307,7 +324,12 @@ screens.PaymentScreenWidget.include({
                     active_ids:[porder_id],
                 }}).done(function () {
                 	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
-                	$('.paylater').trigger('click');
+                	
+         	    	if(sub_id > 0){
+         	    		self.gui.show_screen('room_reservation', {subidno:sub_id});
+         	    	}else{
+         	    		$('.paylater').trigger('click');
+         	    	}
                 });
         },function(err,event){
         	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
@@ -333,6 +355,7 @@ screens.PaymentScreenWidget.include({
     	var invoice_ids = order.hm_invoice_ids;
     	var order_ids = order.hm_order_ids;
     	var i = 0;
+    	var sub_id = order.sub_template_id;
     	var paylines = [];
     	_.every(payment_lines.models, function(line){	
     		var lchange = self.pos.get_order().get_change(line)
@@ -347,7 +370,11 @@ screens.PaymentScreenWidget.include({
                     active_ids:[order_ids],
                 }}).done(function () {
                 	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
-                	$('.paylater').trigger('click');
+                	if(sub_id > 0){
+         	    		self.gui.show_screen('room_reservation', {subidno:sub_id});
+         	    	}else{
+         	    		$('.paylater').trigger('click');
+         	    	}
                 });
         },function(err,event){
         	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
@@ -360,6 +387,53 @@ screens.PaymentScreenWidget.include({
                 'body': _t(err_msg),
             });
         });
+    },
+    
+    update_hm_service_order: function() {
+    	var self = this;
+    	var order = this.pos.get_order();
+    	var payment_lines = order.paymentlines;
+    	var exit_order_id = order.get_exit_order_id();
+    	var datas = order.export_as_JSON();
+    	var sub_id = order.get_sub_template_id();
+    	var paylines = [];
+    	_.every(payment_lines.models, function(line){	
+    		var lchange = self.pos.get_order().get_change(line)
+    		return paylines.push({"amount":line.amount,"paymethod":line.cashregister,"name":line.name, "change":lchange});
+    	});
+    	this._rpc({
+ 			model: 'pos.order',
+    		method:'create_pos_service_order',
+    		args: [datas],
+ 		}).then(function(result){
+ 			self._rpc({
+ 	            model: 'account.invoice',
+ 	            method: 'get_pending_invoice_details',
+ 	            args: [0, paylines, self.pos.pos_session.id, exit_order_id],
+ 	        }).then(function (result) {
+ 		    		self.chrome.do_action('point_of_sale.pos_invoice_report',{additional_context:{ 
+ 	                    active_ids:[exit_order_id],
+ 	                }}).done(function () {
+ 	                	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
+ 	                	
+ 	         	    	if(sub_id > 0){
+ 	         	    		self.gui.show_screen('room_reservation', {subidno:sub_id});
+ 	         	    	}else{
+ 	         	    		$('.paylater').trigger('click');
+ 	         	    	}
+ 	                });
+ 	        },function(err,event){
+ 	        	$('.next').css("pointer-events", "auto"); //enable click action on validate button after complete.
+ 	            event.preventDefault();
+ 	            var err_msg = 'Please check the Internet Connection.';
+ 	            if(err.data.message)
+ 	            	err_msg = err.data.message;
+ 	            self.gui.show_popup('alert',{
+ 	                'title': _t('Error: Could not get order details.'),
+ 	                'body': _t(err_msg),
+ 	            });
+ 	        });
+    	});
     },
     
     validate_order: function(force_validation) {
@@ -396,9 +470,14 @@ screens.PaymentScreenWidget.include({
 	    	}else{
 	    		var is_pending_invoice_id = order.p_invoice_id;
 	    		if (is_pending_invoice_id==0) {
-	                this._super(force_validation);
-	                $('.PayLaterButton').css({"display":"none"});
-	                $('.customerlog-button').css({"display":"none"});
+	    			var exit_order_id = order.get_exit_order_id();
+	    			if(exit_order_id > 0){
+	    				this.update_hm_service_order();
+	    			}else{
+	    				this._super(force_validation);
+		                $('.PayLaterButton').css({"display":"none"});
+		                $('.customerlog-button').css({"display":"none"});
+	    			}
 	            }
 	    	}
     	}

@@ -40,19 +40,30 @@ var ServiceOrderPopupWidget = PopupWidget.extend({
     	var self = this;
     	this.gui.close_popup();
     	var order = this.pos.get_order();
+    	var sub_id = order.get_sub_template_id();
  		var datas = order.export_as_JSON();
  		this._rpc({
  			model: 'pos.order',
     		method:'create_pos_service_order',
     		args: [datas],
  		}).then(function(result){
- 			self.gui.show_screen('room_reservation');
+ 			if(sub_id > 0){
+ 				self.gui.show_screen('room_reservation', {subidno:sub_id});
+ 			}else{
+ 				self.gui.show_screen('room_reservation');
+ 			}
     	});
     },
    
     click_cancel: function(){
     	this.gui.close_popup();
-    	this.gui.show_screen('room_reservation');
+    	var order = this.pos.get_order();
+    	var sub_id = order.get_sub_template_id();
+    	if(sub_id > 0){
+    		this.gui.show_screen('room_reservation', {subidno:sub_id});
+		}else{
+			this.gui.show_screen('room_reservation');
+		}
     }
 });
 
@@ -235,7 +246,8 @@ var HMComplaintPopupWidget = PopupWidget.extend({
 			   				form_name: form_name, form_view: form_view,
 			   				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name: model_name
+							floor_id: floor_id, column_count: column_count, model_name: model_name,
+							current_sub_id: sub_id
 								});
 			   		 contents.find('.hm-center-form-design').html(center_panel_html);
 			   		 old_product_id = contents.find('#product_id').val();	
@@ -432,7 +444,8 @@ var HMFormPopupWidget = PopupWidget.extend({
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name:model_name
+							floor_id: floor_id, column_count: column_count, model_name:model_name,
+							current_sub_id: sub_id
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    		 old_product_id = contents.find('#product_id').val();	
@@ -603,7 +616,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     				form_name: form_name, form_view: form_view,
     				center_panel_temp: center_panel_temp,
 					center_panel_sub_id: center_panel_sub_id,
-					floor_id: floor_id, column_count: column_count
+					floor_id: floor_id, column_count: column_count,
+					current_sub_id: view_sub_id
 					});
     			//var centerform = document.createElement('div');
     			//centerform.innerHTML = center_panel_html;
@@ -623,7 +637,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     				var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
     				sub_template_id = res_table_sub_id;
     				if(sub_template_id > 0){
-    					contents.find('#restaurant_table').text('checkout');
+    					contents.find('#restaurant_table').text('ispage');
     				}else{
     					contents.find('#restaurant_table').text('true');
     				}
@@ -675,7 +689,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    		    				form_name: form_name, form_view: form_view,
 		    		    				center_panel_temp: center_panel_temp,
-		    							center_panel_sub_id: center_panel_sub_id, column_count: column_count
+		    							center_panel_sub_id: center_panel_sub_id, column_count: column_count,
+		    							current_sub_id: sub_id
 		    							});
 		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
 		    		    			old_product_id = contents.find('#product_id').val();	
@@ -696,7 +711,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
 		    		    				form_name: form_name, form_view: form_view,
 		    		    				center_panel_temp: center_panel_temp,
-		    							center_panel_sub_id: center_panel_sub_id, column_count: column_count
+		    							center_panel_sub_id: center_panel_sub_id, column_count: column_count,
+		    							current_sub_id: sub_id
 		    							});
 		    		    			contents.find('.hm-center-form-design').html(center_panel_html);
 		    		    			old_product_id = contents.find('#product_id').val();	
@@ -731,7 +747,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    				form_name: form_name, form_view: form_view,
 	    				center_panel_temp: center_panel_temp,
 						center_panel_sub_id: center_panel_sub_id,
-						floor_id: floor_id, column_count: column_count, model_name: model_name
+						floor_id: floor_id, column_count: column_count, model_name: model_name,
+						current_sub_id: subid
 						});
 	    			//var centerform = document.createElement('div');
 	    			//centerform.innerHTML = center_panel_html;
@@ -786,7 +803,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    				form_name: form_name, form_view: form_view,
 			    				center_panel_temp: center_panel_temp,
 								center_panel_sub_id: center_panel_sub_id,
-								floor_id: floor_id, column_count: column_count, model_name: model_name
+								floor_id: floor_id, column_count: column_count, model_name: model_name,
+								current_sub_id: subid
 								});
 			    			//var centerform = document.createElement('div');
 			    			//centerform.innerHTML = center_panel_html;
@@ -850,7 +868,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					    		    				form_name: form_name, form_view: form_view,
 					    		    				center_panel_temp: center_panel_temp,
 					    							center_panel_sub_id: center_panel_sub_id, column_count: column_count,
-					    							model_name: model_name
+					    							model_name: model_name,current_sub_id: sub_id
 					    							});
 					    		    			contents.find('.hm-center-form-design').html(center_panel_html);
 					    		    			old_product_id = contents.find('#product_id').val();	
@@ -873,7 +891,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					    		    				form_name: form_name, form_view: form_view,
 					    		    				center_panel_temp: center_panel_temp,
 					    							center_panel_sub_id: center_panel_sub_id, column_count: column_count,
-					    							model_name: model_name
+					    							model_name: model_name,current_sub_id: sub_id
 					    							});
 					    		    			contents.find('.hm-center-form-design').html(center_panel_html);
 					    		    			old_product_id = contents.find('#product_id').val();	
@@ -1239,6 +1257,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	var isProceed =true;
             	var id = $(this).attr('id');
             	var order_id = contents.find('#order_id').text();
+            	var c_sub_id = contents.find('#current_sub_id').text();
             	var order_status="checkin";
             	if(id == 'reserve'){
             		order_status="reserved";
@@ -1464,6 +1483,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     							                     'title': _t('Success'),
     							                     'body': _t('Thanks for Booking. Your Reservation is booked'),
     							                });
+    				     						self.pos.gui.show_screen('room_reservation', {subidno:c_sub_id});
     					     				});
     				 		            }else{
     					 		            self.pos.load_new_partner_id(result['id']).then(function(){
@@ -1476,6 +1496,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     								                     'title': _t('Success'),
     								                     'body': _t('Thanks for Booking. Your Reservation is booked'),
     								                });
+    					     						self.pos.gui.show_screen('room_reservation', {subidno:c_sub_id});
     						     				});
     					 		            });
     				 		            }
@@ -1814,6 +1835,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        	var room_id = $(this).attr('room_id');
 	        	var room_table_id = $(this).attr('table_id');
 	        	var folio_id = $(this).attr('folio_id');
+	        	var c_sub_id = $('#current_sub_id').text();
 	        	if(parseInt(folio_id) > 0){
 	        		self._rpc({
 		        		model: 'pos.order',
@@ -1821,7 +1843,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			 	 	    args: [0, room_id],
 			 	 	}).then(function(result){
 			 	 		//self.pos.set_service_order(true);
-			 	 		self.pos.set_service_table(result['partner_id'], result['source_order_id'], result['room_name'], room_table_id, true);
+			 	 		self.pos.set_service_table(result['partner_id'], result['source_order_id'], result['room_name'], room_table_id, true, c_sub_id);
 			 	 	});
 	        	}else{
 	        		self.pos.gui.show_popup('popup_hm_warning',{
@@ -1836,6 +1858,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        var partner_id = 0;
 	        var service_room = '';
 	        var source_id = 0;
+	        var c_sub_id = 0;
 	        contents.off('click','.hm-right-reserve-btn');
 	        contents.on('click','.hm-right-reserve-btn',function(e){
 		         var oid = $(this).attr('orderid');
@@ -1856,7 +1879,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		         if(sid){
 		        	 source_id = sid;
 		         }
-		         if(sub_id > 0){
+		         if(sub_id){
+		        	 c_sub_id = sub_id;
+		         }
+		         if(sub_id > 0 && source_id == 0){
 		        	 self._rpc({
 		        		 model: 'hm.form.template',
 			    		 method: 'get_center_panel_form',
@@ -1874,7 +1900,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			    				form_name: form_name, form_view: form_view,
 			    				center_panel_temp: center_panel_temp,
 								center_panel_sub_id: center_panel_sub_id,
-								floor_id: floor_id, column_count: column_count, model_name:model_name
+								floor_id: floor_id, column_count: column_count, model_name:model_name,
+								current_sub_id: sub_id
 								});
 			    		 contents.find('.hm-center-form-design').html(center_panel_html);
 			    		 old_product_id = contents.find('#product_id').val();	
@@ -1903,7 +1930,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	          
 	         contents.off('click','.hm-service-div');
 	         contents.on('click','.hm-service-div',function(e){
-	        	 var id = $(this).attr('id')
+	        	 var id = $(this).attr('id');
 		         if(id == 'service-delivered'){
 		        	self._rpc({
 						model: 'pos.order',
@@ -1916,7 +1943,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		        	 
 		         }
 		         if(id == 'service-add'){
-		        	 self.pos.set_service_order_details(self, partner_id, order_id, service_room, source_id);
+		        	 self.pos.set_service_order_details(self, partner_id, order_id, service_room, source_id, c_sub_id);
 		        	 $('[rel=hm-popover]').popover('hide');
 		         }
 		         if(id == 'service-close'){
@@ -1953,7 +1980,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name:model_name
+							floor_id: floor_id, column_count: column_count, model_name:model_name,
+							current_sub_id: sub_id
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    		 old_product_id = contents.find('#product_id').val();	
@@ -1998,7 +2026,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				    				form_name: form_name, form_view: form_view,
 				    				center_panel_temp: center_panel_temp,
 									center_panel_sub_id: center_panel_sub_id,
-									floor_id: floor_id, column_count: column_count, model_name: model_name
+									floor_id: floor_id, column_count: column_count, model_name: model_name,
+									current_sub_id: sub_id
 									});
 				    		 contents.find('.hm-center-form-design').html(center_panel_html);
 				    		 old_product_id = contents.find('#product_id').val();	
@@ -2047,7 +2076,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name: model_name
+							floor_id: floor_id, column_count: column_count, model_name: model_name,
+							current_sub_id: sub_id
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    		 contents.find('#top_panel'+sub_id).addClass("hm-top-inner-selected");
@@ -2067,6 +2097,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	         /** Check Out Button Action */
 	         contents.off('click','#checkout');
 	         contents.on('click','#checkout',function(e){
+	        	 var c_sub_id = $('.hm-form-back-icon').attr('sub_id');
 	        	 var sub_id = $(this).attr('sub_id');
 	        	 var order_id = $('#order_id').text();
 	        	 contents.find('.hm-top-inner-selected').removeClass("hm-top-inner-selected");
@@ -2088,7 +2119,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name:model_name
+							floor_id: floor_id, column_count: column_count, model_name:model_name,
+							current_sub_id: sub_id, checkout_sub_id: c_sub_id
 							});
 		    		 contents.find('.hm-center-form-design').html(center_panel_html);
 		    		 old_product_id = contents.find('#product_id').val();	
@@ -2152,7 +2184,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
              	var amount = 0;
              	var partner_id = 0;
              	var order_ids = [];
-             	
+             	var c_sub_id = $('#current_sub_id').text();
  	        	$('#vendor_order_list tbody tr').each(function(){
  	        		if($(this).find('input[type="checkbox"]').prop("checked")){
  	        			var invoice_id = $(this).find("span.folio-payment").attr('invid');
@@ -2175,6 +2207,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
      	 	    	order.set_is_hm_pending(true);
      	 	    	order.set_hm_invoices(invoice_ids);
      	 	    	order.set_hm_orders(order_ids);
+     	 	    	order.set_sub_template_id(c_sub_id);
      	 	    	//order.set_to_invoice(false);
      				self.gui.show_screen('payment');
  	        	}
@@ -2209,7 +2242,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    				form_name: form_name, form_view: form_view,
 		    				center_panel_temp: center_panel_temp,
 							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name:model_name
+							floor_id: floor_id, column_count: column_count, model_name:model_name,
+							current_sub_id: sub_id
 							});
 		    		
 		    		 self.pos.gui.show_popup('popup_hm_form_design',{
@@ -2479,8 +2513,7 @@ chrome.OrderSelectorWidget.include({
             	//alert('dsfs')
             	this.$('.orders').prepend(QWeb.render('BackToRoomService',{room_name:this.pos.room_name}));
                 this.$('.room-service-button').click(function(){
-                		
-                        self.room_service_button_click_handler();
+                	self.room_service_button_click_handler();
                 });
                 this.$el.removeClass('oe_invisible');
             } else {
@@ -2514,13 +2547,15 @@ models.PosModel = models.PosModel.extend({
         return _super_posmodel.initialize.call(this,session,attributes);
     },
     
-    set_service_order_details: function(order_self, partner_id, order_id, service_room, source_id){
+    set_service_order_details: function(order_self, partner_id, order_id, service_room, source_id, current_sub_id){
     	this.room_name = service_room;
     	var order  = this.get_order();
     	var client = this.db.get_partner_by_id(partner_id);
     	order.set_client(client);
     	order.set_exit_order_id(parseInt(order_id));
     	order.set_source_folio_id(source_id);
+    	order.set_sub_template_id(current_sub_id);
+    	order.set_service_order(true);
     	var lines = order.get_orderlines();	
     	order.remove_orderline(lines);
     	var self = this;
@@ -2539,7 +2574,7 @@ models.PosModel = models.PosModel.extend({
 	 	});
     	self.gui.show_screen('products');
     },
-    set_service_table: function(partner_id, source_order_id, room_name, room_table_id, is_service) {
+    set_service_table: function(partner_id, source_order_id, room_name, room_table_id, is_service, current_sub_id) {
     	this.room_name = room_name;
     	var orders = this.get_order_list();
     	var client = this.db.get_partner_by_id(partner_id);
@@ -2550,9 +2585,10 @@ models.PosModel = models.PosModel.extend({
 		order.set_service_order(is_service);
 		order.set_source_folio_id(source_order_id);
 		order.set_room_table_id(room_table_id);
-		console.log('Orders'+JSON.stringify(orders))
-		var pos_order = this.db.get_order(107)
-		console.log('pos_order:'+JSON.stringify(pos_order))
+		order.set_sub_template_id(current_sub_id)
+		//console.log('Orders'+JSON.stringify(orders))
+		//var pos_order = this.db.get_order(107)
+		//console.log('pos_order:'+JSON.stringify(pos_order))
         if (orders.length) {
         	//alert('order')
            // this.set_order(orders[0]); // and go to the first one ...

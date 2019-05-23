@@ -1300,7 +1300,8 @@ class PosOrder(models.Model):
                     order_lines = post.get('order_line')
                     i = 0
                     for line in order.lines:
-                        line.update(order_lines[i])
+                        if(i < len(order_lines)):
+                            line.update(order_lines[i])
                         i = i + 1
                 del post['order_line']
                 order.update(post)
@@ -1478,6 +1479,9 @@ class PosOrder(models.Model):
                         del line[2]['room_line_id']
                         del line[2]['note']
                         pos_order_line.update(line[2])
+                        taxes = pos_order_line.product_id.taxes_id.compute_all(pos_order_line.price_unit, pos_order_line.order_id.pricelist_id.currency_id, pos_order_line.qty, product=pos_order_line.product_id, partner=False)
+                        pos_order_line.price_subtotal = taxes['total_excluded']
+                        pos_order_line.price_subtotal_incl = taxes['total_included']
                     else:
                         line[2]['order_id'] = order.id
                         line[2]['source_order_id'] = pos_order.get('source_folio_id')
@@ -1498,6 +1502,12 @@ class PosOrder(models.Model):
                 order.update({'order_zone': 'room_service'})
                 order.update({'is_service_order': pos_order.get('is_service_order')})
                 order.lines.update({'source_order_id': pos_order.get('source_folio_id')})
+        currency = order.pricelist_id.currency_id
+        order.amount_paid = sum(payment.amount for payment in order.statement_ids)
+        order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in order.statement_ids)
+        order.amount_tax = currency.round(sum(self._amount_line_tax(line, order.fiscal_position_id) for line in order.lines))
+        amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines))
+        order.amount_total = order.amount_tax + amount_untaxed
         return order
 
     @api.model
