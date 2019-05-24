@@ -221,7 +221,7 @@ class FormTemplate(models.Model):
                                 ('product_tmpl_id', '=', product_temp.id)])
             is_booked = False
             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', product.product_tmpl_id.id),
-                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
             if(prod_history):
                 is_booked = True
             if product.id:
@@ -378,7 +378,7 @@ class FormTemplate(models.Model):
                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                             arr['amount'] = prod_tmpl.list_price
                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
                             if(prod_history):
                                 arr['is_booked'] = True
                         many2one_list.append(arr)
@@ -577,7 +577,7 @@ class FormTemplate(models.Model):
                                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                                             arr['amount'] = prod_tmpl.list_price
                                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
                                             if(prod_history):
                                                 arr['is_booked'] = True
                                         many2one_list.append(arr)
@@ -823,7 +823,7 @@ class FormTemplate(models.Model):
                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                             arr['amount'] = prod_tmpl.list_price
                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                      ('state', 'in', ('reserved', 'checkin'))])
+                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
                             if(prod_history):
                                 arr['is_booked'] = True
                         many2one_list.append(arr)
@@ -1006,7 +1006,7 @@ class FormTemplate(models.Model):
                                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                                             arr['amount'] = prod_tmpl.list_price
                                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                                ('state', 'in', ('reserved', 'checkin'))])
+                                                                                                ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
                                             if(prod_history):
                                                 arr['is_booked'] = True
                                         many2one_list.append(arr)
@@ -1207,8 +1207,8 @@ class PosOrder(models.Model):
                                                                    'extend_checkout_date': extend_checkout_date,
                                                                    'remark': reason})
                 prod_history = self.env['product.history'].sudo().search([
-                                        ('order_id', '=', order.id),
-                                        ('state', '=', 'checkin')])
+                                        ('product_id', '=', order_room.product_id.id),
+                                        ('order_id', '=', order.id)], order='id desc')
                 prod_history.write({'out_date': extend_checkout_date,
                                     'state': post.get('reservation_status'),
                                     })
@@ -1228,8 +1228,7 @@ class PosOrder(models.Model):
             if(order_room.product_id.id != new_room_id):
                 """ Old Room Details """
                 prod_history = self.env['product.history'].sudo().search([
-                                        ('order_id', '=', order.id),
-                                        ('state', '=', 'checkin')])
+                                        ('order_id', '=', order.id)])
                 prod_history.write({'state': 'draft'})
                 prod_prod = self.env['product.product'].sudo().search([
                                         ('id', '=', order_room.product_id.id)])
@@ -1244,7 +1243,7 @@ class PosOrder(models.Model):
                 new_prod_temp.write({'state': 'occupied'})
                 room_history = self.env['product.history'].sudo().search([
                                         ('product_id', '=', new_prod_prod.id),
-                                        ('order_id', '=', order.id)])
+                                        ('order_id', '=', order.id)], order='id desc')
                 room_data = {
                             'product_id': new_prod_prod.id,
                             'product_tmpl_id': new_prod_temp.id,
@@ -1306,10 +1305,7 @@ class PosOrder(models.Model):
                         i = i + 1
                 del post['order_line']
                 order.update(post)
-                if(order.reservation_status == 'checkout'):
-                    product_history.write({'state': 'draft'})
-                else:
-                    product_history.write({'state': order.reservation_status})
+                product_history.write({'state': order.reservation_status})
                 order.lines._onchange_product_id()
                 order.lines._onchange_amount_line_all()
                 currency = order.pricelist_id.currency_id
@@ -1318,6 +1314,16 @@ class PosOrder(models.Model):
                 order.amount_tax = currency.round(sum(self._amount_line_tax(line, order.fiscal_position_id) for line in order.lines))
                 amount_untaxed = currency.round(sum(line.price_subtotal for line in order.lines))
                 order.amount_total = order.amount_tax + amount_untaxed
+        return True
+
+    @api.model
+    def reservation_cancel(self, product_id, order_id):
+        pos_order = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
+        prod_history = self.env['product.history'].sudo().search(
+                                    [('order_id', '=', pos_order.id),
+                                     ('product_id', '=', int(product_id))])
+        pos_order.update({'reservation_status': 'cancel'})
+        prod_history.update({'state': 'cancel'})
         return True
 
     @api.multi

@@ -49,6 +49,10 @@
 								<t t-if="state=='extend'">
 								 	 <t t-set="cellcolor" t-value="'4e2ed0'" />
 								</t>
+								<!-- <t t-if="state=='cancel'">
+								 	<t t-set="cellcolor" t-value="'339933'" />
+							 	 	<t t-set="state" t-value="'freecancel'" />
+								</t> -->
 							</t>
 							<t t-else="">				
 							 	 <t t-set="cellcolor" t-value="'339933'" />
@@ -57,9 +61,10 @@
 							<t t-if="today_date > date_col">
 								<t t-set="cellcolor" t-value="'939a93'" />
 							</t>
-							<t t-if="state=='draft'">
+							<t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
 								<t t-set="cellcolor" t-value="'339933'" />
 								<t t-set="state" t-value="'free'" />
+								
 								<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
 									t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
 									t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
@@ -1055,8 +1060,10 @@
 								    									</t>
 								    								</t>
 								    								<t t-else="">
-									    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
-									    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    									<t t-if="data.form_placeholder != 'reserve_cancel'">
+										    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+										    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+									    								</t>
 								    								</t>
 								    							</t>
 								    						</div>

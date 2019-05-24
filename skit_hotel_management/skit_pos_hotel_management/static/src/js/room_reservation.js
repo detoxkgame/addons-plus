@@ -617,7 +617,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
  	     			method:'update_order',
  	     			args: [0, order_post, order_id],
  	     		}).then(function(result){
- 	     			var msg = 'Thanks for Booking. Your Reservation is confirmed.';
+ 	     			var msg = 'Thanks for your confirmation.';
  	     			if(id == 'shift_room')
  	     				msg = 'Your room changed.';
  	     			if(id == 'date_extend')
@@ -1517,6 +1517,56 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             		self.checkMandatory(isProceed, order_post, order_line, order_status, order_id, id, c_sub_id);
             	}
             });
+            
+            /** Reservation Cancel Action */
+            contents.off('click','#reserve_cancel');
+  	        contents.on('click','#reserve_cancel',function(){
+  	        	var reserve_prod_id = contents.find('#product_id').val();
+  	        	var folio_id = contents.find('#order_id').text();
+  	        	var c_sub_id = contents.find('#current_sub_id').text();
+  	        	self._rpc({
+ 	     			model: 'pos.order',
+ 	     			method:'reservation_cancel',
+ 	     			args: [reserve_prod_id, folio_id],
+ 	     		}).then(function(result){
+ 	     			self.pos.gui.show_popup('alert',{
+	                     'title': _t('Success'),
+	                     'body': 'Your reservation is cancelled.',
+	                });
+ 	     			self._rpc({
+		        		 model: 'hm.form.template',
+			    		 method: 'get_center_panel_form',
+			    		 args: [0, c_sub_id, 0],
+			    	 }).then(function(result){
+			    		 var form_name = result[0]['form_name']
+			    		 var center_panel_temp = result[0]['center_panel_temp']
+			    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+			    		 var form_view = result[0]['form_view']
+			    		 var floor_id = result[0]['floor_id']
+			    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+			    		 var column_count = result[0]['column_count']
+			    		 var model_name = result[0]['model_name']
+			    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+			    				form_name: form_name, form_view: form_view,
+			    				center_panel_temp: center_panel_temp,
+								center_panel_sub_id: center_panel_sub_id,
+								floor_id: floor_id, column_count: column_count, model_name:model_name,
+								current_sub_id: c_sub_id
+								});
+			    		 contents.find('.hm-center-form-design').html(center_panel_html);
+			    		 contents.find('#top_panel'+c_sub_id).addClass("hm-top-inner-selected");
+			    		 if(form_view == "restaurant_table"){
+			    			 sub_template_id = res_table_sub_id;
+			    			 if(sub_template_id > 0){
+			    				 contents.find('#restaurant_table').text('ispage');
+			    			 }else{
+			    				 contents.find('#restaurant_table').text('true');
+			    			 }
+			    			 self.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
+			    		 }
+			    	 });
+ 	     		});
+  	        });
             
             /* Room supply booking */
   	       contents.off('click','.room_service');
