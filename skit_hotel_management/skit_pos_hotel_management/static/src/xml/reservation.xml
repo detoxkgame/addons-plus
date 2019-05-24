@@ -7,7 +7,7 @@
    	<t t-set="room_list_array" t-value="lines['room_status_list_array']" />
    	<t t-set="order_list_array" t-value="lines['list_order_array']" />
    	<t t-set="categ_name" t-value="lines['categ_name']" />
-   	<t t-set="today_date" t-value="lines['today_date']" />
+   	<t t-set="lesser_date" t-value="lines['lesser_date']" />
    	<t t-set="product_rows" t-value="lines['list_product_array']" />
    	<t t-set="date_format" t-value="lines['date_format']" />
 		   	<thead class="table-thead">
@@ -58,9 +58,11 @@
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
 							</t>
-							<t t-if="today_date > date_col">
-								<t t-set="cellcolor" t-value="'939a93'" />
-							</t>
+							<t t-foreach="lesser_date" t-as="date_less">
+								<t t-if="date_less == date_col">
+									<t t-set="cellcolor" t-value="'939a93'" />
+								</t>
+						 	</t>
 							<t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
 								<t t-set="cellcolor" t-value="'339933'" />
 								<t t-set="state" t-value="'free'" />

@@ -42,7 +42,8 @@ class RoomStatus(models.Model):
  
         N = 2
         today = datetime.today()
-        date_array=[]    
+        date_array=[]  
+        ls=[]  
         date_format={}
         if(from_date and to_date):
             from_date = datetime.strptime(from_date, '%m/%d/%Y')
@@ -97,13 +98,20 @@ class RoomStatus(models.Model):
             else:
                 range_date = datetime.now() - timedelta(i)
             date = datetime.strftime(range_date, "%b %d %Y") 
+            date_1 = datetime.strptime(date, '%b %d %Y')
             date_value = datetime.strftime(range_date, "%a %m-%d-%Y")   
             today_date_value = datetime.strftime(today, "%b %d %Y")
+            date_2 = datetime.strptime(today_date_value, '%b %d %Y')
             date_array.append(date)
             dates = date_array
             dates.sort(key=lambda date: datetime.strptime(date, "%b %d %Y"))
-            date_format[date] = date_value       
+            date_format[date] = date_value  
+            
+            if(date_1 < date_2):
+                date_date = datetime.strftime(date_1, "%b %d %Y")   
+                ls.append(date_date)
+
 
         return {'date_key':dates, 'date_format':date_format, 'room_status_list_array':room_status_list_arrays,
                 'list_product_array':list_product_arrays,'list_order_array':list_order_arrays,'categ_name':categ_name,
-                'today_date':today_date_value,}
+                'lesser_date':ls,}
