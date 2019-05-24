@@ -1625,7 +1625,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  				                     'body': _t('Requested things will be delivered soon.'),
   	  				                });
   	  	 	 	     				$('.popper').popover('destroy');
-  	  	 	 	     				contents.find('.select_room').addClass('inprogress_room');		
+  	  	 	 	     				//contents.find('.select_room').addClass('inprogress_room');	
+  	  	 	 	     				contents.find('.select_room').addClass('hm-booked-service');	
   	  	 	 	     			}
   	  	 	 	     		});
   	  					}
@@ -1659,7 +1660,8 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
   	  				                     'body': _t('Items Refilled.'),
   	  				                });
   	  	 	 	     				$('.popper').popover('destroy');
-  	  	 	 	     				contents.find('.select_room').removeClass('inprogress_room');
+  	  	 	 	     				contents.find('.inprogress_room').addClass('inprogress_room');
+  	  	 	 	     				contents.find('.select_room').removeClass('hm-booked-service');
   	  	 	 	     				contents.find('.select_room').removeClass('select_room');
   	  	 	 	     			}
   	  	 	 	     		});

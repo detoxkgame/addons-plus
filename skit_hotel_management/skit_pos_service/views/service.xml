@@ -134,6 +134,18 @@
                            
                         </field>
                     </page>
+                    <page string="Room Supply Lines">
+                        <field name="room_supply_ids" nolabel="1">
+                            <tree string="Supply Lines">
+                                <field name="room_no"/>
+                                <field name="date"/>
+                                <field name="supervisor"/>
+                                <field name="supplier" />
+                                <field name="closed_time" />
+                                <field name="state"/>
+                            </tree>    
+                        </field>
+                    </page>
             	</xpath>
             </field>
        	</record>

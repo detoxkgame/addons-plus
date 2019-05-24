@@ -1288,19 +1288,21 @@
     <!-- Restaurant Rooms -->
 	<t t-name="RestaurantRooms">
 		<t t-foreach="tables" t-as="table">
-			<t t-if="table.state == 'inprogress'">
-				<div data-contentwrapper='#supply-container' data-toggle="rs_popover" data-placement="right" class="res_table room_service popper inprogress_room" 
-					t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
-		            									left: #{table.position_h + table.width/2}px; 
-		            									border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
-		            									t-attf-room_id="#{table.product_id}" t-attf-manage_id="#{table.rm_id}" t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}">
-						<span class='label'>
-			                   <t t-esc='table.name' />
-			            </span>
-				</div>
+			<t t-if="(table.folioid) > 0">
+				<div data-contentwrapper='#supply-container' data-toggle="rs_popover" data-placement="right" 
+					t-attf-class="#{(table.state) == 'inprogress' ? 'res_table room_service popper hm-booked-service' : 'res_table room_service popper inprogress_room' }"				
+					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+			          left: #{table.position_h + table.width/2}px; 
+			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+			         t-attf-room_id="#{table.product_id}" t-attf-manage_id="#{table.rm_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" >
+					<span class='label'>
+				    	<t t-esc='table.name' />
+				    </span>
+			    </div>
 			</t>
 			<t t-else="">
-				<div data-contentwrapper='#supply-container' data-toggle="rs_popover" data-placement="right" class="res_table room_service popper" 
+				<div data-contentwrapper='#supply-container' data-toggle="rs_popover" data-placement="right" 
+					t-attf-class="#{(table.state) == 'inprogress' ? 'res_table room_service popper hm-booked-service' : 'res_table room_service popper' }"	
 					t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 		            									left: #{table.position_h + table.width/2}px; 
 		            									border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 

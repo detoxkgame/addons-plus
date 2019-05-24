@@ -78,6 +78,11 @@ class PosOrder(models.Model):
                                           copy=True)
     house_keeping_ids = fields.One2many('hm.house.keeping', 'folio_no', string= "House Keeping", copy=True)
 
+    room_supply_ids = fields.One2many('room.manage',
+                                      'folio_no',
+                                      string="Room Supply Lines",
+                                      copy=True)
+
     @api.model
     def create_from_ui(self, orders):
         # Keep only new orders
@@ -182,6 +187,7 @@ class RoomSupplyDetails(models.Model):
 class HMRoomManage(models.Model):
 
     _name = 'room.manage'
+    _rec_name = "room_no"
     _description = "Room Manage"
 
     room_no = fields.Many2one('product.template', string="Room No")
@@ -221,7 +227,8 @@ class HMRoomManage(models.Model):
                 room_supply_ids.append(room_supply.id)
             # Update folio_no for respective room
             pos_order = self.env['pos.order'].sudo().search([
-                                        ('reservation_status', '=', 'checkin'),
+                                        ('reservation_status', 'in',
+                                         ('checkin', 'shift', 'extend')),
                                         ('is_service_order', '=', False)],
                                         )
             pos_order_line = self.env['pos.order.line'].sudo().search([
