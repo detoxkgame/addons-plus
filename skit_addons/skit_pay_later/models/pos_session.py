@@ -1,4 +1,7 @@
-from odoo import api, models, SUPERUSER_ID, _
+# -*- coding: utf-8 -*-
+import pytz
+from datetime import timedelta
+from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.exceptions import UserError
 
 
@@ -70,4 +73,64 @@ class Skit_PosSession(models.Model):
         res.write(values)
 
         return res
+
+
+class ReportSaleDetails(models.AbstractModel):
+    _inherit = 'report.point_of_sale.report_saledetails'
+
+    @api.multi
+    def get_report_values(self, docids, data=None):
+        """ Inherited method to update payment details of pay later
+            in sales details report"""
+        data = super(ReportSaleDetails, self).get_report_values(
+                                                            docids, data=data)
+        user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
+        today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self)))
+        today = today.astimezone(pytz.timezone('UTC'))
+        if data['date_start']:
+            date_start = fields.Datetime.from_string(data['date_start'])
+        else:
+            # start by default today 00:00:00
+            date_start = today
+
+        if data['date_stop']:
+            # set time to 23:59:59
+            date_stop = fields.Datetime.from_string(data['date_stop'])
+        else:
+            # stop by default today 23:59:59
+            date_stop = today + timedelta(days=1, seconds=-1)
+
+        # avoid a date_stop smaller than date_start
+        date_stop = max(date_stop, date_start)
+
+        date_start = fields.Datetime.to_string(date_start)
+        date_stop = fields.Datetime.to_string(date_stop)
+        configs = self.env['pos.config'].browse(data['config_ids'])
+        # Get session statment_lines for payment details
+        sessions = self.env['pos.session'].search([
+                        ('start_at', '>=', date_start),
+                        ('stop_at', '<=', date_stop),
+                        ('config_id', 'in', configs.ids)])
+        statement_ids = self.env["account.bank.statement"].search([
+                                    ('pos_session_id', 'in', sessions.ids)])
+        st_line_ids = self.env["account.bank.statement.line"].search([
+                                ('statement_id', 'in', statement_ids.ids)]).ids
+        if st_line_ids:
+            self.env.cr.execute("""
+                SELECT aj.name, sum(amount) total
+                FROM account_bank_statement_line AS absl,
+                     account_bank_statement AS abs,
+                     account_journal AS aj
+                WHERE absl.statement_id = abs.id
+                    AND abs.journal_id = aj.id
+                    AND absl.id IN %s
+                GROUP BY aj.name
+            """, (tuple(st_line_ids),))
+            payments = self.env.cr.dictfetchall()
+        else:
+            payments = []
+        # modified previous payments
+        data['payments'] = payments
+        return data
+
 
