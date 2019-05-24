@@ -79,10 +79,10 @@ class ReportSaleDetails(models.AbstractModel):
     _inherit = 'report.point_of_sale.report_saledetails'
 
     @api.multi
-    def get_report_values(self, docids, data=None):
+    def _get_report_values(self, docids, data=None):
         """ Inherited method to update payment details of pay later
             in sales details report"""
-        data = super(ReportSaleDetails, self).get_report_values(
+        data = super(ReportSaleDetails, self)._get_report_values(
                                                             docids, data=data)
         user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
         today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self)))
