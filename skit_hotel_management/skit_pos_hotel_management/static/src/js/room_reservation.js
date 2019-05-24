@@ -148,8 +148,10 @@ var HMConfirmPopupWidget = PopupWidget.extend({
             	contents.find('#checkout_date').val('');
      	   		return false;
      	   	}
-     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
- 	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+     	   	var numberOfNights =  Math.abs((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - 
+   					Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
+     	   	/*var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+ 	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));*/
  	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
  	    	{
  	    		contents.find('#no_night').val(numberOfNights);
@@ -1051,6 +1053,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		    		    			var linegroup = center_panel_temp[0]
 		    		    			//alert('temp_id'+JSON.stringify(linegroup[0]['line_group'][1][0]['sub_template_id']))
 		    		    			var sub_id = linegroup[0]['line_group'][1][0]['sub_template_id']
+		    		    			var sub_id1 = linegroup[0]['line_group'][2][0]['sub_template_id']
 		    			        	//$(this).addClass("hm-top-inner-selected");
 		    		    			
 		    		    			var date1 = new Date(date);
@@ -1105,6 +1108,32 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					    		    			old_product_id = contents.find('#product_id').val();	
 					    		    		});
 				    					}
+				    					if(date == today){
+			    		    				self._rpc({
+					    		    			model: 'hm.form.template',
+					    		    			method: 'get_center_panel_form',
+					    		    			args: [0, sub_id1, 0],
+					    		    		}).then(function(result){
+					    		    			var form_name = result[0]['form_name']
+					    		    			var center_panel_temp = result[0]['center_panel_temp']
+					    		    			var center_panel_sub_id = result[0]['center_panel_sub_id']
+					    		    			var form_view = result[0]['form_view']
+					    		    			var column_count = result[0]['column_count']
+					    		    			var model_name = result[0]['model_name']
+					    		    			center_panel_temp[0][0]['current_order'][0]['checkin_date'] = date + ' ' + '12:00 AM';
+					    		    			center_panel_temp[0][0]['current_order_lines'][0]['product_id'] = prod_id;
+					    		    			center_panel_temp[0][0]['current_order_lines'][0]['room_type_id'] = categ_name;
+					    		    			
+					    		    			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+					    		    				form_name: form_name, form_view: form_view,
+					    		    				center_panel_temp: center_panel_temp,
+					    							center_panel_sub_id: center_panel_sub_id, column_count: column_count,
+					    							model_name: model_name,current_sub_id: sub_id
+					    							});
+					    		    			contents.find('.hm-center-form-design').html(center_panel_html);
+					    		    			old_product_id = contents.find('#product_id').val();	
+					    		    		});
+			    		    			}
 		    		     	   		}
 			    				})
 			    			}
@@ -1216,8 +1245,10 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				     	    contents.find('#checkout_date').val('');
 			     	   		return false;
 			     	   	}
-			     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-		     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+			     	   	var numberOfNights =  Math.abs((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - 
+	     	   					Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
+			     	   	/*var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+		     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));*/
 		     	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
 		     	    	{
 		     	    		contents.find('#no_night').val(numberOfNights);
@@ -1267,8 +1298,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 			            	contents.find('#checkout_date').val('');
 			     	   		return false;
 			     	   	}
-			     	   	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-		     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+			     	   	
+			     	   	var numberOfNights =  Math.abs((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - 
+	     	   					Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
+			     	   	/*var timeDiff = Math.abs(date2.getDate() - date1.getDate());
+		     	    	var numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));*/
 		     	    	if((numberOfNights != undefined) && (numberOfNights != 'NaN'))
 		     	    	{
 		     	    		contents.find('#no_night').val(numberOfNights);
