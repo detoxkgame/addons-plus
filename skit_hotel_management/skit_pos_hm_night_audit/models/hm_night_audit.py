@@ -55,6 +55,11 @@ class PosSession(models.Model):
         self.rooms_occupied = occupied_rooms_count
         self.rooms_blocked = blocked_rooms_count
 
+    @api.multi
+    def save_hand_order(self, hand_over_id):
+        if hand_over_id:
+            self.write({'hand_over_to': hand_over_id})
+
 
 class ServiceDetails(models.Model):
     """Service Details

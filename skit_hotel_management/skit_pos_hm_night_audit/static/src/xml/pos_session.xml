@@ -8,11 +8,11 @@
 	                 <i class='fa fa-cubes' />
 	            </span>  
             </div>
-            <div class="night_audit_session" title="Night Audit">
+            <!-- <div class="night_audit_session" title="Night Audit">
 	        	 <span class="order-button square NightAuditButton">
 	                 <div class="">Night Audit</div>
 	            </span>  
-            </div>  
+            </div>  --> 
                
         </t>
     </t>
@@ -426,15 +426,24 @@
 						           		<tr>
 						      				<td>Hand over to :</td>
 											<td>
-												<input name="partners" list="partner_list" class="partner_datalist"/>
-												<datalist id="partner_list">
-													<t t-foreach="partners_all" t-as="partner">
-														<option  t-attf-name="#{partner.name}" t-att-value="partner.id"><t t-esc="partner.name"/></option>
-													</t>
-												</datalist>
+												<select name="hand_over_to" id="hand_over_to" class="select_hand_over">
+													<option disabled="disabled" selected="selected" class="placeholder"></option>
+											    	 	<t t-foreach="session.hand_over_ids" t-as="user">
+															<p>
+																<t t-if="(user.id == session.hand_over_to)">
+																	<option t-attf-selected="true" t-att-id="user.id">
+																		<t t-esc="user.name" />
+																	</option>
+																</t>
+																<t t-else="">
+																	<option t-att-id="user.id"><t t-esc="user.name" /></option>
+																</t>
+															</p>
+														</t>
+												</select>
 											</td>
 										</tr>
-										<tr><td></td></tr>
+										<!-- <tr><td></td></tr> -->
 						                <tr><td>Occupied Rooms : </td><td><t t-esc="session.rooms_occupied" /></td></tr>
 						                <tr><td>Maintenance Rooms : </td><td><t t-esc="session.rooms_blocked" /></td></tr> 
 						    		</tbody>

@@ -23,6 +23,14 @@ class pos_session(models.Model):
                 admin = 1
             else:
                 admin = 0
+            hand_over_ids = []
+            user_ids = self.env['res.users'].sudo().search([])
+            if user_ids:
+                for user in user_ids:
+                    hand_over_ids.append({'id': user.id,
+                                          'name': user.name,
+                                          'partner_id': user.partner_id.id
+                                          })
             pos_session = {"id": session.id,
                            "name": session.name,
                            "user_id": [session.user_id.id,
@@ -50,7 +58,8 @@ class pos_session(models.Model):
                            "rooms_reserved": session.rooms_reserved,
                            "rooms_occupied": session.rooms_occupied,
                            "rooms_blocked": session.rooms_blocked,
-                           "hand_over_to": session.hand_over_to.name,
+                           "hand_over_to": session.hand_over_to.id,
+                           "hand_over_ids": hand_over_ids,
                            }
             return pos_session
         else:
@@ -122,20 +131,28 @@ class pos_session(models.Model):
         """
         checkin_val = []
         checkout_val = []
-
         session = self.browse(int(session_id))
-        pos_order = self.env['pos.order'].sudo().search(
-            [('session_id', '=', session.id)]
-        )
+        date = session.stop_at.strftime('%Y-%m-%d')
         room_status = {"rooms_available": session.rooms_available,
                        "rooms_reserved": session.rooms_reserved,
                        "rooms_occupied": session.rooms_occupied,
                        "rooms_blocked": session.rooms_blocked}
+        # Get checkin and checkout details
+        sql_query = "select id from pos_order where session_id = "+str(session.id)+" and \
+                            is_service_order='false' \
+                    union \
+                    select id from pos_order where checkout_date >='"+date+"' and \
+                                reservation_status='checkout'"
+        self.env.cr.execute(sql_query)
+        orders = self.env.cr.fetchall()
+        pos_order = self.env['pos.order'].sudo().search([('id', 'in',
+                                                          orders)])
         for order in pos_order:
             product_history = self.env['product.history'].sudo().search(
                 [('order_id', '=', order.id),
                  ('product_id.categ_id.is_room', '=', True),
-                 ('state', 'in', ('checkin', 'checkout'))
+                 ('state', 'in', ('checkin', 'shift',
+                                  'extend', 'checkout'))
                  ])
             for history in product_history:
                 journal_names = ''
@@ -153,7 +170,9 @@ class pos_session(models.Model):
                      'journal_id': journal_names,
                      'payment': history.order_id.invoice_id.state or 'No Invoice'
                 }
-                if history.state == 'checkin':
+                if ((history.state == 'checkin') or
+                    (history.state == 'shift') or
+                    (history.state == 'extend')):
                     checkin_val.append(val)
                 elif history.state == 'checkout':
                     checkout_val.append(val)
@@ -174,7 +193,7 @@ class pos_session(models.Model):
         session = self.browse(int(session_id))
         service_order = self.env['pos.order'].sudo().search(
             [('session_id', '=', session.id),
-             ('order_zone', '=', 'room_service')
+             ('order_zone', 'in', ('room_service', 'laundry'))
              ]
         )
         for s_order in service_order:

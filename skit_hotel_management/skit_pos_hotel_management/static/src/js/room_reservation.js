@@ -1997,29 +1997,56 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
                 	}); 							
                 });
 	        });
-	        /*Session EndOfSession click*/
-	        contents.off('click','.pos_button_section .EndOfSession');
-	        contents.on('click','.pos_button_section .EndOfSession',function(event){
+	        /*Session Hand over to onchange*/
+	        contents.off('change','.select_hand_over');
+	        contents.on('change','.select_hand_over',function(event){
+	        	contents.find('#hand_over_to').removeClass('warning');
 	        	var id = self.pos.pos_session.id;   
-	           	 self._rpc({
+	        	var hand_over_id = contents.find('#hand_over_to option:selected').attr('id');
+	        	 self._rpc({
 	           		 model: 'pos.session',
-	           		 method: 'action_pos_session_closing_control',
-	           		 args: [id],
+	           		 method: 'save_hand_order',
+	           		 args: [id, hand_over_id],
 	           	 }).then(function(result){  
 	           		 	night_audit_subid = $('#night_audit_table').attr('na_sub_id');
 	            		$('.menu_form_btn').trigger('click');
 	            		night_audit_subid = 0;
-	           		 	//self.gui.show_screen('sessionscreen',null,'refresh');	
-	           	 },function(err,event){
-	           		 event.preventDefault();
-	           		 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
-	           		 if(err.data.message)
-	           			 err_msg = err.data.message;
-	           		 self.gui.show_popup('alert',{
-	           			 'title': _t('Odoo Warning'),
-	           			 'body': _t(err_msg),
-	           		 });
-	           	 }); 
+	           	 });
+	        });
+	        /*Session EndOfSession click*/
+	        contents.off('click','.pos_button_section .EndOfSession');
+	        contents.on('click','.pos_button_section .EndOfSession',function(event){
+	        	var id = self.pos.pos_session.id;  
+	        	var hand_over_id = contents.find('#hand_over_to option:selected').attr('id');
+	        	if (hand_over_id){
+		           	 self._rpc({
+		           		 model: 'pos.session',
+		           		 method: 'action_pos_session_closing_control',
+		           		 args: [id],
+		           	 }).then(function(result){  
+		           		 	night_audit_subid = $('#night_audit_table').attr('na_sub_id');
+		            		$('.menu_form_btn').trigger('click');
+		            		night_audit_subid = 0;
+		           		 	//self.gui.show_screen('sessionscreen',null,'refresh');	
+		           	 },function(err,event){
+		           		 event.preventDefault();
+		           		 var err_msg = 'Please verify the details given or Check the Internet Connection./n';
+		           		 if(err.data.message)
+		           			 err_msg = err.data.message;
+		           		 self.gui.show_popup('alert',{
+		           			 'title': _t('Odoo Warning'),
+		           			 'body': _t(err_msg),
+		           		 });
+		           	 }); 
+	        	}
+	        	else{
+	        		contents.find('#hand_over_to').addClass('warning');
+	        		self.pos.gui.show_popup('popup_hm_warning',{
+	            		'title': 'Warning',
+	            		'msg': 'Please select hand over to.',
+	            	});
+	        		return false;
+	        	}
 	        });
 
 	        /* Session print statement click */
@@ -2725,23 +2752,16 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     render_night_audit:function(subid,contents){
     	//Night audit render function
     	var self = this;
-    	var partner_list = []
-    	var partners_all = this.pos.db.get_partners_sorted(1000);
-    	for(var i=0; i<partners_all.length; i++){
-    		partner_list.push({ 
-    			'value' : partners_all[i].id,'key':partners_all[i].name,
-    		});
-    	}
     	self._rpc({
     		model: 'pos.session',
             method: 'get_pos_session',
             args: [0, self.pos.pos_session.id],
     	}).then(function(result){ 
     		var session  = result;
-    		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, session:session, 
+    		var night_audit_html = QWeb.render('SessionDataWidget',{widget: self, 
+    																session:session, 
 																	sub_id: subid,
-																	partner_list:partner_list,
-																	partners_all:partners_all}
+																	}
 																	);
 			contents.find('.nightaudit_container .rs_night_audit_session').html(night_audit_html); //set night audit form in service window
 			contents.find('.pos_button_section .SetClosingBalance').addClass('na_session_width');//set widht for closing balance button

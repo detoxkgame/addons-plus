@@ -348,3 +348,13 @@ h2 {
 	width: 40% !important;
 	height: 60% !important;
 }
+
+.select_hand_over {
+	font-weight: 500 !important;
+	font-size: 16px !important;
+	width: 100% !important;
+	border-top: transparent;
+	border-right: transparent;
+	border-left: transparent;
+	border-bottom-color: black;	
+}
