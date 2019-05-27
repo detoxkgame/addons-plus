@@ -61,12 +61,16 @@
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
 							</t>
+							<t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
+								<t t-set="cellcolor" t-value="'339933'" />
+								<t t-set="state" t-value="'free'" />
+							</t>
 							<t t-foreach="lesser_date" t-as="date_less">
 								<t t-if="date_less == date_col">
 									<t t-set="cellcolor" t-value="'939a93'" />
 								</t>
 						 	</t>
-							<t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
+							<!-- <t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
 								<t t-set="cellcolor" t-value="'339933'" />
 								<t t-set="state" t-value="'free'" />
 								
@@ -75,12 +79,12 @@
 									t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
 									t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
 							</t>
-							<t t-else="">
+							<t t-else=""> -->
 								<td t-attf-style="background-color:##{cellcolor}" t-attf-class="#{(state) == 'block' ? '' : 'rows_item' }" 
 									t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
 									 t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
 									 t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
-							</t>
+							<!-- </t> -->
 						 </t>
 					 </tr>
 				</t>
@@ -892,7 +896,7 @@
 						    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 						    						</t>
 						    						<t t-if="(same_row.form_field_type)=='input_int'">
-						    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+						    							<input type="number" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
 						    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" 
 						    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 						    						</t>
