@@ -738,3 +738,8 @@ div.bhoechie-tab-container{
 	border: 1px solid #32CD32;
  	background: #fff !important;
 }
+.hm-room-blocked{
+	border: 1px solid #32CD32;
+ 	background: #32CD32 !important;
+ 	color: white !important;
+}

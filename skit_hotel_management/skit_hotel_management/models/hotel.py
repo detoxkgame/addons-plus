@@ -44,6 +44,10 @@ class HotelRoomBlock(models.Model):
     from_date = fields.Datetime(string="From Date", required=True)
     to_date = fields.Datetime(string="To Date", required=True)
     remark = fields.Text(string="Remark")
+    state = fields.Selection([('draft', 'Draft'),
+                              ('block', 'Block'),
+                              ('unblock', 'Unblock')],
+                             'Status', default='draft')
 
 
 class GuestIDProof(models.Model):
@@ -771,10 +775,7 @@ class PosOrder(models.Model):
             product_history = self.env['product.history'].sudo().search([
                                         ('order_id', '=', orders.id)],
                                                 order='id desc', limit=1)
-            if(orders.reservation_status == 'checkout'):
-                product_history.write({'state': 'draft'})
-            else:
-                product_history.write({'state': orders.reservation_status})
+            product_history.write({'state': orders.reservation_status})
         return orders
 
 

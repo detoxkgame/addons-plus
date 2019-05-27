@@ -446,6 +446,9 @@
 	        <field name="model">hm.block.room</field>
 	        <field name="arch" type="xml">
 	            <form string="Block Room">
+	            	<header>
+	            		<field name="state" widget="statusbar"/>
+	            	</header>
 	                <sheet>
 	                	<group>
 		                	<group>

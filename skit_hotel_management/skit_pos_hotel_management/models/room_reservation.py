@@ -113,6 +113,10 @@ class FormTemplate(models.Model):
                     model_data = self.env[form_template.form_model_id.model].sudo().search([
                                     ('room_no', '=', floor_table.product_id.id),
                                     ('state', '!=', 'done')], limit=1)
+                elif(form_template.form_model_id.model == 'hm.block.room'):
+                    model_data = self.env[form_template.form_model_id.model].sudo().search([
+                                    ('room_id', '=', product.id),
+                                    ('state', '!=', 'unblock')], order="id desc", limit=1)
                 else:
                     if(form_template.form_model_id.model != 'pos.order'):
                         if(form_template.form_model_id.model == 'hm.house.keeping'):
@@ -140,8 +144,9 @@ class FormTemplate(models.Model):
                                'state': room_manage_id.state,
                                'orderid': service_order.id or 0,
                                'folioid': folio_order.order_id.id or 0,
-                               'model_data': model_data.id,
-                               'model_name': form_template.form_model_id.model
+                               'model_data': model_data.id or 0,
+                               'model_name': form_template.form_model_id.model,
+                               'prod_id': product.id
                                })
         return tables
 
@@ -221,7 +226,7 @@ class FormTemplate(models.Model):
                                 ('product_tmpl_id', '=', product_temp.id)])
             is_booked = False
             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', product.product_tmpl_id.id),
-                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
+                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend', 'block'))])
             if(prod_history):
                 is_booked = True
             if product.id:
@@ -263,7 +268,7 @@ class FormTemplate(models.Model):
             #===================================================================
             sql = "select * from product_history ph where ph.product_tmpl_id = "+str(product_temp.id)+" \
                     and ((ph.date between '"+checkin_date+"' and '"+checkout_date+"') \
-                    or ((ph.out_date - INTERVAL '1 DAY') between '"+checkin_date+"' and '"+checkout_date+"')) and state in ('reserved', 'checkin', 'shift', 'extend')"
+                    or ((ph.out_date - INTERVAL '1 DAY') between '"+checkin_date+"' and '"+checkout_date+"')) and state in ('reserved', 'checkin', 'shift', 'extend', 'block')"
             if(int(order_id) > 0):
                 sql += " and order_id !="+str(order_id)+""
             cr = self.env.cr
@@ -378,7 +383,7 @@ class FormTemplate(models.Model):
                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                             arr['amount'] = prod_tmpl.list_price
                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
+                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend', 'block'))])
                             if(prod_history):
                                 arr['is_booked'] = True
                         many2one_list.append(arr)
@@ -450,7 +455,7 @@ class FormTemplate(models.Model):
                         count = count + 1
                     order_data['id'] = order['id']
                     order_data['state'] = order['state']
-                    if(panel_form_temp.form_model_id.model == 'hm.house.keeping'):
+                    if(panel_form_temp.form_model_id.model == 'hm.house.keeping' or panel_form_temp.form_model_id.model == 'hm.block.room'):
                         order_data['name'] = ''
                     else:
                         order_data['name'] = order['name']
@@ -577,7 +582,7 @@ class FormTemplate(models.Model):
                                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                                             arr['amount'] = prod_tmpl.list_price
                                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
+                                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend', 'block'))])
                                             if(prod_history):
                                                 arr['is_booked'] = True
                                         many2one_list.append(arr)
@@ -823,7 +828,7 @@ class FormTemplate(models.Model):
                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                             arr['amount'] = prod_tmpl.list_price
                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
+                                                                                      ('state', 'in', ('reserved', 'checkin', 'shift', 'extend', 'block'))])
                             if(prod_history):
                                 arr['is_booked'] = True
                         many2one_list.append(arr)
@@ -1006,7 +1011,7 @@ class FormTemplate(models.Model):
                                             prod_tmpl = self.env['product.template'].sudo().search([('id', '=', rec.product_tmpl_id.id)])
                                             arr['amount'] = prod_tmpl.list_price
                                             prod_history = self.env['product.history'].sudo().search([('product_tmpl_id', '=', prod_tmpl.id),
-                                                                                                ('state', 'in', ('reserved', 'checkin', 'shift', 'extend'))])
+                                                                                                ('state', 'in', ('reserved', 'checkin', 'shift', 'extend', 'block'))])
                                             if(prod_history):
                                                 arr['is_booked'] = True
                                         many2one_list.append(arr)
@@ -1130,6 +1135,40 @@ class FormTemplate(models.Model):
             model.update(post)
         else:
             self.env[model_name].create(post)
+
+    @api.model
+    def create_block_room(self, post, order_id, model_name, field_name):
+        if(model_name == 'hm.block.room'):
+            prod = self.env['product.product'].sudo().search([('id', '=', post.get('room_id'))])
+            from_date = datetime.strptime(post.get('from_date'), '%Y-%m-%d %H:%M:%S')
+            to_date = datetime.strptime(post.get('to_date'), '%Y-%m-%d %H:%M:%S')
+            if(int(order_id) > 0):
+                block_room = self.env['hm.block.room'].sudo().search([('id', '=', int(order_id))])
+                if(field_name == 'unblock_room'):
+                    block_room.update({'state': 'unblock'})
+                    room_history = self.env['product.history'].sudo().search([
+                                        ('product_id', '=', prod.id),
+                                        ('block_room_id', '=', block_room.id)],
+                                                order='id desc', limit=1)
+                    room_history.update({'state': 'cancel'})
+                else:
+                    room_data = {
+                            'date': from_date,
+                            'out_date': to_date,
+                            }
+                    block_room.update(post)
+                    self.env['product.history'].sudo().update(room_data)
+            else:
+                room = self.env['hm.block.room'].sudo().create(post)
+                room_data = {
+                            'product_id': prod.id,
+                            'product_tmpl_id': prod.product_tmpl_id.id,
+                            'state': 'block',
+                            'block_room_id': room.id,
+                            'date': from_date,
+                            'out_date': to_date,
+                            }
+                self.env['product.history'].sudo().create(room_data)
 
 
 class ResPartner(models.Model):

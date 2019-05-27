@@ -22,6 +22,7 @@ class ProductHistory(models.Model):
          ('paid', 'Paid'), ('done', 'Posted'), ('invoiced', 'Invoiced'), 
          ('shift', 'Shifted'), ('extend', 'Extended'), ('block', 'Blocked'),],
         'Status',  copy=False, default='draft')
+    block_room_id = fields.Many2one('hm.block.room', string='Block Room', ondelete='cascade')
 
  
 class Producttemplate(models.Model): 

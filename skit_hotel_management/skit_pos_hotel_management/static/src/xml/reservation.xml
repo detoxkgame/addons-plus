@@ -49,6 +49,9 @@
 								<t t-if="state=='extend'">
 								 	 <t t-set="cellcolor" t-value="'4e2ed0'" />
 								</t>
+								<t t-if="state=='block'">
+								 	 <t t-set="cellcolor" t-value="'000000'" />
+								</t>
 								<!-- <t t-if="state=='cancel'">
 								 	<t t-set="cellcolor" t-value="'339933'" />
 							 	 	<t t-set="state" t-value="'freecancel'" />
@@ -73,7 +76,7 @@
 									t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
 							</t>
 							<t t-else="">
-								<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
+								<td t-attf-style="background-color:##{cellcolor}" t-attf-class="#{(state) == 'block' ? '' : 'rows_item' }" 
 									t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
 									 t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
 									 t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
@@ -723,8 +726,8 @@
 			    						<td class="hm-form-td" colspan="2" style="width:100% !important;">
 				    					<textarea class="hm-textarea" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}"
 				    							 t-attf-placeholder="#{first_col.form_placeholder}" t-attf-name="#{first_col.form_fields}" 
-				    							 t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" t-attf-value="#{c_order[first_col.form_fields]}"
-				    							 rows="2" cols="95"></textarea>
+				    							 t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
+				    							 rows="2" cols="95"><t t-esc="c_order[first_col.form_fields]" /></textarea>
 				    					</td>
 				    				</t>
 			    					<t t-else="">
@@ -812,8 +815,8 @@
 			    													<td class="hm-form-td" colspan="2" style="width:100% !important;">
 										    							<textarea class="hm-textarea" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}"
 										    							 t-attf-placeholder="#{sub_same_row.form_placeholder}" t-attf-name="#{sub_same_row.form_fields}" 
-										    							 t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" t-attf-value="#{c_orderline[sub_same_row.form_fields]}" 
-										    							 rows="2" cols="95"></textarea>
+										    							 t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" 
+										    							 rows="2" cols="95"><t t-esc="c_orderline[sub_same_row.form_fields]" /></textarea>
 										    						</td>
 										    					</t>
 										    					<t t-else="">
@@ -874,8 +877,8 @@
 			    								<td class="hm-form-td" colspan="2" style="width:100% !important;">
 										    		<textarea class="hm-textarea" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-id="#{same_row.form_fields}"
 										    			t-attf-placeholder="#{same_row.form_placeholder}" t-attf-name="#{same_row.form_fields}" 
-										    			t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" t-attf-value="#{c_order[same_row.form_fields]}"
-										    			rows="2" cols="95"></textarea>
+										    			t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" 
+										    			rows="2" cols="95"><t t-esc="c_order[same_row.form_fields]" /></textarea>
 										    	</td>
 										    </t>
 			    							<t t-else="">
@@ -931,8 +934,8 @@
 					    											<td class="hm-form-td" colspan="2" style="width:100% !important;">
 														    			<textarea class="hm-textarea" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}"
 														    				t-attf-placeholder="#{sub_first_col.form_placeholder}" t-attf-name="#{sub_first_col.form_fields}" 
-														    				t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" t-attf-value="#{c_order_line[sub_first_col.form_fields]}"
-														    				rows="2" cols="95"></textarea>
+														    				t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" 
+														    				rows="2" cols="95"><t t-esc="c_order_line[sub_first_col.form_fields]"/></textarea>
 														    		</td>
 														    	</t>
 														    	<t t-else="">
@@ -974,8 +977,8 @@
 					    													<td class="hm-form-td" colspan="2" style="width:100% !important;">
 																    			<textarea class="hm-textarea" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}"
 																    				t-attf-placeholder="#{sub_same_row.form_placeholder}" t-attf-name="#{sub_same_row.form_fields}" 
-																    				t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" t-attf-value="#{c_order_line[sub_same_row.form_fields]}"
-																    				rows="2" cols="95"></textarea>
+																    				t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}"
+																    				rows="2" cols="95"><t t-esc="c_order_line[sub_same_row.form_fields]" /></textarea>
 																    		</td>
 																    	</t>
 																    	<t t-else="">
@@ -1056,16 +1059,26 @@
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
 								    										</t>
 								    									</t>
+								    									<t t-elif="data.form_placeholder == 'block_room'">
+								    										<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">Update</span>
+								    									</t>
+								    									<t t-elif="data.form_placeholder == 'unblock_room'">
+								    										<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    									</t>
 								    									<t t-else="">
 								    										<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
 								    									</t>
 								    								</t>
 								    								<t t-else="">
-								    									<t t-if="data.form_placeholder != 'reserve_cancel'">
-										    								<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
-										    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
-									    								</t>
+								    									<t t-if="(data.form_placeholder != 'reserve_cancel')">
+								    										<t t-if="(data.form_placeholder != 'unblock_room')">
+									    										<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+											    								t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    										</t>
+								    									</t>
 								    								</t>
 								    							</t>
 								    						</div>
@@ -1092,6 +1105,7 @@
 					<t t-if="form_view == 'restaurant_table'">
 						<span id="restaurant_table" style="display:none">false</span>
 						<span id="current_sub_id" style="display:none"><t t-esc="current_sub_id" /></span>
+						<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
 						<t t-if='floor_count > 1'>
 		                    <div class='floor-selector'>
 		                        <t t-foreach="floors" t-as="floor">
@@ -1471,23 +1485,38 @@
 	<t t-name="PageViewRoomWidget">
 		<t t-foreach="tables" t-as="table">
 			<t t-if="(table.folioid) > 0">
-				<div data-placement="right" t-attf-class="res_table hm-booked-room #{hm_class}" 
+				<div data-placement="right" t-attf-class="res_table hm-booked-room #{hm_class} #{block_class}" 
 					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 			          left: #{table.position_h + table.width/2}px; 
 			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
 			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" 
-			         t-attf-folio_id="#{table.folioid}" t-attf-sub_id="#{sub_temp_id}">
+			         t-attf-folio_id="#{table.folioid}" t-attf-sub_id="#{sub_temp_id}" t-attf-model_id="#{table.model_data}"
+			         t-attf-prod_id="#{table.prod_id}">
+					<span class='label'>
+				    	<t t-esc='table.name' />
+				    </span>
+			    </div>
+			</t>
+			<t t-elif="(table.model_data) > 0">
+				<div data-placement="right" t-attf-class="res_table #{block_class} #{b_class}" 
+					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
+			          left: #{table.position_h + table.width/2}px; 
+			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
+			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" 
+			         t-attf-model_id="#{table.model_data}" t-attf-folio_id="#{table.folioid}" t-attf-sub_id="#{sub_temp_id}"
+			         t-attf-prod_id="#{table.prod_id}">
 					<span class='label'>
 				    	<t t-esc='table.name' />
 				    </span>
 			    </div>
 			</t>
 			<t t-else="">
-				<div data-placement="right" class="res_table"
+				<div data-placement="right" t-attf-class="res_table #{block_class}" 
 					 t-attf-style="width:#{table.width}px; height:#{table.height}px; line-height:#{table.height}px; margin-left:#{-table.width/2}px; margin-top:#{-table.height/2}px; top:#{table.position_v + table.height/2}px;
 			          left: #{table.position_h + table.width/2}px; 
 			          border-radius:#{table.shape === 'round' ? (Math.max(table.width,table.height)/2) : 3}px;" 
-			         t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" t-attf-table_id="#{table.id}" >
+			         t-attf-model_id="#{table.model_data}" t-attf-room_id="#{table.product_id}"  t-attf-floor_id="#{table.floor_id}" 
+			         t-attf-table_id="#{table.id}" t-attf-sub_id="#{sub_temp_id}" t-attf-folio_id="#{table.folioid}" t-attf-prod_id="#{table.prod_id}" >
 					<span class='label'>
 				    	<t t-esc='table.name' />
 				    </span>
