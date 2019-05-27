@@ -77,8 +77,11 @@ class RoomStatus(models.Model):
                                 rowdate1 = ""+datetime.strftime(history.out_date, "%b %d %Y")
                                 d1 = datetime.strptime(rowdate, "%b %d %Y")
                                 d2 = datetime.strptime(rowdate1, "%b %d %Y")
-                                days = (abs((d2 - d1).days))
-                                    
+                                if(history.block_room_id):
+                                    days = (abs((d2 - d1).days) + 1)
+                                else:
+                                    days = (abs((d2 - d1).days))
+
                                 for i in range(days):
                                     if rowdate and rowdate1:
                                         range_dates = history.date + timedelta(i)
