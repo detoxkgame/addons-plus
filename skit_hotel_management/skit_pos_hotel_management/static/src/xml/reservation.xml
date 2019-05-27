@@ -61,17 +61,19 @@
 							 	 <t t-set="cellcolor" t-value="'339933'" />
 							 	 <t t-set="state" t-value="'free'" />
 							</t>
-							<t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
-								<t t-set="cellcolor" t-value="'339933'" />
-								<t t-set="state" t-value="'free'" />
-							</t>
+							<t t-set="cellcolor_lesser" t-value="" />
 							<t t-foreach="lesser_date" t-as="date_less">
 								<t t-if="date_less == date_col">
-									<t t-set="cellcolor" t-value="'939a93'" />
+									<t t-set="cellcolor_lesser" t-value="'939a93'" />
 								</t>
 						 	</t>
-							<!-- <t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
-								<t t-set="cellcolor" t-value="'339933'" />
+							<t t-if="(state=='draft') or (state=='checkout') or (state=='cancel')">
+								<t t-if="cellcolor_lesser != ''">
+									<t t-set="cellcolor" t-value="cellcolor_lesser" />
+								</t>
+								<t t-else="">
+									<t t-set="cellcolor" t-value="'339933'" />
+								</t>
 								<t t-set="state" t-value="'free'" />
 								
 								<td t-attf-style="background-color:##{cellcolor}" class="rows_item"
@@ -79,12 +81,15 @@
 									t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
 									t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
 							</t>
-							<t t-else=""> -->
+							<t t-else="">
+								<t t-if="cellcolor_lesser != ''">
+									<t t-set="cellcolor" t-value="cellcolor_lesser" />
+								</t>
 								<td t-attf-style="background-color:##{cellcolor}" t-attf-class="#{(state) == 'block' ? '' : 'rows_item' }" 
 									t-att-data-id="order_list_array[key]" t-attr-data-prod_id="#{lines['list_product_array'][product_row]}"
 									 t-attr-data-name="#{categ_name[product_row]}" t-attr-data-date="#{date_col}"
 									 t-attr-format-date="#{format_date}"><t t-esc="state" /></td>
-							<!-- </t> -->
+							</t>
 						 </t>
 					 </tr>
 				</t>
@@ -326,9 +331,10 @@
 			    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled="#{first_col.readonly ? 'disabled' : undefined }"  />
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='input_int'">
-			    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+			    								<input type="number" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
 				    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
-				    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
+				    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" 
+				    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 			    							</t>
 			    							<t t-if="(first_col.form_field_type)=='date'">
 			    								<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
@@ -369,9 +375,10 @@
 									    								t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
 									    						</t>
 									    						<t t-if="(sub_first_col.form_field_type)=='input_int'">
-											    					<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+											    					<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
 											    						t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" 
-											    						t-attf-value="#{c_orderline[sub_first_col.form_fields]}"  t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
+											    						t-attf-value="#{c_orderline[sub_first_col.form_fields]}"  t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" 
+											    						onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 											    				</t>
 											    				<t t-if="(sub_first_col.form_field_type)=='many2one'">
 												    				<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_first_col.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }"  
@@ -402,9 +409,10 @@
 											    								t-attf-value="#{c_orderline[sub_same_row.form_fields]}"  t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
 											    						</t>
 											    						<t t-if="(sub_same_row.form_field_type)=='input_int'">
-											    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+											    							<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
 											    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" 
-											    								t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
+											    								t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" 
+											    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 											    						</t>
 											    						<t t-if="(sub_same_row.form_field_type)=='many2one'">
 											    							<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_same_row.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -446,9 +454,10 @@
 					    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='input_int'">
-					    								<input type="text" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+					    								<input type="number" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
 					    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" 
-					    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
+					    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" 
+					    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 					    							</t>
 					    							<t t-if="(same_row.form_field_type)=='date'">
 					    								<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
@@ -471,9 +480,10 @@
 											    								t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
 											    						</t>
 											    						<t t-if="(sub_first_col.form_field_type)=='input_int'">
-													    					<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+													    					<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
 													    						t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" 
-													    						t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
+													    						t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" 
+													    						onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 													    				</t>
 													    				<t t-if="(sub_first_col.form_field_type)=='many2one'">
 														    				<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_first_col.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -504,9 +514,10 @@
 													    								t-attf-value="#{c_orderline[sub_same_row.form_fields]}"  t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
 													    						</t>
 													    						<t t-if="(sub_same_row.form_field_type)=='input_int'">
-													    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+													    							<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
 													    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" 
-													    								t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
+													    								t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" 
+													    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 													    						</t>
 													    						<t t-if="(sub_same_row.form_field_type)=='many2one'">
 													    							<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_same_row.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -745,9 +756,10 @@
 				    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
 				    						</t>
 				    						<t t-if="(first_col.form_field_type)=='input_int'">
-				    							<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+				    							<input type="number" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
 					    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" 
-					    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" />
+					    								t-attf-value="#{c_order[first_col.form_fields]}" t-attf-disabled = "#{first_col.readonly ? 'disabled' : undefined}" 
+					    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 				    						</t>
 				    						<t t-if="(first_col.form_field_type)=='date'">
 				    							<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
@@ -789,9 +801,10 @@
 									    							t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
 									    					</t>
 									    					<t t-if="(sub_first_col.form_field_type)=='input_int'">
-											    				<input type="text" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+											    				<input type="number" class="hm-form-input" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
 											    					t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" 
-											    					t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
+											    					t-attf-value="#{c_orderline[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" 
+											    					onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 											    			</t>
 											    			<t t-if="(sub_first_col.form_field_type)=='many2one'">
 												    			<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_first_col.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -831,9 +844,10 @@
 												    							t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
 												    					</t>
 												    					<t t-if="(sub_same_row.form_field_type)=='input_int'">
-												    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+												    						<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
 												    							t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" 
-												    							t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
+												    							t-attf-value="#{c_orderline[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" 
+												    							onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 												    					</t>
 												    					<t t-if="(sub_same_row.form_field_type)=='many2one'">
 												    						<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_same_row.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -898,7 +912,8 @@
 						    						<t t-if="(same_row.form_field_type)=='input_int'">
 						    							<input type="number" class="hm-form-input" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
 						    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" 
-						    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" />
+						    								t-attf-value="#{c_order[same_row.form_fields]}" t-attf-disabled = "#{same_row.readonly ? 'disabled' : undefined}" 
+						    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 						    						</t>
 						    						<t t-if="(same_row.form_field_type)=='date'">
 						    							<input type="text" class="hm-form-input hm-date" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
@@ -950,9 +965,10 @@
 												    								t-attf-value="#{c_order_line[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
 												    					</t>
 												    					<t t-if="(sub_first_col.form_field_type)=='input_int'">
-														    				<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
+														    				<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_first_col.font_size}px;" t-attf-id="#{sub_first_col.form_fields}" t-attf-placeholder="#{sub_first_col.form_placeholder}" 
 														    						t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}" 
-														    						t-attf-value="#{c_order_line[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" />
+														    						t-attf-value="#{c_order_line[sub_first_col.form_fields]}" t-attf-disabled = "#{sub_first_col.readonly ? 'disabled' : undefined}" 
+														    						onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 														    			</t>
 														    			<t t-if="(sub_first_col.form_field_type)=='many2one'">
 															    			<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_first_col.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -993,9 +1009,10 @@
 														    								t-attf-value="#{c_order_line[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
 														    					</t>
 														    					<t t-if="(sub_same_row.form_field_type)=='input_int'">
-														    						<input type="text" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
+														    						<input type="number" class="hm-form-input" t-attf-style="font-size:#{sub_same_row.font_size}px;" t-attf-id="#{sub_same_row.form_fields}" t-attf-placeholder="#{sub_same_row.form_placeholder}" 
 														    								t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}" 
-														    								t-attf-value="#{c_order_line[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" />
+														    								t-attf-value="#{c_order_line[sub_same_row.form_fields]}" t-attf-disabled = "#{sub_same_row.readonly ? 'disabled' : undefined}" 
+														    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 														    					</t>
 														    					<t t-if="(sub_same_row.form_field_type)=='many2one'">
 														    						<select onchange="this.className=this.options[this.selectedIndex].className" t-attf-class="#{(c_orderline[sub_same_row.form_fields]) !='' ? 'hm-form-input' : 'hm-form-input hm-placeholder' }" 
@@ -1154,8 +1171,9 @@
 					    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
 					    						</t>
 					    						<t t-if="(first_col.form_field_type)=='input_int'">
-					    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
-						    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""/>
+					    							<input type="number" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
+						    								t-attf-name="#{first_col.form_fields}" t-attf-ismandatory="#{first_col.isMandatory}" t-attf-ftype="#{first_col.form_field_type}" value=""
+						    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 					    						</t>
 					    						<t t-if="(first_col.form_field_type)=='date'">
 					    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{first_col.form_fields}" t-attf-placeholder="#{first_col.form_placeholder}" 
@@ -1177,8 +1195,9 @@
 							    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
 							    						</t>
 							    						<t t-if="(same_row.form_field_type)=='input_int'">
-							    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
-							    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" />
+							    							<input type="number" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"
+							    								t-attf-name="#{same_row.form_fields}" t-attf-ismandatory="#{same_row.isMandatory}" t-attf-ftype="#{same_row.form_field_type}" value="" 
+							    								onkeypress='return (event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57) || (event.charCode == 0 || event.charCode == 08 || event.charCode == 127)'/>
 							    						</t>
 							    						<t t-if="(same_row.form_field_type)=='date'">
 							    							<input type="text" class="hm-form-input hm-search-input-border" t-attf-style="font-size:#{same_row.font_size}px;" t-attf-placeholder="#{same_row.form_placeholder}" t-attf-id="#{same_row.form_fields}"

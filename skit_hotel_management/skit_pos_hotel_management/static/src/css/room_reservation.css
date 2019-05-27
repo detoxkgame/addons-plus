@@ -743,3 +743,6 @@ div.bhoechie-tab-container{
  	background: #32CD32 !important;
  	color: white !important;
 }
+.rows_item{
+	cursor: pointer;
+}

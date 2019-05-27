@@ -1011,7 +1011,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 		     	   		var date2 = new Date(today);
 		     	   		if(date1 >= date2){
 		     	   			$(this).addClass("date_item");
-	    					if(order_id == undefined){//without order_id
+	    					if(order_id == undefined || order_id == ""){//without order_id
 	    						self._rpc({
 		    		    			model: 'hm.form.template',
 		    		    			method: 'get_center_panel_form',
