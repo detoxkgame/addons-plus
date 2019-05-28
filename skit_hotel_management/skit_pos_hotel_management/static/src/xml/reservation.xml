@@ -101,7 +101,7 @@
             <div class="screen-content roomstatusreport-screen-content"  style="left: 26% !important; position: fixed;">
                 <section class="full-content">
                     <div class='window'>
-                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 38%;">  
+                        <section class='subwindow' style="position: fixed !important; width: 49% !important; top: 32%;">  
                              <div class="container">
 									<div class="row">
 								        <div class="dl-col-lg-3 dl-col-md-3 dl-col-sm-6 dl-col-xs-7 bhoechie-tab-container">
@@ -116,7 +116,7 @@
 												</div>
 												</div>
 							                	<div><br></br></div>
-							                	<div class="dl_otable" style="height: 20rem; overflow: scroll;"></div>
+							                	<div class="dl_otable"></div>
 								             </div> 
 								            </div>
 								        </div>

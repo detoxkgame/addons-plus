@@ -757,3 +757,7 @@ div.bhoechie-tab-container{
 	font-weight: bold;
 	font-size: 18px;
 }
+.dataTables_scrollBody{
+	height: 16rem !important;
+	overflow-y: scroll !important;
+}
