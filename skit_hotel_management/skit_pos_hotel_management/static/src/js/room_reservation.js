@@ -305,6 +305,11 @@ var HMFormPopupWidget = PopupWidget.extend({
 	referred_by_name: function(){
 		var self = this;
 		var id = $('#popup_form').find("#referred_by_name option:selected").val();
+		var referred_by = $('#popup_form').find("#referred_by_id option:selected").val();
+		var hm_class = $('#popup_form').find("#referred_by_id option:selected").attr('class');
+		if(hm_class == 'placeholder')
+			referred_by = 0;
+		var exit = false;
 		self._rpc({
 			model: 'hm.form.template',
 			method: 'get_referred_by',
@@ -316,17 +321,31 @@ var HMFormPopupWidget = PopupWidget.extend({
 		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Referred Name</option>';
 		    for (var i = 0; i < len; i++)
       		{
+		    	if(referred_by == result[i].id ){
+		    		exit = true;
+		    	}
 		    	list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
 		    }
 		    //replace selection option in room based on room type
 		    selectbox.html(list); 
-		    $('#popup_form').find("#referred_by_id").addClass('hm-placeholder');
+		    if(exit){
+		    	$('#popup_form').find("#referred_by_id").val(referred_by)
+		    	$('#popup_form').find("#referred_by_id").removeClass('hm-placeholder');
+		    }else{
+		    	$('#popup_form').find("#referred_by_id").addClass('hm-placeholder');
+		    }
+		    
 		});
 	},
 	
 	referred_by: function(){
 		var self = this;
 		var id = $('#popup_form').find("#referred_by_id option:selected").val();
+		var referred_by_name = $('#popup_form').find("#referred_by_name option:selected").val();
+		var hm_class = $('#popup_form').find("#referred_by_name option:selected").attr('class');
+		if(hm_class == 'placeholder')
+			referred_by_name = 0;
+		var exit = false;
 		self._rpc({
 			model: 'hm.form.template',
 			method: 'get_referred_name',
@@ -338,11 +357,20 @@ var HMFormPopupWidget = PopupWidget.extend({
 		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Referred Name</option>';
 		    for (var i = 0; i < len; i++)
       		{
+		    	if(referred_by_name == result[i].id ){
+		    		exit = true;
+		    	}
 		    	list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
 		    }
 		    //replace selection option in room based on room type
 		    selectbox.html(list); 
-		    $('#popup_form').find("#referred_by_name").addClass('hm-placeholder');
+		    if(exit){
+		    	$('#popup_form').find("#referred_by_name").val(referred_by_name)
+		    	$('#popup_form').find("#referred_by_name").removeClass('hm-placeholder');
+		    }else{
+		    	$('#popup_form').find("#referred_by_name").addClass('hm-placeholder');
+		    }
+		    
 		});
 	},
 	
@@ -640,10 +668,11 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 					});
 					$(this).find('textarea').each(function(index, element) {     						
 						order_post[element.name]=element.value;
-     			});
-					$(this).find('select').each(function(index, element) {     						
-						order_post[element.name]=element.value;
-     			});
+					});
+					$(this).find('select').each(function(index, element) {  
+						if((element.value != 'false') && (element.value != ''))
+							order_post[element.name] = element.value;
+					});
         	});
         	$('.hm-center-form-design').find('table.hm-form-table tr.hm-orderline-details').each(function() {	
         		var order_line_array ={};
@@ -684,30 +713,6 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	                     'body': msg,
 	                });
  	     		});
-        		/*if((id == 'date_extend') || (id == 'shift_room')){
-        			var title = 'Date Extend'
-        			if(id == 'shift_room')
-        				title = 'Shift Room'
-        			self.pos.gui.show_popup('popup_hm_complaint',{
-    	        		'title': title,
-    	        		'msg': '',
-    	        		'folio_id': order_id,
-    	        		'sub_id': 0,
-    	        		'order_post': JSON.stringify(order_post),
-    	        		
-        			});
-        		}else{
-        			self._rpc({
-	 	     			model: 'pos.order',
-	 	     			method:'update_order',
-	 	     			args: [0, order_post, order_id, ''],
-	 	     		}).then(function(result){
-	 	     			self.pos.gui.show_popup('alert',{
-		                     'title': _t('Success'),
-		                     'body': _t('Thanks for Booking. Your Reservation is confirmed.'),
-		                });
-	 	     		});
-        		}*/
         		
         	}else{
         		_.every(product_array, function(line){	
@@ -841,8 +846,9 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				$(this).find('textarea').each(function(index, element) {     						
 					order_post[element.name]=element.value;
 				});
-				$(this).find('select').each(function(index, element) {     						
-					order_post[element.name]=element.value;
+				$(this).find('select').each(function(index, element) {  
+					if((element.value != 'false') && (element.value != ''))
+						order_post[element.name]=element.value;
 				});
 			});
 			order_post['state'] = order_status;

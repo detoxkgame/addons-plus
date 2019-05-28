@@ -27,7 +27,7 @@ class FormTemplate(models.Model):
             data_field.append(val)
         if(datas.get('mobile') != ''):
             if(model.model == 'pos.order'):
-                data_field.append(('reservation_status', 'in', ('reserved', 'checkin')))
+                data_field.append(('reservation_status', 'in', ('reserved', 'checkin', 'shift', 'extend')))
                 order = self.env[model.model].sudo().search(data_field, limit=1,
                                                             order='id desc')
                 order_id = order.id
