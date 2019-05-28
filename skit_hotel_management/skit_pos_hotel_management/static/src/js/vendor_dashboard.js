@@ -68,7 +68,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
             .next().show().animate({
               width: width+'%'
             })
-            .siblings(".info").animate({
+            .siblings(".hm-info").animate({
               width: 0
             });
         	$(this).next().find(".info1").css({'display': 'block'});

@@ -862,7 +862,7 @@
 						</t>
 					</t>
 				</div>			
-				<div class="info" t-attf-style="background-color:#{dashboard.color};">
+				<div class="hm-info" t-attf-style="background-color:#{dashboard.color};">
 					<div class="info1" t-attf-style="display:inline-block;float: left;width:5%;height:0vh;">
 						<t t-if="widget.get_dashboard_line(dashboard.id)" >
 							<table style="width:100%;margin-top: 20px;display: inline-block;">
