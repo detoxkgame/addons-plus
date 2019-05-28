@@ -584,7 +584,12 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
 	                		if(form_fields_records[i].form_field_type == 'many2one'){
 	                			var value1 =  $(this).find('#'+form_fields_records[i].form_fields+' option:selected').val();
 	                			var value =  $(this).find('#'+form_fields_records[i].form_fields+' option:selected').attr("id");
-	                			order_datas[field] = value;
+	                			if (value == undefined){
+	                				order_datas[field] = 0;
+	                			}
+	                			else{
+	                				order_datas[field] = value;
+	                			}	                			
 	                			if(!value && mandatory){
 	                				error = true;
 	                				$(this).find('select#'+form_fields_records[i].form_fields).css({'border': '1px solid red'});
@@ -673,6 +678,7 @@ var VendorDashboardScreenWidget = screens.ScreenWidget.extend({
                 			_.every(product_array, function(line){	             			
     							var product =  self.pos.db.get_product_by_id(line);
     							if(product!=undefined){
+    								order.remove_orderline(lines);
     								order.add_product(product, {price: product.price});
     							}
                     		});
