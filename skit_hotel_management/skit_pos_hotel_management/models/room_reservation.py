@@ -1265,6 +1265,12 @@ class PosOrder(models.Model):
                 extend_date = edate.strftime('%Y-%m-%d')
                 post['checkout_date'] = post.get('extend_checkout_date')
                 extend_checkout_date = post.get('extend_checkout_date')
+                cin_date = order.checkin_date.strftime('%Y-%m-%d')
+                total = datetime.strptime(extend_date, '%Y-%m-%d') - datetime.strptime(cin_date, '%Y-%m-%d')
+                if post.get('order_line'):
+                    post.get('order_line')[0]['qty'] = total.days
+                else:
+                    post['order_line'].append({'qty': total.days})
             else:
                 extend_checkout_date = post.get('checkout_date')
             if(order_check_out_date != extend_date):
