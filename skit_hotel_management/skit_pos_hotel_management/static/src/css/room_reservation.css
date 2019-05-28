@@ -746,3 +746,7 @@ div.bhoechie-tab-container{
 .rows_item{
 	cursor: pointer;
 }
+.hm-form-icon{
+	width: 40%;
+	cursor: pointer;
+}

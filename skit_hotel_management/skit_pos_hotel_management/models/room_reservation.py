@@ -200,6 +200,32 @@ class FormTemplate(models.Model):
         return room_supply
 
     @api.multi
+    def get_referred_name(self, id):
+        """ Get Referred Name while selected Referred """
+        referred_lines = []
+        referred_line = self.env['hm.referred.line'].sudo().search([
+                                ('referred_by_id', '=', int(id))])
+        for line in referred_line:
+            referred_lines.append({
+                              'id': line.id,
+                              'name': line.name,
+                            })
+        return referred_lines
+
+    @api.multi
+    def get_referred_by(self, id):
+        """ Get Referred by while selected Referred Name"""
+        referred_lines = []
+        referred_line = self.env['hm.referred.line'].sudo().search([
+                                ('id', '=', int(id))], limit=1)
+        for line in referred_line:
+            referred_lines.append({
+                              'id': line.referred_by_id.id,
+                              'name': line.referred_by_id.referred_by,
+                            })
+        return referred_lines
+
+    @api.multi
     def get_product_roomtype(self, room_id):
         """ Get Room type while select room"""
         room_type = []
@@ -413,7 +439,8 @@ class FormTemplate(models.Model):
                      'description': form_line.description,
                      'model_name': form_line.model_name,
                      'model_method': form_line.model_method,
-                     'readonly': form_line.readonly
+                     'readonly': form_line.readonly,
+                     'invisible': form_line.invisible
                      }
             template_lines.append(datas)
             if count == 0:
@@ -609,7 +636,8 @@ class FormTemplate(models.Model):
                                      'description': line.description,
                                      'model_name': line.model_name,
                                      'model_method': line.model_method,
-                                     'readonly': line.readonly
+                                     'readonly': line.readonly,
+                                     'invisible': line.invisible
                                      }
                             temp_order_lines.append(datas)
                             if count == 0:
@@ -890,7 +918,8 @@ class FormTemplate(models.Model):
                      'description': line.description,
                      'model_name': line.model_name,
                      'model_method': line.model_method,
-                     'readonly': line.readonly
+                     'readonly': line.readonly,
+                     'invisible': line.invisible
                      }
             template_lines.append(datas)
             if count == 0:
@@ -1038,7 +1067,8 @@ class FormTemplate(models.Model):
                                      'description': line.description,
                                      'model_name': line.model_name,
                                      'model_method': line.model_method,
-                                     'readonly': line.readonly
+                                     'readonly': line.readonly,
+                                     'invisible': line.invisible
                                      }
                             temp_order_lines.append(datas)
                             if count == 0:

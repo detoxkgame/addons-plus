@@ -319,7 +319,7 @@
 								 	<t t-set="datalen" t-value="(94/((center_temp['line_group'][line_key]).length))" />
 								 	<t t-set="column_size" t-value="(100/(column_count))" />
 									<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
-									<tr t-attf-class="#{(((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')) ? 'hm-display-none' : 'hm-form-tr hm-order-details' }" >
+									<tr t-attf-class="#{((((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')) or (first_col.invisible)) ? 'hm-display-none' : 'hm-form-tr hm-order-details' }" >
 										<!-- First Column -->
 										<td class="hm-form-td" t-attf-style="width:#{column_size}% !important;">
 			    							<t t-if="(first_col.form_field_type)=='header_label'">
@@ -730,11 +730,17 @@
 								<t t-set="datalen" t-value="(94/((center_temp['line_group'][line_key]).length))" />
 								<t t-set="column_size" t-value="(100/(column_count))" />
 								<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
-								<tr t-attf-class="#{(((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')) ? 'hm-display-none' : 'hm-form-tr hm-order-details' }" >
+								<tr t-attf-class="#{((((first_col.form_field_type)=='sub_form') and ((first_col.ttype)=='one2many')) or (first_col.invisible)) ? 'hm-display-none hm-order-details' : 'hm-form-tr hm-order-details' }" >
 									<!-- First Column -->
 									<t t-if="(first_col.form_field_type)=='button'">
 			    						<td class="hm-form-td hm-right-td">
 			    							<i class="fa fa-arrow-left hm-form-back-icon" t-attf-sub_id="#{first_col.sub_template_id}" aria-hidden="true"></i>
+			    						</td>
+			    					</t>
+			    					<t t-if="(first_col.form_field_type)=='icon'">
+			    						<td class="hm-form-td hm-right-td" t-attf-style="#{first_col.field_styles}">
+			    							<img t-attf-id="#{first_col.form_placeholder}" class="hm-form-icon" t-attf-sub_id="#{first_col.sub_template_id}"
+									               t-att-src='widget.template_line_icon_url(first_col.id)' alt="Icon"/>
 			    						</td>
 			    					</t>
 			    					<t t-elif="(first_col.form_field_type)=='textarea'">
@@ -889,6 +895,12 @@
 			    							<t t-if="(same_row.form_field_type)=='button'">
 			    								<td class="hm-form-td hm-right-td">
 			    									<i class="fa fa-arrow-left hm-form-back-icon" t-attf-sub_id="#{same_row.sub_template_id}" aria-hidden="true"></i>
+			    								</td>
+			    							</t>
+			    							<t t-if="(same_row.form_field_type)=='icon'">
+			    								<td class="hm-form-td hm-right-td" t-attf-style="#{same_row.field_styles}">
+			    									<img t-attf-id="#{same_row.form_placeholder}" class="hm-form-icon" t-attf-sub_id="#{same_row.sub_template_id}"
+									                t-att-src='widget.template_line_icon_url(same_row.id)' alt="Icon"/>
 			    								</td>
 			    							</t>
 			    							<t t-if="(same_row.form_field_type)=='textarea'">
@@ -1066,6 +1078,10 @@
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;">Update</span>
 								    										</t>
 								    										<t t-elif="data.form_label == 'Check Out'">
+								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
+									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
+								    										</t>
+								    										<t t-elif="data.form_placeholder == 'hm_id_proof_ok'">
 								    											<span class="hm-footer-btn" t-attf-id="#{data.form_placeholder}" t-attf-sub_id="#{data.sub_template_id}"
 									    										t-attf-style="#{data.field_styles}; font-size:#{data.font_size}px;"><t t-esc="data.form_label" /></span>
 								    										</t>
@@ -1623,14 +1639,16 @@
 			     </div>
             	<div class="body copy_pre_body" id="popup_form" style="height: 85%;">
             	</div>
-                 <div class="footer">                   
-                    <div class="button hm-inspect">
-                        Inspect 
-                    </div>
-                    <div class="button hm-close">
-                        Done 
-                    </div>
-                </div>
+            	<t t-if="widget.options.is_footer">
+	                <div class="footer">                   
+	                    <div class="button hm-inspect">
+	                        Inspect 
+	                    </div>
+	                    <div class="button hm-close">
+	                        Done 
+	                    </div>
+	                </div>
+                </t>
             </div>
         </div>
     </t>

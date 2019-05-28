@@ -372,7 +372,7 @@ class FormTemplate(models.Model):
     form_template_line_menu_ids = fields.One2many('hm.form.template.line',
                                                   'form_template_id',
                                                   domain=[('form_field_type',
-                                                           'in', ('menu', 'logo'))],
+                                                           'in', ('menu', 'logo', 'icon'))],
                                                   string='Form Template Menu',
                                                   copy=True)
     form_view = fields.Selection([
@@ -498,6 +498,7 @@ class FormTemplateLine(models.Model):
         ('tab', _('Tab')),
         ('menu', _('Menu')),
         ('logo', _('Logo')),
+        ('icon', _('Icon')),
         ('search', _('Search')),
         ('left_panel', _('Left Panel')),
         ('right_panel', _('Right Panel')),
@@ -550,6 +551,7 @@ class FormTemplateLine(models.Model):
     model_method = fields.Char(string="Model Method")
     description = fields.Char(string="Description")
     readonly = fields.Boolean(string='ReadOnly', default=False)
+    invisible = fields.Boolean(string='InVisible', default=False)
 
     @api.onchange('form_field_type')
     def change_form_field_type(self):

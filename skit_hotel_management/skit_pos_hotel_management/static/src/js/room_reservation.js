@@ -296,7 +296,59 @@ var HMFormPopupWidget = PopupWidget.extend({
         'click #hk_clean': 'hk_clean',
         'click .hm-inspect': 'hk_inspect',
         'click .hm-close': 'hk_close',
+        'click #hm_id_proof_ok': 'hm_id_proof',
+        'change #referred_by_id': 'referred_by',
+        'change #referred_by_name': 'referred_by_name',
+        
 	}),
+	
+	referred_by_name: function(){
+		var self = this;
+		var id = $('#popup_form').find("#referred_by_name option:selected").val();
+		self._rpc({
+			model: 'hm.form.template',
+			method: 'get_referred_by',
+			args: [0, id],
+		}).then(function(result){
+			var len = result.length;
+			var selectbox = $('#popup_form').find("#referred_by_id");
+		    selectbox.empty();
+		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Referred Name</option>';
+		    for (var i = 0; i < len; i++)
+      		{
+		    	list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+		    }
+		    //replace selection option in room based on room type
+		    selectbox.html(list); 
+		    $('#popup_form').find("#referred_by_id").addClass('hm-placeholder');
+		});
+	},
+	
+	referred_by: function(){
+		var self = this;
+		var id = $('#popup_form').find("#referred_by_id option:selected").val();
+		self._rpc({
+			model: 'hm.form.template',
+			method: 'get_referred_name',
+			args: [0, id],
+		}).then(function(result){
+			var len = result.length;
+			var selectbox = $('#popup_form').find("#referred_by_name");
+		    selectbox.empty();
+		    var list = '<option id="" disabled="disabled"  selected="selected" class="hm-form-input hm-placeholder">Referred Name</option>';
+		    for (var i = 0; i < len; i++)
+      		{
+		    	list += "<option class='hm-form-input' style='color: black;' id='"+result[i].id+"' value='" +result[i].id+ "'>" +result[i].name+ "</option>";
+		    }
+		    //replace selection option in room based on room type
+		    selectbox.html(list); 
+		    $('#popup_form').find("#referred_by_name").addClass('hm-placeholder');
+		});
+	},
+	
+	hm_id_proof: function(){
+		this.popup_save_action('hm_id_proof_ok')
+	},
 	
 	hk_dirty: function(){
 		this.popup_save_action('hk_dirty')
@@ -323,7 +375,7 @@ var HMFormPopupWidget = PopupWidget.extend({
 	    var order_line = [];
 	    var self = this;
     	/** Start Check the Mandatory field */
-    	$('input[ismandatory="true"]').each(function(index, element) {
+	    $('#popup_form').find('input[ismandatory="true"]').each(function(index, element) {
 			if (!$(this).val().length > 0) {										
 				if(!(typeof attr !== typeof undefined)){
 					$(this).addClass('warning');
@@ -337,7 +389,7 @@ var HMFormPopupWidget = PopupWidget.extend({
 				$(this).removeClass('warning');
 			}
     	});
-    	$('textarea[ismandatory="true"]').each(function(index, element) {
+    	$('#popup_form').find('textarea[ismandatory="true"]').each(function(index, element) {
 			if (!$(this).val().length > 0) {										
 				if(!(typeof attr !== typeof undefined)){
 					$(this).addClass('warning');
@@ -351,7 +403,7 @@ var HMFormPopupWidget = PopupWidget.extend({
 				$(this).removeClass('warning');
 			}
     	});
-		$('select[ismandatory="true"]').each(function(index, element) {
+		$('#popup_form').find('select[ismandatory="true"]').each(function(index, element) {
 			if ($(this).val() == null) {										
 				if(!(typeof attr !== typeof undefined)){
 					$(this).addClass('warning');
@@ -368,14 +420,14 @@ var HMFormPopupWidget = PopupWidget.extend({
 		
     	if (!isProceed)
 		{
-				//alert('Please fill mandatory fields.');
-				self.pos.gui.show_popup('popup_hm_warning',{
+				alert('Please fill mandatory fields.');
+				/*self.pos.gui.show_popup('popup_hm_warning',{
             		'title': 'Warning',
             		'msg': 'Please fill mandatory fields.',
-            	});
+            	});*/
 				return false;
 		}else{
-			$('table.hm-form-table tr.hm-order-details').each(function() {	
+			$('#popup_form').find('table.hm-form-table tr.hm-order-details').each(function() {	
 				$(this).find('input').each(function(index, element) {  
 					if($(this).attr('ftype')=='date'){
 						var value = element.value;
@@ -419,47 +471,50 @@ var HMFormPopupWidget = PopupWidget.extend({
         		order_id = 0;
         		var msg = 'House Keeping created.';
         	}
-        	self._rpc({
-	     		model: 'hm.form.template',
-	     		method:'popup_create_order',
-	     		args: [order_post, order_id, model_name],
-	     	}).then(function(result){
-	     		/*self.pos.gui.show_popup('alert',{
-                     'title': _t('Success'),
-                     'body': msg,
-                });*/
-	     		var contents = $('.hm-reservation-content');
-	     		self._rpc({
-	        		 model: 'hm.form.template',
-		    		 method: 'get_center_panel_form',
-		    		 args: [0, sub_id, 0],
-		    	 }).then(function(result){
-		    		 var form_name = result[0]['form_name']
-		    		 var center_panel_temp = result[0]['center_panel_temp']
-		    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
-		    		 var form_view = result[0]['form_view']
-		    		 var floor_id = result[0]['floor_id']
-		    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
-		    		 var column_count = result[0]['column_count']
-		    		 var model_name = result[0]['model_name']
-		    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
-		    				form_name: form_name, form_view: form_view,
-		    				center_panel_temp: center_panel_temp,
-							center_panel_sub_id: center_panel_sub_id,
-							floor_id: floor_id, column_count: column_count, model_name:model_name,
-							current_sub_id: sub_id
-							});
-		    		 contents.find('.hm-center-form-design').html(center_panel_html);
-		    		 old_product_id = contents.find('#product_id').val();	
-		    			
-		    		 if(form_view == "restaurant_table"){
-		    			 if(res_table_sub_id > 0){
-		    				contents.find('#restaurant_table').text('ispopup');
-		    			 }
-		    			 hm_widget.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
-		    		 }
-		    	 });
-	     	});
+        	if(cid == 'hm_id_proof_ok'){
+				$.each( order_post, function( key, value ) {
+				  $('.hm-center-form-design').find("#"+key+"").val(value)
+				});
+				
+			}else{
+	        	self._rpc({
+		     		model: 'hm.form.template',
+		     		method:'popup_create_order',
+		     		args: [order_post, order_id, model_name],
+		     	}).then(function(result){
+		     		var contents = $('.hm-reservation-content');
+		     		self._rpc({
+		        		 model: 'hm.form.template',
+			    		 method: 'get_center_panel_form',
+			    		 args: [0, sub_id, 0],
+			    	 }).then(function(result){
+			    		 var form_name = result[0]['form_name']
+			    		 var center_panel_temp = result[0]['center_panel_temp']
+			    		 var center_panel_sub_id = result[0]['center_panel_sub_id']
+			    		 var form_view = result[0]['form_view']
+			    		 var floor_id = result[0]['floor_id']
+			    		 var res_table_sub_id = result[0]['center_panel_temp'][0][0]['res_table_sub_id'];
+			    		 var column_count = result[0]['column_count']
+			    		 var model_name = result[0]['model_name']
+			    		 var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+			    				form_name: form_name, form_view: form_view,
+			    				center_panel_temp: center_panel_temp,
+								center_panel_sub_id: center_panel_sub_id,
+								floor_id: floor_id, column_count: column_count, model_name:model_name,
+								current_sub_id: sub_id
+								});
+			    		 contents.find('.hm-center-form-design').html(center_panel_html);
+			    		 old_product_id = contents.find('#product_id').val();	
+			    			
+			    		 if(form_view == "restaurant_table"){
+			    			 if(res_table_sub_id > 0){
+			    				contents.find('#restaurant_table').text('ispopup');
+			    			 }
+			    			 hm_widget.render_rooms(floor_id,contents, res_table_sub_id, form_name); 
+			    		 }
+			    	 });
+		     	});
+			}
     	}
     	self.gui.close_popup();
     },
@@ -509,7 +564,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
     checkMandatory: function(isProceed, order_post, order_line, order_status, order_id, id, c_sub_id) {
     	var self = this;
     	/** Start Check the Mandatory field */
-    	$('input[ismandatory="true"]').each(function(index, element) {
+    	$('.hm-center-form-design').find('input[ismandatory="true"]').each(function(index, element) {
 			if (!$(this).val().length > 0) {										
 				if(!(typeof attr !== typeof undefined)){
 					$(this).addClass('warning');
@@ -523,7 +578,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				$(this).removeClass('warning');
 			}
     	});
-    	$('textarea[ismandatory="true"]').each(function(index, element) {
+    	$('.hm-center-form-design').find('textarea[ismandatory="true"]').each(function(index, element) {
 			if (!$(this).val().length > 0) {										
 				if(!(typeof attr !== typeof undefined)){
 					$(this).addClass('warning');
@@ -537,7 +592,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 				$(this).removeClass('warning');
 			}
     	});
-		$('select[ismandatory="true"]').each(function(index, element) {
+    	$('.hm-center-form-design').find('select[ismandatory="true"]').each(function(index, element) {
 			if ($(this).val() == null) {										
 				if(!(typeof attr !== typeof undefined)){
 					$(this).addClass('warning');
@@ -563,7 +618,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
         	var product_array=[];
         	var order = self.pos.get_order();
         	var no_night = 1;
-        	$('table.hm-form-table tr.hm-order-details').each(function() {	
+        	$('.hm-center-form-design').find('table.hm-form-table tr.hm-order-details').each(function() {	
 					$(this).find('input').each(function(index, element) {  
 						if($(this).attr('ftype')=='date'){
 							var value = element.value;
@@ -590,7 +645,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 						order_post[element.name]=element.value;
      			});
         	});
-        	$('table.hm-form-table tr.hm-orderline-details').each(function() {	
+        	$('.hm-center-form-design').find('table.hm-form-table tr.hm-orderline-details').each(function() {	
         		var order_line_array ={};
         		order_line_array['qty'] = no_night;
 					$(this).find('input').each(function(index, element) {  
@@ -841,6 +896,64 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	     		}
 	     	});
 		}
+    },
+    
+    popup_center_panel: function(sub_id, model_id){
+    	var self = this;
+    	self._rpc({
+	   		 model: 'hm.form.template',
+	   		 method: 'get_center_panel_form',
+	   		 args: [0, sub_id, model_id],
+	   	}).then(function(result){
+	   		var form_name = result[0]['form_name']
+			var center_panel_temp = result[0]['center_panel_temp']
+			var center_panel_sub_id = result[0]['center_panel_sub_id']
+			var form_view = result[0]['form_view']
+			var floor_id = result[0]['floor_id']
+			var column_count = result[0]['column_count']
+			var model_name = result[0]['model_name']
+			
+			var center_panel_html = QWeb.render('CenterPanelContent',{widget: self, 
+				form_name: form_name, form_view: form_view, center_panel_temp: center_panel_temp,
+				center_panel_sub_id: center_panel_sub_id, floor_id: floor_id, column_count: column_count, 
+				model_name: model_name, current_sub_id: sub_id
+			});
+	   		self.pos.gui.show_popup('popup_hm_form_design',{
+        		'title': 'ID Proof',
+        		'msg': 'Your ID updated.',
+        		'folio_id': model_id,
+        		'sub_id': sub_id,
+        		'order_post': '',
+        		'product_id': '',
+        		'is_footer': false,
+          });
+		  $('#popup_form').html(center_panel_html);
+
+		  if(model_id <=0 ){
+			  $('#popup_form').find('table.hm-form-table tr.hm-order-details').each(function() {	
+					$(this).find('input').each(function(index, element) {  
+						var id = $(this).attr('id');
+						var value = $('.hm-center-form-design').find("#"+id+"").val();
+						$(this).val(value);
+							
+					});
+					$(this).find('textarea').each(function(index, element) {     						
+						var id = $(this).attr('id');
+						var value = $('.hm-center-form-design').find("#"+id+"").val();
+						$(this).val(value);
+					});
+					$(this).find('select').each(function(index, element) {     						
+						var id = $(this).attr('id');
+						var value = $('.hm-center-form-design').find("#"+id+"").val();
+						if(value != null){
+							$(this).val(value);
+							$(this).removeClass('hm-placeholder');
+						}
+							
+					});
+	      	});
+	   	}
+	   	});
     },
     
     show: function(){
@@ -2519,6 +2632,7 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	    	        		'sub_id': sub_id,
 	    	        		'order_post': '',
 	    	        		'product_id': product_id,
+	    	        		'is_footer': true,
 	    	         });
 		    		 $('#popup_form').html(center_panel_html);
 		    		 if(id == 'hm-form-empty-popup'){
@@ -2602,6 +2716,18 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
             	}
             	self.mandatoryValidation(isProceed, order_post, order_status, order_id, id, c_sub_id, model_name);
             });
+            
+            /** Popup Form Widget */
+ 	        contents.off('click','#hm_id_proof, #hm_reffered_by'); 
+	        contents.on('click','#hm_id_proof, #hm_reffered_by',function(){
+	        	var order_id = contents.find('#order_id').text();
+	        	var sub_id = $(this).attr('sub_id');
+	        	if(order_id == ''){
+            		order_id = 0;
+            	}
+	        	var cpanel_html = self.popup_center_panel(sub_id, order_id);
+	        	
+	        });
 		});
 
     },
