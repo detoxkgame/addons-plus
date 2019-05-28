@@ -1520,7 +1520,7 @@ class PosOrder(models.Model):
                             ('product_tmpl_id', '=', int(product_id))],
                                                 limit=1)
         order_line = self.env['pos.order.line'].sudo().search([
-                            ('order_id.reservation_status', '=', 'checkin'),
+                            ('order_id.reservation_status', 'in', ('checkin', 'shift', 'extend')),
                             ('product_id', '=', prod.id)], limit=1)
         data = {'partner_id': order_line.order_id.partner_id.id,
                 'source_order_id': order_line.order_id.id,

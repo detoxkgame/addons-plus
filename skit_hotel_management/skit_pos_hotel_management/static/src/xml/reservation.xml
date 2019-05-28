@@ -679,6 +679,9 @@
 	    				<span id="order_id" style="display:none;"><t t-esc="c_order['id']" /></span>
 	    				<span id="current_sub_id" style="display:none;"><t t-esc="current_sub_id" /></span>
 	    				<span id="model_name" style="display:none;"><t t-esc="model_name" /></span>
+	    				<t t-if="c_order['id']">
+	    					<span id="order_name" class="hm-folio-name"><t t-esc="c_order['name']" /></span>
+	    				</t>
 	    				<table class="hm-form-table">
 	    				<tbody class="hm-form-body">
 	    					<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
