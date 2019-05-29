@@ -265,9 +265,10 @@
             			<field name="driver_name" />
             			<field name="car_no" /> -->
             			<field name="source_folio_id" readonly="1"/>
-            			<field name="car_type_id" invisible="1"/>
+            			<field name="order_zone" invisible="1"/>
+            			<field name="laundry_id" attrs="{'invisible': [('order_zone', '!=', 'laundry')]}"/>
             		</group>
-            		<group string='Taxi Details' attrs="{'invisible': [('car_type_id', '=', False)]}">
+            		<group string='Taxi Details' attrs="{'invisible': [('order_zone', '!=', 'taxi')]}">
             			<group>
 	            			<field name="driver_name" />
 	            			<field name="vendor_mobile" /> 

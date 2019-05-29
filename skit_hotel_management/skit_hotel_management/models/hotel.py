@@ -705,6 +705,7 @@ class PosOrder(models.Model):
                                    copy=False, default='draft')
     is_commissionpaid = fields.Boolean(string="IsCommission Paid")
     room_id = fields.Many2one('product.product', string="Room No")
+    laundry_id = fields.Many2one('laundry.order', string="Laundry Order")
     vendor_id = fields.Many2one('res.partner', required=True,
                                 domain=[('supplier', '=', True)],
                                 string="Vendor")

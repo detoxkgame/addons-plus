@@ -94,8 +94,12 @@ class LaundryManagement(models.Model):
 
     @api.multi
     def _invoice_count(self):
-        wrk_ordr_ids = self.env['account.invoice'].search([('origin', '=', self.sale_obj.name)])
-        self.invoice_count = len(wrk_ordr_ids)
+        if self.sale_obj:
+            self.invoice_count = self.env['account.invoice'].search_count([
+                                        ('origin', '=', self.sale_obj.name)])
+        if self.pos_order_id:
+            self.invoice_count = self.env['account.invoice'].search_count([
+                                        ('origin', '=', self.pos_order_id.name)])
 
     @api.multi
     def _work_count(self):
@@ -136,7 +140,13 @@ class LaundryManagement(models.Model):
 
     @api.multi
     def action_view_invoice(self):
-        inv_obj = self.env['account.invoice'].search([('origin', '=', self.sale_obj.name)])
+        if self.sale_obj:
+            inv_obj = self.env['account.invoice'].search([
+                                        ('origin', '=', self.sale_obj.name)])
+        if self.pos_order_id:
+            inv_obj = self.env['account.invoice'].search([
+                                        ('origin', '=', self.pos_order_id.name)])
+        #inv_obj = self.env['account.invoice'].search([('origin', '=', self.sale_obj.name)])
         inv_ids = []
         for each in inv_obj:
             inv_ids.append(each.id)
@@ -199,8 +209,11 @@ class LaundryManagement(models.Model):
         ('return', 'Returned'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
-    folio_id = fields.Many2one('pos.order', string="Folio")
+    source_folio_id = fields.Many2one("pos.order", string='Source Folio')
+    pos_order_id = fields.Many2one('pos.order', string='POS Order')
     guest_name = fields.Char(string="Guest Name")
+    room_id = fields.Many2one('product.product', string="Room No")
+    session_id = fields.Many2one('pos.session', string="POS Session")
 
 
 class LaundryManagementLine(models.Model):

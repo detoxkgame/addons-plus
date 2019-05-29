@@ -16,8 +16,8 @@
                 <form string="Laundry Order" class="o_sale_order">
                 <header>
                     <button name="confirm_order" class="oe_highlight" string="Confirm Order" type="object" states="draft"/>
-                    <button name="create_invoice" class="oe_highlight" string="Create Invoice" type="object"
-                    attrs="{'invisible': ['|',('invoice_status', '=', 'invoiced'), ('state', '!=', 'done')]}"/>
+                    <!-- <button name="create_invoice" class="oe_highlight" string="Create Invoice" type="object"
+                    attrs="{'invisible': ['|',('invoice_status', '=', 'invoiced'), ('state', '!=', 'done')]}"/> -->
                     <button name="return_dress" string="Return" class="oe_highlight" type="object" states="done"/>
                     <button name="cancel_order" string="Cancel" type="object" states="draft"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,order,done,return"/>
@@ -27,7 +27,7 @@
                         <button name='action_view_laundry_works' class="oe_stat_button" type="object" icon="fa-money" states="order,done,return,process">
                             <field string="Works" name="work_count" widget="statinfo" />
                         </button>
-                        <button name='action_view_invoice' class="oe_stat_button" type="object" icon="fa-money" states="done,return">
+                        <button name='action_view_invoice' class="oe_stat_button" type="object" icon="fa-money" attrs="{'invisible':['|',('invoice_count','=',0),('state', 'not in', ('done','return'))]}">
                             <field string="Invoice" name="invoice_count" widget="statinfo" />
                         </button>
                     </div>
@@ -52,7 +52,8 @@
                             <field name="currency_id" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name="laundry_person" attrs="{'readonly': [('state','in',('return', 'cancel'))]}"/>
                             <field name="invoice_status" invisible="1"/>
-                            <field name="sale_obj" invisible="1"/>
+                            <field name="sale_obj" string="Sale Order" attrs="{'invisible': [('sale_obj','=', False)]}"/>
+                            <field name="pos_order_id" attrs="{'invisible': [('pos_order_id', '=', False)]}"/>
                         </group>
                     </group>
                     <notebook>

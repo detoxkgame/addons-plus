@@ -449,7 +449,11 @@ class ResPartner(models.Model):
                     order_data['name'] = order['name']
                     order_data['picking_ids'] = []
                     if form_template.form_model_id.model == 'laundry.order':
-                        order_data['invoice_ids'] = order.sale_obj.invoice_ids.ids
+                        if order.sale_obj:
+                            order_data['invoice_ids'] = order.sale_obj.invoice_ids.ids
+                        else:
+                            order_data['invoice_ids'] = order.pos_order_id.invoice_id.ids
+                        order_data['room_id'] = order.room_id.name
                     if form_template.form_model_id.model == 'sale.order':
                         order_data['invoice_ids'] = order.invoice_ids.ids
                         order_data['order_state'] = order.order_state
@@ -708,7 +712,8 @@ class ResPartner(models.Model):
         if model_name == 'purchase.order':
             order.button_cancel()
         if model_name == 'laundry.order':
-            order.cancel_order()
+            if order:
+                order.cancel_order()
         edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
                             ('form_template_id', '=', int(form_temp_id)),
                             ('name', '=', 'Edit')])
@@ -788,6 +793,7 @@ class ResPartner(models.Model):
             #===================================================================
         else:
             datas['partner_id'] = int(vendor_id)
+            datas['session_id'] = order_datas.get('session_id')
             if model_name == 'pos.order':
                 POSOrder = self.env[model_name]
                 order = POSOrder.create(POSOrder._order_fields(pos_order))
@@ -859,9 +865,15 @@ class ResPartner(models.Model):
         if model_name == 'sale.order' or model_name == 'stock.picking':
             order.action_confirm()
         if model_name == 'purchase.order':
+            if datas['session_id']:
+                order.update({'session_id': datas['session_id']})
             order.button_confirm()
         if model_name == 'laundry.order':
-            order.confirm_order()
+            if order.source_folio_id:
+                order.update({'state': 'order'})
+                self.create_pos_laundry_order(order)
+            else:
+                order.confirm_order()
 
         edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
                             ('form_template_id', '=', int(form_temp_id)),
@@ -870,6 +882,84 @@ class ResPartner(models.Model):
                   'edit_form_id': edit_form_id.id}
 
         return result
+
+    @api.multi
+    def create_pos_laundry_order(self, laundry_order):
+        """ Create POS order for Laundry order
+            @params: laundry_order
+        """
+        source_folio = laundry_order.source_folio_id
+        session = laundry_order.session_id
+
+        if session:
+            # set name based on the sequence specified on the config
+            name = session.config_id.sequence_id._next()
+        else:
+            # fallback on any pos.order sequence
+            name = self.env['ir.sequence'].next_by_code('pos.order')
+        if session.config_id.use_pricelist:
+            # set price list based on the session price list
+            pricelist = laundry_order.session.config_id.pricelist_id.id
+        else:
+            # set price list based on the partner price list
+            pricelist = source_folio.partner_id.property_product_pricelist.id
+        # order values
+        pos_order_values = {'name': name,
+                            'pos_session_id': laundry_order.session_id.id,
+                            'pricelist_id': pricelist,
+                            'partner_id': source_folio.partner_id.id,
+                            'user_id': self.env.uid,
+                            'creation_date': fields.Date.context_today(self),
+                            'amount_paid':  0,
+                            'amount_total':  laundry_order.total_amount,
+                            'amount_tax':  0,
+                            'amount_return':  0,
+                            'fiscal_position_id': False,
+                            }
+        lines = []
+        order_lines = []
+        if laundry_order:
+            for line in laundry_order.order_lines:
+                order_lines = {'product_id': line.product_id.id,
+                               'qty': line.qty,
+                               'price_unit': line.washing_type.amount,
+                               'price_subtotal': line.amount,
+                               'price_subtotal_incl': line.amount,
+                               'tax_ids': [(6, 0, [x.id for x in line.product_id.taxes_id])],
+                               }
+                lines.append([0, 0, order_lines])
+            pos_order_values['lines'] = lines
+            POSOrder = self.env['pos.order']
+            pos_order = POSOrder.create(POSOrder._order_fields(pos_order_values))
+            if pos_order:
+                currency = pos_order.pricelist_id.currency_id
+                pos_order.amount_paid = sum(payment.amount for payment in pos_order.statement_ids)
+                pos_order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in pos_order.statement_ids)
+                pos_order.amount_tax = currency.round(sum(pos_order._amount_line_tax(line, pos_order.fiscal_position_id) for line in pos_order.lines))
+                amount_untaxed = currency.round(sum(line.price_subtotal for line in pos_order.lines))
+                pos_order.amount_total = pos_order.amount_tax + amount_untaxed
+                pos_order.update({'laundry_id': laundry_order.id,
+                                  'order_zone': 'laundry',
+                                  'is_service_order': True,
+                                  'source_folio_id': source_folio.id,
+                                  'guest_name': pos_order.partner_id.name
+                                  })
+                pos_order.lines.update({'source_order_id': source_folio.id})
+                for line in pos_order.lines:
+                    res = line._compute_amount_line_all()
+                    line.update(res)
+            if pos_order:
+                laundry_order.update({'pos_order_id': pos_order.id})
+                for each in laundry_order:
+                    for obj in each.order_lines:
+                        self.env['washing.washing'].create({
+                                            'name': obj.product_id.name + '-Washing',
+                                            'user_id': obj.washing_type.assigned_person.id,
+                                            'description': obj.description,
+                                            'laundry_obj': obj.id,
+                                            'state': 'draft',
+                                            'washing_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                            })
 
     @api.model
     def _pos_purchase_create_order(self, order, supplier_id):
@@ -945,11 +1035,6 @@ class ResPartner(models.Model):
         order = self.env[model_name].search([('id', '=', int(order_id))])
         if model_name == 'sale.order':
             order.update({'order_state': 'done'})
-        if model_name == 'laundry.order':
-            if order.sale_obj.state in ['draft', 'sent']:
-                order.sale_obj.action_confirm()
-            order.invoice_status = order.sale_obj.invoice_status
-            invoice = order.sale_obj.action_invoice_create()
         if model_name == 'purchase.order':
             journal = self.env['account.journal'].search([('type', '=', 'purchase')], limit=1)
             invoice_val = {'type': 'in_invoice',
@@ -978,6 +1063,17 @@ class ResPartner(models.Model):
             invoice_val['invoice_line_ids'] = invoice_line
             acc_invoice = self.env['account.invoice'].create(invoice_val)
             invoice = acc_invoice.id
+        elif model_name == 'laundry.order':
+            invoice = 0
+            if order.sale_obj.state in ['draft', 'sent']:
+                order.sale_obj.action_confirm()
+                order.invoice_status = order.sale_obj.invoice_status
+                invoice = order.sale_obj.action_invoice_create()
+            if order.pos_order_id:
+                self.create_vendor_invoice(order.pos_order_id)
+                if order.pos_order_id.invoice_id:
+                    order.invoice_status = order.pos_order_id.state
+                invoice = order.pos_order_id.invoice_id.id
         else:
             invoice = order.action_invoice_create()
 
@@ -1081,7 +1177,8 @@ class ResPartner(models.Model):
         """ Get order details while select room in vendor form"""
         orders = []
         folio_order = self.env['pos.order'].sudo().search([
-                                    ('reservation_status', '=', 'checkin')])
+                                    ('reservation_status', 'in',
+                                     ('checkin', 'shift', 'extend'))])
         if folio_order:
             folio_lines = self.env['pos.order.line'].sudo().search([
                                         ('product_id', '=', int(room_id)),
