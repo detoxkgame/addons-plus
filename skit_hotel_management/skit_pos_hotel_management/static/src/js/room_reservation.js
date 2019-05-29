@@ -3080,4 +3080,26 @@ models.PosModel = models.PosModel.extend({
     }
 });
 
+var RoomServiceOrderButton = screens.ActionButtonWidget.extend({
+    template: 'RoomServiceOrderButton',
+    room_service_order_button_click_handler: function(){
+		
+		this.pos.gui.show_popup('popup_service_order', {
+            'title': _t('Confirmation'),
+        });
+
+    },
+    button_click: function() {
+    	this.room_service_order_button_click_handler();
+    },
+});
+
+screens.define_action_button({
+    'name': 'room_service_order',
+    'widget': RoomServiceOrderButton,
+    'condition': function(){
+        return this.pos.config.iface_room_service;
+    },
+});
+
 });

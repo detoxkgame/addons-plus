@@ -139,6 +139,12 @@
         </span>
     </t>
     
+    <t t-name="RoomServiceOrderButton">
+        <div class='control-button'>
+            Service Order
+        </div>
+    </t>
+    
 	<t t-name="RoomReservationScreenWidget">
 		<div class="hm-container">
 			<div class="hm-container hm-reservation-content">

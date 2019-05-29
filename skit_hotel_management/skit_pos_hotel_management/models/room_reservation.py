@@ -705,23 +705,21 @@ class FormTemplate(models.Model):
                     order = self.env['pos.order'].sudo().search([('invoice_id', '=', data['id'])])
                     order_data['order_id'] = order.id
                     order_data['cust_id'] = data.partner_id.id
-                    #===========================================================
-                    # paid_amount1 = 0
-                    # paid_amount2 = 0
-                    # if pos_order.statement_ids:
-                    #     paid_amount1 = sum([x.amount for x in pos_order.statement_ids if not x.journal_id.is_pay_later])
-                    # account_payment = self.env['account.payment'].sudo().search(
-                    #                        [('invoice_ids', 'in', data.id)])
-                    # if account_payment:
-                    #     paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
-                    # paid_amount = paid_amount1 + paid_amount2
-                    # diff = (data.amount_total - paid_amount)
-                    # amt = round(diff, 2)
-                    # if diff == 0:
-                    #     amt = 0
-                    # order_data['residual'] = amt
-                    #===========================================================
-                    order_data['residual'] = data.residual
+                    paid_amount1 = 0
+                    paid_amount2 = 0
+                    if order.statement_ids:
+                        paid_amount1 = sum([x.amount for x in order.statement_ids if not x.journal_id.is_pay_later])
+                    account_payment = self.env['account.payment'].sudo().search(
+                                           [('invoice_ids', 'in', data.id)])
+                    if account_payment:
+                        paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
+                    paid_amount = paid_amount1 + paid_amount2
+                    diff = (data.amount_total - paid_amount)
+                    amt = round(diff, 2)
+                    if diff == 0:
+                        amt = 0
+                    order_data['residual'] = amt
+                    #order_data['residual'] = data.residual
                 result_datas.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])
@@ -1271,6 +1269,12 @@ class PosOrder(models.Model):
                     post.get('order_line')[0]['qty'] = total.days
                 else:
                     post['order_line'].append({'qty': total.days})
+                """ Update invoice qty """
+                invoice_line = self.env['account.invoice.line'].sudo().search([
+                                    ('invoice_id', '=', order.invoice_id.id)],
+                                                            limit=1)
+                invoice_line.write({'quantity': total.days})
+                order.invoice_id.write({'residual': order.invoice_id.amount_total})
             else:
                 extend_checkout_date = post.get('checkout_date')
             if(order_check_out_date != extend_date):
