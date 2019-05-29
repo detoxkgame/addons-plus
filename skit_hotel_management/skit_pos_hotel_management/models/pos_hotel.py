@@ -682,7 +682,8 @@ class ResPartner(models.Model):
         """ Change order state from departure to drop state """
         order = self.env[model_name].search([('id', '=', int(order_id))])
         if (order.pickup_date and order.return_date):
-            order.update({'order_state': 'drop'})
+            order.update({'order_state': 'drop',
+                          'service_status': 'close'})
         edit_form_id = self.env['hm.sub.form.template.line'].sudo().search([
                             ('form_template_id', '=', int(form_temp_id)),
                             ('name', '=', 'Edit')])
@@ -1073,6 +1074,7 @@ class ResPartner(models.Model):
                 self.create_vendor_invoice(order.pos_order_id)
                 if order.pos_order_id.invoice_id:
                     order.invoice_status = order.pos_order_id.state
+                    order.pos_order_id.service_status = 'close'
                 invoice = order.pos_order_id.invoice_id.id
         else:
             invoice = order.action_invoice_create()
