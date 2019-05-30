@@ -143,7 +143,7 @@
 								    </li>
 								    <li class="night_audit_table_row night_audit_li" >
 								      <div class="col col-1" ><t t-esc="room_state.rooms_available" /></div>
-								      <div class="col col-2" ><t 	t-esc="room_state.rooms_reserved" /></div>
+								      <div class="col col-2" ><t t-esc="room_state.rooms_reserved" /></div>
 								      <div class="col col-3" ><t t-esc="room_state.rooms_occupied" /></div>
 								      <div class="col col-4" ><t t-esc="room_state.rooms_blocked" /></div>
 									</li>
@@ -445,7 +445,7 @@
 										</tr>
 										<!-- <tr><td></td></tr> -->
 						                <tr><td>Occupied Rooms : </td><td><t t-esc="session.rooms_occupied" /></td></tr>
-						                <tr><td>Maintenance Rooms : </td><td><t t-esc="session.rooms_blocked" /></td></tr> 
+						                <tr><td>Blocked Rooms : </td><td><t t-esc="session.rooms_blocked" /></td></tr> 
 						    		</tbody>
 				         		</table>
 				    		</td>

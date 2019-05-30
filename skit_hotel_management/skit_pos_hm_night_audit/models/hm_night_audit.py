@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, tools
+from datetime import datetime
 
 
 class ShiftMaster(models.Model):
@@ -27,7 +28,7 @@ class PosSession(models.Model):
     rooms_reserved = fields.Char(string="Reserved Rooms",
                                  compute='_compute_all_room_count',
                                  )
-    rooms_blocked = fields.Char(string="Maintenance Rooms",
+    rooms_blocked = fields.Char(string="Blocked/Maintenance Rooms",
                                 compute='_compute_all_room_count',
                                 )
     room_details_of_order = fields.One2many('hm.service.details',
@@ -42,14 +43,41 @@ class PosSession(models.Model):
 
     @api.one
     def _compute_all_room_count(self):
-        available_rooms_count = self.env['product.template'].search_count([
-                    ('categ_id.is_room', '=', True),  ('state', '=', 'available')])
-        reserved_rooms_count = self.env['product.template'].search_count([
-                    ('categ_id.is_room', '=', True),  ('state', '=', 'reserved')])
-        occupied_rooms_count = self.env['product.template'].search_count([
-                    ('categ_id.is_room', '=', True),  ('state', '=', 'occupied')])
-        blocked_rooms_count = self.env['product.template'].search_count([
-                    ('categ_id.is_room', '=', True),  ('state', '=', 'blocked')])
+        """ Display rooms count in session"""
+        product_ids = self.env['product.template'].sudo().search([
+                                        ('categ_id.is_room', '=', True),
+                                        ('available_in_pos', '=', True),
+                                        ])
+        available_rooms_count = 0
+        reserved_rooms_count = 0
+        occupied_rooms_count = 0
+        blocked_rooms_count = 0
+        for product_id in product_ids:
+            date = datetime.today().strftime('%Y-%m-%d')
+            sql_query = "select id from product_history ph where \
+                            ph.product_tmpl_id="+str(product_id.id)+" and\
+                            to_date('"+str(date)+"','YYYY-MM-DD') \
+                            BETWEEN DATE(ph.date) AND DATE(ph.out_date - INTERVAL '1 DAY')\
+                            order by id desc LIMIT 1"
+            self.env.cr.execute(sql_query)
+            prod_history = self.env.cr.fetchall()
+            if prod_history:
+                history = self.env['product.history'].sudo().search([
+                                    ('id', 'in', prod_history)])
+                if ((history.state == 'checkout') or
+                    (history.state == 'cancel') or
+                    (history.state == 'draft')):
+                    available_rooms_count += 1
+                if ((history.state == 'checkin') or
+                    (history.state == 'shift') or
+                    (history.state == 'extend')):
+                    occupied_rooms_count += 1
+                if (history.state == 'reserved'):
+                    reserved_rooms_count += 1
+                if (history.state == 'block'):
+                    blocked_rooms_count += 1
+            else:
+                available_rooms_count += 1
         self.rooms_available = available_rooms_count
         self.rooms_reserved = reserved_rooms_count
         self.rooms_occupied = occupied_rooms_count
