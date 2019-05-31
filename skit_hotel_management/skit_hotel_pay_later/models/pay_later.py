@@ -250,20 +250,24 @@ class Skit_AccountInvoice(models.Model):
             pos_order.invoice_id.sudo().action_invoice_open()
             pos_order.account_move = pos_order.invoice_id.move_id
             invoice_id = pos_order.invoice_id.id
-        else:
-            pos_order.invoice_id.update({'state': 'draft'})
-            pos_order.invoice_id.invoice_line_ids.unlink()
-            for line in pos_order.lines:
-                pos_order._action_create_invoice_line(line, pos_order.invoice_id.id)
-            invoice_id = pos_order.invoice_id.id
-            for inv_line in pos_order.invoice_id.invoice_line_ids:
-                inv_line._compute_price()
-            pos_order.invoice_id._compute_amount()
-            pos_order.invoice_id.compute_taxes()
-            pos_order.invoice_id._compute_residual()
-            #pos_order.invoice_id.update({'state': 'open'})
-            pos_order.invoice_id.sudo().action_invoice_open()
-            pos_order.account_move = pos_order.invoice_id.move_id
+            if pos_order.is_service_order:
+                pos_order.update({'service_status': 'close'})
+        #=======================================================================
+        # else:
+        #     pos_order.invoice_id.update({'state': 'draft'})
+        #     pos_order.invoice_id.invoice_line_ids.unlink()
+        #     for line in pos_order.lines:
+        #         pos_order._action_create_invoice_line(line, pos_order.invoice_id.id)
+        #     invoice_id = pos_order.invoice_id.id
+        #     for inv_line in pos_order.invoice_id.invoice_line_ids:
+        #         inv_line._compute_price()
+        #     pos_order.invoice_id._compute_amount()
+        #     pos_order.invoice_id.compute_taxes()
+        #     pos_order.invoice_id._compute_residual()
+        #     #pos_order.invoice_id.update({'state': 'open'})
+        #     pos_order.invoice_id.sudo().action_invoice_open()
+        #     pos_order.account_move = pos_order.invoice_id.move_id
+        #=======================================================================
         for pl in payment_lines:
             invoice = self.browse(int(invoice_id))
             order = self.env['pos.order'].search([
@@ -310,7 +314,8 @@ class Skit_AccountInvoice(models.Model):
                 for order in checkout_order:
                     order.write({'reservation_status': 'checkout'})
                     prod_history = self.env['product.history'].sudo().search([
-                                        ('order_id', '=', checkout_order.id)])
+                                        ('order_id', '=', checkout_order.id),
+                                        ('state', 'in', ('checkin', 'shift', 'extend'))])
                     prod_history.write({'state': 'checkout'})
                     order_line = self.env['pos.order.line'].sudo().search([('order_id', '=', order.id)], limit=1)
                     prod_prod = self.env['product.product'].sudo().search([('id', '=', order_line.product_id.id)])

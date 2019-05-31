@@ -1257,7 +1257,7 @@
 						    		<t t-set="head_count" t-value="1" />
 						    		<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
 						    			<t t-if="head_count == 1" >
-								    		<tr style="background-color: #875A7B;color: white;">
+								    		<tr style="background-color: #3366FF;color: white;">
 												<t t-foreach="center_temp['line_group'][line_key]" t-as="label">
 											    	<t t-if="(label.form_field_type)=='sub_form'">
 											    		<t t-foreach="center_temp['sub_form_template'][label.sub_template_id]" t-as="temp" >
@@ -1284,45 +1284,56 @@
 							    		<t t-foreach="center_temp['line_group_key']" t-as="line_key" >
 							    			<t t-set="first_col" t-value="center_temp['line_group'][line_key][0]" />
 							    			<tr>
-							    				<t t-if="(first_col.form_field_type)=='sub_form'">
-								    				<t t-foreach="center_temp['sub_form_template'][first_col.sub_template_id]" t-as="temp" >
+							    				<t t-if="order['header']">
+							    					<td colspan="5" style="background: white;"><span class="hm-list-span"><t t-esc="order['header']" /></span></td>
+							    				</t> 
+							    				<t t-else="">
+								    				<t t-if="(first_col.form_field_type)=='sub_form'">
+									    				<t t-foreach="center_temp['sub_form_template'][first_col.sub_template_id]" t-as="temp" >
+										    				<td>
+										    					<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" class="edit-datatable" ><img t-att-src='widget.sub_template_line_icon_url(temp.id)' width="20" height="17" /></span>
+										    				</td>
+									    				</t>
+									    			</t>
+									    			<t t-else="" >
 									    				<td>
-									    					<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" class="edit-datatable" ><img t-att-src='widget.sub_template_line_icon_url(temp.id)' width="20" height="17" /></span>
+									    					<t t-if="(first_col.form_field_type)=='label'">
+									    						<span><t t-esc="order[first_col.form_fields]" /></span>
+									    					</t>
+									    					<t t-if="(first_col.form_field_type)=='checkbox'">
+									    						<input type="checkbox" name="select_all" value=""  />
+									    					</t>
 									    				</td>
 								    				</t>
-								    			</t>
-								    			<t t-else="" >
-								    				<td>
-								    					<t t-if="(first_col.form_field_type)=='label'">
-								    						<span><t t-esc="order[first_col.form_fields]" /></span>
-								    					</t>
-								    					<t t-if="(first_col.form_field_type)=='checkbox'">
-								    						<input type="checkbox" name="select_all" value=""  />
-								    					</t>
-								    				</td>
 							    				</t>
 							    				<t t-set="same_row_count" t-value="((center_temp['line_group'][line_key]).length) - 1" />
 												<t t-set="sameline_count" t-value="0" />
 							    				<t t-foreach="center_temp['line_group'][line_key]" t-as="same_row">
 							    					<t t-if="same_row.sameline">
-							    						<td>
-									    					<t t-if="(same_row.form_field_type)=='label'">
-									    						<span><t t-esc="order[same_row.form_fields]" /></span>
-									    						<t t-if="sameline_count == same_row_count">
-									    							<span t-attf-amt="#{order.residual}" t-attf-invid="#{order.id}" t-attf-custid="#{order.cust_id}" t-attf-orderid="#{order.order_id}"
-									    							 style="display:none" class="folio-payment">Pay</span>
-									    						</t>
-									    					</t>
-									    					<t t-if="((same_row.form_field_type)=='button') and ((same_row.sub_template_id))">
-									    						<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="temp" >
-									    							<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" t-attf-style="#{same_row.field_styles}" class="view-datatable"><t t-esc="same_row.form_label" /></span>
-									    						</t>
-									    					</t>
-									    					
-									    				</td>
+							    						<t t-if="order['header']">	
+							    							<td style="display:none"></td>
+							    						</t>
+							    						<t t-else="">
+								    						<td>
+										    					<t t-if="(same_row.form_field_type)=='label'">
+										    						<span><t t-esc="order[same_row.form_fields]" /></span>
+										    						<t t-if="sameline_count == same_row_count">
+										    							<span t-attf-amt="#{order.residual}" t-attf-invid="#{order.id}" t-attf-custid="#{order.cust_id}" t-attf-orderid="#{order.order_id}"
+										    							 style="display:none" class="folio-payment">Pay</span>
+										    						</t>
+										    					</t>
+										    					<t t-if="((same_row.form_field_type)=='button') and ((same_row.sub_template_id))">
+										    						<t t-foreach="center_temp['sub_form_template'][same_row.sub_template_id]" t-as="temp" >
+										    							<span t-attf-id="#{temp.id}" t-attf-orderid="#{order.id}" t-attf-style="#{same_row.field_styles}" class="view-datatable"><t t-esc="same_row.form_label" /></span>
+										    						</t>
+										    					</t>
+										    					
+										    				</td>
+									    				</t>
 							    					</t>
 							    				<t t-set="sameline_count" t-value="sameline_count + 1" />
 							    				</t>
+							    				
 							    			</tr>
 							    		</t>
 							    		<t t-set="count" t-value="count + 1" />

@@ -411,6 +411,7 @@ screens.PaymentScreenWidget.include({
  	            method: 'get_pending_invoice_details',
  	            args: [0, paylines, self.pos.pos_session.id, exit_order_id],
  	        }).then(function (result) {
+ 	        		order.set_exit_order_id(0);
  		    		self.chrome.do_action('point_of_sale.pos_invoice_report',{additional_context:{ 
  	                    active_ids:[exit_order_id],
  	                }}).done(function () {

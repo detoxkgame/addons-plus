@@ -327,17 +327,33 @@ class FormTemplate(models.Model):
         porder = self.env['pos.order'].sudo().search([('id', '=', int(order_id))])
         invoice_ids = [0]
         if panel_form_temp.form_view == 'list':
+            if panel_form_temp.form_model_id.model == 'account.invoice':
+                model_datas = []
             if(porder):
                 invoice_ids.append(porder.invoice_id.id)
+
             if panel_form_temp.form_model_id.model == 'account.invoice':
+                model_datas.append('room_rent')
+                sinvoice = self.env['account.invoice'].sudo().search([('id', '=', porder.invoice_id.id)])
+                model_datas.append(sinvoice)
                 if(porder):
                     service_order = self.env['pos.order'].sudo().search([
-                                                ('order_zone', '=', 'room_service'),
-                                                ('source_folio_id', '=', porder.id)])
+                                                ('order_zone', 'in', ('room_service', 'taxi', 'laundry', 'doctors', 'vegetables', 'others')),
+                                                ('source_folio_id', '=', porder.id)], order='order_zone')
+                    order_zone = ''
                     for sorder in service_order:
                         invoice_ids.append(sorder.invoice_id.id)
-                model_datas = self.env[panel_form_temp.form_model_id.model].search(
-                                                    [('id', 'in', invoice_ids)])
+                        if sorder.invoice_id:
+                            sinvoice = self.env['account.invoice'].sudo().search([
+                                            ('id', '=', sorder.invoice_id.id)])
+                            if(order_zone != sorder.order_zone):
+                                order_zone = sorder.order_zone
+                                model_datas.append(sorder.order_zone)
+                            model_datas.append(sinvoice)
+                #===============================================================
+                # model_datas = self.env[panel_form_temp.form_model_id.model].search(
+                #                                     [('id', 'in', invoice_ids)])
+                #===============================================================
             #===================================================================
             # if is_pay:
             #     if panel_form_temp.form_model_id.model == 'account.invoice':
@@ -694,32 +710,45 @@ class FormTemplate(models.Model):
             for data in model_datas:
                 order_data = {}
                 count = 0
-                for field in fields:
-                    if field_type[count] == 'many2one':
-                        order_data[field] = data[field].name
-                    else:
-                        order_data[field] = data[field]
-                    count = count + 1
-                order_data['id'] = data['id']
-                if panel_form_temp.form_model_id.model == 'account.invoice':
-                    order = self.env['pos.order'].sudo().search([('invoice_id', '=', data['id'])])
-                    order_data['order_id'] = order.id
-                    order_data['cust_id'] = data.partner_id.id
-                    paid_amount1 = 0
-                    paid_amount2 = 0
-                    if order.statement_ids:
-                        paid_amount1 = sum([x.amount for x in order.statement_ids if not x.journal_id.is_pay_later])
-                    account_payment = self.env['account.payment'].sudo().search(
-                                           [('invoice_ids', 'in', data.id)])
-                    if account_payment:
-                        paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
-                    paid_amount = paid_amount1 + paid_amount2
-                    diff = (data.amount_total - paid_amount)
-                    amt = round(diff, 2)
-                    if diff == 0:
-                        amt = 0
-                    order_data['residual'] = amt
-                    #order_data['residual'] = data.residual
+                if((data == 'room_rent') or (data == 'room_service') or (data == 'taxi') or (data == 'laundry') or (data == 'doctors')):
+                    if(data == 'room_rent'):
+                        order_data['header'] = 'Room Rent'
+                    if(data == 'room_service'):
+                        order_data['header'] = 'Room Service'
+                    if(data == 'taxi'):
+                        order_data['header'] = 'Taxi'
+                    if(data == 'laundry'):
+                        order_data['header'] = 'Laundry'
+                    if(data == 'doctors'):
+                        order_data['header'] = 'Doctors'
+                else:
+                    for field in fields:
+                        if field_type[count] == 'many2one':
+                            order_data[field] = data[field].name
+                        else:
+                            order_data[field] = data[field]
+                        count = count + 1
+                    order_data['id'] = data['id']
+                    if panel_form_temp.form_model_id.model == 'account.invoice':
+                        order = self.env['pos.order'].sudo().search([('invoice_id', '=', data['id'])])
+                        order_data['order_id'] = order.id
+                        order_data['cust_id'] = data.partner_id.id
+                        order_data['header'] = ''
+                        paid_amount1 = 0
+                        paid_amount2 = 0
+                        if order.statement_ids:
+                            paid_amount1 = sum([x.amount for x in order.statement_ids if not x.journal_id.is_pay_later])
+                        account_payment = self.env['account.payment'].sudo().search(
+                                               [('invoice_ids', 'in', data.id)])
+                        if account_payment:
+                            paid_amount2 = sum([x.amount for x in account_payment if not x.journal_id.is_pay_later])
+                        paid_amount = paid_amount1 + paid_amount2
+                        diff = (data.amount_total - paid_amount)
+                        amt = round(diff, 2)
+                        if diff == 0:
+                            amt = 0
+                        order_data['residual'] = amt
+                        #order_data['residual'] = data.residual
                 result_datas.append(order_data)
             sub_temp = self.env['hm.sub.form.template'].sudo().search([
                                 ('id', 'in', sub_form_temp_ids)])

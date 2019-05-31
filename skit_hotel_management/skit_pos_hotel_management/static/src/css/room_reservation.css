@@ -761,3 +761,9 @@ div.bhoechie-tab-container{
 	height: 16rem !important;
 	overflow-y: scroll !important;
 }
+.hm-list-span{
+	font-size: 18px;
+	color: #36F;
+	float: left;
+	margin-left: 1%;
+}
