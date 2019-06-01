@@ -26,7 +26,7 @@ odoo.define('skit_pos_gift_card.pos_gift_card', function (require) {
 	        this.gift_card = gift_card;
 	        this.trigger('change',this);
 	    },
-	    is_gift_card: function(){	 
+	    is_gift_card: function(){	
 	        return this.gift_card;
 	    },	 
 	    set_gift_card_ids: function(gift_card_ids){
@@ -49,7 +49,7 @@ odoo.define('skit_pos_gift_card.pos_gift_card', function (require) {
 	        this.gift_voucher = gift_voucher;
 	        this.trigger('change',this);
 	    },
-	    is_gift_voucher: function(){	 
+	    is_gift_voucher: function(){
 	        return this.gift_voucher;
 	    },	 
 	    set_gift_voucher_ids: function(gift_voucher_ids){
@@ -102,18 +102,28 @@ odoo.define('skit_pos_gift_card.pos_gift_card', function (require) {
 	        this.set_gift_voucher_ids(json.gift_voucher_ids);
 	        this.set_gift_voucher_ids_values(json.gift_voucher_ids_values);
 	    },
-	    
-	    export_for_printing: function(){
-	        var json = _super_orderline.prototype.export_for_printing.apply(this,arguments);
-	        json.gift_card = this.is_gift_card();
-	        json.gift_voucher = this.is_gift_voucher();
-	        return json;
-	    },
 	});
 	
 	/*Product added to cart*/
 	var _super_order = models.Order.prototype;
 	models.Order = models.Order.extend({
+		
+		set_pricelist: function (pricelist) {
+	        var self = this;
+	    	//_super_order.set_pricelist.apply(this,arguments);
+	        this.pricelist = pricelist;
+	        
+	        var lines_to_recompute = _.filter(this.get_orderlines(), function (line) {
+	            return ! line.price_manually_set;
+	        });
+	        _.each(lines_to_recompute, function (line) {
+	        	if(line.is_gift_voucher() == true && line.is_gift_card() != true){
+		            line.set_unit_price(line.product.get_price(self.pricelist, line.get_quantity()));
+		            self.fix_tax_included_price(line);
+	        	}
+	        });
+	        this.trigger('change');
+    },
 	
 	add_product: function(product, options){
 		   	var self = this;
@@ -200,7 +210,8 @@ odoo.define('skit_pos_gift_card.pos_gift_card', function (require) {
 											'barcode':'',
 												}]);
 										if(gift_product!=undefined)
-										{order.add_product(gift_product, {
+										{
+											order.add_product(gift_product, {
 											price: 500, 
 											quantity: 1,
 											gift_card: true,
@@ -251,9 +262,21 @@ odoo.define('skit_pos_gift_card.pos_gift_card', function (require) {
 		template : 'RedeemGiftCardButton',
 		button_click : function() {
 			var self = this;
-			self.gui.show_popup('managecard', {
-				'title' : 'Redeem Gift Coupon',
-			});
+			var order = self.pos.get_order();
+			//if(order.get_client()){
+				self.gui.show_popup('managecard', {
+					'title' : 'Redeem Gift Coupon',
+				});
+			//}
+			/*else{
+				self.gui.show_popup('confirm',{
+			        'title': _t('Please select the Customer'),
+			        'body': _t('You need to select the customer before you proceed.'),
+			            confirm: function(){
+			           	 this.pos.gui.show_screen('clientlist');
+			            },
+			    });
+				}*/
 		
 		},
 	});
@@ -317,6 +340,7 @@ odoo.define('skit_pos_gift_card.pos_gift_card', function (require) {
 											gift_voucher_ids: gift_coupons,
 											merge: false,
 										});
+										oLine.set_gift_voucher(true);
 									}
 									else{
 										self.gui.show_popup('alert', {
