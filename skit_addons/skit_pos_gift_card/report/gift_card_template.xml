@@ -17,8 +17,8 @@
                             <h3>Gift Card Number:</h3>
                             <hr color="gray"></hr>
                             <h3><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]><span t-field="doc.barcode"/></h3>
-                            <!-- <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128',doc.barcode, 600, 900)" style="width:300px;height:50px; margin-top:30px"/>
-                            <h5><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]><span t-field="doc.barcode"/></h5> -->
+                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128',doc.barcode, 600, 900)" style="width:300px;height:50px; margin-top:30px"/>
+                            <h5><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]><span t-field="doc.barcode"/></h5>
                             <hr color="gray"></hr>
                             <h4>Note: Keep Your Gift Card Number Safe.</h4> 
                             <hr color="gray"></hr>   
