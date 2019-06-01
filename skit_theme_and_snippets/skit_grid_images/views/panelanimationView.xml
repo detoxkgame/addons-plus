@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+	<template name="Grid Imges" id="s_panel_map">
+	    <section class="s_title">
+	      <div class="container">
+	        <div class="row">
+	          <div class="col-md-12">
+	            <h1 class="text-center"><span class="fa fa-photo fa-1x" style="" data-original-title="" title=""/>&amp;nbsp;Irregular Images Snippet&amp;nbsp;<span class="fa fa-photo fa-1x" style=""/></h1>
+	            <h3 class="text-center text-muted o_default_snippet_text">And a great subtitle too</h3>
+	          </div>
+	        </div>
+	      </div>
+	    </section>
+		<section class="section-quaternary section-tiles">
+			<div class="container">
+				<div class="section-body">
+					<div class="cols">
+						<div class="col col-1of4">
+							<div class="tile red sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/5.jpg" alt="" width="292" height="584" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay red">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of4">
+							<div class="tile sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/1.jpg" alt="" width="292" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of2">
+							<div class="tile darkblue sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/6.jpg" alt="" width="584" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay darkblue">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of2">
+							<div class="tile green sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/7.jpg" alt="" width="584" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay green">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of4">
+							<div class="tile purple sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/2.jpg" alt="" width="292" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay purple">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of4">
+							<div class="tile orange sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/3.jpg" alt="" width="292" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay orange">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of2">
+							<div class="tile yellow sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/8.jpg" alt="" width="584" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay yellow">
+								</div>
+							</div>
+						</div>
+						<div class="col col-1of4">
+							<div class="tile pink sks-irr-img-container">
+								<img class="sks-irr-img" src="/skit_grid_images/static/img/4.jpg" alt="" width="292" height="292" />
+								<strong>
+									<a href="/event" data-original-title="" title="">
+										<font style="color: rgb(255, 255, 255);">HEADING</font>
+									</a>
+								</strong>
+								<div class="sks-irr-img-overlay pink">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</template>
+    <!-- Add to the top bar -->
+    <template id="panel_snippet" inherit_id="website.snippets">
+      <xpath expr="//div[@id='snippet_feature']/div[contains(@class, 'o_panel_body')]" position="inside">
+        <t t-snippet="skit_grid_images.s_panel_map" t-thumbnail="/skit_grid_images/static/img/snippets.png"/>
+      </xpath>
+    </template>
+  </data>
+</openerp>
