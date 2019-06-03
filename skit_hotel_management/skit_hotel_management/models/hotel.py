@@ -18,7 +18,10 @@ class Note(models.Model):
     _name = "hm.note"
     _description = "Hotel Note"
     
-    note = fields.Text(string = "Note")    
+    note = fields.Text(string = "Note") 
+    #user_id = fields.Integer(string = "UserID")
+    user_name = fields.Text(string = "UserName")
+    session_id = fields.Integer(string = "SessionId")   
 
 class HotelRoomShift(models.Model):
 

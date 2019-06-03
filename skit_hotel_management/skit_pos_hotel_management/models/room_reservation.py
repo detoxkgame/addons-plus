@@ -1785,16 +1785,18 @@ class Note(models.Model):
     def note_method(self, note):
         user_id = self._uid
         order_id = self.env['res.users'].sudo().search([('id', '=', user_id)])
-        name = order_id.login
         messages = []
         if (note != ''):
-            note_value = {'note': note,}
+            note_value = {'note': note, 
+                          'user_name': order_id.partner_id.name,
+                          }
             self.env['hm.note'].sudo().create(note_value)
             
         model = self.env['hm.note'].sudo().search([],order="write_date desc")
         for notes in model:
             messages.append('<div class="message_note">'+notes.note + '</div>')
             messages.append(notes.create_date)
-            messages.append(' ' + name)
+            messages.append(' ')
+            messages.append(notes.user_name)
             messages.append('<br />')
         return messages
