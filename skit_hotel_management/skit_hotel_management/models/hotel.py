@@ -14,6 +14,11 @@ class HotelFloor(models.Model):
 
     name = fields.Char('Floor Name')
 
+class Note(models.Model):
+    _name = "hm.note"
+    _description = "Hotel Note"
+    
+    note = fields.Text(string = "Note")    
 
 class HotelRoomShift(models.Model):
 
@@ -387,6 +392,7 @@ class FormTemplate(models.Model):
                     ('night_audit', _('Night Audit')),
                     ('restaurant_table', _('Restaurant Table')),
                     ('room_status_report', _('Room Status Report')),
+                    ('note',_('Note')),
                     ('search_view', _('Search View'))], string="Form View",
                                   default='')
     column_count = fields.Integer(string="Column Per Row", default=3)

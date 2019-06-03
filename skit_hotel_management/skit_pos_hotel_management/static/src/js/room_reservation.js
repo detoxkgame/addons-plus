@@ -2238,6 +2238,35 @@ var RoomReservationScreenWidget = screens.ScreenWidget.extend({
 	        	}
 	        	//self.pos.set_service_table(partner_id);
 	        });
+	        
+	        /** Note Action */
+	        self._rpc({
+				model: 'hm.note',
+				method: 'note_method',
+				args: [''],
+	        	}).then(function(result){
+	        		$('#notes_list').append(result);
+	        });
+	        
+	        contents.off('click', '#Send');
+	        contents.on('click','#Send',function(){
+	        	var note = $('#Note').val();
+	        	self._rpc({
+				model: 'hm.note',
+				method: 'note_method',
+				args: [note],
+	        	}).then(function(result){
+	        		$('#notes_list').html('');
+	        		$('#notes_list').append(result);
+	        	});
+	        	$('#Note').val("");
+	        });
+	        
+	        contents.off('click', '#Clear');
+	        contents.on('click','#Clear',function(){
+	        	$('#Note').val("");
+	        });
+	        
 	        /** Room Service Action */
 	  	    var order_id = 0;
 	        var partner_id = 0;

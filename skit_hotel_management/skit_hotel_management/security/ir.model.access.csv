@@ -43,3 +43,5 @@ access_hm_agent_commission_invoice_user,hm.agent.commission.invoice.user,model_h
 access_hm_agent_commission_invoice_manager,hm.agent.commission.invoice.manager,model_hm_agent_commission_invoice,skit_hotel_management.group_hotel_manager,1,1,1,1
 access_hm_agent_commission_invoice_line_user,hm.agent.commission.invoice.line.user,model_hm_agent_commission_invoice_line,skit_hotel_management.group_hotel_user,1,1,1,0
 access_hm_agent_commission_invoice_line_manager,hm.agent.commission.invoice.line.manager,model_hm_agent_commission_invoice_line,skit_hotel_management.group_hotel_manager,1,1,1,1
+access_hm_note_user,hm.note.user,model_hm_note,skit_hotel_management.group_hotel_user,1,1,1,1
+access_hm_note_manager,hm.note.manager,model_hm_note,skit_hotel_management.group_hotel_manager,1,1,1,1

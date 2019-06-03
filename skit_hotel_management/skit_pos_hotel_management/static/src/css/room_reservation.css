@@ -767,3 +767,24 @@ div.bhoechie-tab-container{
 	float: left;
 	margin-left: 1%;
 }
+.hm-form-icon_right{
+	width: 7%;
+}
+.hm-textarea_right{
+	border: 1px solid gray !important;
+    box-shadow: none !important;
+    width: 67% !important;
+    height: 10px;
+    overflow: hidden;
+}
+#notes_list{
+	text-align: left;
+	font-size: 13px;
+	height: 65%;
+	overflow-y: scroll;
+	margin-left: 5%;
+}
+.message_note{
+	font-size: 16px;
+    color: blue;
+}

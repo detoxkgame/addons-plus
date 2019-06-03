@@ -617,6 +617,79 @@
 											<p class="hm-right-note-page"><t t-esc="data.description"/></p>
 										</div>
 									</t>
+									
+									<!-- Note Design -->
+									<t t-if="(data.form_field_type)=='sub_form'" t-attf-subid="#{data.sub_template_id}">
+									<t t-set="first_col" t-value="right_temp['line_group'][line_key][0]" />
+										<div id="notes_list">
+										<!-- <a class="js_payment_info fa fa-info-circle" role="button" style="text-align: right"></a> -->
+										</div>
+										<t t-if="((first_col.form_field_type)=='sub_form')">
+						    				<t t-foreach="right_temp['sub_form_template'][first_col.sub_template_id]" t-as="stemp" >
+						    					<t t-if="right_temp['sub_line_group_key']">
+						    						<t t-foreach="right_temp['sub_line_group_key_array'][first_col.sub_template_id]" t-as="sline_key" >
+						    							<!-- Sub Template First Column -->
+						    							<t t-set="sub_first_col" t-value="right_temp['sub_line_group_array'][first_col.sub_template_id][sline_key][0]" />
+						    							<tr class="hm-form-tr hm-orderline-details">
+						    								<td class="hm-form-td" t-attf-style="width:#{column_size}% !important;">
+						    									<t t-if="(sub_first_col.form_field_type)=='textarea'">
+												    				<td class="hm-form-td" colspan="2" style="width:100% !important;">
+													    				<textarea class="hm-textarea_right" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_first_col.form_placeholder}"
+													    					t-attf-name="#{sub_first_col.form_fields}" t-attf-ismandatory="#{sub_first_col.isMandatory}" 
+													    					t-attf-ftype="#{sub_first_col.form_field_type}" cols="10"></textarea>
+													    			</td>
+													    		</t>
+													    		<t t-if="(sub_first_col.form_field_type)=='button'">
+														    		<td class="hm-form-td" colspan="2" style="width:100% !important;">
+															    		<button class="hm-button" t-attf-style="font-size:#{sub_first_col.font_size}px;"
+															    			t-attf-id="#{sub_first_col.form_placeholder}" t-attf-placeholder="#{sub_first_col.form_placeholder}"
+															    			t-attf-ismandatory="#{sub_first_col.isMandatory}" t-attf-ftype="#{sub_first_col.form_field_type}">
+															    			<t t-esc="sub_first_col.form_placeholder" />
+															    		</button>
+															    	</td>
+															    </t>
+															    <t t-if="(sub_first_col.form_field_type)=='icon'">
+										    						<td class="hm-form-td hm-right-td" t-attf-style="#{sub_first_col.field_styles}">
+										    							<img t-attf-id="#{sub_first_col.form_placeholder}" class="hm-form-icon_right"
+																               t-att-src='widget.template_line_icon_url(sub_first_col.id)' alt="Icon"/>
+										    						</td>
+										    					</t>
+						    								</td>
+						    								<!-- Sub Template Same Row -->
+						    								<t t-foreach="right_temp['sub_line_group_array'][first_col.sub_template_id][sline_key]" t-as="sub_same_row">
+						    									<t t-if="sub_same_row.sameline">
+						    										<td class="hm-form-td" t-attf-style="width:#{column_size}% !important;">
+						    											<t t-if="(sub_same_row.form_field_type)=='textarea'">
+														    				<td class="hm-form-td" colspan="2" style="width:100% !important;">
+															    				<textarea class="hm-textarea_right" t-attf-style="font-size:#{first_col.font_size}px;" t-attf-id="#{sub_same_row.form_placeholder}"
+															    					t-attf-name="#{sub_same_row.form_fields}" t-attf-ismandatory="#{sub_same_row.isMandatory}" 
+															    					t-attf-ftype="#{sub_same_row.form_field_type}" rows="1" cols="10"></textarea>
+															    			</td>
+															    		</t>
+						    											<t t-if="(sub_same_row.form_field_type)=='button'">
+														    				<td class="hm-form-td" colspan="2" style="width:100% !important;">
+															    				<button class="hm-button" t-attf-style="font-size:#{sub_first_col.font_size}px;"
+															    					t-attf-id="#{sub_same_row.form_placeholder}" t-attf-placeholder="#{sub_same_row.form_placeholder}"
+															    					t-attf-ismandatory="#{sub_same_row.isMandatory}" t-attf-ftype="#{sub_same_row.form_field_type}">
+															    					<t t-esc="sub_same_row.form_placeholder" />
+															    				</button>
+															    			</td>
+															    		</t>
+															    		<t t-if="(sub_same_row.form_field_type)=='icon'">
+												    						<td class="hm-form-td hm-right-td" t-attf-style="#{sub_same_row.field_styles}">
+												    							<img t-attf-id="#{sub_same_row.form_placeholder}" class="hm-form-icon_right"
+																		               t-att-src='widget.template_line_icon_url(sub_same_row.id)' alt="Icon"/>
+												    						</td>
+												    					</t>
+						    										</td>
+						    									</t>
+						    								</t>
+						    							</tr>
+						    						</t>
+						    					</t>
+						    				</t>
+						    			</t>
+					    			</t>
 									<t t-if="(data.model_name) and (data.model_method)">
 										<div class="hm-right-reserve">
 											<t t-foreach="right_temp['model_method_datas'][data.id]" t-as="code">

@@ -765,6 +765,83 @@ class FormTemplate(models.Model):
                                     })
                 sub_form_template[temp.id] = temp_array
         floor_count = 0
+        
+        """ Right Panel """
+        if panel_form_temp.form_view == 'right_panel':
+            order_data = {}
+            sub_line_group_key_array = {}
+            sub_temp = self.env['hm.sub.form.template'].sudo().search([
+                                ('id', 'in', sub_form_temp_ids)])
+            line_fields = []
+            line_field_type = []
+            for temp in sub_temp:
+                sub_temp_line = self.env['hm.sub.form.template.line'].sudo().search(
+                            [('sub_form_template_id', '=', temp.id)],
+                            order='sequence asc')
+                tmp_line = self.env['hm.form.template.line'].sudo().search([
+                                ('sub_template_id', '=', temp.id),
+                                ('form_template_id', '=', panel_form_temp.id)])
+                temp_array = []
+                tid = 0
+                sub_line_group = {}
+                for sline in sub_temp_line:
+                    tid = sline.id
+                    temp_array.append({'id': sline.id,
+                                       'name': sline.name,
+                                       'color': sline.color
+                                       })  
+                sub_form_template[temp.id] = temp_array   
+                line_form_template = self.env['hm.form.template'].sudo().search(
+                                    [('id', '=', sline.form_template_id.id)])
+                line_form_template_line = self.env['hm.form.template.line'].sudo().search(
+                                    [('form_template_id', '=', line_form_template.id)],
+                                    order='sequence asc')
+                temp_order_lines = []
+                for line in line_form_template_line:
+                    line_tmp = line.form_template_id.id
+                    line_model = line.form_template_id.form_model_id.model
+                    datas = {'id': line.id,
+                             'form_label': line.form_label,
+                             'form_field_type': line.form_field_type,
+                             'form_fields': line.form_field_id.name,
+                             'sameline': line.sameline,
+                             'isMandatory': line.isMandatory,
+                             'sequence': line.sequence,
+                             'form_placeholder': line.form_placeholder,
+                             'font_size': line.font_size,
+                             'font_style': line.font_style,
+                             'font_family': line.font_family,
+                             'sub_template_id': line.sub_template_id.id,
+                             'model_id': line.form_template_id.form_model_id.id,
+                             'form_template_selection_fields': selection_items,
+                             'form_template_model_fields': many2one_list,
+                             'field_styles': line.field_styles,
+                             'field_group': line.field_group,
+                             'description': line.description,
+                             'model_name': line.model_name,
+                             'model_method': line.model_method,
+                             'readonly': line.readonly,
+                             'invisible': line.invisible
+                             }
+                    temp_order_lines.append(datas)
+                    if count == 0:
+                        sub_key = line.sequence
+                        sub_temp_id.append(datas)
+                        sub_line_group[sub_key] = sub_temp_id
+                    else:
+                        if line.sameline:
+                            sub_temp_id.append(datas)
+                            sub_line_group[sub_key] = sub_temp_id
+                        else:
+                            sub_key = line.sequence
+                            sub_temp_id = []
+                            sub_temp_id.append(datas)
+                            sub_line_group[sub_key] = sub_temp_id
+                    count = count+1
+                sub_form_template[temp.id] = temp_array
+                sub_line_group_array[temp.id] = sub_line_group
+                sub_line_group_key_array[temp.id] = sorted(sub_line_group.keys())
+        
         if panel_form_temp.form_view == 'restaurant_table':
             floor_count = self.env['restaurant.floor'].sudo().search_count([
                                             ('is_room_service', '=', True)])
@@ -1700,3 +1777,24 @@ class Complaint(models.Model):
                           'guest_name_id': folio.partner_id.id,
                           'complaint': reason})
         return True
+
+class Note(models.Model):
+    _inherit = 'hm.note'
+    
+    @api.model
+    def note_method(self, note):
+        user_id = self._uid
+        order_id = self.env['res.users'].sudo().search([('id', '=', user_id)])
+        name = order_id.login
+        messages = []
+        if (note != ''):
+            note_value = {'note': note,}
+            self.env['hm.note'].sudo().create(note_value)
+            
+        model = self.env['hm.note'].sudo().search([],order="write_date desc")
+        for notes in model:
+            messages.append('<div class="message_note">'+notes.note + '</div>')
+            messages.append(notes.create_date)
+            messages.append(' ' + name)
+            messages.append('<br />')
+        return messages
