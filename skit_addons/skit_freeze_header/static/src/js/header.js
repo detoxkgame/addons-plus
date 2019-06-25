@@ -40,20 +40,6 @@ odoo.define('skit_freeze_header.header', function (require) {
 	 		return $tfoot;
   		},
 	    /*********End code for _renderFooter********/
-  		
-
-	    /*********Start code for _renderBody********/
-	  	 _renderBody: function () {
-	  		var self = this;
-	  		this._super(); 
-	     	var $rows = this._renderRows();
-	        while ($rows.length < 9) {
-	            $rows.push(this._renderEmptyRow());
-	        }
-	        return $('<tbody>').append($rows);
-	     },
-	    /*********End code for _renderBody********/
-
 
 	});
 });
