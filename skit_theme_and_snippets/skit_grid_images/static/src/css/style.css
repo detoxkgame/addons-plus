@@ -295,7 +295,7 @@
   overflow: hidden;
   width: 100%;
   height:0;
-  transition: .5s ease;
+  transition: 1s ease;
 }
 
 .sks-irr-img-container:hover .sks-irr-img-overlay {
