@@ -39,7 +39,7 @@
 									<div class="sks-sec2-contact-div1">
 										<div class="sks-sec2-contact-div2">
 											<img class="sks-sec2-contact-img"
-												src="/skit_website_menu/static/src/img/1_new.png" />
+												src="/skit_file_upload/static/src/img/1_new.png" />
 										</div>
 										<div class="sks-sec2-contact-div3">
 											<div class="text-container sks-sec2-contact-div4">
@@ -123,7 +123,7 @@
 																height="100"></canvas>
 															<img id="confirm_gif_id" class="confirm_gif"
 																alt="Contact us."
-																src="/skit_snippets/static/src/img/float_video/confirm.gif" />
+																src="/skit_file_upload/static/src/img/confirm.gif" />
 															<span class="pop_span">Thank for registering we will contact
 																you soon
 															</span>
