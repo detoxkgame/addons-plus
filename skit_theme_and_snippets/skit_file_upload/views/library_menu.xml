@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- <menuitem name="Career" id="skit_career" sequence="30"/>
+        <menuitem name="Career" id="skit_career" sequence="30"/> -->
+
+		<record id="skit_careers" model="website.menu">
+			<field name="name">Career</field>
+			<field name="url">/careers_new</field>
+			<field name="parent_id" ref="website.main_menu" />
+			<field name="sequence" type="int">25</field>
+		</record>
+		<record id="action_open_career" model="ir.actions.act_url">
+            <field name="name">Career</field>
+            <field name="target">self</field>
+            <field name="url">/careers_new</field>
+        </record>
+    </data>
+</odoo>

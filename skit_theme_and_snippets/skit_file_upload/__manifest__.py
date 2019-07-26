@@ -12,6 +12,7 @@
                 ],
     'data': [
         'views/careers.xml',
+        'views/library_menu.xml',
        ],
     'images': ['static/description/logo.png'],
     'license': "AGPL-3",
