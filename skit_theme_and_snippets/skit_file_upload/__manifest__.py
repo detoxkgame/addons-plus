@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'File Upload',
-    'summary': "Srikesh Infotech - File Upload",
+    'name': 'Webiste Career',
+    'summary': "This module adds career menu in Website with upload resume option.",
     'category': 'Website',
     'author': 'Srikesh Infotech',
     'company': 'Srikesh Infotech',
     'website': 'http://www.srikeshinfotech.com',
+    'price': 30,
+    'currency': 'EUR',
     'depends': [
                 'website','hr_recruitment'
                 ],
