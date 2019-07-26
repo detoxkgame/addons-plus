@@ -8,7 +8,7 @@
     'company': 'Srikesh Infotech',
     'website': 'http://www.srikeshinfotech.com',
     'depends': [
-                'website'
+                'website','hr_recruitment'
                 ],
     'data': [
         'views/careers.xml',
