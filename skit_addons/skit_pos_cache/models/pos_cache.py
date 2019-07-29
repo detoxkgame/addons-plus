@@ -14,6 +14,10 @@ class POSCacheData(models.Model):
     user_id = fields.Integer('User ID')
     is_delete = fields.Boolean('Delete', default=False)
     product_id = fields.Integer(string='Product ID')
+    applied = fields.Char('Applied On')
+    product_tmpl_id = fields.Many2one('product.template',string="Product Template")
+    categ_id = fields.Many2one('product.category',string="Product Category")
+    prod_id = fields.Many2one('product.product',string="Product Product")
 
     @api.model
     def product_cache_data_count(self, user_id):
@@ -194,10 +198,10 @@ class POSCacheData(models.Model):
                             "applied_on":pricelist_item.applied_on,
                             "id":pricelist_item.id,
                         })
-            applied = pricelist_item.applied_on
-            categ_id = pricelist_item.categ_id
-            product_tmpl_id = pricelist_item.product_tmpl_id
-            product_id = pricelist_item.product_id
+            applied = pricelist_item.applied_on or cache.applied
+            categ_id = pricelist_item.categ_id or cache.categ_id
+            product_tmpl_id = pricelist_item.product_tmpl_id or cache.product_tmpl_id
+            product_id = pricelist_item.product_id or cache.prod_id
         if applied == '3_global':
             prod_prod = self.env['product.product'].sudo().search(
                         [('product_tmpl_id.available_in_pos', '=', True)])
@@ -230,7 +234,8 @@ class POSCacheData(models.Model):
                                  prod.product_tmpl_id.categ_id.name],
                     "id": prod.id,
                     "taxes_id": taxes_id,
-                    "is_create": cache.is_create
+                    "is_create": cache.is_create,
+                    "is_delete": cache.is_delete
                     })
         if applied == '2_product_category':
             prod_prod = self.env['product.product'].sudo().search([
@@ -265,7 +270,8 @@ class POSCacheData(models.Model):
                                  prod.product_tmpl_id.categ_id.name],
                     "id": prod.id,
                     "taxes_id": taxes_id,
-                    "is_create": cache.is_create
+                    "is_create": cache.is_create,
+                    "is_delete": cache.is_delete
                 })
         if applied == '1_product':
             prod_prod = self.env['product.product'].sudo().search([
@@ -300,7 +306,8 @@ class POSCacheData(models.Model):
                                  prod.product_tmpl_id.categ_id.name],
                     "id": prod.id,
                     "taxes_id": taxes_id,
-                    "is_create": cache.is_create
+                    "is_create": cache.is_create,
+                    "is_delete": cache.is_delete
                 })
         if applied == '0_product_variant':
             prod_prod = self.env['product.product'].sudo().search([
@@ -335,8 +342,10 @@ class POSCacheData(models.Model):
                                  prod.product_tmpl_id.categ_id.name],
                     "id": prod.id,
                     "taxes_id": taxes_id,
-                    "is_create": cache.is_create
+                    "is_create": cache.is_create,
+                    "is_delete": cache.is_delete
                 })
+        
         result = {'products': product_datas,
                   'pricelists': pricelist_datas}
         return result

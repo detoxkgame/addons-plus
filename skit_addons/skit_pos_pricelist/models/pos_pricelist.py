@@ -164,3 +164,42 @@ class Product_PriceListItem(models.Model):
                                       'user_id': session.user_id.id,
                                       'model_name': 'product.pricelist.item'})
         return pricelist
+
+    @api.multi
+    def unlink(self):
+        plist = self.env['product.pricelist.item'].sudo().search([('id', '=', self.id)])
+        applied_on = plist.applied_on
+        categ_id = plist.categ_id.id
+        product_tmpl_id = plist.product_tmpl_id.id
+        product_id = plist.product_id.id
+        pricelist = super(Product_PriceListItem, self).unlink()
+        pos_cache = self.env['pos.cache.data']
+        user_id = self.env.uid
+        exit_cache = self.env['pos.cache.data'].sudo().search([
+                        ('pk_id', '=', self.id),
+                        ('user_id', '=', user_id),
+                        ('model_name', '=', 'product.pricelist.item')])
+        if not exit_cache:
+            pos_session = self.env['pos.session'].sudo().search([
+                                                ('state', '=', 'opened')])
+            for session in pos_session:
+                session_exit_cache = self.env['pos.cache.data'].sudo().search([
+                        ('pk_id', '=', self.id),
+                        ('user_id', '=', session.user_id.id),
+                        ('model_name', '=', 'product.pricelist.item')])
+                if not session_exit_cache:
+                    pos_cache.create({'pk_id': self.id,
+                                      'user_id': session.user_id.id,
+                                      'model_name': 'product.pricelist.item',
+                                      'is_delete': True,
+                                      'applied': applied_on,
+                                      'categ_id': categ_id,
+                                      'product_tmpl_id': product_tmpl_id,
+                                      'prod_id': product_id})
+        else:
+            exit_cache.update({'is_delete': True,
+                               'applied': applied_on,
+                               'categ_id': categ_id,
+                               'product_tmpl_id': product_tmpl_id,
+                               'prod_id': product_id})
+        return pricelist
