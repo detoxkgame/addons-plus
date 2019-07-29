@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets" inherit_id="point_of_sale.assets">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/skit_pos_res_partner/static/src/js/pos_res_partner.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>

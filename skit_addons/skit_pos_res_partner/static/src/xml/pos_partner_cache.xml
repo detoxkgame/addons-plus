@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<!--  Extend the SynchNotificationWidget for add the synchronization of pos data -->
+   	 <t t-extend="SynchNotificationWidget">
+	   	<t t-jquery='.js_synch' t-operation='before'>
+            <div class="oe_status pos_partner_synch">
+	   			<span class='pos_partner_cache_js_msg oe_hidden'>0</span>
+		   		<div class="pos_partner_cache_js_connected oe_icon oe_green partner-sync-button">
+	                 <img class="partner_cache_img" src="/skit_pos_res_partner/static/src/img/partner_cache_green.png" width="25" height="25" /> 
+	            </div>
+            </div>
+	    </t>       
+   	</t> 
+</templates>
