@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
-    'name': "POS Quick Lead - Pricelsit",
+    'name': "POS Quick Lead - Pricelist",
     'version': '1.1',
     'summary': """Synchronization of POS price list item data""",
     'author': 'Srikesh Infotech',
