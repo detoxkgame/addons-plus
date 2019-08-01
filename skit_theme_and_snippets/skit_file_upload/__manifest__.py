@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Webiste Career',
+    'name': 'Website Career',
     'summary': "This module adds career menu in Website with upload resume option.",
     'category': 'Website',
     'author': 'Srikesh Infotech',
@@ -16,7 +16,7 @@
         'views/careers.xml',
         'views/library_menu.xml',
        ],
-    'images': ['static/description/logo.png'],
+    'images': ['images/main_screenshot.png'],
     'license': "AGPL-3",
     'installable': True,
     'application': True,
