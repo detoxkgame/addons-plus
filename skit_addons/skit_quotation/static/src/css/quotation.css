@@ -1,0 +1,111 @@
+.overlay-ordercnt{
+	color: #fff;
+	font-size: 80%;
+	background-color: #7e7d7d;
+	-webkit-transform: translate(-50%,-90%);
+	-moz-transform: translate(-50%,-90%);
+	transform: translate(-50%,-90%);
+	padding: 0 10%;
+	border-radius: 1000px;
+}
+
+.order-cnt {
+    top: 67% !important;
+    left: 53px !important;   
+    color: #fcfcfc !important;   
+    padding: 1px 3px !important;
+    font: 10px Verdana !important;
+}
+
+.quotation_icon{
+	color: aliceblue;
+}
+
+.confirm_order,.createinvoice,.printpdf,.payment,.paid{
+	background-color: #49A6C8;
+    border: #49A6C8;
+    color: #fff !important;
+    padding: 0 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    width:85%;
+}
+.so_order_id{
+	display:none;
+}
+.invoice_id{
+	display:none;
+}
+.popup_confirm{
+	width:65% !important ;
+	height:80% !important ;
+}
+.shipmnt_title,.payment_title{
+	background-color: #6EC89B !important;
+}
+.shipment_view,.payment_view{
+	display: inline-block;
+	width: 95% !important;
+}
+.ship-table,.payment-table{
+	width:100%;
+	text-align:left;
+}
+.shipment_tab{
+	display: inline-block;
+	width: 95% !important;
+}
+.tab{
+	display:flex;
+	margin-bottom: 5px !important;
+}
+.active{
+    background: lightgrey;
+}
+
+.required_column{
+    border-style:solid !important;
+	border-width:1px !important;
+	border-color:red !important;
+}
+.input-icon {
+  position: relative;
+}
+
+.input-icon > i {
+  position: absolute;
+  display: block;
+  transform: translate(0, -50%);
+  top: 50%;
+  pointer-events: none;
+  width: 25px;
+  text-align: center;
+	font-style: normal;
+}
+
+.input-icon > input {
+  padding-left: 25px;
+	padding-right: 0;
+}
+
+.input-icon-right > i {
+  right: 0;
+}
+
+.input-icon-right > input {
+  padding-left: 0;
+  padding-right: 25px;
+  text-align: right;
+}
+.qty_done{
+	width: 183px;
+}
+.error{
+	display: none;
+	color: red;
+}

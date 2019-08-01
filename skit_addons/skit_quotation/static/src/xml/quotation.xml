@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+	<t t-name="SalesOrderButton">
+		<div class="sales_order_button">
+		<div class='control-button' id='sales_order'>
+			<i class='fa fa-file-o' /> Create Quotation
+		</div>
+		</div>
+	</t>
+
+	<t t-extend='OrderSelectorWidget'>
+        <t t-jquery='.order-selector' t-operation='append'>
+        	<div class="rfq-event" title="RFQ">
+        	 <span class="order-button square RFQButton">
+                 <i class='fa fa-clipboard quotation_icon'><span class="rorder-cnt RFQ-cnt"></span></i>
+            </span>
+            </div>
+        </t>
+    </t>
+    
+    <t t-name="QuotationPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm">
+                <p class="title"><t t-esc=" widget.options.title || 'Alert' " /></p>
+                <p class="body"><t t-esc=" widget.options.body || '' "/></p>
+                <div class="footer">
+                    <div class="button cancel">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t> 
+    
+    <t t-name="RFQScreenWidget">
+        <div class="rfq clientlist-screen screen">
+            <div class="screen-content rfq-screen-content">
+                <section class="top-content">   
+	                <span class='button back'>
+	                        <i class='fa fa-angle-double-left'></i>
+	                        Cancel
+	                </span>           		                              
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow collapsed'>
+                        	<p class="dltitle" style="font-size: 1.5em;width: 100%;font-weight:bold;text-align:center;">Sale Order Quotation </p>
+                            <div class='subwindow-container border skit_section-max-height'>
+                                <div class='subwindow-container-fix  touch-scrollable scrollable-y quotation' style="height:500px;">                                
+                                 	<table id="so_quotation_otable">
+                                 	
+                                 	</table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+     <t t-name="SOLineScreenWidget">
+        <table class='dl-olist' id="pendinginvoice_oltable">
+			 <thead>
+	            <tr>
+	                <th>S.no</th>
+	                <th>Product</th>      
+	                <th class='text-right' >Qty</th>
+	                <th class='text-right' >UnitPrice</th>
+	                <th class='text-right' >Amount</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+		          <t t-foreach="lines" t-as="line">
+			          <tr>
+			          	<td><t t-esc='line.sno or ""' /></td> 
+			            <td><t t-esc='line.product or ""' /></td>
+			            <td class='text-right' ><t t-esc='line.product_uom_qty or ""' /></td>
+			            <td class='text-right' ><t t-esc='line.price_unit or ""' /></td>     
+			            <td class='text-right' ><t t-esc='line.amount or ""' /></td>          
+			          </tr>
+		          </t>
+	          </tbody>
+		 </table> 
+    </t>
+    
+    <t t-name="SuccessPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup_confirm">
+                <p class="title shipmnt_title"><t t-esc=" widget.options.title || 'Alert' " /></p>
+                <span class="error"></span>
+	         		<div class="shipment_view">
+	         			<table  class="ship-table" id="card" style="line-height:60px;">   	
+							<tbody >
+							<t t-if="widget.options.shipment_view">
+			         		<t t-set="details" t-value="widget.options.shipment_view"/>
+								<tr>
+		                			<th>
+										  <span><t t-esc="details[0]['name']"></t></span>
+		                			</th>
+		                			<th>
+		                			<span></span>
+		                			</th>
+		                			<th>
+		                			<span></span>
+		                			</th>
+		                			<th>
+		                			<span style="display:none;" id="order_id"><t t-esc="details[0]['id']"></t></span>
+		                			<input type="number"  class="order_id"  t-att-value="details[0]['id']" style="display:none;" />
+		                			</th>
+		                			<th>
+		                				<t t-if="(widget.options.state) != 'done'">
+		                        			<i class="oe_link_icon fa fa-pencil-square-o oe_icon line-edit-icon oe_green edit"/>
+		                				</t>
+		                			</th>
+		                		</tr>
+								<tr>
+		                			<td>
+										Partner:
+										</td>
+								    <td style="width:25%">
+								        <span id="partner"><t t-esc="details[0]['partner']"></t></span>	
+								        <t t-if="widget.pos.partners">
+				         					<select name='partner_id' class="partner" style="display:none;width:80%;height:44px;">
+								        		<option value="0"></option>
+									        	<t t-foreach="widget.pos.partners" t-as='partner'>
+										    		<t t-if="details[0]['partner'] == partner.name">
+										    		<option t-att-id="partner['id']" t-att-value="partner['id']" t-att-selected="true" > 
+														<t t-esc="partner['name']" />										                                									                                    
+										    		</option>
+										    		</t>
+										    		<t t-else="">
+											    		<option t-att-id="partner['id']" t-att-value="partner['id']" > 
+															<t t-esc="partner['name']" />										                                									                                    
+											    		</option>
+										    		</t>							                                	
+									        	</t>
+								            </select>
+							            </t>
+								        </td>
+		                			
+			                			<td>
+									       <t>
+										      Scheduled Date:
+										   </t>
+								        </td>
+								    	<td>
+								            <span id="date"><t t-esc="details[0]['min_date']"></t></span>								           
+											<div class="input-group sp-date" style="display:none;">
+											  <input type="text" id="sp-date1" class="form-control sp-date" t-att-value="details[0]['min_date']"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></input>
+											</div>
+								        </td>
+		                		
+		                			</tr>
+		                			<tr>
+			                			<td>
+									       <t>
+										      Source Document:
+										   </t>
+								        </td>
+								    	<td>
+								           <span id="source"><t t-esc="details[0]['origin']"></t></span>   
+								           <input type="text"  class="source"  t-att-value="details[0]['origin']" style="display:none;" />
+								        </td>
+		                			</tr>
+		                			</t>
+			                	</tbody> 		                
+		                	</table>
+                	</div>
+                	
+                <div class="shipment-tab-container shipment_tab">
+                	 <div class="shipment-tab-menu" style="margin-right:48%;">
+			              <div class="ship_tab  tab">
+			                <a href="#" data-id='0' class="ship-group-item operation active" style="border: 4px solid #6EC89B;border-bottom-color: transparent;">
+				                Operations
+				            </a> 
+				            <a href="#" data-id='1' class="ship-group-item initial" style="margin-left:5%; margin-right:5%;border: 4px solid #6EC89B;border-bottom-color: transparent;">
+				                 Initial Demand
+				            </a>
+				             <a href="#" data-id='2'  class="ship-group-item additional" style="border: 4px solid #6EC89B;border-bottom-color: transparent;">
+				                 Additional Info
+				            </a>  
+
+			              </div>
+						</div> 
+						  <div class="ship-tab" style="">								            
+				             <div class="ship-tab-content active" style="max-height:395%;">		
+							   	<div class="operations_table" style="border: 4px solid #6EC89B;text-align:left;border-top-color: transparent;height: 140px;overflow-y:scroll;">
+							   		<table id="operations" class="operations">
+					                	</table>
+							   	</div>
+							   	<div class="initial_table" style="display:none;border: 4px solid #6EC89B;text-align:left;border-top-color: transparent;height: 140px;overflow-y:scroll;">
+							   		<table id="initial" data-detail-view="true">
+					                	</table>
+							   	</div>
+							   	<div class="additional_info_table" style="display:none;border: 4px solid #6EC89B;border-top-color: transparent;">
+							   		<table id="additional" style="width:100%">
+							   		<tbody >
+									<t t-if="widget.options.shipment_view">
+					         		<t t-set="details" t-value="widget.options.shipment_view"/>
+										<tr style="padding-top: 2%;padding-bottom: 30px;display: block;">										
+												<td style="width: 25%;">
+													Shipping Policy:
+												</td>
+												<td style="width: 27%;">
+													<span id="delivery"><t t-esc="details[0]['move_type_value']"></t></span>
+													 <t t-if="widget.options.shipment_dropdown">
+							         					<select name='delivery_type' class="delivery" style="display:none;height:44px;">							       					
+											        		<option value="0"></option>
+											        		<t t-foreach="[
+																   {'key':'direct', 'value':'As soon as possible'},
+																   {'key':'one', 'value':'When all products are ready'}
+																  ]" t-as="j">
+																<t t-if="details[0]['move_type'] == j.key">								
+																	<option t-att-id="j.key" t-att-selected="true" t-att-value="j.key">
+																		<t t-esc="j.value"/>
+																	 </option>
+																</t>
+																<t t-else="">
+																	<option  t-att-id="j.key" t-att-value="j.key"><t t-esc="j.value"/></option>	
+																</t>
+															</t>
+											            </select>
+							            			</t>
+						                		</td>
+					                			<td style="width: 41%;">
+													 Procurement Group:
+											     </td>
+											    <td>
+											       <span><t t-esc="details[0]['group']"></t></span>
+											     </td>
+				                			</tr>
+				                			<tr style="padding-bottom: 30px;display: block;">				                				
+											        <td style="width: 25%;">
+														Operation Type:
+													</td>
+											    	<td style="width: 25%;">
+											             <span id="picking"><t t-esc="details[0]['picking_type']"></t></span>
+											             <!-- <select class="picking" style="display:none;width: 123%;"/> -->	
+											            <t t-if="widget.options.picking_type">											              
+								         					<select name='picking_type' class="picking" style="display:none;width:121%;height:44px;">
+												        		<option value=''></option>
+													        	<t t-foreach="widget.options.picking_type" t-as='picking'>													    		
+														    		<t t-if="details[0]['picking_type_id'] == picking.picking_type_id">
+															    		<option t-att-id="picking['picking_type_id']" t-att-value="picking['picking_type_id']" t-att-selected="true"> 
+																		<t t-esc="picking['picking_type_name']" />										                                									                                    
+														    		</option>
+															    		</t>
+															    		<t t-else="">
+																    		<option t-att-id="picking['picking_type_id']" t-att-value="picking['picking_type_id']" > 
+																		<t t-esc="picking['picking_type_name']" />										                                									                                    
+														    		</option>										                                									                                    
+															    		</t>						                                	
+													        	</t>
+												            </select>
+							            				</t>	
+											        </td>										        
+						                			<td style="width: 28%;">
+													      Priority:
+											        </td>
+											    	<td>											    	
+											            <span id="priority"><t t-esc="details[0]['priority_value']"></t></span>
+											             <!-- <select class="priority" style="display:none;width: 730%;"/> -->
+											            <t t-if="widget.options.shipment_dropdown">
+								         					<select name='priority' class="priority" style="display:none;height:44px;">
+												        		<option value=''></option>
+												        		<t t-foreach="[
+																	   {'key':'0', 'value':'Not urgent'},
+																	   {'key':'1', 'value':'Normal'},
+																	   {'key':'2', 'value':'Urgent'},
+																	   {'key':'3', 'value':'Very Urgent'}
+																	  ]" t-as="j">	
+																	<t t-if="details[0]['priority'] == j.key">												
+																		<option t-att-id="j.key" t-att-selected="true" t-att-value="j.key">
+																			<t t-esc="j.value"/>
+																		 </option>		
+																	</t>
+																	<t t-else="">												
+																		<option  t-att-id="j.key" t-att-value="j.key"><t t-esc="j.value"/></option>	
+																	</t> 	  		
+																</t>
+												            </select>
+								            			</t>
+												      </td>
+				                				</tr>
+				                			</t>
+					                	</tbody> 
+					                </table>
+							   	</div>
+				            </div> 
+				            </div>
+				            </div>
+                  <div class="footer">
+                  	<t t-if="(widget.options.state) != 'done'">
+	                    <div style="display:none;" class="button confirm shipment_confirm">
+	                        Save
+	                    </div>
+	                     <div class="button cancel shipment_validate">
+	                        Validate
+	                    </div>
+                    </t>
+                    <div class="button cancel shipment_cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>   
+    
+    <t t-name="PaymentPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm" style="width:73%; height:72%;">
+                <p class="title payment_title"><t t-esc=" widget.options.title || 'Alert' " /></p>
+                	<div class="payment_view">
+	         			<table  class="payment-table"  style="line-height:60px;">   	
+							<tbody >
+							<t t-if="widget.options.payment_details">
+			         		<t t-set="details" t-value="widget.options.payment_details"/>
+								<tr style="line-height:100px;">
+		                			<td >
+										Payment Journal:
+									</td>
+								    <td style="width:25%">
+								    	<t t-if="widget.options.journals">
+				         					<select name='journal' class="journal" style="width:97%; height:44px;">
+								        		<option value=''></option>
+									        	<t t-foreach="widget.options.journals" t-as='journal'>
+												    <option t-att-id="journal['journal_id']" t-att-value="journal['journal_id']" > 
+														<t t-esc="journal['journal_name']" />										                                									                                    
+										    		</option>										                                									                                    
+									        	</t>
+								            </select>
+							            	</t>
+								        </td>
+			                			<td style="padding-left:2%;">
+									       <t>
+										      Payment Date:
+										   </t>
+								        </td>
+								    	<td>
+								    		<span class="pay-date" style="font-weight: 600 !important;"><t t-esc="details[0]['payment_date']"></t></span>
+								        </td>
+		                			</tr>
+		                			<tr>
+			                			<td>
+									       <t>
+										      Payment Amount:
+										   </t>
+								        </td>
+								    	<td class="" style="display: flex;">
+										      <t t-esc="details[0]['currency_symbol']"></t>
+										      <input type="text"  id="pay_amt" class="form-control payment_amount"  t-att-value="details[0]['payment_amount']"  style="width:90%;margin-left:7px;height:44px;"/>
+								        </td>
+								        <td style="padding-left:2%;">
+									       <t>
+										      Memo:
+										   </t>
+								        </td>
+								    	<td>
+								    		<span class="memo" style="font-weight: 600 !important;"><t t-esc="details[0]['communication']"></t></span> 	 
+								        </td>
+		                			</tr>
+		                			<tr class="display_partial_amt" style="display:none;">
+		                			 <td >
+									  		Payment Difference	
+									  </td>
+									  <td style="width:26%;">
+										  		<span id="partial_amt"></span>
+									  </td>
+		                			</tr>
+		                			<tr>
+		                			<td>
+		                			<input type="text"  class="order_id"  t-att-value="details[0]['id']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="payment_type"  t-att-value="details[0]['payment_type']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="partner_type"  t-att-value="details[0]['partner_type']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="account_id"  t-att-value="details[0]['account_id']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="currency_id"  t-att-value="details[0]['currency_id']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="invoice_id"  id="invoice_id" t-att-value="details[0]['invoice_ids']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="partner_id"  t-att-value="details[0]['partner_id']" style="display:none;" />
+		                			</td>
+		                			<td>
+		                			<input type="text"  class="amount"  t-att-value="details[0]['payment_amount']" style="display:none;" />
+		                			</td>
+		                			</tr>
+		                			</t>
+			                	</tbody> 
+		                	</table>
+                	</div>
+                <div class="footer">
+                    <div class="button  payment_confirm">
+                        Validate
+                    </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                    <span class="error">Please fill in the particulars in the mandatory fields.</span>
+                </div>
+            </div>
+        </div>
+    </t>     
+
+</templates>

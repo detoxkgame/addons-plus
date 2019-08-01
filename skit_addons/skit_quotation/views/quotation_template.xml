@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>       
+        <template id="assets" inherit_id="point_of_sale.assets">
+          <xpath expr="." position="inside">
+          	<link rel="stylesheet" href="/skit_quotation/static/src/css/quotation.css" /> 
+            <script type="text/javascript" src="/skit_quotation/static/src/js/screen.js"></script>
+            <script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap.js"></script>
+   			<script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap-table.min.js"></script>
+  			<script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap-table.js"></script>
+   			<script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap.min.js"></script>
+  			<script type="text/javascript" src="/skit_quotation/static/src/js/ga.js"></script>
+  			<script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap-table-locale-all.js"></script>
+  			<script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap-table-locale-all.min.js"></script> 
+  			<script type="text/javascript" src="/skit_quotation/static/src/js/bootstrap-datetimepicker.js" charset="UTF-8"></script> 
+    			
+    		<link rel="stylesheet" href="/skit_quotation/static/src/css/bootstrap-datetimepicker.min.css" />
+    		<link rel="stylesheet" href="/skit_quotation/static/src/css/bootstrap-datetimepicker.css" />
+  			<link rel="stylesheet" href="/skit_quotation/static/src/css/bootstrap.css"/>
+    		<link rel="stylesheet" href="/skit_quotation/static/src/css/bootstrap-table.css"/>
+    		<link rel="stylesheet" href="/skit_quotation/static/src/css/bootstrap-table.min.css"/>   
+          </xpath>
+        </template>
+    </data>
+</odoo>
