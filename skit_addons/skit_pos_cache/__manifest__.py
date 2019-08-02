@@ -11,7 +11,7 @@
     'description': """
         Synchronization of POS data
     """,
-    'price': 35,
+    'price': 25,
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'category': "Point of Sale",

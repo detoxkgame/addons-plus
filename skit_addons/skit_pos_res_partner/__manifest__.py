@@ -6,10 +6,11 @@
     'summary': """ Synchronization of POS partner data """,
     'license': "AGPL-3",
     'website': 'http://www.srikeshinfotech.com',
+    'author': 'Srikesh Infotech',
     'description': """
         Synchronization of POS Partner Data
     """,
-    'price': 35,
+    'price': 25,
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'category': 'Point Of Sale',
