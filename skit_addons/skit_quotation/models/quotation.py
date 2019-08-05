@@ -42,17 +42,21 @@ class Skit_saleorder(models.Model):
 
     @api.model
     def fetch_quotation_order(self, session_id):
-        """ Serialize the orders of the customer
-
-        params: customer int representing the customer id
+        """ Serialize the orders from Sales
         """
+        # Get last 30days record from sale order
+        sql_query = """ select x.order_id, x.date_order, x.type  from(
+                        select id as order_id,date_order, 'SO' as type
+                        from sale_order
+                        where note like '%POS in Session%' and
+                        date_order > current_date - interval '30 day'
+                        )
+                        as x order by x.date_order desc """
 
-        pos_ses = self.env['pos.session'].browse(
-                                    session_id)
-        if pos_ses.state == 'closing_control' or pos_ses.state == 'closed':
-            raise UserError(_("Session was closed."))
-        note = 'Created from POS in Session ' + pos_ses.name
-        orders = self.search([('note', 'ilike', note)])
+        self._cr.execute(sql_query)
+        rows = self._cr.dictfetchall()
+        so_ids = [x['order_id'] for x in rows if x['type'] == "SO"]
+        orders = self.search([('id', 'in', so_ids)])
         order_details = []
         status = ''
         invoice_status = ''
