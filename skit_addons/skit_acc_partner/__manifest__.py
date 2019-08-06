@@ -14,7 +14,7 @@
         'views/account_partner.xml',
     ],
     'depends': [
-        'account',
+        'account','skit_account_reports'
     ],
     'installable': True,
     'application': True,

@@ -10,6 +10,26 @@
                <field name="partner_id" />
              </xpath> 
         </field> 
-    </record>
+    </record> 
+       <record id="view_account_general_ledger_form" model="ir.ui.view">  
+         <field name="name">account.report.general.ledger.form</field> 
+          <field name="model">account.report.general.ledger</field> 
+          <field name="inherit_id" ref="account.account_common_report_view"/> 
+         <field name="arch" type="xml">  
+            <xpath expr="//field[@name='date_to']" position="before"> 
+                <field name="partner_id"/>
+             </xpath>  
+        </field>  
+     </record> 
+      <record id="view_account_accounting_form" model="ir.ui.view">  
+         <field name="name">accounting.report.form</field> 
+          <field name="model">accounting.report</field> 
+          <field name="inherit_id" ref="account.account_common_report_view"/> 	
+         <field name="arch" type="xml">  
+            <xpath expr="//field[@name='date_to']" position="before"> 
+                <field name="partner_id"/>
+             </xpath>  
+        </field>  
+     </record>
   </data> 
  </odoo> 
