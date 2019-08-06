@@ -285,7 +285,6 @@ class ReportFinancial(models.AbstractModel):
     
     def get_account_lines(self, data=None):
         lines = []
-        print(data['comparison_context']['partner_id'])
         account_report = self.env['account.financial.report'].search([('id', '=', data['account_report_id'][0])])
         child_reports = account_report._get_children_by_order()
         res = self.with_context(data.get('used_context'))._compute_report_balance(child_reports, data['comparison_context']['partner_id'])
@@ -348,6 +347,86 @@ class ReportFinancial(models.AbstractModel):
                         sub_lines.append(vals)
                 lines += sorted(sub_lines, key=lambda sub_line: sub_line['name'])
         return lines
+    
+class ReportTrialBalance(models.AbstractModel):
+    _inherit = 'report.skit_account_reports.report_trialbalance'
+    
+    def _get_accounts(self, accounts, display_account, partner_id):
+        """ compute the balance, debit and credit for the provided accounts
+            :Arguments:
+                `accounts`: list of accounts record,
+                `display_account`: it's used to display either all accounts or those accounts which balance is > 0
+            :Returns a list of dictionary of Accounts with following key and value
+                `name`: Account name,
+                `code`: Account code,
+                `credit`: total amount of credit,
+                `debit`: total amount of debit,
+                `balance`: total amount of balance,
+        """
+
+        account_result = {}
+        # Prepare sql query base on selected parameters from wizard
+        tables, where_clause, where_params = self.env['account.move.line']._query_get()
+        tables = tables.replace('"','')
+        if not tables:
+            tables = 'account_move_line'
+        wheres = [""]
+        if where_clause.strip():
+            wheres.append(where_clause.strip())
+        filters = " AND ".join(wheres)
+        # compute the balance, debit and credit for the provided accounts
+        request = "SELECT account_id AS id, SUM(debit) AS debit, SUM(credit) AS credit, (SUM(debit) - SUM(credit)) AS balance" +\
+                  " FROM " + tables + " WHERE account_id IN %s "\
+        
+        if partner_id:
+            request = request + """ AND account_move_line.partner_id = %s"""
+            params = (tuple(accounts.ids), partner_id) + tuple(where_params)
+        else:
+            params = (tuple(accounts.ids),) + tuple(where_params)     
+        request =  request + filters + ''' GROUP BY account_id '''
+        #params = (tuple(accounts.ids),) + tuple(where_params)
+        self.env.cr.execute(request, params)
+        for row in self.env.cr.dictfetchall():
+            account_result[row.pop('id')] = row
+
+        account_res = []
+        for account in accounts:
+            res = dict((fn, 0.0) for fn in ['credit', 'debit', 'balance'])
+            currency = account.currency_id and account.currency_id or account.company_id.currency_id
+            res['code'] = account.code
+            res['name'] = account.name
+            if account.id in account_result:
+                res['debit'] = account_result[account.id].get('debit')
+                res['credit'] = account_result[account.id].get('credit')
+                res['balance'] = account_result[account.id].get('balance')
+            if display_account == 'all':
+                account_res.append(res)
+            if display_account == 'not_zero' and not currency.is_zero(res['balance']):
+                account_res.append(res)
+            if display_account == 'movement' and (not currency.is_zero(res['debit']) or not currency.is_zero(res['credit'])):
+                account_res.append(res)
+        return account_res
+
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        if not data.get('form') or not self.env.context.get('active_model'):
+            raise UserError(_("Form content is missing, this report cannot be printed."))
+
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        display_account = data['form'].get('display_account')
+        partner_id = data['partner_id']
+        accounts = docs if self.model == 'account.account' else self.env['account.account'].search([])
+        account_res = self.with_context(data['form'].get('used_context'))._get_accounts(accounts, display_account, partner_id)
+        return {
+            'doc_ids': self.ids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'Accounts': account_res,
+        }
 
 
         
