@@ -9,6 +9,10 @@
 	border-radius: 1000px;
 }
 
+.rfq-screen-content{
+	max-width: 1028px !important;
+}
+
 .order-cnt {
     top: 67% !important;
     left: 53px !important;   

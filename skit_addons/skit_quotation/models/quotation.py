@@ -92,6 +92,7 @@ class Skit_saleorder(models.Model):
                 elif(order.invoice_status == 'invoiced'):
                     invoice_status = 'Fully Invoiced'
             isno = isno + 1
+            unpaid_amount = round(order.invoice_ids.residual, 2)
             order_details.append({'name': order.name,
                                   'order_id': order.id,
                                   'sno': isno,
@@ -101,6 +102,7 @@ class Skit_saleorder(models.Model):
                                   'status': status,
                                   'invoice_id': order.invoice_ids.id,
                                   'invoice_status': invoice_status,
+                                  'amount_due': unpaid_amount if unpaid_amount > 0 else '',
                                   })
         return {'order_details': order_details}
 

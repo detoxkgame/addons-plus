@@ -558,6 +558,7 @@ odoo.define('skit_quotation.screen', function (require) {
 					    		}
 					     },
 					     {field: 'amount_total',class: 'amount_total',title: 'Amount',sortable: true,},
+					     {field: 'amount_due',class: 'amount_due',title: 'Amount Due',sortable: true,},
 					     {field: 'status',class: 'status',title: 'Status',sortable: true,},
 					     {field: 'invoice_id',class: 'invoice_id',title: 'Invoice ID',sortable: true,},
 					     {field: 'status',title: 'Shipment',align: 'right', 
