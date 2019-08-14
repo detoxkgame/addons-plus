@@ -1,0 +1,108 @@
+.oe-visible{
+	visibility: hidden !important;
+}
+
+.round-btn {
+    float: right !important;
+	border-radius: 13px !important;
+	background: #73AD21 !important;
+	color: white !important;
+	font-size: 20px !important;
+	margin-left: 10px !important;
+	min-width: 27px !important;
+	line-height: 27px !important;
+	height: 28px !important;
+}
+
+.pos-lines-header{
+	border: 1px solid black;
+	margin-top: 20px !important;
+	border-bottom: 0px !important;
+}
+
+.pos-lines-header-li{
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+	padding-left: 15px !important;
+	padding-right: 15px !important;
+}
+
+.pos-lines{
+	border: 1px solid black;
+}
+
+.pos-prod-name{
+	width: 60% !important;
+}
+.pos-prod-name65{
+	width: 55% !important;
+}
+
+.pos-kit-order{
+	margin-left: 15%;
+	margin-right: 15%;
+	max-width: 100% !important;
+}
+
+.pos-table-no{
+	width: 30% !important;
+	display: inline-block;
+}
+.pos-table-time{
+	width: 50% !important;
+	display: inline-block;
+}
+.pos-kit-status-div{
+	width:25%; 
+	float:right;
+}
+.pos-kit-status100{
+	width: 100%;
+	display: inline-block;
+}
+
+.pos-kit-forward{
+	float:right;
+	width: 20%;
+	padding: 0;
+	margin: 0 !important;
+	display: inline-block;
+}
+.pos-kit-status-name{
+	margin-left: 10px; 
+	font-weight: bold; 
+	float: right;
+	margin-top: 4px !important;
+	width: 40%;
+	padding: 0;
+	margin: 0;
+	display: inline-block;
+	text-align: center;
+}
+.pos-status-name{
+	margin-left: 10px;
+	font-weight: bold; 
+	float: right;
+}
+.pos-kit-reverse{
+	float:right;
+	width: 20% !important;
+	padding: 0;
+	margin: 0 !important;
+	display: inline-block;
+}
+.pos-kit-price{
+	width:15%;
+}
+.pos-width100{
+	width:100% !important;
+}
+.red-color{
+	color: #e74c3c;
+}
+.blue-color{
+	color: #3498db;
+}
+.green-color{
+	color: #2ecc71 ;
+}

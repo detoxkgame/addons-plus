@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    
+    <!-- Extend the OrderWidget for hide some widget in Kitchen View -->
+    <t t-extend="OrderWidget">
+    	<t t-jquery=".order" t-operation="replace">
+    		<t t-if='widget.pos.config.is_kitchen'>
+    			<div class="order pos-kit-order" >
+                    <t t-if="orderlines.length === 0" >
+                        <div class='order-empty'>
+                            <i class='fa fa-shopping-cart' role="img" aria-label="Shopping cart" title="Shopping cart"/>
+                            <h1>Your shopping cart is empty</h1>
+                        </div>
+                    </t>
+                    <t t-if="orderlines.length > 0">
+                    	<t t-foreach="widget.pos.get_order_list()" t-as="order">
+                    		<ul class="pos-lines-header">
+                    			<li class="pos-lines-header-li">
+                    				<span class="pos-table-no">Table No : <t t-esc="order.floor.name"/> ( <t t-esc="order.table.name"/> )</span>
+                    				<span class="pos-table-time">Time : <t t-esc="moment(order.creation_date).format('hh:mm')"/> </span>
+                    				<span>Order No :<t t-esc="order.sequence_number" /></span>
+                    			</li>
+                    		</ul>
+                        	<ul t-attf-class="pos-lines orderlines#{order.uid}" t-att-data-uid="order.uid"></ul>
+                        </t>
+                        <div class="summary clearfix oe_hidden">
+                            <div class="line">
+                                <div class='entry total'>
+                                    <span class="badge">Total: </span> <span class="value">0.00 €</span>
+                                    <div class='subentry'>Taxes: <span class="value">0.00€</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+    		</t>
+    		<t t-else="">
+    			<div class="order">
+                    <t t-if="orderlines.length === 0" >
+                        <div class='order-empty'>
+                            <i class='fa fa-shopping-cart' role="img" aria-label="Shopping cart" title="Shopping cart"/>
+                            <h1>Your shopping cart is empty</h1>
+                        </div>
+                    </t>
+                    <t t-if="orderlines.length > 0">
+                        <ul class="orderlines"></ul>
+                        <div class="summary clearfix">
+                            <div class="line">
+                                <div class='entry total'>
+                                    <span class="badge">Total: </span> <span class="value">0.00 €</span>
+                                    <div class='subentry'>Taxes: <span class="value">0.00€</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+    		</t>
+    	</t>
+    </t>
+    
+    <!-- Extend the Orderline for add the kitchen status button in Kitchen View -->
+    <t t-extend="Orderline">
+	    <t t-jquery=".product-name" t-operation="replace">
+	    	<t t-if='widget.pos.config.is_kitchen'>
+		    	<span class="product-name pos-prod-name" >
+	                <t t-esc="line.get_product().display_name"/>
+	                <t t-if="line.get_product().tracking!=='none'">
+	                    <i class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_green" t-if="line.has_valid_product_lot()"
+	                       aria-label="Valid product lot" role="img" title="Valid product lot"/>
+	                    <i class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_red" t-if="not(line.has_valid_product_lot())"
+	                       aria-label="Invalid product lot" role="img" title="Invalid product lot"/>
+	                </t>
+	            </span>
+            </t>
+            <t t-else="">
+            	<span class="product-name pos-prod-name65" >
+	                <t t-esc="line.get_product().display_name"/>
+	                <t t-if="line.get_product().tracking!=='none'">
+	                    <i class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_green" t-if="line.has_valid_product_lot()"
+	                       aria-label="Valid product lot" role="img" title="Valid product lot"/>
+	                    <i class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_red" t-if="not(line.has_valid_product_lot())"
+	                       aria-label="Invalid product lot" role="img" title="Invalid product lot"/>
+	                </t>
+	            </span>
+            </t>
+	    </t>
+        <t t-jquery=".price" t-operation="replace">
+        	<t t-if='widget.pos.config.is_kitchen'>
+	        	<div class="pos-kit-status-div">
+	        		<div class="pos-kit-status100">
+			        	<span class="order-button square forward_view_btn round-btn pos-kit-forward">
+			                <i class='fa fa-angle-right' role="img" aria-label="Delete order" title="Delete order"/>
+			            </span>
+			            
+			            <span class="kitchen_status pos-kit-status-name" >
+			                <t t-esc="line.get_kitchen_state()"/>
+			            </span>
+			            
+		            	<span class="order-button square reverse_view_btn round-btn pos-kit-reverse">
+			                <i class='fa fa-angle-left' role="img" aria-label="New order" title="New order"/>
+			            </span>
+		            </div>
+	            </div>
+	            <span class="price pos-kit-price" >
+	                <t t-esc="widget.format_currency(line.get_display_price())"/>
+	            </span>
+            </t>
+            <t t-else="">
+            	<t t-if="line.get_kitchen_state() == 'cooking'">
+            		<span class="kitchen_status pos-status-name blue-color">
+				    	<t t-esc="line.get_kitchen_state()"/>
+				    </span>
+            	</t>
+            	<t t-elif="line.get_kitchen_state() == 'delivered'">
+            		<span class="kitchen_status pos-status-name green-color">
+				    	<t t-esc="line.get_kitchen_state()"/>
+				    </span>
+            	</t>
+            	<t t-else="">
+            		<span class="kitchen_status pos-status-name red-color">
+			    	<t t-esc="line.get_kitchen_state()"/>
+			    </span>
+            	</t>
+            	
+            	<span class="price" >
+	                <t t-esc="widget.format_currency(line.get_display_price())"/>
+	            </span>
+            </t>
+            
+        </t>
+    </t>
+    
+    <!-- Extend the ProductScreenWidget for hide the NumberPad widget in Kitchen View -->
+    <t t-extend="ProductScreenWidget">
+		<t t-jquery=".leftpane" t-operation="replace">
+			<t t-if='widget.pos.config.is_kitchen'>
+				<div class="leftpane pos-width100">
+	                <div class='window'>
+	                    <div class='subwindow'>
+	                        <div class='subwindow-container'>
+	                            <div class='subwindow-container-fix'>
+	                                <div class="placeholder-OrderWidget"></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	
+	                    <div class='subwindow collapsed'>
+	                        <div class='subwindow-container oe_hidden'>
+	                            <div class='subwindow-container-fix pads'>
+	                                <div class="control-buttons oe_hidden"></div>
+	                                <div class="placeholder-ActionpadWidget"></div>
+	                                <div class="placeholder-NumpadWidget"></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	
+	                </div>
+            </div>
+			</t>
+			<t t-else="">
+				<div class="leftpane">
+	                <div class='window'>
+	                    <div class='subwindow'>
+	                        <div class='subwindow-container'>
+	                            <div class='subwindow-container-fix'>
+	                                <div class="placeholder-OrderWidget"></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	
+	                    <div class='subwindow collapsed'>
+	                        <div class='subwindow-container'>
+	                            <div class='subwindow-container-fix pads'>
+	                                <div class="control-buttons oe_hidden"></div>
+	                                <div class="placeholder-ActionpadWidget"></div>
+	                                <div class="placeholder-NumpadWidget"></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	
+	                </div>
+	            </div>
+			</t>
+			
+		</t>
+		<t t-jquery=".rightpane" t-operation="replace">
+			<t t-if='widget.pos.config.is_kitchen'>
+				<div class="rightpane oe_hidden">
+	                <table class="layout-table">
+	
+	                    <tr class="header-row">
+	                        <td class="header-cell">
+	                            <span class="placeholder-ProductCategoriesWidget" />
+	                        </td>
+	                    </tr>
+	
+	                    <tr class="content-row">
+	                        <td class="content-cell">
+	                            <div class="content-container">
+	                                <span class="placeholder-ProductListWidget" />
+	                            </div>
+	                        </td>
+	                    </tr>
+	
+	                </table>
+	            </div>
+			</t>
+			<t t-else="">
+				<div class="rightpane">
+	                <table class="layout-table">
+	
+	                    <tr class="header-row">
+	                        <td class="header-cell">
+	                            <span class="placeholder-ProductCategoriesWidget" />
+	                        </td>
+	                    </tr>
+	
+	                    <tr class="content-row">
+	                        <td class="content-cell">
+	                            <div class="content-container">
+	                                <span class="placeholder-ProductListWidget" />
+	                            </div>
+	                        </td>
+	                    </tr>
+	
+	                </table>
+	            </div>
+			</t>
+			
+		</t>
+	</t> 
+	
+	<!-- Extend the OrderSelectorWidget for hide the new order and delete order button in Kitchen View -->
+	<t t-extend="OrderSelectorWidget">
+		<t t-jquery=".order-selector" t-operation="replace">
+			<t t-if='widget.pos.config.is_kitchen'>
+				<div class="order-selector oe-visible">
+		            <span class="orders touch-scrollable">
+		
+		                <t t-foreach="widget.pos.get_order_list()" t-as="order">
+		                    <t t-if='order === widget.pos.get_order()'>
+		                        <span class="order-button select-order selected" t-att-data-uid="order.uid">
+		                            <span class='order-sequence'>
+		                                <t t-esc='order.sequence_number' />
+		                            </span>
+		                            <t t-esc="moment(order.creation_date).format('hh:mm')"/>
+		                        </span>
+		                    </t>
+		                    <t t-if='order !== widget.pos.get_order()'>
+		                        <span class="order-button select-order" t-att-data-uid="order.uid">
+		                            <span class='order-sequence'>
+		                                <t t-esc='order.sequence_number' />
+		                            </span>
+		                        </span>
+		                    </t>
+		                </t>
+		            </span>
+		            <span class="order-button square neworder-button">
+		                <i class='fa fa-plus' role="img" aria-label="New order" title="New order"/>
+		            </span>
+		            <span class="order-button square deleteorder-button">
+		                <i class='fa fa-minus' role="img" aria-label="Delete order" title="Delete order"/>
+		            </span>
+		        </div>
+			</t>
+			<t t-else="">
+				<div class="order-selector">
+		            <span class="orders touch-scrollable">
+		
+		                <t t-foreach="widget.pos.get_order_list()" t-as="order">
+		                    <t t-if='order === widget.pos.get_order()'>
+		                        <span class="order-button select-order selected" t-att-data-uid="order.uid">
+		                            <span class='order-sequence'>
+		                                <t t-esc='order.sequence_number' />
+		                            </span>
+		                            <t t-esc="moment(order.creation_date).format('hh:mm')"/>
+		                        </span>
+		                    </t>
+		                    <t t-if='order !== widget.pos.get_order()'>
+		                        <span class="order-button select-order" t-att-data-uid="order.uid">
+		                            <span class='order-sequence'>
+		                                <t t-esc='order.sequence_number' />
+		                            </span>
+		                        </span>
+		                    </t>
+		                </t>
+		            </span>
+		            <span class="order-button square neworder-button">
+		                <i class='fa fa-plus' role="img" aria-label="New order" title="New order"/>
+		            </span>
+		            <span class="order-button square deleteorder-button">
+		                <i class='fa fa-minus' role="img" aria-label="Delete order" title="Delete order"/>
+		            </span>
+		        </div>
+			</t>
+		</t>
+	</t>
+    
+</templates>
