@@ -5,7 +5,7 @@
 .round-btn {
     float: right !important;
 	border-radius: 13px !important;
-	background: #73AD21 !important;
+	/* background: #73AD21 !important; */
 	color: white !important;
 	font-size: 20px !important;
 	margin-left: 10px !important;
@@ -25,10 +25,15 @@
 	padding-bottom: 5px !important;
 	padding-left: 15px !important;
 	padding-right: 15px !important;
+	background: #a569bd !important;
+	border-radius: 3px;
 }
 
 .pos-lines{
-	border: 1px solid black;
+	/* border: 1px solid black; */
+	margin-top: 20px !important;
+	box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
+	border-radius: 30px;
 }
 
 .pos-prod-name{
@@ -47,10 +52,15 @@
 .pos-table-no{
 	width: 30% !important;
 	display: inline-block;
+	color: white !important;
 }
 .pos-table-time{
 	width: 50% !important;
 	display: inline-block;
+	color: white !important;
+}
+.pos-order-name{
+	color: white !important;
 }
 .pos-kit-status-div{
 	width:25%; 
@@ -98,11 +108,39 @@
 	width:100% !important;
 }
 .red-color{
-	color: #e74c3c;
+	color: #dc7633 !important;
 }
 .blue-color{
-	color: #3498db;
+	color: #3498db !important;
 }
 .green-color{
-	color: #2ecc71 ;
+	color: #2ecc71 !important;
 }
+.red-bgcolor{
+	background: #dc7633 !important;
+}
+.blue-bgcolor{
+	background: #3498db !important;
+}
+.green-bgcolor{
+	background: #2ecc71 !important;
+}
+.pos-ms-name{
+	text-align: left !important;
+	font-size: 78% !important;
+}
+.pos-note{
+	width: 60% !important;
+	color: #2980b9 !important;
+}
+.pos-lines .orderline:nth-child(odd) { 
+	 background: #d1f2eb; 
+     /* font-size: 36px; 
+     color:white;  */
+} 
+.pos-lines .orderline:nth-child(even) { 
+     background: #d6eaf8; 
+     /* font-size: 36px; 
+     color:yellow; */ 
+} 
+       

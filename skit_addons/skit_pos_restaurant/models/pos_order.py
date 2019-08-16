@@ -8,6 +8,6 @@ class PosOrderLine(models.Model):
     _inherit = 'pos.order.line'
 
     kitchen_state = fields.Selection(
-        [('start', 'Start'), ('cooking', 'Cooking'),
+        [('queue', 'In Queue'), ('cooking', 'Cooking'),
          ('delivered', 'Delivered'), ('cancel', 'Cancelled')],
         'Kitchen Status', default='start')
