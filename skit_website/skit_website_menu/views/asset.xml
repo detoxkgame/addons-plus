@@ -6,6 +6,10 @@
 			<link href="/skit_website_menu/static/src/scss/contact.scss" rel="stylesheet" type="text/less" />
 			<link href="/skit_website_menu/static/src/scss/topmenu.scss" rel="stylesheet" type="text/less" />
 			<link href="/skit_website_menu/static/src/scss/float_icon.scss" rel="stylesheet" type="text/less" />
+			
+			<link href="/skit_website_menu/static/src/css/contact.css" rel="stylesheet" type="text/css"></link>
+			<link href="/skit_website_menu/static/src/css/about.css" rel="stylesheet" type="text/css"></link>
+			<link href="/skit_website_menu/static/src/css/careers.css" rel="stylesheet" type="text/css"></link>
 		</xpath>
 		<xpath expr="//script[last()]" position="after">
 			<script type="text/javascript" src="/skit_website_menu/static/src/js/demo_example.js"></script>

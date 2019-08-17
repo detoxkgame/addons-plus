@@ -277,3 +277,116 @@ p {
 		transform: rotate(360deg) scale(1);
 	}
 }
+
+
+
+
+
+
+
+
+/* ----------------------------Media Query---------------------------- */
+
+
+
+
+/* ----------------------------320px to 425px---------------------------- */
+/*
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 425px) {
+  
+.slide5-title {
+		font-size: calc((0.7em + 2vmin) + (0.7em + 2vmax));
+		
+}
+
+.sks-sec2-contact-div2 {
+	display: none;
+}
+
+.sks-sec2-contact-div3 {
+	width: 100% !important;
+}
+  
+.sks-sec2-contact-h2 {
+    font-size: 1.5em;
+}
+
+.sks-sec2-contact-p1 {
+	font-size: 10px;
+}
+
+.sks-career-form-label {
+	font-size: 13px;
+}
+
+input.sks-career-form {
+	width: 13em !important;
+	font-size: 13px;
+}
+
+.sks-form-style-4 {
+	width: 11.8em !important;
+	font-size: 13px;
+}
+*/
+/*Buttons*/
+/*
+.sks-form-upload-btn , .sks-form-submit-btn {
+    width: 50%;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+*/
+/*Contact Form*/
+/*
+.sks-sec2-contact-inside1 {
+	display: none;
+}
+.sks-sec2-contact-inside2 {
+	width: 100% !important; 
+	margin: 2%;
+}
+.sks-sec2-contact-inside-div1 {
+	width: 100% !important;
+}
+
+.sks_float_form_content , .sks_contact_form {
+	width: 100%;
+}
+
+.phone-container , .phone-input {
+	font-size: 15px !important;
+}
+
+}
+*/
+
+
+/* ----------------------------320px to 768px---------------------------- */
+/*
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 768px) {
+  
+.slide5-title {
+		font-size: calc((1em + 2vmin) + (1em + 2vmax));
+}
+
+}
+*/
+
+
+/* ----------------------------769px to 1600px---------------------------- */
+/*
+@media only screen 
+  and (min-device-width: 769px) 
+  and (max-device-width: 1600px) {
+   
+	.slide5-title {
+		font-size: calc((2em + 4vmin) + (2em + 4vmax));
+	}
+
+}
+*/

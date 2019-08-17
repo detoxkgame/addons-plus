@@ -4,19 +4,22 @@
 			<t t-set="title">Contact</t>
 			<div class="oe_structure">
 
-				<section class="sks_sectionContact section2"
-					style="height: 60em;">
-					<div class="container sks_container">
+				<section class="sks_sectionProducts " style="height: 60em;">
+					<div class="container">
 						<div class="row">
-							<div class="sks-slide sks-sec1-contact-slide-div"
-								data-background="#fff">
-								<div class="inside sks-contact-inside">
-									<p class="o_default_snippet_text sks-sec1-contact-p">Contact</p>
+							<div class="sks-slide slide-five" data-background="#ffffff">
+								<div class="inside title_fix_cntr">
+									<h1>
+										<b>
+											<font style="color: rgba(230, 230, 230);" class="slide5-title">Contact</font>
+										</b>
+									</h1>
 								</div>
 							</div>
 						</div>
 					</div>
 				</section>
+				
 				<section style="height: 60em;">
 					<div class="container sks_container">
 						<div class="row">

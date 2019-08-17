@@ -4,14 +4,16 @@
 			<t t-set="title">Careers</t>
 			<div class="oe_structure">
 
-				<section class="sks_sectionContact section2"
-					style="height: 50em;">
+				<section class="sks_sectionProducts " style="height: 60em;">
 					<div class="container">
 						<div class="row">
-							<div class="sks-slide sks-sec1-contact-slide-div"
-								data-background="#fff">
-								<div class="inside sks-contact-inside">
-									<p class="o_default_snippet_text sks-sec1-contact-p">Careers</p>
+							<div class="sks-slide slide-five" data-background="#ffffff">
+								<div class="inside title_fix_cntr">
+									<h1>
+										<b>
+											<font style="color: rgba(230, 230, 230);" class="slide5-title">Career</font>
+										</b>
+									</h1>
 								</div>
 							</div>
 						</div>
@@ -33,9 +35,9 @@
 										<div class="sks-sec2-contact-div3">
 											<div class="text-container sks-sec2-contact-div4">
 												<div class="title-container">
-													<h2 class="sks-sec2-contact-h2">
+													<div class="sks-sec2-contact-h2">
 														SEND YOUR RESUME
-													</h2>
+													</div>
 												</div>
 												<div class="p1-container">
 													<p class="sks-sec2-contact-p1">
@@ -55,30 +57,36 @@
 															<div class="row it">
 																<div id="one">
 																	<div class="sks-carieer-form-flds">
-																		<span class="sks-career-form-label">Hey, my name is</span>
-																		<input style="width: 20em;"
-																			class="sks-career-form sks-career-form-name" t-attf-ismandatorty="true"
-																			type="text" name="name" placeholder="full name" />
-																		<br></br>
+																		<div class="mohanraj" style="width: 100%;">
+																			<span class="sks-career-form-label">Hey, my name is</span>
+																			<input style="width: 20em;"
+																				class="sks-career-form sks-career-form-name" t-attf-ismandatorty="true"
+																				type="text" name="name" placeholder="full name" />
+																		</div>
+																		<div class="mohanraj" style="width: 100%;">
 																		<span class="sks-career-form-label">My Qualification is</span>
 																		<input style="width: 19.3em;"
 																			class="sks-career-form sks-career-form-qualification" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="qualification" />
-																		<br></br>
+																		</div>
+																		<div class="mohanraj" style="width: 100%;">
 																		<span class="sks-career-form-label">You can call me</span>
 																		<input style="width: 20.3em;"
 																			class="sks-career-form sks-career-form-phone" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="phone number" />
-																		<br></br>
+																		</div>
+																		<div class="mohanraj" style="width: 100%;">
 																		<span class="sks-career-form-label">You can reach me at</span>
 																		<input style="width: 18.1em;"
 																			class="sks-career-form sks-career-form-email" t-attf-ismandatorty="true"
 																			type="text" name="name" placeholder="email" />
-																		<br></br>
+																		</div>
+																		<div class="mohanraj" style="width: 100%;">
 																		<span class="sks-career-form-label">Some more information</span>
 	                                                                    <label for="field4">
 	                                                                        <textarea style="width: 16.8em;" class="sks-career-form sks-career-form-about sks-form-style-4" name="field4" placeholder="about me" onkeyup="adjust_textarea(this)" required="true"/>
 	                                                                    </label>
+	                                                                    </div>
 																	</div>
 																	<div id="uploader">
 																		<div class="row uploadDoc">

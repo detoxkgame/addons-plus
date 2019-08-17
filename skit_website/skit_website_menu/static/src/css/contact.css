@@ -1,289 +1,138 @@
-#sks-contact-feedback-page {
-	text-align: center;
+/* ----------MEDIA QUERY---------- */
+
+/* ---------- MOBILE---------- */
+@media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+	
+	.title_fix_cntr {
+		top: 40%;
+	    position: sticky;
+	}
+	
+	.sks-sec2-contact-inside1 {
+		display: none !important;
+	}
+	
+	.sks-sec2-contact-inside2 {
+		width: 100% !important;
+	}
+
 }
 
-#sks-contact-text-feedback {
-	width: 80%;
-	padding-left: 10%;
-	padding-right: 10%;
-	background-color: white;
-	text-align: center;
-}
-
-#sks-contact-form-main {
-	width: 100%;
-	float: left;
-	padding-top: 30px;
-}
-
-#sks-contact-form-div {
-	background-color: #3c3c3c;
-	padding-left: 35px;
-	padding-right: 35px;
-	padding-top: 35px;
-	padding-bottom: 50px;
-	width: 30%;
-	float: left;
-	right: 50%;
-	position: absolute;
-	margin-right: 10%;
-}
-
-.sks-contact-feedback-input {
-	opacity: 0.9;
-	color: #0493bd;
-	font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-	font-weight: 400;
-	font-size: 18px;
-	border-radius: 0;
-	line-height: 22px;
-	background-color: #fbfbfb;
-	border: 3px solid #fbfbfb;
-	padding: 13px 13px 13px 13px;
-	margin-bottom: 10px;
-	width: 100%;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-.sks-contact-feedback-input:focus {
-	background: #fff;
-	box-shadow: 0;
-	border: 3px solid #3498db;
-	color: #3498db;
-	outline: none;
-	padding: 13px 13px 13px 54px;
-}
-
-.sks-contact-focused {
-	color: #30aed6;
-	border: #30aed6 solid 3px;
-}
-
-#sks-contact-name {
-	background-image: url(http://rexkirby.com/kirbyandson/images/name.svg);
-	background-size: 30px 30px;
-	background-position: 11px 8px;
-	background-repeat: no-repeat;
-}
-
-#sks-contact-name:focus {
-	background-image: url(http://rexkirby.com/kirbyandson/images/name.svg);
-	background-size: 30px 30px;
-	background-position: 8px 5px;
-	background-position: 11px 8px;
-	background-repeat: no-repeat;
-}
-
-#sks-contact-email {
-	background-image: url(http://rexkirby.com/kirbyandson/images/email.svg);
-	background-size: 30px 30px;
-	background-position: 11px 8px;
-	background-repeat: no-repeat;
-}
-
-#sks-contact-email:focus {
-	background-image: url(http://rexkirby.com/kirbyandson/images/email.svg);
-	background-size: 30px 30px;
-	background-position: 11px 8px;
-	background-repeat: no-repeat;
-}
-
-#sks-contact-comment {
-	background-image:
-		url(http://rexkirby.com/kirbyandson/images/comment.svg);
-	background-size: 30px 30px;
-	background-position: 11px 8px;
-	background-repeat: no-repeat;
-}
-
-textarea {
-	width: 100%;
-	height: 150px;
-	line-height: 150%;
-}
-
-input:hover, textarea:hover, input:focus, textarea:focus {
-	background-color: white;
-}
-
-#sks-contact-button-blue {
-	font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-	float: left;
-	width: 100%;
-	border: #fbfbfb solid 4px;
-	cursor: pointer;
-	background-color: #3498db;
-	color: white;
-	font-size: 24px;
-	padding-top: 22px;
-	padding-bottom: 22px;
-	-webkit-transition: all 0.3s;
-	-moz-transition: all 0.3s;
-	transition: all 0.3s;
-}
-
-#sks-contact-button-blue:hover {
-	background-color: rgba(0, 0, 0, 0);
-	color: #0493bd;
-}
-
-.submit:hover {
-	color: #3498db;
-}
-
-.sks-contact-ease {
-	border-top: 3px #3c3c3c solid;
-	width: 0px;
-	height: 76px;
-	background-color: #fbfbfb;
-	-webkit-transition: .3s ease;
-	-moz-transition: .3s ease;
-	-o-transition: .3s ease;
-	-ms-transition: .3s ease;
-	transition: .3s ease;
-}
-
-.sks-contact-submit:hover .ease {
-	width: 100%;
-	background-color: white;
-}
-
-@media only screen and (max-width: 580px) {
-	#sks-contact-form-div {
-		left: 3%;
-		margin-right: 3%;
-		width: 88%;
-		margin-left: 0;
-		padding-left: 3%;
-		padding-right: 3%;
+/* Mobile View - Small */
+@media only screen and (max-width:320px){
+	.sks-sec2-contact-inside-div2 {
+		width:100%;
+	}
+	.sks-sec2-contact-inside-div2 {
+		width:100%;
+	}
+	.sks_float_form {
+		width: 100%;
+	}
+	.phone-container , .phone-input {
+		font-size: 15px;
+	}
+	.sks_contact_name {
+		width: 9.6em !important;
+	}
+	.sks_contact_company {
+		width: 11.3em !important;
+	}
+	.sks_contact_email {
+		width: 7.7em  !important;	
+	}
+	.sks_contact_phone {
+		width: 7.7em  !important;
+	}
+	.sks_contact_project {
+		width: 6.3em  !important;
 	}
 }
 
-.phone-container {
-	font-size: 32px;
-	font-weight: bolder;
-	line-height: 2.5em;
-	color: #fff;
+
+/* Mobile View - Medium */
+@media only screen and (min-width:321px) and (max-width:375px){
+	.sks-sec2-contact-inside-div2 {
+		width:100%;
+	}
+	.sks-sec2-contact-inside-div2 {
+		width:100%;
+	}
+	.sks_float_form {
+		width: 100%;
+	}
+	.phone-container , .phone-input {
+		font-size: 15px;
+	}
+	.sks_contact_name {
+		width: 13em !important;
+	}
+	.sks_contact_company {
+		width: 14.7em !important;
+	}
+	.sks_contact_email {
+		width: 11.1em  !important;	
+	}
+	.sks_contact_phone {
+		width: 11.1em  !important;
+	}
+	.sks_contact_project {
+		width: 9.7em  !important;
+	}
 }
 
-input {
-	border: none;
-	border-bottom: 1px solid;
-	border-color: inherit;
-	color: inherit;
-	font-size: 22px;
-	width: inherit;
-	background: inherit;
+/* Mobile View - Large */
+@media only screen and (min-width:376px) and (max-width:425px){
+	.sks-sec2-contact-inside-div2 {
+		width:100%;
+	}
+	.sks-sec2-contact-inside-div2 {
+		width:100%;
+	}
+	.sks_float_form {
+		width: 100%;
+	}
+	.phone-container , .phone-input {
+		font-size: 15px;
+	}
 }
 
-input[type=text] {
-	padding: 20px 20px;
-	height: 1.2em;
+/* Tablet View */
+@media only screen and (min-width:426px) and (max-width:768px){
+
 }
 
-.phone-input {
-	border: none;
-	border-bottom: 1px solid #c5c5c5;
-	border-color: #c5c5c5;
-	color: inherit;
-	font-size: 32px;
-	width: inherit;
-	background: inherit;
+
+/* Laptop View */
+@media only screen and (min-width:769px) and (max-width:1024px){
+	.p4-container {
+		width: 150%;
+	}
+	.sks_float_form_content {
+		width: 100%;
+	}
+	.sks_float_form {
+		width: 100%;
+	}
+	.sks_contact_name {
+		width: 13em !important;
+	}
+	.sks_contact_company {
+		width: 14.7em !important;
+	}
+	.sks_contact_email {
+		width: 11.1em  !important;	
+	}
+	.sks_contact_phone {
+		width: 11.1em  !important;
+	}
+	.sks_contact_project {
+		width: 9.7em  !important;
+	}
 }
 
-.phone-input:focus {
-	border: none;
-	border-bottom: 1px solid #c5c5c5;
-	border-color: #c5c5c5;
-	color: inherit;
-	font-size: 32px;
-	width: inherit;
-	background: inherit;
-}
 
-.phone-input:hover {
-	border: none;
-	border-bottom: 1px solid #c5c5c5;
-	border-color: #c5c5c5;
-	color: inherit;
-	font-size: 32px;
-	width: inherit;
-	background: inherit;
-}
+/* Laptop View - Large*/
+@media only screen and (min-width:1025px) and (max-width:1440px){
 
-.sks_contact_info {
-	background-color: transparent;
-	color: #fff;
-	padding: 9px 27px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 20px;
-	font-weight: inherit;
-	margin: 4px 2px;
-	cursor: pointer;
-	border: 1px solid #fff;
-	border-radius: 5%;
-}
-
-.sks_contact_info:hover {
-	background-color: #fff;
-	border: 1px solid fff;
-	color: #007bff;
-}
-
-.sks_container {
-	max-width: 100%;
-}
-
-.sks-sec1-contact-slide-div {
-	height: 789px;
-	width: 100%;
-	line-height: 1.5;
-}
-
-.sks-sec1-contact-p {
-	text-align: center;
-	font-size: 20em;
-	font-weight: 900;
-	color: rgba(0, 0, 0, 0.21);
-}
-
-.sks-sec2-contact-slide-div {
-	width: 100%;
-}
-
-.sks-sec2-contact-inside1 {
-	margin-right: 5%;
-	width: 40%;
-	float: right;
-}
-
-.sks-sec1-contact-div {
-	height: 40em;
-	width: 100%;
-	background-image:
-		url(https://cdn.dribbble.com/users/1418263/screenshots/3916990/aayi-mandabam.gif);
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-}
-
-.sks-sec2-contact-inside2 {
-	margin-left: 5%;
-	width: 50%;
-	float: left;
-}
-
-.sks-sec2-contact-inside-div1 {
-	height: 20em;
-	width: 50%;
-}
-
-.sks-sec2-contact-inside-div2 {
-	float: left;
-	color: #fff;
 }
