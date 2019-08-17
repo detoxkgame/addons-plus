@@ -65,13 +65,11 @@ class Skit_saleorder(models.Model):
             if order.invoice_ids.state:
                 if(order.invoice_ids.state == 'draft'):
                     status = 'Draft'
-                elif(order.invoice_ids.state == 'sale'):
-                    status = 'Sale'
                 elif(order.invoice_ids.state == 'open'):
                     status = 'Open'
                 elif(order.invoice_ids.state == 'paid'):
                     status = 'Paid'
-                else:
+                elif(order.invoice_ids.state == 'cancel'):
                     status = 'Cancelled'
             else:
                 if(order.state == 'draft'):
@@ -82,7 +80,7 @@ class Skit_saleorder(models.Model):
                     status = 'Sale Order'
                 elif(order.state == 'done'):
                     status = 'Locked'
-                else:
+                elif(order.state == 'cancel'):
                     status = 'Cancelled'
             if(order.invoice_status):
                 if(order.invoice_status == 'no'):

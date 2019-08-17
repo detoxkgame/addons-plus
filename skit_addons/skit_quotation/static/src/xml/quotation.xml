@@ -405,7 +405,7 @@
                     <div class="button cancel">
                         Cancel
                     </div>
-                    <span class="error">Please fill in the particulars in the mandatory fields.</span>
+                    <span style="display:none;color:red;" class="error">Please fill in the particulars in the mandatory fields.</span>
                 </div>
             </div>
         </div>
