@@ -25,6 +25,7 @@
         "views/float_icon.xml",
         "views/snippets_template.xml",
         "views/sitemap_templates.xml",
+        "views/s_slider.xml",
     ],
     "auto_install": False,
     "installable": True,

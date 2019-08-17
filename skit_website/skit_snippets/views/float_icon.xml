@@ -49,7 +49,7 @@
 												type="text" placeholder="email" />
 									</div>
 									<div class="contact_field_div">		
-											<span class="contact_label" style="visibility: hidden;">You can reach me at</span>
+											<span class="contact_label cntct_fld_hdn" style="visibility: hidden;">You can reach me at</span>
 											<input class="sks_float_input phone" t-attf-ismandatorty="true"
 											type="text" placeholder="phone no" />
 									</div>
@@ -83,7 +83,7 @@
 												t-attf-ismandatorty="true" type="text" placeholder="email" />
 									</div>
 									<div class="contact_field_div">
-											<span class="contact_label" style="visibility: hidden;">You can reach me at</span>
+											<span class="contact_label cntct_fld_hdn" style="visibility: hidden;">You can reach me at</span>
 											<input class="sks_float_input hire_phone" t-attf-ismandatorty="true"
 											type="text" placeholder="phone no" />
 									</div>
@@ -123,7 +123,7 @@
 												t-attf-ismandatorty="true" type="text" placeholder="email" />
 									</div>
 									<div class="contact_field_div">
-										<span class="contact_label" style="visibility: hidden;">You can reach me at</span>
+										<span class="contact_label cntct_fld_hdn" style="visibility: hidden;">You can reach me at</span>
 										<input class="sks_float_input develop_phone"
 											t-attf-ismandatorty="true" type="text" placeholder="phone no" />
 									</div>

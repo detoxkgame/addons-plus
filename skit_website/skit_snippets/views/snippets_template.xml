@@ -8,13 +8,20 @@
 				<link href="/skit_snippets/static/src/css/work_scroll.css" rel="stylesheet" type="text/css" /> 
 				<link href="/skit_snippets/static/src/css/float.css" rel="stylesheet" type="text/css" />
 				<link href="/skit_snippets/static/src/css/sitemap.css" rel="stylesheet" type="text/css" />
+				<link rel="stylesheet" href="/skit_snippets/static/src/css/s_slider.css" />
+				<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.css'/>
+				<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css'/>
+				<link rel='stylesheet' href='https://unpkg.com/aos@2.3.1/dist/aos.css'/>
 			</xpath>	
 			<xpath expr="//script[last()]" position="after">
 				<script type="text/javascript" src="/skit_snippets/static/src/js/jquery.scrollie.js"></script>
 				<script type="text/javascript" src="/skit_snippets/static/src/js/jquery.scrollie.min.js"></script>
 				<script type="text/javascript" src="/skit_snippets/static/src/js/jquery.scroll.js"></script>	
 				<script type="text/javascript" src="/skit_snippets/static/src/js/work_scroll.js"></script>	
-				<script type="text/javascript" src="/skit_snippets/static/src/js/float_icon.js"></script>	
+				<script type="text/javascript" src="/skit_snippets/static/src/js/float_icon.js"></script>
+				<script type="text/javascript" src="/skit_snippets/static/src/js/s_slider.js"></script>
+				<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.js'></script>
+				<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js'></script>	
 			</xpath>
 		</template>	
 	</data>

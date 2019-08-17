@@ -32,8 +32,6 @@ video::-webkit-media-controls {
 .contact-forms__hello-icon {
 	border-radius: 50%;	
     position: absolute;
-    left: 50%;
-    top: 50%;
     width: 100%;
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
@@ -43,8 +41,6 @@ video::-webkit-media-controls {
 .contact-forms__close-icon{
 	border-radius: 50%;
 	position: absolute;
-    left: 50%;
-    top: 50%;
     width: 100%;
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
@@ -298,7 +294,7 @@ a#contact:focus {
 /* FORM SUBMIT BUTTON */
 	.sks_float_btn{
 		float:left;
-		padding:12px 12px;
+		padding:12px 12px !important;
 		margin:8px 0 0;
 		font-family:'Montserrat',sans-serif;
 		border:2px solid #fff;
@@ -377,7 +373,7 @@ i.fa.fa-long-arrow-left.fa-flip-horizontal:hover {
 	display: table-cell;width: 1px;padding-right: .5rem;white-space: nowrap;
 }
 .contact_label{
-	font-size:22px !important; color:#fff; font-weight: 600; float: left; margin: 2%;
+	font-size:22px; color:#fff; font-weight: 600; float: left; margin: 2%;
 }
 .contact_field_project_div{
 	content:attr(type); display:block; margin:0 0 0 0;width: 100%;

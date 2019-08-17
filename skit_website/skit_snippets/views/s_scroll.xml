@@ -6,22 +6,21 @@
 		<section class="sks_scroll_nav" style="height: 60em;">
 			<div class="container">
 				<div class="row">
-					<div class="sks-slide slide-one" data-background="#ffffff"
-						style="height: 881px;">
+					<div class="sks-slide slide-one" data-background="#ffffff">
 						<div class="inside">
 							<h1>
 								<b>
-									<font style="font-size: 3em; font-weight: 900; color: #7C7BAD;">Shaping Ideas </font>
+									<font class="slide1-line123">Shaping Ideas </font>
 								</b>
 							</h1>
 							<h1>
 								<b>
-									<font style="font-size: 3em; font-weight: 900; color: #7C7BAD;">Into Great </font>
+									<font class="slide1-line123">Into Great </font>
 								</b>
 							</h1>
 							<h1>
 								<b>
-									<font style="font-size: 3em; font-weight: 900; color: #7C7BAD;">Software Products </font>
+									<font class="slide1-line123">Software Products </font>
 								</b>
 							</h1>
 						</div>
@@ -35,11 +34,13 @@
 		<section class="sks_sectionAbout section2" style="height: 60em;">
 			<div class="container">
 				<div class="row">
-					<div class="sks-slide slide-two" data-background="#7C7BAD"
-						style="height: 657px; width: 100%;">
+					<div class="sks-slide slide-two" data-background="#7C7BAD">
 						<div class="inside">
-							<p class="o_default_snippet_text"
-								style="text-align: center; font-size: 20em; font-weight: 900; color: rgba(255, 255, 255, 0.21);">About</p>
+							<h1>
+								<b>
+									<font class="slide2-title">About</font>
+								</b>
+							</h1>
 						</div>
 					</div>
 				</div>
@@ -222,12 +223,12 @@
 					<div class="sks-slide slide-four" data-background="#a54a7b"
 						style="height: 657px;">
 						<div class="inside">
-							<p style="text-align: left; font-size: 3em; font-weight: 600; line-height: 2em;"><font style="color: rgb(198, 123, 165);">We experted in</font>
+							<div class="slide4-content"><font style="color: rgb(198, 123, 165);">We experted in</font>
 								Software development, ERP implementation <font style="color: rgb(198, 123, 165);">and</font> customization,
 								Mobile Apps, Offshore development
 								<font style="color: rgb(198, 123, 165);" class="o_default_snippet_text">and</font>
 								offers resource to hire.
-							</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -236,11 +237,13 @@
 		<section class="sks_sectionProducts " style="height: 60em;">
 			<div class="container">
 				<div class="row">
-					<div class="sks-slide slide-five" data-background="#ffffff"
-						style="height: 657px; width: 100%;">
+					<div class="sks-slide slide-five" data-background="#ffffff">
 						<div class="inside">
-							<p class="o_default_snippet_text"
-								style="text-align: center; font-size: 20em; font-weight: 900; color: rgba(230, 230, 230);">Work</p>
+							<h1>
+								<b>
+									<font style="color: rgba(230, 230, 230);" class="slide5-title">Work</font>
+								</b>
+							</h1>
 						</div>
 					</div>
 				</div>
@@ -390,6 +393,109 @@
 								</div>									
 							</div>
 					</div>
+				</div>
+			</div>
+		</section>
+		<section class="sks_slider">
+			<div class="container">
+				<div class="row">
+						
+						<div class="swiper-container">
+							   <!-- Additional required wrapper -->
+							   <div class="swiper-wrapper">
+							   <!-- Slider -->
+							   
+							      <!-- Slide1 -->
+							      <div class="swiper-slide" style="background-color: #BED2D1">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/1.jpg)"/>
+							         <span class="number">01</span>
+							         <div class="slide-text playText" style="background-color: #BED2D1">
+							            <h1>TCCL</h1>
+							            <p>ERP for Devotional Center</p>
+							            <button class="btn">Case Study</button>
+							  
+							         </div>
+							      </div>
+							      
+							      <!-- END Slide1 -->
+							      <!-- Slide2 -->
+							      <div class="swiper-slide" style="background-color: #eacb00">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/2.jpg)"/>
+							         <span class="number">02</span>
+							         <div class="slide-text" style="background-color: #eacb00">
+							            <h1>VIA CRM</h1>
+							            <p>To Automate your telemarketing campaigns with our various numbering modes</p>
+							            <button class="btn">Case Study</button>
+							         </div>
+							      </div>
+							      <!-- END Slide2 -->
+							      
+							      <!-- Slide3 -->
+							      <div class="swiper-slide" style="background-color: #ADB3BE">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/3.jpg)"/>
+							         <span class="number">03</span>
+							         <div class="slide-text" style="background-color: #ADB3BE">
+							            <h1>FLEET MASTER</h1>
+							            <p>Messaging app integrated with Fleet Master</p>
+							            <button class="btn">Case Study</button>
+							            
+							         </div>
+							      </div>
+							      <!-- END Slide3 -->
+							      
+							      <!-- Slide4 -->
+							      <div class="swiper-slide" style="background-color: #DACFD1">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/4.jpg)"/>
+							         <span class="number">04</span>
+							         <div class="slide-text" style="background-color: #DACFD1">
+							            <h1>LGA</h1>
+							            <p>Software Development</p>
+							            <button class="btn">Case Study</button>
+							            
+							         </div>
+							        
+							      </div>
+							      <!-- END Slide4 -->
+							      <!-- Slide5 -->
+							      <div class="swiper-slide" style="background-color: #D5AB92">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/5.jpg)"/>
+							         <span class="number">05</span>
+							         <div class="slide-text" style="background-color: #D5AB92">
+							            <h1>Thailand</h1>
+							            <p>Sales and Purchase in POS System</p>
+							            <button class="btn">Case Study</button>
+							            
+							         </div>
+							        
+							      </div>
+							      <!-- END Slide5 -->
+							      
+							   </div>
+							   <!-- If we need pagination -->
+<!-- 							   <div class="swiper-pagination"></div> -->
+								<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 1"></span>
+									
+									<span class="swiper-pagination-bullet swiper-pagination-bullet-active"
+										tabindex="0" role="button" aria-label="Go to slide 2"></span>
+									
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 3"></span>
+									
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 4"></span>
+									
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 5"></span>
+								</div>
+							
+							   <!-- If we need navigation buttons -->
+							   <div class="swiper-arrows">
+								   <div class="swiper-button-prev"><span></span></div>
+								   <div class="swiper-button-next"><span></span></div>
+							   </div>
+							</div>
 				</div>
 			</div>
 		</section>

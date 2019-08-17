@@ -10,6 +10,7 @@
 					<div class="o_panel_body">
 						<t t-snippet="skit_snippets.s_tittle" t-thumbnail="/skit_snippets/static/src/img/snippets/s_tittle.png" />
 						<t t-snippet="skit_snippets.s_scroll" t-thumbnail="/skit_snippets/static/src/img/snippets/s_scroll.png" />
+						<t t-snippet="skit_snippets.sks_slider" t-thumbnail="/skit_snippets/static/src/img/snippets/s_slider.png" />
 					</div>
 				</div>
 		</xpath>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template name="SKIT Slider" id="sks_slider">
+		<section class="sks_slider">
+			<div class="container">
+				<div class="row">
+						
+						<div class="swiper-container">
+							   <!-- Additional required wrapper -->
+							   <div class="swiper-wrapper">
+							   <!-- Slider -->
+							   
+							      <!-- Slide1 -->
+							      <div class="swiper-slide" style="background-color: #BED2D1">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/1.jpg)"/>
+							         <span class="number">01</span>
+							         <div class="slide-text playText" style="background-color: #BED2D1">
+							            <h1>Here goes a headline</h1>
+							            <p>And a little description.</p>
+							            <button class="btn">link</button>
+							  
+							         </div>
+							      </div>
+							      
+							      <!-- END Slide1 -->
+							      <!-- Slide2 -->
+							      <div class="swiper-slide" style="background-color: #eacb00">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/2.jpg)"/>
+							         <span class="number">02</span>
+							         <div class="slide-text" style="background-color: #eacb00">
+							            <h1>Here goes a second headline</h1>
+							            <p>And another little description.</p>
+							            <button class="btn">link</button>
+							         </div>
+							      </div>
+							      <!-- END Slide2 -->
+							      
+							      <!-- Slide3 -->
+							      <div class="swiper-slide" style="background-color: #ADB3BE">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/3.jpg)"/>
+							         <span class="number">03</span>
+							         <div class="slide-text" style="background-color: #ADB3BE">
+							            <h1>Here goes a second headline</h1>
+							            <button class="btn">link</button>
+							            
+							         </div>
+							      </div>
+							      <!-- END Slide3 -->
+							      
+							      <!-- Slide4 -->
+							      <div class="swiper-slide" style="background-color: #DACFD1">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/4.jpg)"/>
+							         <span class="number">04</span>
+							         <div class="slide-text" style="background-color: #DACFD1">
+							            <h1>Here goes a second headline</h1>
+							            <button class="btn">link</button>
+							            
+							         </div>
+							        
+							      </div>
+							      <!-- END Slide4 -->
+							      <!-- Slide5 -->
+							      <div class="swiper-slide" style="background-color: #D5AB92">
+							         <div class="swiper-item" style="background-image: url(skit_snippets/static/src/img/s_scroll/5.jpg)"/>
+							         <span class="number">05</span>
+							         <div class="slide-text" style="background-color: #D5AB92">
+							            <h1>Here goes a second headline</h1>
+							            <button class="btn">link</button>
+							            
+							         </div>
+							        
+							      </div>
+							      <!-- END Slide5 -->
+							      
+							   </div>
+							   <!-- If we need pagination -->
+<!-- 							   <div class="swiper-pagination"></div> -->
+								<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 1"></span>
+									
+									<span class="swiper-pagination-bullet swiper-pagination-bullet-active"
+										tabindex="0" role="button" aria-label="Go to slide 2"></span>
+									
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 3"></span>
+									
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 4"></span>
+									
+									<span class="swiper-pagination-bullet" tabindex="0" role="button"
+										aria-label="Go to slide 5"></span>
+								</div>
+							
+							   <!-- If we need navigation buttons -->
+							   <div class="swiper-arrows">
+								   <div class="swiper-button-prev"><span></span></div>
+								   <div class="swiper-button-next"><span></span></div>
+							   </div>
+							</div>
+				</div>
+			</div>
+		</section>
+	</template>
+</odoo>  		

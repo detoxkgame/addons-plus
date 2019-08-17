@@ -23,3 +23,250 @@
     width: 100%;
     background-color: transparent !important;
 }
+
+
+
+
+
+
+
+/* ----------- Homepage Slide 1 ----------- */
+.slide1-line123 {
+	font-weight: 900; 
+	color: #7C7BAD;
+}
+
+/* ----------- Homepage Slide 2 ----------- */
+.slide-two {
+	display: block;
+	margin: 0 auto;
+}
+
+.slide2-title {
+	text-align: center; 
+	font-weight: 900; 
+	color: rgba(255, 255, 255, 0.21);
+}
+
+.slide4-content {
+	font-weight: 600;
+	line-height: 2em;
+	text-align: left;
+	color: #ffffffe3;
+}
+
+.slide5-title {
+	text-align: center;
+	font-size: 20em;
+	font-weight: 900;
+}
+
+.slide-five {
+	display: block;
+	margin: 0 auto;
+}
+
+/* ----------- 320px to 425px Mobiles ----------- */
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 425px) {
+  
+  /*Banner Scroll Img*/
+  .scroll_icon {
+  	width: 15% !important;
+  }
+  
+  /*Float Icon*/
+	.contact-forms__hello-icon , .contact-forms__close-icon {
+		left: 0% !important;
+    	top: 0% !important;
+	}
+	
+/*POPUP Window*/
+	.overlay a {
+		font-size: calc((0.4em + 0.4vmin) + (0.4em + 0.4vmax)) !important;
+		line-height: 6em;
+		padding: 0px !important;
+	}
+  
+	.sks_float_input.name {
+		width: 8rem !important;
+		padding: 1em;
+	}
+
+	.sks_float_input.company {
+		width: 8rem !important;
+		padding: 1em;
+	}
+
+	.sks_float_input.email {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.phone {
+		width: 8rem !important;
+		padding: 1em;
+	}
+
+	.sks_float_input.hire_name {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.hire_company {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.hire_email {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.hire_phone {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.develop_name {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.develop_company {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.develop_email {
+		width: 8rem !important;
+		padding: 1em;
+	}
+	
+	.sks_float_input.develop_phone {
+		width: 8rem !important;
+		padding: 1em;
+	}
+}
+
+
+/* ----------- 425px to 768px Tablets ----------- */
+
+@media only screen 
+  and (min-device-width: 425px) 
+  and (max-device-width: 768px) {
+  
+  /*Banner Scroll Img*/
+  .scroll_icon {
+  	width: 10% !important;
+  }
+  
+  /*Float Icon*/
+	.contact-forms__hello-icon , .contact-forms__close-icon {
+		left: 50%;
+    	top: 50%;
+	}
+	
+/*POPUP Window*/
+	.overlay a {
+		font-size: calc((0.6em + 0.6vmin) + (0.6em + 0.6vmax)) !important;
+		line-height: 4em;
+		padding: 0px !important;
+	}
+}
+
+/* ----------- 320px to 768px Mobiles and Tablets ----------- */
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 768px) {
+  
+	.slide1-line123 {
+		font-size: calc((0.5em + 1vmin) + (0.5em + 1vmax));
+	}
+	
+	.slide-one {
+		margin: 6em 2em;
+	}
+	
+	.slide2-title , .slide5-title {
+		font-size: calc((1em + 2vmin) + (1em + 2vmax));
+	}
+	
+	.slide-three {
+		width: 100% !important;
+	}
+	
+	.slide4-content {
+		font-size: calc((0.6em + 0.6vmin) + (0.6em + 0.6vmax));
+		text-align: center;
+	}
+	
+	#work_sec , .work_section {
+		display: none;
+	}
+	
+	.contact_label , .sks_float_input {
+		font-size: 13px !important;
+		text-align: left;
+	}
+	
+	.contact_label {
+		margin: 0% !important;
+	}
+	
+	.sks_float_form_content {
+		width: 100%;
+	}
+	
+
+
+	.cntct_fld_hdn {
+		display: none;
+	}
+	
+	#sks_fa-chevron_left {
+		margin-top: 5em !important;
+	}
+	
+	.sks_float_fa_content {
+		margin-top: 4em !important;
+	}
+	
+	.sks_float_btn {
+		width: 40% !important;
+		padding: 0% !important;
+		margin: 0% !important;
+	}
+
+}
+
+/* ----------- Laptop Non-Retina Screens ----------- */
+@media screen 
+  and (min-device-width: 769px) 
+  and (max-device-width: 1600px) {
+
+	.slide1-line123 {
+		font-size: calc((1em + 1vmin) + (1em + 1vmax));
+	}
+
+	.slide2-title , .slide5-title {
+		font-size: calc((2em + 4vmin) + (2em + 4vmax));
+	}
+	
+	.slide4-content {
+		font-size: calc((0.6em + 0.6vmin) + (0.6em + 0.6vmax));
+	}
+/*Float Icon*/
+	.contact-forms__hello-icon , .contact-forms__close-icon {
+		left: 50%;
+    	top: 50%;
+	}
+	
+	.sks_slider {
+		display: none;
+	}
+	
+}
