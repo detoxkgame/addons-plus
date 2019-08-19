@@ -62,46 +62,48 @@ class Skit_saleorder(models.Model):
         invoice_status = ''
         isno = 0
         for order in orders:
-            if order.invoice_ids.state:
-                if(order.invoice_ids.state == 'draft'):
-                    status = 'Draft'
-                elif(order.invoice_ids.state == 'open'):
-                    status = 'Open'
-                elif(order.invoice_ids.state == 'paid'):
-                    status = 'Paid'
-                elif(order.invoice_ids.state == 'cancel'):
-                    status = 'Cancelled'
-            else:
-                if(order.state == 'draft'):
-                    status = 'Quotation'
-                elif(order.state == 'sent'):
-                    status = 'QuotationSent'
-                elif(order.state == 'sale'):
-                    status = 'Sale Order'
-                elif(order.state == 'done'):
-                    status = 'Locked'
-                elif(order.state == 'cancel'):
-                    status = 'Cancelled'
-            if(order.invoice_status):
-                if(order.invoice_status == 'no'):
-                    invoice_status = 'Nothing to Invoice'
-                elif(order.invoice_status == 'to invoice'):
-                    invoice_status = 'To Invoice'
-                elif(order.invoice_status == 'invoiced'):
-                    invoice_status = 'Fully Invoiced'
-            isno = isno + 1
-            unpaid_amount = round(order.invoice_ids.residual, 2)
-            order_details.append({'name': order.name,
-                                  'order_id': order.id,
-                                  'sno': isno,
-                                  'amount_total': round(order.amount_total, 2),
-                                  'date_order': order.date_order,
-                                  'partner': order.partner_id.name if order.partner_id else '',
-                                  'status': status,
-                                  'invoice_id': order.invoice_ids.id,
-                                  'invoice_status': invoice_status,
-                                  'amount_due': unpaid_amount if unpaid_amount > 0 else '',
-                                  })
+            for invoice in order.invoice_ids:
+                if not invoice.refund_invoice_id:
+                    if invoice.state:
+                        if(invoice.state == 'draft'):
+                            status = 'Draft'
+                        elif(invoice.state == 'open'):
+                            status = 'Open'
+                        elif(invoice.state == 'paid'):
+                            status = 'Paid'
+                        elif(invoice.state == 'cancel'):
+                            status = 'Cancelled'
+                    else:
+                        if(order.state == 'draft'):
+                            status = 'Quotation'
+                        elif(order.state == 'sent'):
+                            status = 'QuotationSent'
+                        elif(order.state == 'sale'):
+                            status = 'Sale Order'
+                        elif(order.state == 'done'):
+                            status = 'Locked'
+                        elif(order.state == 'cancel'):
+                            status = 'Cancelled'
+                    if(order.invoice_status):
+                        if(order.invoice_status == 'no'):
+                            invoice_status = 'Nothing to Invoice'
+                        elif(order.invoice_status == 'to invoice'):
+                            invoice_status = 'To Invoice'
+                        elif(order.invoice_status == 'invoiced'):
+                            invoice_status = 'Fully Invoiced'
+                    isno = isno + 1
+                    unpaid_amount = round(invoice.residual, 2)
+                    order_details.append({'name': order.name,
+                                          'order_id': order.id,
+                                          'sno': isno,
+                                          'amount_total': round(order.amount_total, 2),
+                                          'date_order': order.date_order,
+                                          'partner': order.partner_id.name if order.partner_id else '',
+                                          'status': status,
+                                          'invoice_id': invoice.id,
+                                          'invoice_status': invoice_status,
+                                          'amount_due': unpaid_amount if unpaid_amount > 0 else '',
+                                          })
         return {'order_details': order_details}
 
     @api.model
