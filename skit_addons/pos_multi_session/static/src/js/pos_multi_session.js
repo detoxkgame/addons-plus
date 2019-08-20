@@ -798,6 +798,9 @@ odoo.define('pos_multi_session', function(require){
             if(typeof data.discount !== "undefined" && data.discount !== this.discount){
                 this.set_discount(data.discount);
             }
+            if(typeof data.kitchen_state !== "undefined" && data.kitchen_state !== this.kitchen_state){
+                this.set_kitchen_state(data.kitchen_state);
+            }
         },
         set_selected: function(){
             this.ms_changing_selected = true;
