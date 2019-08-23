@@ -51,13 +51,13 @@ models.PosModel = models.PosModel.extend({
         	if(this.config.is_kitchen){
         		return orders;
         	}else{
-            var t_orders = [];
-            for (var i = 0; i < orders.length; i++) {
-                if ( orders[i].table === this.table) {
-                    t_orders.push(orders[i]);
-                }
-            }
-            return t_orders;
+	            var t_orders = [];
+	            for (var i = 0; i < orders.length; i++) {
+	                if ( orders[i].table === this.table) {
+	                    t_orders.push(orders[i]);
+	                }
+	            }
+	            return t_orders;
         	}
         }
     },
@@ -76,7 +76,11 @@ base_models.PosModel = base_models.PosModel.extend({
 	         for (var i = 0; i < orders.length; i++) {
 	        	 var order = orders[i];
 			     if (order && i > 0) {
-			    	 this.set_order(order);
+			    	 var orderlines = order.get_orderlines();
+			         if(orderlines.length > 0){
+			        	 this.set_order(order);
+			         }
+			    	 
 			     }
 		     }
 		     this.set_order(orders[0]);
@@ -128,6 +132,9 @@ screens.OrderWidget.include({
 		            var order = orders[j]
 
 		            var orderlines = order.get_orderlines();
+		            if(orderlines.length <= 0){
+		            	el_node.querySelector('.orderlines'+orders[j].uid).remove();
+		            }
 		            for(var i = 0, len = orderlines.length; i < len; i++){
 		                var orderline = this.render_orderline(orderlines[i]);
 		            	//var orderline = this.kitchen_render_orderline(order, orderlines[i]);
