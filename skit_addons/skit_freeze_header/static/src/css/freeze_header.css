@@ -4,7 +4,7 @@
     position: sticky !important;
     position: -webkit-sticky !important; /* Safari */
     background-color: #eee;
-    z-index: 1 !important;
+    z-index: 2 !important;
 }
 
 .table-responsive{
