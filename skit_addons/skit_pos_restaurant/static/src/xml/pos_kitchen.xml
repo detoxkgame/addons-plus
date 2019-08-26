@@ -69,7 +69,7 @@
     <t t-extend="Orderline">
 	    <t t-jquery=".product-name" t-operation="replace">
 	    	<t t-if='widget.pos.config.is_kitchen'>
-		    	<span class="product-name pos-prod-name" >
+		    	<span t-attf-class="product-name pos-prod-name olid#{line.id}" >
 	                <t t-esc="line.get_product().display_name"/>
 	                <t t-if="line.get_product().tracking!=='none'">
 	                    <i class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_green" t-if="line.has_valid_product_lot()"
@@ -171,6 +171,11 @@
 	                        discount
 	                    </li>
 	                </t>
+	                <t t-if="line.get_note()">
+		                <li class="info orderline-note">
+		                    <i class='fa fa-tag' role="img" aria-label="Note" title="Note"/><t t-esc="line.get_note()" />
+		                </li>
+		            </t>
 	            </ul>
 	    	</t>
 	    </t>

@@ -61,6 +61,22 @@ odoo.define('pos_models', function(require){
 	        	}
 	        	if(kitchen_state == 'cooking'){
 	        		order.get_selected_orderline().set_kitchen_state('delivered');
+	        		var orderlines = order.get_selected_orderline().order.get_orderlines();
+	        		var delivery_order = true;
+			        for(var i = 0, len = orderlines.length; i < len; i++){
+			        	var pos_categ_id = orderlines[i].get_product().pos_categ_id[0];
+			            var pos_categ_ids = this.pos.config.pos_categ_ids
+			            if ($.inArray(pos_categ_id, pos_categ_ids) > -1) {
+			            	if(orderlines[i].get_kitchen_state() != 'delivered'){
+			            		delivery_order = false;
+				            }
+			            }
+			         }
+			        if(delivery_order){
+			        	//$('.orderlines'+order.get_selected_orderline().order.uid).remove()
+			        	$('.orderlines'+order.get_selected_orderline().order.uid).css({'display': 'none'})
+			        }
+	        		//$(".olid"+order.get_selected_orderline().id).parent().remove();
 	        	}
 	        	
 	        }

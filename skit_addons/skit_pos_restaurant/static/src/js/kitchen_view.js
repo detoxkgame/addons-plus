@@ -135,11 +135,26 @@ screens.OrderWidget.include({
 		            if(orderlines.length <= 0){
 		            	el_node.querySelector('.orderlines'+orders[j].uid).remove();
 		            }
+		            var is_categ_order = false;
 		            for(var i = 0, len = orderlines.length; i < len; i++){
-		                var orderline = this.render_orderline(orderlines[i]);
-		            	//var orderline = this.kitchen_render_orderline(order, orderlines[i]);
-		                list_container.appendChild(orderline);
+		            	var pos_categ_id = orderlines[i].get_product().pos_categ_id[0];
+		            	var pos_categ_ids = this.pos.config.pos_categ_ids
+
+		            	if ($.inArray(pos_categ_id, pos_categ_ids) > -1) {
+		            		if(orderlines[i].get_kitchen_state() != 'delivered'){
+		            			is_categ_order = true;
+			            		var orderline = this.render_orderline(orderlines[i]);
+					            list_container.appendChild(orderline);
+			            	}
+		                }
+
+		               /* var orderline = this.render_orderline(orderlines[i]);
+		                list_container.appendChild(orderline);*/
 		            }
+		            if(!is_categ_order){
+		            	el_node.querySelector('.orderlines'+orders[j].uid).remove();
+		            }
+		            
 	            }
 
 	            if(this.el && this.el.parentNode){

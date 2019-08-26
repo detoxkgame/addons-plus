@@ -7,6 +7,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//h2[@name='order']" position="before">
                     <h2 name="refunds">Restaurant</h2>
+                    <!-- Kitchen Checkbox -->
                     <div class="row mt16 o_settings_container" id="pos_restaurant">
                         <div id="is_kitchen" class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
@@ -14,6 +15,21 @@
                             </div>
                             <div class="o_setting_right_pane">
                                 <label for="is_kitchen"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- POS Category-->
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="payment_methods">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">POS Category</span>
+                                
+                                <div class="content-group mt16">
+                                    <field name="pos_categ_ids" colspan="4" nolabel="1"  widget="many2many_tags" domain="[('id','not in',other_pos_categ_ids)]"/>
+                                    <field name="other_pos_categ_ids" colspan="4" nolabel="1"  widget="many2many_tags" invisible="1"/>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
