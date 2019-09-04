@@ -226,7 +226,8 @@
 
 /*********Start code for middle and bottom section in clientlist-screen*********/
 .pos .clientlist-screen .client-picture{
-	width: 54px;
+	width: 50px;
+	height: 50px;
 }
 .pos .clientlist-screen .client-name{
 	font-size: 18px;
@@ -248,9 +249,15 @@
 }
 .pos .clientlist-screen .client-detail > .client-email{
 	word-wrap:break-word;
+	word-break: break-word;
 }
-.pos .clientlist-screen .edit-buttons{
-	top: 25px;
+.pos .clientlist-screen .client-details.edit .edit-buttons{
+	width: fit-content;
+	width: -moz-fit-content;
+	display: inline;
+	position: relative;
+	right: auto;
+    top: auto;
 }
 .pos .clientlist-screen .client-details-box{
 	font-size: 12px;
@@ -273,14 +280,17 @@
 /*********End code for middle and bottom section in clientlist-screen*********/
 /**********Start code for clientlist-screen edit part*************/
 .pos .clientlist-screen .client-details input.client-name{
-	width: 136px;
-	font-size: 18px;
+	width: 115px;
+	font-size: 13px;
 }
 .pos .clientlist-screen .client-details select,.pos .clientlist-screen .client-details input{
 	width: 75%;
 	font-size: 12px;
 }
-
+.pos .clientlist-screen .client-details.edit{
+    overflow-y: scroll;
+    height: 150px;
+}
 /***********End code for clientlist-screen edit part************/
 }
 
@@ -315,6 +325,7 @@
 .payment-screen .left-content.pc40{
 	width: 100%;
 	right: 0%;
+	top: 10%;
 	/* height: 20%; */
 }
 .payment-screen .right-content.pc60{
@@ -322,6 +333,9 @@
 	left: 0%;
 	/* height: 60%; */
 	top: 32%;
+}
+.payment-screen .paymentmethods{
+	margin: 4px;
 }
 .payment-screen .paymentmethods .button{
 	line-height: 25px;
@@ -533,12 +547,14 @@
 }
 .receipt-screen .top-content h1{
 	font-size: 21px;
+	text-align: left;
+	margin-left: 16px;
 }
 .receipt-screen .top-content .button{
 	line-height: 21px;
 	font-size: 12px;
 	padding: 3px 6px;
-	width: 20%;
+	/* width: 20%; */
 }
 /*******End code for receipt-screen top buttons part in pos*********/
 
@@ -680,4 +696,19 @@
 
 /**************End code for Normal view css*****************/
 
-
+/*********Start code for pos popup********/
+@media only screen and (max-width: 767px) {
+.pos .modal-dialog .popup{
+	width: 250px;
+    height: fit-content;
+    font-size: 13px;
+}
+.pos .popup .body{
+	font-size: 12px;
+}
+.pos .popup .footer{
+	height: fit-content;
+	display: inline-table;
+}
+}
+/*********End code for pos popup********/
