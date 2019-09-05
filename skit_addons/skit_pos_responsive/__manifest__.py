@@ -16,7 +16,7 @@
     'website': "www.srikeshinfotech.com",
     'category': 'point_of_sale',
     'version': '10.0.0.1',
-    'depends': ['point_of_sale','pos_restaurant'],
+    'depends': ['point_of_sale','pos_restaurant','barcodes'],
     'qweb': ['static/src/xml/pos.xml',
      ],
     'data': [

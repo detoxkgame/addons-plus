@@ -291,6 +291,9 @@
     overflow-y: scroll;
     height: 150px;
 }
+.pos .clientlist-screen .subwindow .subwindow-container-fix{
+	height: inherit !important;
+}
 /***********End code for clientlist-screen edit part************/
 }
 
