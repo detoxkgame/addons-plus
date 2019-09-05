@@ -423,11 +423,6 @@
 /**********Start code for pos-topheader in pos********/
 @media only screen and (max-width: 767px) {
 .pos .pos-branding{
-	width: 96%;
-    padding-left: 2%;
-    padding-right: 2%;
-}
-.pos .pos-branding{
 	display: table;
     height: 50px;
     width: 15%;
@@ -448,12 +443,33 @@
 	left: 15%;
 }
 .pos .pos-rightheader .orders{
-	padding-left: 8px;
-    padding-right: 5px;
+	/* padding-left: 8px;
+    padding-right: 5px; */
+    position: absolute;
+	top: 100%;
+	z-index: 1000;
+	width: 100%;
+    overflow-x: scroll;
+    left: -10%;
+    right: 10%;
+    display:none;
 }
 .pos .pos-rightheader .order-button{
 	min-width: 35px;
     padding: 0px 0px;
+}
+.pos .pos-rightheader .select-order{
+	height: 35px;
+    line-height: 35px;
+    min-width:35px;
+    border-radius: 5px;
+}
+.pos .pos-rightheader .select-order .order-sequence{
+	font-size: 0.8em;
+	font-weight: 200;
+}
+.pos .show_ordersbtn{
+	display:block !important;
 }
 }
 /**********End code for pos-topheader in pos**********/
@@ -694,6 +710,9 @@
     display:none;
 }
 .mbl_guest{
+	display:none;
+}
+.pos .show_ordersbtn{
 	display:none;
 }
 

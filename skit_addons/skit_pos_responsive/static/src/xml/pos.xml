@@ -252,5 +252,14 @@
 </t>
 <!-- End code for "note" popup inherit -->
 
+<!-- Start code for - added show order button -->
+<t t-extend="OrderSelectorWidget">
+	<t t-jquery='.deleteorder-button' t-operation='after'>
+		<span class="icon order-button square show_ordersbtn" title="Show_Orders">
+			<i class="fa fa-chevron-down"></i>
+		</span>
+	</t>       
+</t>
+<!-- End code for - added show order button -->
 
 </templates>
