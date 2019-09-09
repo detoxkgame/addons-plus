@@ -337,6 +337,9 @@
 	/* height: 60%; */
 	top: 32%;
 }
+.payment-screen .right-content.pc60 .paymentlines-container{
+	padding-bottom: 0px;
+}
 .payment-screen .paymentmethods{
 	margin: 4px;
 }
@@ -585,6 +588,7 @@
 }
 .receipt-screen .pos-sale-ticket{
 	width: auto;
+	font-size: 11.5px;
 }
 .pos .receipt-screen .centered-content .button{
 	width: fit-content;
