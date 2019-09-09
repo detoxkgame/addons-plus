@@ -9,7 +9,7 @@
     'description': """
         Responsive for pos screen.
     """,
-    'price': 25,
+    'price': 65,
     'currency': 'EUR',
     'author': "Srikesh Infotech",
     'license': "AGPL-3",
