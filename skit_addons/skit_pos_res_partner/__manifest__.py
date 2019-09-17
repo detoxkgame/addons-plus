@@ -10,7 +10,7 @@
     'description': """
         Synchronization of POS Partner Data
     """,
-    'price': 25,
+    'price': 30,
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'category': 'Point Of Sale',

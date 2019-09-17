@@ -10,7 +10,6 @@
     'description': """
         Synchronization of POS Product PriceList Data
     """,
-    'price': 25,
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'category': 'Point Of Sale',
