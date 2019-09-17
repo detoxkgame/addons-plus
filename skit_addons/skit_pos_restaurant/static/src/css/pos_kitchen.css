@@ -27,15 +27,17 @@
 	padding-right: 15px !important;
 	background: #a569bd !important;
 	border-radius: 3px;
-}
+ }
 
 .pos-lines{
 	/* border: 1px solid black; */
-	margin-top: 20px !important;
-	box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
-	border-radius: 30px;
+/* 	margin-top: 20px !important;
+ */	box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
+/* 	border-radius: 30px;
+ */	width: 30%;
+    float: left;
+    margin:0 1.5% 2% !important;    
 }
-
 .pos-prod-name{
 	width: 60% !important;
 }
@@ -47,29 +49,32 @@
 	margin-left: 15%;
 	margin-right: 15%;
 	max-width: 100% !important;
+    margin: 0 1.5%;
+    width: 98%;
 }
 
 .pos-table-no{
-	width: 30% !important;
 	display: inline-block;
 	color: white !important;
 }
 .pos-table-time{
-	width: 50% !important;
-	display: inline-block;
+	/* width: 50% !important;
+	display: inline-block; */
 	color: white !important;
+/* 	margin-left:72%; */
+	margin-left: 60px;
 }
 .pos-order-name{
 	color: white !important;
 }
 .pos-kit-status-div{
-	width:25%; 
+	width:40%; 
 	float:right;
-}
+} 
 .pos-kit-status100{
 	width: 100%;
 	display: inline-block;
-}
+} 
 
 .pos-kit-forward{
 	float:right;
@@ -83,12 +88,12 @@
 	font-weight: bold; 
 	float: right;
 	margin-top: 4px !important;
-	width: 40%;
+	width: 50%;
 	padding: 0;
 	margin: 0;
 	display: inline-block;
 	text-align: center;
-}
+} 
 .pos-status-name{
 	margin-left: 10px;
 	font-weight: bold; 
@@ -102,7 +107,7 @@
 	display: inline-block;
 }
 .pos-kit-price{
-	width:15%;
+	width:14%;
 }
 .pos-width100{
 	width:100% !important;

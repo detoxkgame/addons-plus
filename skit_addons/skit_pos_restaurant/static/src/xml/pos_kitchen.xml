@@ -22,7 +22,7 @@
                     				<span>Order No :<t t-esc="order.sequence_number" /></span>
                     			</li>
                     		</ul> -->
-                        	<ul t-attf-class="pos-lines orderlines#{order.uid}" t-att-data-uid="order.uid">
+                        	<ul t-attf-class="pos-lines  orderlines#{order.uid}" t-att-data-uid="order.uid">
                         		<li class="pos-lines-header-li">
                     				<span class="pos-table-no">Table No : <t t-esc="order.floor.name"/> ( <t t-esc="order.table.name"/> )</span>
                     				<span class="pos-table-time">Time : <t t-esc="moment(order.creation_date).format('hh:mm')"/> </span>
@@ -124,8 +124,8 @@
 	                        <em>
 	                            <t t-esc="line.get_quantity_str()" />
 	                        </em>
-	                        <t t-esc="line.get_unit().name" />
-	                        at
+                       <t t-esc="line.get_unit().name" />
+                         at
 	                        <t t-esc="widget.format_currency(line.get_unit_display_price(),'Product Price')" />
 	                        /
 	                        <t t-esc="line.get_unit().name" />
@@ -227,8 +227,8 @@
 	            </div>
 	            <span class="price pos-kit-price" >
 	            	<t t-esc="line.get_quantity_str()" />
-                    <t t-esc="line.get_unit().name" />
-	                <!-- <t t-esc="widget.format_currency(line.get_display_price())"/> -->
+<!--                     <t t-esc="line.get_unit().name" />
+ -->	                <!-- <t t-esc="widget.format_currency(line.get_display_price())"/> -->
 	            </span>
             </t>
             <t t-else="">
