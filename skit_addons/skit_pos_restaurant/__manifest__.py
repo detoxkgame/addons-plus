@@ -10,8 +10,7 @@
         POS Restaurant
     """,
 
-    'depends': ['point_of_sale','pos_restaurant_base',
-        'pos_multi_session'],
+    'depends': ['point_of_sale', 'pos_multi_session_restaurant'],
 
     "data": [
         "views/pos_config_view.xml",
