@@ -15,7 +15,7 @@
     'images': ['images/main_screenshot.png'],
     'category': 'Point Of Sale',
     'version': '1.0',
-    'depends': ['point_of_sale', 'skit_pos_cache'],
+    'depends': ['point_of_sale', 'skit_pos_pricelist'],
     'qweb': ['static/src/xml/pos_partner_cache.xml'],
     'data': [
         'data/pos_res_partner_data.xml',

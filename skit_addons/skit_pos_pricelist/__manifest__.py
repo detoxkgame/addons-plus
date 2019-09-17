@@ -14,7 +14,7 @@
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'category': 'Point Of Sale',
-    'depends': ['point_of_sale', 'skit_pos_cache'],
+    'depends': ['point_of_sale', 'pos_cache'],
     'qweb': ['static/src/xml/pos_pricelist_cache.xml'],
     'data': [
         'data/pos_pricelist_data.xml',
