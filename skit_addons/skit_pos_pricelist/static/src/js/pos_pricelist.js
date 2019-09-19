@@ -2,6 +2,9 @@ odoo.define('skit_pos_pricelist.pos_pricelist', function (require) {
     "use strict";
     var core = require('web.core');
     var models = require('point_of_sale.models');
+    var chrome = require('point_of_sale.chrome');
+    var screens = require('point_of_sale.screens');
+    var ProductCategoriesWidget = screens.ProductCategoriesWidget;	
     var rpc = require('web.rpc');
     var _t = core._t;
 
