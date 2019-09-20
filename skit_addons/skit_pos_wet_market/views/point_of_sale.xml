@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="skit_pos_fish_market_assets" inherit_id="point_of_sale.assets">
+			<xpath expr="." position="inside">
+				<script type="text/javascript" src="/skit_pos_wet_market/static/src/js/pos_db.js"></script>
+				<script type="text/javascript" src="/skit_pos_wet_market/static/src/js/pos_model.js"></script>
+				<script type="text/javascript" src="/skit_pos_wet_market/static/src/js/pos_screen.js"></script>
+				<script type="text/javascript" src="/skit_pos_wet_market/static/src/js/pos_sorder_sync.js"></script>
+				<script type="text/javascript" src="/skit_pos_wet_market/static/src/js/pos_vendor_view.js"></script>
+				
+				<link rel="stylesheet" type="text/css" href="/skit_pos_wet_market/static/src/css/pos_vendor_view.css"></link> 
+				
+			</xpath>
+		</template>
+		
+		<template id="skit_index" inherit_id='point_of_sale.index' name="SKIT POS Index">&lt;!DOCTYPE html&gt;
+            <xpath expr="//meta[@name='viewport']" position="replace">
+		                <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		            </xpath>
+		</template>
+       
+	</data>
+</openerp>

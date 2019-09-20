@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	
+	<!-- Order Payment Widget -->
+	<t t-name="OrderPaymentWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-alert">
+            	<p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                <div class="body copy_pre_body">
+                	<t t-if='widget.options.journals'>
+	                	<t t-foreach="widget.options.journals" t-as="data">
+	                		<span id="invoice_id" style="display:none"><t t-esc="data.invoice_id" /></span>
+	                		<span id="order_id" style="display:none"><t t-esc="data.order_id" /></span>
+					    	<table class="payment-table" id="order-payment-grid">
+						    	<tbody>
+						        	<tr>
+						        		<td>
+						        			<span>Payment Type </span>
+						        			
+						        		</td>
+						        		<td>
+						        			<select class="payment-table-select" id="journal_id">
+					                            <t t-foreach="data['journals']" t-as="journal">
+													<option  t-att-value="journal.id"><t t-esc="journal.name" /></option>  
+												</t>	
+											</select>
+						        		</td>
+						        		<td>
+						        			<span>Date</span>
+						        		</td>
+						        		<td>
+						        			<input id="payment_date" type="text" t-att-value="data.payment_date" readonly="readonly"></input>
+						        		</td>
+						        	</tr>		
+						        	<tr>
+						        		<td>
+						        			<span>Amount</span>
+						        		</td>
+						        		<td>
+						        			<input id="payment_amount" type="text" t-att-value="data.payment_amount" readonly="readonly"></input>
+						        		</td>
+						        	</tr>
+						        </tbody>
+						    </table>
+					    </t>
+				    </t>
+                </div>
+                <div class="footer">
+                   	<div class="button payment-cancel"> Cancel  </div>
+                   	
+         			<div class="button payment-ok"> Ok </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Order Payment Widget -->
+	<t t-name="PaymenPopuptWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-alert">
+            	<p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                <div class="body copy_pre_body">
+                	<span>Payment created successfully.</span>
+                </div>
+                <div class="footer">
+         			<div class="button ok"> Ok </div>
+                </div>
+            </div>
+        </div>
+    </t>
+	
+	<!-- Display the Shop Cart Orders -->
+	<t t-name="ShopCartOrders">
+		<div>
+			<t t-if="sorderlines.length > 0 ">
+			<div class="pos-cart-slide">
+				<ul t-attf-class="pos-cart">
+	            	<li class="pos-cart-header-li">
+	                	<span class="pos-order-no">Order No : <t t-esc="sorder.name"/> </span>
+	                   	<span class="pos-order-date">Date : <t t-esc="sorder.create_date"/> </span>
+	                </li>
+	                <li class="pos-cart-header-li">
+	                	<span class="pos-order-no">Status : 
+	                		<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
+	                			Open
+	                		</t>
+	                		<t t-elif="(sorder.state == 'sale')">
+	                			Order Confirm
+	                		</t>
+	                		<t t-elif="(sorder.state == 'preparing')">
+	                			Preparing
+	                		</t>
+	                		<t t-elif="(sorder.state == 'ready')">
+	                			Ready to Delivery
+	                		</t>
+	                		<t t-elif="(sorder.state == 'delivered')">
+	                			Delivered
+	                		</t>
+	                		<t t-else="">
+	                			Payment
+	                		</t>
+	                	</span>
+	                	
+	                	<span class="pos-order-date">
+	                		<t t-if="(sorder.state != 'payment')">
+			                	<div class="round_btn blue-bgcolor order_btn" t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" t-attf-order_id="#{sorder.id}"  >
+			                		<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Order Confirm</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'sale')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Preparing</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'preparing')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" >Ready to Delivery</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'ready')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Delivered</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'delivered')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Payment</span>
+			                		</t>
+						        	
+						        </div>
+					        </t>
+	                	</span>
+	                	
+	                </li>
+	                <li class="pos-line-li">
+	                	    <span class="cart-list-header cart-24">S.No</span>
+	            			<span class="cart-list-header cart-50">Product</span>
+	            			<span class="cart-list-header cart-24">Qty</span>
+	            			<span class="cart-list-header cart-24">Price</span>
+	            			<!-- <span class="cart-list-header cart-24">Status</span> -->
+	            	</li>
+	            	<div class="pos_sorderlines">
+	            		<t t-set="serial_no" t-value="1" />
+		               	<t t-foreach="sorderlines" t-as="line">
+		            		<li class="pos-cart-li">
+		            			<span class="cart_list_span"><t t-esc="serial_no"/></span>
+		            			<span class="cart_list_span cart-50"><t t-esc="line.product_id[1]"/></span>
+		            			<span class="cart_list_span"><t t-esc="line.product_uom_qty"/></span>
+		            			<span class="cart_list_span"><t t-esc="line.price_subtotal"/></span>
+		            		</li>
+		            		<t t-set="serial_no" t-value="(serial_no) + 1" />
+		           		</t>
+	           		</div>
+	            </ul>
+			</div>
+			</t>
+		</div>
+	</t>
+	
+	<!-- Shop Cart Orders Widget -->
+	<t t-name="SOOrderScreenWidget">
+		<div class="pos_vendor_view screen">
+			<div class="vendor_view_header">
+				<span class="vendor_view_text">Shop Cart</span>
+				<i id="zoom_in" class="fa fa-search-plus shop_zoom" aria-hidden="true"></i>
+				<i id="zoom_out" class="fa fa-search-minus shop_zoom" aria-hidden="true"></i>
+			</div>
+			 <div class="checkout_orders">
+             </div>
+		</div>
+	</t>
+</templates>
