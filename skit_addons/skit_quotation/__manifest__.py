@@ -10,6 +10,8 @@
     'description': """
         This module helps to create sales order quotation from POS.
     """,
+    'price': 75,
+    'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'depends': ['sale_management', 'point_of_sale'],
     'qweb': ['static/src/xml/quotation.xml'],
