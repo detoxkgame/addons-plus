@@ -23,7 +23,7 @@ chrome.OrderSelectorWidget.include({
 chrome.Chrome.include({
     build_widgets: function(){
         this._super();
-        if(this.pos.config.supplier_view ){
+        if(this.pos.config.supplier_view || this.pos.config.cashier_view){
         	this.gui.set_startup_screen('supplier_view');
             this.gui.set_default_screen('supplier_view');
         }

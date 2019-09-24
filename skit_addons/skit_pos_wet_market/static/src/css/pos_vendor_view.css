@@ -20,7 +20,7 @@
 	padding-bottom: 5px !important;
 	padding-left: 15px !important;
 	padding-right: 15px !important;
-	background: #a569bd !important;
+	background: #a569bd;
 	border-radius: 3px;
 	font-size: 12px;
 }
@@ -192,13 +192,25 @@
 .shop_zoom{
 	font-size: 20px;
     display: inline-block;
-    background: red;
+    background: #3498db;
     padding: 2px;
     border-radius: 3px;
     color: white;
     float: right;
     cursor: pointer;
     margin-left: 20px;
+}
+.yellow_bgcolor{
+	background: #EEC808;
+}
+.green_bgcolor{
+	background: #7FC406;
+}
+.orange_bgcolor{
+	background: #E1790A;
+}
+.pink_bgcolor{
+	background: #F512AD;
 }
 
 /** Media Query */

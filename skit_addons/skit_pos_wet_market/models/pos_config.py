@@ -8,3 +8,4 @@ class PosConfig(models.Model):
     _inherit = 'pos.config'
 
     supplier_view = fields.Boolean(string='Supplier View', default=False)
+    cashier_view = fields.Boolean(string='Cashier View', default=False)

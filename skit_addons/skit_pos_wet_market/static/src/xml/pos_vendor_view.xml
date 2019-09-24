@@ -73,13 +73,14 @@
 	<t t-name="ShopCartOrders">
 		<div>
 			<t t-if="sorderlines.length > 0 ">
-			<div class="pos-cart-slide">
+			<t t-if="((widget.pos.config.supplier_view) and (sorder.state != 'delivered'))">
+			<div t-attf-id="cart-#{sorder.id}" t-att-class='"pos-cart-slide " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_zoom1" : "") + ((slevel == 3) ? "pos_zoom2" : "") + ((slevel == 4) ? "pos_zoom3" : "")'>
 				<ul t-attf-class="pos-cart">
-	            	<li class="pos-cart-header-li">
+	            	<li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
 	                	<span class="pos-order-no">Order No : <t t-esc="sorder.name"/> </span>
 	                   	<span class="pos-order-date">Date : <t t-esc="sorder.create_date"/> </span>
 	                </li>
-	                <li class="pos-cart-header-li">
+	                <li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
 	                	<span class="pos-order-no">Status : 
 	                		<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
 	                			Open
@@ -136,16 +137,92 @@
 	            		<t t-set="serial_no" t-value="1" />
 		               	<t t-foreach="sorderlines" t-as="line">
 		            		<li class="pos-cart-li">
-		            			<span class="cart_list_span"><t t-esc="serial_no"/></span>
-		            			<span class="cart_list_span cart-50"><t t-esc="line.product_id[1]"/></span>
-		            			<span class="cart_list_span"><t t-esc="line.product_uom_qty"/></span>
-		            			<span class="cart_list_span"><t t-esc="line.price_subtotal"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="serial_no"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span cart-50 " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="line.product_id[1]"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="line.product_uom_qty"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="line.price_subtotal"/></span>
 		            		</li>
 		            		<t t-set="serial_no" t-value="(serial_no) + 1" />
 		           		</t>
 	           		</div>
 	            </ul>
 			</div>
+			</t>
+			<t t-if="((widget.pos.config.cashier_view) and (sorder.state == 'delivered'))">
+			<div t-attf-id="cart-#{sorder.id}" t-att-class='"pos-cart-slide " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_zoom1" : "") + ((slevel == 3) ? "pos_zoom2" : "") + ((slevel == 4) ? "pos_zoom3" : "")'>
+				<ul t-attf-class="pos-cart">
+	            	<li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
+	                	<span class="pos-order-no">Order No : <t t-esc="sorder.name"/> </span>
+	                   	<span class="pos-order-date">Date : <t t-esc="sorder.create_date"/> </span>
+	                </li>
+	                <li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
+	                	<span class="pos-order-no">Status : 
+	                		<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
+	                			Open
+	                		</t>
+	                		<t t-elif="(sorder.state == 'sale')">
+	                			Order Confirm
+	                		</t>
+	                		<t t-elif="(sorder.state == 'preparing')">
+	                			Preparing
+	                		</t>
+	                		<t t-elif="(sorder.state == 'ready')">
+	                			Ready to Delivery
+	                		</t>
+	                		<t t-elif="(sorder.state == 'delivered')">
+	                			Delivered
+	                		</t>
+	                		<t t-else="">
+	                			Payment
+	                		</t>
+	                	</span>
+	                	
+	                	<span class="pos-order-date">
+	                		<t t-if="(sorder.state != 'payment')">
+			                	<div class="round_btn blue-bgcolor order_btn" t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" t-attf-order_id="#{sorder.id}"  >
+			                		<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Order Confirm</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'sale')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Preparing</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'preparing')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" >Ready to Delivery</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'ready')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Delivered</span>
+			                		</t>
+			                		<t t-elif="(sorder.state == 'delivered')">
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Payment</span>
+			                		</t>
+						        	
+						        </div>
+					        </t>
+	                	</span>
+	                	
+	                </li>
+	                <li class="pos-line-li">
+	                	    <span class="cart-list-header cart-24">S.No</span>
+	            			<span class="cart-list-header cart-50">Product</span>
+	            			<span class="cart-list-header cart-24">Qty</span>
+	            			<span class="cart-list-header cart-24">Price</span>
+	            			<!-- <span class="cart-list-header cart-24">Status</span> -->
+	            	</li>
+	            	<div class="pos_sorderlines">
+	            		<t t-set="serial_no" t-value="1" />
+		               	<t t-foreach="sorderlines" t-as="line">
+		            		<li class="pos-cart-li">
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="serial_no"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span cart-50 " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="line.product_id[1]"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="line.product_uom_qty"/></span>
+		            			<span t-attf-id="cartlist-#{sorder.id}" t-att-class='"cart_list_span " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_list_zoom1" : "") + ((slevel == 3) ? "pos_list_zoom2" : "") + ((slevel == 4) ? "pos_list_zoom3" : "")'><t t-esc="line.price_subtotal"/></span>
+		            		</li>
+		            		<t t-set="serial_no" t-value="(serial_no) + 1" />
+		           		</t>
+	           		</div>
+	            </ul>
+			</div>
+			</t>
 			</t>
 		</div>
 	</t>

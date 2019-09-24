@@ -101,38 +101,50 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
        
     },
     updateZoom: function(zoom){
-    	zoomLevel += zoom;
-    	if(zoomLevel == 1){
-    		$('.pos-cart-slide').removeClass('pos_zoom1');
-        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
-        	$('.cart_list_span').removeClass('pos_list_zoom1');
-    	}
-    	if(zoomLevel == 2){
-    		$('.pos-cart-slide').removeClass('pos_zoom2');
-        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
-        	$('.cart_list_span').removeClass('pos_list_zoom2');
-    		$('.pos-cart-slide').addClass('pos_zoom1');
-        	$('.pos-cart-header-li').addClass('pos_header_zoom1');
-        	$('.cart_list_span').addClass('pos_list_zoom1');
-    	}
-    	if(zoomLevel == 3){
-    		$('.pos-cart-slide').removeClass('pos_zoom2');
-        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
-        	$('.cart_list_span').removeClass('pos_list_zoom2');
-        	$('.pos-cart-slide').removeClass('pos_zoom3');
-        	$('.pos-cart-header-li').removeClass('pos_header_zoom3');
-        	$('.cart_list_span').removeClass('pos_list_zoom3');
-    		$('.pos-cart-slide').addClass('pos_zoom2');
-        	$('.pos-cart-header-li').addClass('pos_header_zoom2');
-        	$('.cart_list_span').addClass('pos_list_zoom2');
-    	}
-    	if(zoomLevel == 4){
-    		$('.pos-cart-slide').removeClass('pos_zoom3');
-        	$('.pos-cart-header-li').removeClass('pos_header_zoom3');
-        	$('.cart_list_span').removeClass('pos_list_zoom3');
-    		$('.pos-cart-slide').addClass('pos_zoom3');
-        	$('.pos-cart-header-li').addClass('pos_header_zoom3');
-        	$('.cart_list_span').addClass('pos_list_zoom3');
+    	var mutelevel = zoomLevel + zoom;
+    	if(mutelevel > 0 && mutelevel <= 4){
+	    	zoomLevel += zoom;
+	    	if(zoomLevel == 1){
+	    		$('.pos-cart-slide').removeClass('pos_zoom1');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
+	        	$('.cart_list_span').removeClass('pos_list_zoom1');
+	    	}
+	    	if(zoomLevel == 2){
+	    		$('.pos-cart-slide').removeClass('pos_zoom2');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
+	        	$('.cart_list_span').removeClass('pos_list_zoom2');
+	    		$('.pos-cart-slide').addClass('pos_zoom1');
+	        	$('.pos-cart-header-li').addClass('pos_header_zoom1');
+	        	$('.cart_list_span').addClass('pos_list_zoom1');
+	    	}
+	    	if(zoomLevel == 3){
+	    		$('.pos-cart-slide').removeClass('pos_zoom1');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
+	        	$('.cart_list_span').removeClass('pos_list_zoom1');
+	    		$('.pos-cart-slide').removeClass('pos_zoom2');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
+	        	$('.cart_list_span').removeClass('pos_list_zoom2');
+	        	$('.pos-cart-slide').removeClass('pos_zoom3');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom3');
+	        	$('.cart_list_span').removeClass('pos_list_zoom3');
+	    		$('.pos-cart-slide').addClass('pos_zoom2');
+	        	$('.pos-cart-header-li').addClass('pos_header_zoom2');
+	        	$('.cart_list_span').addClass('pos_list_zoom2');
+	    	}
+	    	if(zoomLevel == 4){
+	    		$('.pos-cart-slide').removeClass('pos_zoom1');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
+	        	$('.cart_list_span').removeClass('pos_list_zoom1');
+	    		$('.pos-cart-slide').removeClass('pos_zoom2');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
+	        	$('.cart_list_span').removeClass('pos_list_zoom2');
+	    		$('.pos-cart-slide').removeClass('pos_zoom3');
+	        	$('.pos-cart-header-li').removeClass('pos_header_zoom3');
+	        	$('.cart_list_span').removeClass('pos_list_zoom3');
+	    		$('.pos-cart-slide').addClass('pos_zoom3');
+	        	$('.pos-cart-header-li').addClass('pos_header_zoom3');
+	        	$('.cart_list_span').addClass('pos_list_zoom3');
+	    	}
     	}
     	
     	//$('body').css({ zoom: zoomLevel, '-moz-transform': 'scale(' + zoomLevel + ')' });
@@ -174,7 +186,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
             var sorderline = self.sorder_cache.get_node(order.id);
             if(sorderline){
             	var orderlines = self.pos.db.get_orderline_by_order(order.id);
-                sorderline_html = QWeb.render('ShopCartOrders',{widget: self, sorder:order, sorderlines:orderlines});
+                sorderline_html = QWeb.render('ShopCartOrders',{widget: self, sorder:order, sorderlines:orderlines, slevel:zoomLevel});
                 sorderline = document.createElement('div');
                 sorderline.innerHTML = sorderline_html;
                 sorderline = sorderline.childNodes[1];
@@ -188,6 +200,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                     }.bind(this)));
                 }
             }
+            
         });
     },
     update_sorder_screen: function(order_ids){
@@ -207,7 +220,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
             	if(this.pos.db.get_orderline_by_order(orders[i].id) != undefined){
             		orderlines = this.pos.db.get_orderline_by_order(orders[i].id);
             	}
-                var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:orders[i], sorderlines:orderlines});
+                var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:orders[i], sorderlines:orderlines, slevel:zoomLevel});
                 var sorderline = document.createElement('div');
                 sorderline.innerHTML = sorderline_html;
                 sorderline = sorderline.childNodes[1];
