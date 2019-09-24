@@ -1,4 +1,4 @@
-odoo.define('skit_pos_fish_market.pos_model', function(require) {
+odoo.define('skit_pos_wet_market.pos_model', function(require) {
 	"use strict";		
 var screens = require('point_of_sale.screens');
 var OrderWidget = screens.OrderWidget;

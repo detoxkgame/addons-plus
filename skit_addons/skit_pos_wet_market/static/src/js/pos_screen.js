@@ -1,4 +1,4 @@
-odoo.define('skit_pos_fish_market.pos_screen', function (require) {
+odoo.define('skit_pos_wet_market.pos_screen', function (require) {
 "use strict";
 
 var chrome = require('point_of_sale.chrome');

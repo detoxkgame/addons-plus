@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <record model="ir.ui.view" id="view_fish_view_order_form">
-            <field name="name">sale.order.form.view.fish.inherit</field>
+        <record model="ir.ui.view" id="view_wet_view_order_form">
+            <field name="name">sale.order.form.view.wet.inherit</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
