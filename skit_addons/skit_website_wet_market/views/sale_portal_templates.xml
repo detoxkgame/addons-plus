@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+
+    <template id="shop_website_cart" name="Shop Product" inherit_id="website_sale.cart" priority="20">
+    	<xpath expr="//div[hasclass('oe_cart')]//div/a[hasclass('float-right')]" position="replace">
+            <a role="button" t-if="website_sale_order and website_sale_order.website_order_line" class="btn btn-primary float-right" id="shop_process_checkout">
+            	<span class="">Process Checkout</span>
+                <span class="fa fa-chevron-right" />
+            </a>
+    	</xpath>
+    </template>
+    
+    <template id="optional_products_modal_test" name="Optional Products">
+        <main class="modal-body">
+           
+                            <div class="row">
+                        <div class="col-md-6">
+                            <t t-set="variant_img" t-value="any(product.mapped('product_variant_ids.image_variant'))"/>
+                            <t t-set="image_ids"  t-value="product.product_image_ids"/>
+                            <div id="o-carousel-product" class="carousel slide" data-ride="carousel" data-interval="0">
+                              <div class="carousel-outer">
+                                <div class="carousel-inner">
+                                    <div t-if="variant_img" class="carousel-item active" itemprop="image" t-field="product[:1].product_variant_id.image" t-options="{'widget': 'image', 'class': 'product_detail_img js_variant_img', 'alt-field': 'name', 'zoom': 'image', 'unique': str(product['__last_update']) + (str(product.product_variant_id['__last_update']) or '')}"/>
+                                    <div t-attf-class="carousel-item#{'' if variant_img else ' active'}" itemprop="image" t-field="product.image" t-options="{'widget': 'image', 'class': 'product_detail_img', 'alt-field': 'name', 'zoom': 'image', 'unique': product['__last_update']}"/>
+                                    <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                                        <div class="carousel-item" t-field="pimg.image" t-options='{"widget": "image", "class": "product_detail_img", "alt-field": "name", "zoom": "image" }'/>
+                                    </t>
+                                </div>
+
+                              </div>
+
+                              <ol class="carousel-indicators" t-if="len(image_ids) or variant_img">
+                                <li t-if="variant_img" data-target="#o-carousel-product" data-slide-to="0" class="active">
+                                    <img class="img img-fluid js_variant_img_small" t-attf-src="/website/image/product.product/{{product.product_variant_id.id}}/image/90x90" t-att-alt="product.name"/>
+                                </li>
+                                <li data-target="#o-carousel-product" t-att-data-slide-to="1 if variant_img else '0'" t-att-class="'' if variant_img else 'active'">
+                                    <img class="img img-fluid" t-attf-src="/website/image/product.template/{{product.id}}/image/90x90" t-att-alt="product.name"/>
+                                </li>
+                                <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                                    <li data-target="#o-carousel-product" t-att-data-slide-to="pimg_index + (variant_img and 2 or 1)">
+                                        <img class="img img-fluid" t-attf-src="/website/image/product.image/{{pimg.id}}/image/90x90" t-att-alt="pimg.name"/>
+                                    </li>
+                                </t>
+                              </ol>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="product_details">
+                            <h1 itemprop="name" t-field="product.name">Product Name</h1>
+                            <span itemprop="url" style="display:none;" t-esc="'%sshop/product/%s' % (request.httprequest.url_root, slug(product))"/>
+                            <form action="/shop/cart/update/attribute" method="POST">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                                <div class="js_product js_main_product">
+                                    <t t-placeholder="select">
+                                        <input type="hidden" class="product_id" name="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" />
+                                        <input type="hidden" class="product_template_id" name="product_template_id" t-att-value="product.id" />
+                                        <t t-call="sale.variants">
+                                            <t t-set="ul_class" t-value="'flex-column'" />
+                                        </t>
+                                    </t>
+                                    <input type="text" style="display: none" class="form-control quantity" data-min="1" name="add_qty" t-att-value="quantity"/>
+                                    <t t-call="website_sale.product_price" />
+                                    <p t-if="product.has_dynamic_attributes() or len(product.product_variant_ids) &gt; 1" class="css_not_available_msg bg-danger" style="padding: 15px;">This combination does not exist.</p>
+                                    <a role="button" id="add_to_cart" class="btn btn-primary btn-lg mt8 js_check_product a-submit" href="#">Add to Cart</a>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+           
+        </main>
+    </template>
+    
+    <template id="shop_products_item" name="Shop Product" inherit_id="website_sale.products_item" priority="20">
+    	<xpath expr="//div[@class='oe_product_image']" position="replace">
+    		<div class="oe_product_image">
+            	<a itemprop="url">
+                	<span itemprop="image" t-attf-content="{{request.httprequest.url_root}}web/image/product.template/{{product.id}}/image" t-field="product.image" t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}" t-att-alt="product.name" />
+                </a>
+            </div>
+    	</xpath>
+    	
+    	<xpath expr="//section" position="replace">      
+    		<section class="shop_section">
+                    <h6>
+                        <span itemprop="name"  class="shop_prod_name" t-att-content="product.name" t-field="product.name" />
+                        <a role="button" t-if="not show_publish and not product.website_published" t-att-href="product_href" class="btn btn-secondary btn-sm btn-danger" title="This product is unpublished.">Unpublished</a>
+                        <span class="shop_price" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    </h6>
+                    
+			        <div style="width:100%;">
+			        	 
+	                    <div id="shop_cart_details">
+	                    	<span class="shop_prod_price" style="display:none;" t-esc="product.website_price" />
+	                    	<span class="shop_prod_id" style="display:none;" t-esc="product.id" />
+				        	<div class="css_quantity input-group oe_website_spinner shop-prod" contenteditable="false">
+					            <div class="input-group-prepend">
+					                <a t-attf-href="#" class="btn btn-secondary js_add_cart_json" aria-label="Remove one" title="Remove one">
+					                    <i class="fa fa-minus"></i>
+					                </a>
+					            </div>
+					            <input type="text" class="form-control quantity" data-min="1" name="add_qty" value="1"/>
+					            <div class="input-group-append">
+					                <a t-attf-href="#" class="btn btn-secondary float_left js_add_cart_json" aria-label="Add one" title="Add one">
+					                    <i class="fa fa-plus"></i>
+					                </a>
+					            </div>
+					        </div>
+					        <a role="button" id="shop_add_to_cart" class="btn btn-primary btn-lg mt8 js_check_product shop_cart">Add to Cart</a>
+				        </div>
+			        </div>
+                    
+                </section>
+    	</xpath>
+    </template>
+    
+    <template id="shop_products_template" name="Shop Product" inherit_id="website_sale.products" priority="20">
+    	<xpath expr="//div[@id='wrap']" position="before">
+    		<t t-call="skit_website_wet_market.floaticon" />
+    	</xpath>
+    </template>
+    
+    <template id="floaticon">
+		<aside id="floatsticky-social" class="float_cartimg_z_index">
+			<ul>
+				<li>
+					<t t-set="website_sale_order" t-value="website.sale_get_order()" />
+					<a href="/shop/cart" class="event_tooltip">
+					 <img src="/skit_website_wet_market/static/src/img/cart_image.png" style="width:100%;"/>
+					 <sup id="float_new_web_cart_quantity" t-attf-class="my_cart_quantity badge badge-primary shopcartfloat"
+								t-esc="website_sale_order and website_sale_order.cart_quantity or ''" />
+					</a>
+				</li>
+			</ul>
+		</aside>
+	</template>
+    
+    <template id="sale_order_portal_status_test" name="Sales Order Portal Content" inherit_id="sale.sale_order_portal_template" priority="20">
+   		<xpath expr="//div[hasclass('alert-warning')]" position="before">
+        	<span class="track-span"> Track Order </span>
+        	<section class="ps-timeline-sec">
+        <div class="container">
+            <ol class="ps-timeline">
+            	<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
+            		<li id="sale_confirm" class="border-gray">
+	                    <div class="ps-bot">
+	                        <p>Confirmed</p>
+	                    </div>
+	                    <span class="ps-sp-top border-gray-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_gray.png" alt=""/></span>
+	                </li>
+            	</t>
+            	<t t-else="">
+            		<li id="sale_confirm" class="border-green">
+	                    <div class="ps-bot">
+	                        <p>Confirmed</p>
+	                    </div>
+	                   <span class="ps-sp-top border-green-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_green.png" alt=""/></span>
+	                </li>
+            	</t>
+                <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale')">
+                	<li id="sale_preparing" class="border-gray">
+	                     <div class="ps-bot">
+	                        <p>Preparing</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-gray-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_gray.png" alt=""/></span>
+	                </li>
+                </t>
+                <t t-else="">
+                	<li id="sale_preparing" class="border-green">
+	                     <div class="ps-bot">
+	                        <p>Preparing</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-green-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_green.png" alt=""/></span>
+	                </li>
+                </t>
+                <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
+                	<li id="sale_ready" class="border-gray">
+	                     <div class="ps-bot">
+	                        <p>Ready to Delivery</p>
+	                    </div>
+	                    <span class="ps-sp-top border-gray-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></span>
+	                </li>
+                </t>
+                <t t-else="">
+                	<li id="sale_ready" class="border-green">
+	                     <div class="ps-bot">
+	                        <p>Ready to Delivery</p>
+	                    </div>
+	                    <span class="ps-sp-top border-green-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></span>
+	                </li>
+                </t>
+                 <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing') or (sale_order.state == 'ready')">
+                 	<li id="sale_delivered" class="border-gray">
+	                     <div class="ps-bot">
+	                        <p>Delivered</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-gray-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_gray.png" alt=""/></span>
+	                </li>
+                 </t>
+                 <t t-else="">
+                 	<li id="sale_delivered" class="border-green">
+	                     <div class="ps-bot">
+	                        <p>Delivered</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-green-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_green.png" alt=""/></span>
+	                </li>
+                 </t>
+                
+            </ol>
+        </div>
+    </section>
+        </xpath>
+    </template>
+</odoo>
