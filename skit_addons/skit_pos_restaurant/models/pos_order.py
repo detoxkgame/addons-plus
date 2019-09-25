@@ -11,4 +11,4 @@ class PosOrderLine(models.Model):
         [('queue', 'In Queue'), ('cooking', 'Cooking'),
          ('ready', 'To Ready'),
          ('delivered', 'Delivered'), ('cancel', 'Cancelled')],
-        'Kitchen Status', default='start')
+        'Kitchen Status', default='queue')
