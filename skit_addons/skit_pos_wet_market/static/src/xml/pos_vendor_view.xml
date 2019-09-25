@@ -231,7 +231,7 @@
 	<t t-name="SOOrderScreenWidget">
 		<div class="pos_vendor_view screen">
 			<div class="vendor_view_header">
-				<span class="vendor_view_text">Shop Cart</span>
+				<span class="vendor_view_text">Order Dashboard</span>
 				<i id="zoom_in" class="fa fa-search-plus shop_zoom" aria-hidden="true"></i>
 				<i id="zoom_out" class="fa fa-search-minus shop_zoom" aria-hidden="true"></i>
 			</div>

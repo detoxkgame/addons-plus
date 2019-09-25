@@ -34,14 +34,15 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
     @http.route(['/shop/product/cart/update'], type='json', auth="public", methods=['POST'], website=True, csrf=False)
     def shop_cart_update(self, product_id, price, qty):
-        product = request.env['product.template'].sudo().search([
+        product_tmpl = request.env['product.template'].sudo().search([
             ('id', '=', int(product_id))])
-        if(product.attribute_line_ids):
-            print('TEST')
+        product = request.env['product.product'].sudo().search([
+            ('product_tmpl_id', '=', int(product_id))], limit=1)
+        if(product_tmpl.attribute_line_ids):
             return "attribute"
         else:
             request.website.sale_get_order(force_create=1)._cart_update(
-                product_id=int(product_id),
+                product_id=int(product.id),
                 add_qty=qty,
                 set_qty=0,
                 product_custom_attribute_values=[]

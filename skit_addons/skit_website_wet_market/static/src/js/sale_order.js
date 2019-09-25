@@ -83,7 +83,6 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
     	var cart_qty = $(ev.currentTarget).closest('#shop_cart_details').find('.quantity').val();
     	var price = $(ev.currentTarget).closest('#shop_cart_details').find('.shop_prod_price').text();
     	var prod_id = $(ev.currentTarget).closest('#shop_cart_details').find('.shop_prod_id').text();
-    	
     	this._rpc({
              route: "/shop/product/cart/update",
              params: {
