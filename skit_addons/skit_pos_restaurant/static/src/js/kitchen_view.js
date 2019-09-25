@@ -10,9 +10,19 @@ var rpc = require('web.rpc');
 var ActionpadWidget = screens.ActionpadWidget;
 var NumpadWidget = screens.NumpadWidget;
 var base_models = require('pos_restaurant_base.models');
+var floors = require('pos_restaurant.floors');
 
 var QWeb = core.qweb;
 var _t = core._t;
+
+/** Extend TableWidget */
+floors.TableWidget.include({
+	renderElement: function(){
+		console.log('Floor Table Render')
+		this.waiter_status = this.pos.get_waiter_status(this.table).length;
+		this._super();
+	}
+});
 
 /** Extend the pos model for kitchen view */
 var _super_posmodel = models.PosModel.prototype;
@@ -61,6 +71,22 @@ models.PosModel = models.PosModel.extend({
         	}
         }
     },
+    
+    get_waiter_status: function(table) {
+    	var orders = this.get_table_orders(table);
+        var t_orders = [];
+        for (var i = 0; i < orders.length; i++) {
+            if (orders[i].table === table) {
+            	var orderlines = orders[i].get_orderlines();
+            	for(var j = 0, len = orderlines.length; j < len; j++){
+	            	if(orderlines[j].get_kitchen_state() == 'ready'){
+	            		t_orders.push(orders[i]);
+	            	}
+            	}
+            }
+        }
+        return t_orders;
+    },
 	
 });
 
@@ -95,17 +121,7 @@ screens.OrderWidget.include({
 	     this._super(parent,options);
 	     
 	     this.line_click_handler = function(event){
-	    	 /*if(self.pos.config.is_kitchen){
-		    	 var orders = self.pos.get_order_list();
-		         for (var i = 0; i < orders.length; i++) {
-			        var order = orders[i];
-			        if (order && i > 0) {
-			        	self.pos.set_order(order);
-			        }
-		         }
-		         console.log('click handler');
-		    	 self.pos.set_order(orders[0]);
-	    	 }*/
+	    	
 	         self.click_line(this.orderline, event);
 	    };
 	},
@@ -133,7 +149,9 @@ screens.OrderWidget.include({
 
 		            var orderlines = order.get_orderlines();
 		            if(orderlines.length <= 0){
-		            	el_node.querySelector('.orderlines'+orders[j].uid).remove();
+		            	if(el_node.querySelector('.orderlines'+orders[j].uid) != null){
+		            		el_node.querySelector('.orderlines'+orders[j].uid).remove();
+		            	}
 		            }
 		            var is_categ_order = false;
 		            for(var i = 0, len = orderlines.length; i < len; i++){
@@ -147,12 +165,12 @@ screens.OrderWidget.include({
 					            list_container.appendChild(orderline);
 			            	}
 		                }
-
-		               /* var orderline = this.render_orderline(orderlines[i]);
-		                list_container.appendChild(orderline);*/
+		              
 		            }
 		            if(!is_categ_order){
-		            	el_node.querySelector('.orderlines'+orders[j].uid).remove();
+		            	if(el_node.querySelector('.orderlines'+orders[j].uid) != null){
+		            		el_node.querySelector('.orderlines'+orders[j].uid).remove();
+		            	}
 		            }
 		            
 	            }
@@ -196,77 +214,5 @@ screens.OrderWidget.include({
 	    	}
 	    },
 });
-/*var KitchenScreenWidget = screens.ScreenWidget.extend({
-    template:'KitchenScreenWidget',
-
-    start: function(){ 
-
-        var self = this;
-
-        this.actionpad = new ActionpadWidget(this,{});
-        this.actionpad.replace(this.$('.placeholder-ActionpadWidget'));
-
-        this.numpad = new NumpadWidget(this,{});
-        this.numpad.replace(this.$('.placeholder-NumpadWidget'));
-
-        this.order_widget = new screens.OrderWidget(this,{
-            numpad_state: this.numpad.state,
-        });
-        this.order_widget.replace(this.$('.placeholder-OrderWidget'));
-
-        this.product_list_widget = new screens.ProductListWidget(this,{
-            click_product_action: function(product){ self.click_product(product); },
-            product_list: this.pos.db.get_product_by_category(0)
-        });
-        this.product_list_widget.replace(this.$('.placeholder-ProductListWidget'));
-
-        this.product_categories_widget = new screens.ProductCategoriesWidget(this,{
-            product_list_widget: this.product_list_widget,
-        });
-        this.product_categories_widget.replace(this.$('.placeholder-ProductCategoriesWidget'));
-
-        this.action_buttons = {};
-        var classes = screens.action_button_classes;
-        for (var i = 0; i < classes.length; i++) {
-            var classe = classes[i];
-            if ( !classe.condition || classe.condition.call(this) ) {
-                var widget = new classe.widget(this,{});
-                widget.appendTo(this.$('.control-buttons'));
-                this.action_buttons[classe.name] = widget;
-            }
-        }
-        if (_.size(this.action_buttons)) {
-            this.$('.control-buttons').removeClass('oe_hidden');
-        }
-    },
-
-    click_product: function(product) {
-       if(product.to_weight && this.pos.config.iface_electronic_scale){
-           this.gui.show_screen('scale',{product: product});
-       }else{
-           this.pos.get_order().add_product(product);
-       }
-    },
-
-    show: function(reset){
-        this._super();
-        if (reset) {
-            this.product_categories_widget.reset_category();
-            this.numpad.state.reset();
-        }
-        if (this.pos.config.iface_vkeyboard && this.chrome.widget.keyboard) {
-            this.chrome.widget.keyboard.connect($(this.el.querySelector('.searchbox input')));
-        }
-    },
-
-    close: function(){
-        this._super();
-        if(this.pos.config.iface_vkeyboard && this.chrome.widget.keyboard){
-            this.chrome.widget.keyboard.hide();
-        }
-    },
-
-});
-gui.define_screen({name:'kitchen_view', widget: KitchenScreenWidget});*/
 
 });

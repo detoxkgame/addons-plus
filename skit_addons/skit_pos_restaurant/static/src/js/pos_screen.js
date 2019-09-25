@@ -19,28 +19,6 @@ chrome.OrderSelectorWidget.include({
         this.$el.removeClass('oe_invisible');
     },
     
-    /*renderElement: function(){
-        var self = this;
-        this._super();
-        if (this.pos.config.iface_floorplan && !this.pos.config.is_kitchen) {
-            if (this.pos.get_order()) {
-                if (this.pos.table && this.pos.table.floor) {
-                	if(this.$('.floor-button').length <= 0){
-                		console.log('Floor'+this.$('.floor-button').length)
-                		this.$('.orders').prepend(QWeb.render('BackToFloorButton',{table: this.pos.table, floor:this.pos.table.floor}));
-                        this.$('.floor-button').click(function(){
-                            self.floor_button_click_handler();
-                        });
-                	}
-
-                }
-                this.$el.removeClass('oe_invisible');
-            } else {
-                this.$el.addClass('oe_invisible');
-            }
-        }
-    },*/
-    
 });
 // Add the FloorScreen to the GUI, and set it as the default screen
 chrome.Chrome.include({

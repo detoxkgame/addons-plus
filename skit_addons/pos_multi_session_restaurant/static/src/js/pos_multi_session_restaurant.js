@@ -384,6 +384,7 @@ odoo.define('pos_multi_session_restaurant', function(require){
                     'shape': table.shape,
                     'width': table.width,
                     'order_count': self.pos.get_table_orders(table).length,
+                    'waiter_status': self.pos.get_waiter_status(table).length,
                     'customer_count': self.pos.get_customer_count(table),
                     'fill': Math.min(1,Math.max(0,self.pos.get_customer_count(table) / table.seats)),
                     'notifications': self.get_notifications(table),

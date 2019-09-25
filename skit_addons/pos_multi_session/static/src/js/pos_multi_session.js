@@ -842,7 +842,7 @@ odoo.define('pos_multi_session', function(require){
                         this.pos.gui.close_popup();
                     }
                 } else if (!self.offline_sync_all_timer) {
-                    self.no_connection_warning();
+                    //self.no_connection_warning();
                     self.start_offline_sync_timer();
                     if (self.pos.debug){
                         console.log('MultiSession initialize error');

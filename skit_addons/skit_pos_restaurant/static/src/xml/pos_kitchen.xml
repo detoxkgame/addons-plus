@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    
+    <!-- Extend Floor Table -->
+    <t t-extend="TableWidget">
+    	<t t-jquery=".table" t-operation="replace">
+    		<div class='table' t-att-style='widget.table_style_str()'>
+                <span 
+                    t-if="widget.table.shape"
+                    t-att-class='"table-cover " + (widget.fill >= 1 ? "full" : "")'
+                    t-att-style='"height: " + Math.ceil(widget.fill * 100) + "%;"'
+                    ></span>
+                <t t-if='widget.order_count'>
+                    <span t-att-class='"order-count " + (widget.notifications.printing ? "notify-printing":"") + (widget.notifications.skipped ? "notify-skipped" : "")'><t t-esc='widget.order_count'/></span>
+                </t>
+                <t t-if='widget.waiter_status'>
+                <span class="table_ready circle red"></span>
+                </t>
+                <span class='label'>
+                    <t t-esc='widget.table.name' />
+                </span>
+                <span class="table-seats"><t t-esc="widget.table.seats" /></span>
+            </div>
+    	</t>
+    </t>
+   
     <!-- Extend the OrderWidget for hide some widget in Kitchen View -->
     <t t-extend="OrderWidget">
     	<t t-jquery=".order" t-operation="replace">
@@ -93,12 +115,12 @@
 	    </t>
 	    <t t-jquery=".ms_info" t-operation="replace">
 	    	<t t-if='widget.pos.config.is_kitchen'>
-	    		<div t-if="line.ms_info and line.ms_info.created" class="ms_info oe_hidden">
+	    		<!-- <div t-if="line.ms_info and line.ms_info.created" class="ms_info oe_hidden">
 	                added by <t t-esc="line.ms_info.created.user.name"/> (<t t-esc="line.ms_info.created.pos.name"/>)
 	                <t t-if="line.ms_info.changed and line.ms_info.changed.pos.id != line.ms_info.created.pos.id">
 	                    , edited by <t t-esc="line.ms_info.changed.user.name"/>  (<t t-esc="line.ms_info.changed.pos.name"/>)
 	                </t>
-	            </div>
+	            </div> -->
 
 	    	</t>
 	    	<t t-else="">
@@ -112,12 +134,12 @@
 	    </t>
 	    <t t-jquery=".info-list" t-operation="replace">
 	    	<t t-if='widget.pos.config.is_kitchen'>
-	    		 <div t-if="line.ms_info and line.ms_info.created" class="ms_info pos-ms-name">
+	    		 <!-- <div t-if="line.ms_info and line.ms_info.created" class="ms_info pos-ms-name">
 	                added by <t t-esc="line.ms_info.created.user.name"/> (<t t-esc="line.ms_info.created.pos.name"/>)
 	                <t t-if="line.ms_info.changed and line.ms_info.changed.pos.id != line.ms_info.created.pos.id">
 	                    , edited by <t t-esc="line.ms_info.changed.user.name"/>  (<t t-esc="line.ms_info.changed.pos.name"/>)
 	                </t>
-	            </div>
+	            </div> -->
 	    		<ul class="info-list">
 	                <t t-if="line.get_quantity_str() !== '1' || line.selected ">
 	                    <li class="info oe_hidden">
@@ -197,6 +219,19 @@
 				                <i class='fa fa-angle-left' role="img" aria-label="New order" title="New order"/>
 				            </span>
 			            </t>
+			            <t t-elif="line.get_kitchen_state() == 'ready'">
+				        	<span class="order-button square forward_view_btn round-btn pos-kit-forward yellow-bgcolor">
+				                <i class='fa fa-angle-right' role="img" aria-label="Delete order" title="Delete order"/>
+				            </span>
+				            
+				            <span class="kitchen_status pos-kit-status-name yellow-color" >
+				                <t t-esc="'Ready'"/>
+				            </span>
+				            
+			            	<span class="order-button square reverse_view_btn round-btn pos-kit-reverse yellow-bgcolor">
+				                <i class='fa fa-angle-left' role="img" aria-label="New order" title="New order"/>
+				            </span>
+			            </t>
 			            <t t-elif="line.get_kitchen_state() == 'delivered'">
 				        	<span class="order-button square forward_view_btn round-btn pos-kit-forward green-bgcolor">
 				                <i class='fa fa-angle-right' role="img" aria-label="Delete order" title="Delete order"/>
@@ -235,6 +270,11 @@
             	<t t-if="line.get_kitchen_state() == 'cooking'">
             		<span class="kitchen_status pos-status-name blue-color">
 				    	<t t-esc="'Cooking'"/>
+				    </span>
+            	</t>
+            	<t t-elif="line.get_kitchen_state() == 'ready'">
+            		<span class="kitchen_status pos-status-name yellow-color">
+				    	<t t-esc="'Ready'"/>
 				    </span>
             	</t>
             	<t t-elif="line.get_kitchen_state() == 'delivered'">

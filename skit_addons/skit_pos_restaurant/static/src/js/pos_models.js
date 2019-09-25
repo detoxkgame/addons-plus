@@ -42,6 +42,9 @@ odoo.define('pos_models', function(require){
 	        if (order.get_selected_orderline()) {
 	        	var kitchen_state = order.get_selected_orderline().get_kitchen_state();
 	        	if(kitchen_state == 'delivered'){
+	        		order.get_selected_orderline().set_kitchen_state('ready');
+	        	}
+	        	if(kitchen_state == 'ready'){
 	        		order.get_selected_orderline().set_kitchen_state('cooking');
 	        	}
 	        	if(kitchen_state == 'cooking'){
@@ -60,6 +63,9 @@ odoo.define('pos_models', function(require){
 	        		order.get_selected_orderline().set_kitchen_state('cooking');
 	        	}
 	        	if(kitchen_state == 'cooking'){
+	        		order.get_selected_orderline().set_kitchen_state('ready');
+	        	}
+	        	if(kitchen_state == 'ready'){
 	        		order.get_selected_orderline().set_kitchen_state('delivered');
 	        		var orderlines = order.get_selected_orderline().order.get_orderlines();
 	        		var delivery_order = true;
@@ -73,27 +79,13 @@ odoo.define('pos_models', function(require){
 			            }
 			         }
 			        if(delivery_order){
-			        	//$('.orderlines'+order.get_selected_orderline().order.uid).remove()
 			        	$('.orderlines'+order.get_selected_orderline().order.uid).css({'display': 'none'})
 			        }
-	        		//$(".olid"+order.get_selected_orderline().id).parent().remove();
 	        	}
 	        	
 	        }
 	    },
 	    
-	    /*reverse_icon_click_handler: function(orderline) {
-	    	this.pos.get_order().select_orderline(orderline);
-	        var order = this.pos.get_order();
-	        if (order.get_selected_orderline()) {
-	        	order.get_selected_orderline().set_kitchen_state('cooking');
-	        }
-	        this.pos.get_order().trigger('new_updates_to_send');
-		},*/
-		
-		/*forward_icon_click_handler: function(event, $el) {
-			    alert('reverse')
-		},*/
 	});
     
     /** Order Line */
@@ -130,25 +122,6 @@ odoo.define('pos_models', function(require){
 	    get_kitchen_state: function(){
 	        return this.kitchen_state;
 	    },
-	    /*reverse_click_handler: function(event, $el) {
-	       // this.pos.add_new_order();
-	    	alert('reverse')
-	    },
-	    forward_click_handler: function(event, $el) {
-		       // this.pos.add_new_order();
-		    	alert('reverse')
-		},
-
-	    renderElement: function(){
-	        var self = this;
-	        this._super();
-
-	        this.$('.reverse_view_btn').click(function(event){
-	            self.reverse_click_handler(event,$(this));
-	        });
-	        this.$('.forward_view_btn').click(function(event){
-	            self.forward_click_handler(event,$(this));
-	        });
-	    },*/
+	   
     });
 });

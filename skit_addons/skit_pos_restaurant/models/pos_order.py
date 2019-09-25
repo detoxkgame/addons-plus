@@ -9,5 +9,6 @@ class PosOrderLine(models.Model):
 
     kitchen_state = fields.Selection(
         [('queue', 'In Queue'), ('cooking', 'Cooking'),
+         ('ready', 'To Ready'),
          ('delivered', 'Delivered'), ('cancel', 'Cancelled')],
         'Kitchen Status', default='start')
