@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="pos_assets" name="point_of_sale_assets" inherit_id="point_of_sale.assets">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/skit_walkin_customer/static/src/js/walkin.js"></script>
+                <script type="text/javascript" src="/skit_walkin_customer/static/src/js/db_walkin.js"></script>
+                <script type="text/javascript" src="/skit_walkin_customer/static/src/js/screens_walkin.js"></script>
+                <script type="text/javascript" src="/skit_walkin_customer/static/src/js/models_walkin.js"></script>
+                <link rel="stylesheet" href="/skit_walkin_customer/static/src/css/walkin.css" />
+            </xpath>
+        </template>
+    </data>
+</odoo>

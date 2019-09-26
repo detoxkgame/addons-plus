@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">  
+	    <t t-name="WalkinButton"> 	
+	       <t t-if='widget.pos.config.is_walkin'>    	
+		    	<div class="walkin_button"> 	
+			        <div class='control-button '>
+			               <t t-if="widget.pos.db.get_walkin_customer().name"> 
+				           	   <t t-esc="widget.pos.db.get_walkin_customer().name" />	        
+				            </t>
+				             <t t-else=""> 
+				          		 Walk-in 
+			               </t> 			            
+	                </div>
+			    </div> 
+			    </t>
+	       </t> 
+</templates>
