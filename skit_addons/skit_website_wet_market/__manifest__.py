@@ -13,6 +13,7 @@
     'data': [
         'views/assets.xml',
         'views/sale_portal_templates.xml',
+        'views/skit_mobile_view.xml',
        ],
     'license': "AGPL-3",
     'installable': True,

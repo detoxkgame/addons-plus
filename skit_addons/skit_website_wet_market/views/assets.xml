@@ -10,5 +10,11 @@
              <script type="text/javascript" src="/skit_website_wet_market/static/src/js/product_configuration.js"></script>
         </xpath>
     </template>
+    
+    <template id="skit_website_frontend" inherit_id="website.assets_frontend" name="Skit Website Assets">
+    	<xpath expr="link[last()]" position="after">
+			<link rel="stylesheet" type="text/scss" href="/skit_website_fish_market/static/src/css/skit_website_mobile.css"/>
+		</xpath> 
+	</template>
    
 </odoo>

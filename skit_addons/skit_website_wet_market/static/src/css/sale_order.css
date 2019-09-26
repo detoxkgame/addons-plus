@@ -5,7 +5,7 @@
 .ps-timeline-sec .container {
   position: relative;
 }
-@media screen and (max-width: 767px) {
+/* @media screen and (max-width: 767px) {
   .ps-timeline-sec .container ol:before {
     background: #348e80;
     content: "";
@@ -114,7 +114,7 @@
     right: 0;
     top: -40px;
   }
-}
+} */
 .ps-timeline-sec .container ol:before {
   background: #348e80;
   content: "";

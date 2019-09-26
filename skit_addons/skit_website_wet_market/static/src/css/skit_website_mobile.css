@@ -1,0 +1,318 @@
+#wrapwrap .navbar .home_menuicon{
+	width: 1em;
+    height: 1em;
+}
+#wrapwrap .navbar .home_menu_btn{
+	padding: 0.15rem 0.25rem;
+}
+@media only screen and (max-width: 767px) {
+.o_website_sale_search{
+	top: 0px;
+	top: 0px;
+    position: absolute;
+    width: 60%;
+    padding-top: 9px;
+    padding-left: 4px;
+}
+.top_pager{
+	display:none;
+}
+#floatsticky-social{
+	right:9px !important;
+	z-index: 7;
+	bottom: 0px !important;
+	top: auto !important;
+}
+#floatsticky-social > ul{
+	padding:0px;
+}
+.event_tooltip > img{
+	width: 66% !important;
+}
+.event_tooltip .shopcartfloat{
+	margin-top: -63%;
+}
+/********Start code for products part in shop page**********/
+#products_grid .oe_product.oe_grid{
+	margin-bottom: 7%;
+	height: 200px;
+}
+#products_grid .oe_product.oe_grid:hover { 
+	box-shadow: 0 0 8px 4px darkgrey;
+}
+#products_grid .oe_product{
+	width: 90%;
+    left: 5%;
+    right: 5%;
+}
+#shop_cart_details .shop_cart {
+    padding: 0.275rem 0.55rem !important;
+    font-size: 0.7rem;
+}
+.css_quantity{
+	height: 28px;
+	max-width: 111px;
+}
+.minus_icon,.plus_icon,.shop_cart{
+	font-size: 0.677rem;
+}
+.qty_icon{
+	height: calc(1.7rem + 2px);
+}
+/*********End code for products part in shop page*********/
+/**********Start code for prod_categ_menu for mobile***********************/
+.oe_website_sale .prod_categ_menu{
+	display: block;
+    width: 80%;
+    background-color: darkgrey;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.prod_cat_icon{
+	padding-left: 4%;
+}
+.nav_pcateg{
+	display:none;
+	width: 80%;
+    margin: 0 auto;
+}
+/**********End code for prod_categ_menu for mobile***********************/
+/**********Start code for shop/cart page***********/
+.second_chkoutbtn,.first_chkoutbtn{
+	display:none !important;
+}
+.card-body{
+	padding: 0px;
+}
+.conti_btn{
+	margin-bottom: 0px !important;
+	font-size: 0.775rem;
+}
+.top_chkoutbtn_manuval{
+	font-size: 0.775rem;
+}
+/**********End code for shop/cart page***********/
+/**********Start code for my/orders page***********/
+.ps-timeline-sec{
+	padding-top: 5%;
+	height: 10% !important;
+}
+.ps-timeline-sec .container ol.ps-timeline li p{
+	font-size: 0.7rem;
+}
+#quote_content .track-span{
+	font-size: 16px;
+}
+.skit_qut_card{
+	padding: 0.75rem 0rem !important;
+}
+.skit_qut_card h2{
+	font-size: 1.25rem;
+}
+.quot_add{
+	font-size: 0.775rem;
+    padding-left: 2%;
+}
+section#details{
+	margin-top: 0px !important;
+	font-size: 0.775rem;
+}
+section#details h3{
+	font-size: 1.25rem;
+}
+.o_portal_sale_sidebar .card{
+	padding-bottom: 0rem !important;
+}
+#sale_order_communication{
+	margin-top: 0px !important;
+}
+#sale_order_communication h2{
+	font-size: 1.25rem;
+}
+.o_portal_chatter hr{
+	margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+.o_portal_chatter_composer_btn{
+	font-size: 0.675rem;
+}
+.o_portal_wrap > .container{
+	margin-bottom: 0px !important;
+}
+.o_portal_chatter_composer_form > .mb32{
+	margin-bottom: 8px !important;
+}
+#quote_content > .justify-content-center a{
+	font-size: 0.675rem;
+}
+.o_portal_sidebar #sidebar_content > ul > li:first-child > .btn{
+	font-size: 0.675rem;
+}
+.o_portal_sidebar #sidebar_content > ul > li:first-child > div > .btn-group > a{
+	font-size: 0.675rem;
+}
+.o_portal_sidebar #sidebar_content > ul > .navspy{
+	font-size: 0.775rem;
+}
+#sidebar_content > .card-body > h2{
+	font-size: 1.15rem;
+}
+#sidebar_content > .card-body{
+	padding-top: 0.5rem !important;
+}
+.mob_dwnld_btn{
+	display:none;
+}
+.edit_mode_hide{
+	display:none;
+}
+.track_status_bar_nor{
+  	display:none;
+  }
+/**********End code for my/orders page***********/
+} 
+
+@media only screen and (min-width: 768px) {
+.track_status_bar_mob{
+	display:none;
+}
+}
+
+.prod_categ_menu{
+	display:none;
+}
+
+/***********************/
+.container_div {
+   width: 80%;
+   padding: 0px 0;
+   position: relative;
+   overflow: hidden;
+   margin-top: 15px;
+   margin-left: auto;
+   margin-right: auto;
+}
+.container_div:before {
+   content: '';
+   position: absolute;
+   top: 11px;
+   margin-left: 12px;
+   width: 2px;
+   background: #CCD1D9;
+}
+.timeline-block {
+   width: -webkit-calc(50% + 8px);
+   width: -moz-calc(50% + 8px);
+   width: calc(50% + 8px);
+   display: -webkit-box;
+   display: -webkit-flex;
+   display: -moz-box;
+   display: flex;
+   -webkit-box-pack: justify;
+   -webkit-justify-content: space-between;
+   -moz-box-pack: justify;
+   justify-content: space-between;
+   clear: both;
+}
+.timeline-block-right {
+   float: right;
+}
+.timeline-block-left {
+   float: left;
+   direction: rtl
+}
+.marker {
+   width: 18px;
+   height: 18px;
+   border-radius: 50%;
+   border: 2px solid #F5F7FA;
+   background: #b8b8b8;
+   margin-top: 11px;
+   z-index: 9999;
+   text-align:center;
+   position: relative;
+   left:4px;
+}
+.marker.active{
+  background:#5bd040;
+}
+.active_back{
+  background:#5bd040;
+}
+.timeline-content {
+   width: 55%;
+   padding: 0 15px;
+   color: #666
+}
+i.fa.fa-check{
+  display:none;
+}
+i.fa.fa-check.active {
+ 	display:block !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    height: 50%;
+  	color:#fff;
+}
+.timeline-content h6 {
+   margin-top: 13px;
+   margin-bottom: 5px;
+   font-size: 13px;
+   font-weight: 500;
+}
+.timeline-content span {
+   font-size: 15px;
+   color: #a4a4a4;
+}
+.timeline-content p {
+   font-size: 14px;
+   line-height: 1.5em;
+   word-spacing: 1px;
+   color: #888;
+}
+.container:before {
+   left: 19px;
+   width: 2px;
+}
+.timeline-block {
+   width: 100%;
+}
+.timeline-block-right {
+   float: none;
+}
+.timeline-block-left {
+     float: none;
+     direction: ltr;
+}
+
+#msale_confirm_img,#msale_prepare_img{
+	width: 30px;
+    height: 30px;
+}
+#msale_ready_img,#msale_deliver_img{
+	width: 30px;
+    height: 30px;
+}
+.track_img_conf,.track_img_prepare{
+	height: fit-content;
+    margin-top: 6px;
+}
+.track_img_ready,.track_img_deliver{
+	height: fit-content;
+    margin-top: 0px;
+}
+.conf_vertical_ln,.prepare_vertical_ln,.ready_vertical_ln,.deli_vertical_ln{
+	border-left: 2px solid #b8b8b8;
+    height: 46px;
+    margin-left: 11px;
+}
+.active_ln{
+	border-left: 2px solid #5bd040;
+}
+/************************/

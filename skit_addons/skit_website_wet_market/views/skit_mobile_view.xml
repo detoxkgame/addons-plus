@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="layout" name="Main layout" inherit_id="portal.frontend_layout">
+		<xpath expr="//header//button[@class='navbar-toggler']" position="replace">
+			<button type="button" class="navbar-toggler home_menu_btn" data-toggle="collapse" data-target="#top_menu_collapse">
+        		<span class="navbar-toggler-icon home_menuicon"/>
+        	</button>
+    	</xpath>
+	</template>
+	
+	
+	<template id="products_website" inherit_id="website_sale.products" name="website_products">
+		<xpath expr="//div[hasclass('products_pager')]/t[@t-call][last()]" position="replace">
+			<t t-call="website.pager">
+        		<t t-set="_classes">ml-2 top_pager</t>
+        	</t>
+		</xpath>
+	</template>
+	
+	<template id="skit_products_categories" inherit_id="website_sale.products" name="Skit eCommerce Categories">
+		<xpath expr="//div[@id='products_grid_before']" position="replace">
+			<div class="col-lg-3 col-md-4 col-12" id="products_grid_before">
+				<div class="prod_categ_menu"><div class="pcate_menu">Product Categ<i class="fa fa-chevron-down prod_cat_icon"></i></div></div>
+					<ul class="nav nav-pills flex-column mt16 nav_pcateg">
+                		<li class="nav-item">
+                    		<a t-att-href="keep('/shop',category=0)" t-attf-class="nav-link#{'' if category else ' active'} o_not_editable">All Products</a>
+                		</li>
+                		<t t-foreach="categories" t-as="c">
+                    		<t t-call="website_sale.categories_recursive" />
+                		</t>
+            		</ul>
+            	</div>
+			</xpath>
+	</template>
+	
+	<template id="skit_website_orders" inherit_id="sale.sale_order_portal_content" name="Sales Order Portal Content">
+		<xpath expr="//div[@id='introduction']" position="replace">
+			<div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white skit_qut_card' if report_type == 'html' else ''}">
+            	<h2 class="my-0">
+                	<span t-field="sale_order.type_name"></span>
+                	<em t-esc="sale_order.name"/>
+            	</h2>
+        	</div>
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="replace">
+        	<div id="informations" class="quot_add">
+                <div t-if="sale_order.transaction_ids and not invoices and sale_order.state in ('sent', 'sale') and portal_confirmation == 'pay' and not success and not error" t-att-data-order-id="sale_order.id">
+                    <t t-if="sale_order.transaction_ids">
+                        <t t-call="payment.payment_confirmation_status">
+                            <t t-set="payment_tx_id" t-value="sale_order.get_portal_last_transaction()"/>
+                        </t>
+                    </t>
+                </div>
+                <div class="mb-3">
+                    <strong>Date:</strong> <span t-field="sale_order.create_date" t-options='{"widget": "date"}'/>
+                </div>
+                <div class="mb-3" t-if="sale_order.validity_date">
+                    <strong>Expiration Date:</strong> <span t-field="sale_order.validity_date" t-options='{"widget": "date"}'/>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <strong class="d-block mb-1">Invoicing Address</strong>
+                        <address t-field="sale_order.partner_invoice_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    </div>
+                    <div id="shipping_address" class="col-lg-6" groups="sale.group_delivery_invoice_address">
+                        <strong class="d-block mb-1">Shipping Address</strong>
+                        <address t-field="sale_order.partner_shipping_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    </div>
+                </div>
+
+                <t t-set="invoices" t-value="[i for i in sale_order.invoice_ids if i.state not in ['draft', 'cancel']]"/>
+                <div t-if="invoices" class="row">
+                    <div class="col">
+                        <strong class="d-block mb-1">Invoices</strong>
+                        <ul class="list-group mb-4">
+                            <t t-foreach="invoices" t-as="i">
+                                <t t-set="report_url" t-value="i.get_portal_url(report_type='pdf', download=True)"/>
+                                <a class="list-group-item list-group-item-action d-flex flex-wrap align-items-center justify-content-between py-2 px-3" t-att-href="report_url">
+                                    <div>
+                                        <i class="fa fa-download mr-1" role="img" aria-label="Download" title="Download"/>
+                                        <span t-esc="i.number" class="mr-lg-3"/>
+                                        <div class="small d-lg-inline-block">Date: <span class="text-muted" t-field="i.date_invoice"/></div>
+                                    </div>
+                                    <span t-if="i.state == 'paid'" class="small text-success orders_label_text_align"><i class="fa fa-fw fa-check"/> <b>Paid</b></span>
+                                    <span t-else="" class="small text-info orders_label_text_align"><i class="fa fa-fw fa-clock-o"/> <b>Waiting Payment</b></span>
+                                </a>
+                            </t>
+                        </ul>
+                        <t t-if="invoices2">
+                            <strong class="text-muted d-block mb-1">Invoices</strong>
+                            <div>
+                                <t t-foreach="invoices" t-as="i">
+                                    <t t-set="report_url" t-value="i.get_portal_url(report_type='pdf', download=True)"/>
+                                    <div>
+                                        <a t-att-href="report_url"><span class="fa fa-download" role="img" aria-label="Download" title="Download"/></a>
+                                        <a t-att-href="report_url"><span t-esc="i.number"/></a>
+                                        <span class="text-muted" t-field="i.date_invoice"/>
+                                        <t t-if="i.state == 'paid'">
+                                            <span class="badge badge-success orders_label_text_align"><i class="fa fa-fw fa-check"/> Paid</span>
+                                        </t>
+                                        <t t-if="i.state != 'paid'">
+                                            <span class="badge badge-info orders_label_text_align"><i class="fa fa-fw fa-clock-o"/> Waiting Payment</span>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+	</template>
+	
+	
+	
+	<template id="Skit Portal Layout" inherit_id="portal.portal_layout" name="Portal Layout">
+		<xpath expr="//div[hasclass('alert-dismissible')]" position="replace">
+			<div t-if="o_portal_fullwidth_alert" class="edit_mode_hide alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden">
+                <div class="container">
+                    <t t-raw="o_portal_fullwidth_alert"/>
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"> &#215; </button>
+            </div>
+		</xpath>
+		<xpath expr="//div[hasclass('o_portal_wrap')]" position="before">
+  			<div class="timeline track_status_bar_mob">
+    			<div class="container_div">
+					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
+   						<div class="timeline-block timeline-block-right">
+      						<div class="icon_confirm marker"></div>
+      						<div class="track_img_conf"><img id="msale_confirm_img" src="/skit_website_fish_market/static/src/img/confirmed_gray.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Confirmed</h6>
+      						</div>
+   						</div>
+   						<div class="conf_vertical_ln"></div>
+   					</t>
+   					<t t-else="">
+    					<div class="timeline-block timeline-block-right">
+      						<div class="icon_confirm marker active"></div>
+      						<div class="track_img_conf"><img id="msale_confirm_img" src="/skit_website_fish_market/static/src/img/confirmed_green.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Confirmed</h6>
+      						</div>
+   						</div>
+   						<div class="conf_vertical_ln active_ln"></div>
+   					</t>
+					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale')">
+   						<div class="timeline-block timeline-block-left">
+      						<div class="icon_preparing marker"></div>
+      						<div class="track_img_prepare"><img id="msale_prepare_img" src="/skit_website_fish_market/static/src/img/preparing_gray.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Preparing</h6>
+      						</div>
+   						</div>
+   						<div class="prepare_vertical_ln"></div>
+   					</t>
+   					<t t-else="">
+   						<div class="timeline-block timeline-block-left">
+      						<div class="icon_preparing marker active"></div>
+      						<div class="track_img_prepare"><img id="msale_prepare_img" src="/skit_website_fish_market/static/src/img/preparing_green.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Preparing</h6>
+      						</div>
+   						</div>
+   						<div class="prepare_vertical_ln active_ln"></div>
+   					</t>
+   
+					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
+   						<div class="timeline-block timeline-block-right">
+      						<div class="icon_ready marker"></div>
+      						<div class="track_img_ready"><img id="msale_ready_img" src="/skit_website_fish_market/static/src/img/ready.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Ready to Delivery</h6> 
+      						</div>
+   						</div>
+   						<div class="ready_vertical_ln"></div>
+   					</t>
+   					<t t-else="">
+   						<div class="timeline-block timeline-block-right">
+      						<div class="icon_ready marker active"></div>
+      						<div class="track_img_ready"><img id="msale_ready_img" src="/skit_website_fish_market/static/src/img/ready_green.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Ready to Delivery</h6> 
+      						</div>
+   						</div>
+   						<div class="ready_vertical_ln active_ln"></div>
+   					</t>
+					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing') or (sale_order.state == 'ready')">
+   						<div class="timeline-block timeline-block-left">
+      						<div class="icon_delivered marker"></div>
+      						<div class="track_img_deliver"><img id="msale_deliver_img" src="/skit_website_fish_market/static/src/img/delivered_gray.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Delivered</h6>
+      						</div>
+   						</div>
+   					</t>
+   					<t t-else="">
+   						<div class="timeline-block timeline-block-left">
+      						<div class="icon_delivered marker active"></div>
+      						<div class="track_img_deliver"><img id="msale_deliver_img" src="/skit_website_fish_market/static/src/img/delivered_green.png" alt=""/></div>
+      						<div class="timeline-content">
+         						<h6>Delivered</h6>
+      						</div>
+   						</div>
+   					</t>
+  				</div>  
+			</div>
+		</xpath>
+	</template>
+	
+</odoo>
