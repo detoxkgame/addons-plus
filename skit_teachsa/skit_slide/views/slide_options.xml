@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <data>
+	<record model="ir.ui.view" id="view_slide_channel_form_inherit">
+		<field name="name">skit.slide.channel.form</field>
+		<field name="model">slide.channel</field>
+		<field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
+		<field name="arch" type="xml">
+    	<xpath expr="//form/sheet/notebook/page[2]" position="after">
+			<page string="Options">				      
+						<group><group string="Course">						
+							<field name="channel_type" widget="radio" />
+							<field name="user_id" />
+							<field name="website_id" />
+						</group>	
+						<group string="Access Rights">						
+							<field name="enroll" widget="radio" />	
+							<field name="upload_group_ids" widget="many2many_tags"/>
+							<field name="enroll_group_ids" widget="many2many_tags"/>
+						</group>	
+						</group>		
+						
+			    		<group><group string="Communication">			    		
+			    			<field name="allow_comment"/>
+			    			<field name="forum_id"/>
+			    			<field name="publish_template_id" domain="[('model','=','slide.slide')]"/>
+                             <field name="share_template_id" domain="[('model','=','slide.slide')]"/>
+			    		</group>
+			    		
+			    		<group string="Display">			    		
+			    		<field name="visibility" widget="radio"/>
+			    		<field name="promote_strategy" widget="radio"/>
+			    		</group>
+			    		</group>
+			    		
+			    </page>
+			</xpath>
+		</field>
+	</record>
+	</data>
+</odoo>

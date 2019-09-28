@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'views/slide_document.xml',
         'views/skit_quiz.xml',
+        'views/slide_options.xml',
     ],
     'depends': ['website_slides'],
     'installable': True,
