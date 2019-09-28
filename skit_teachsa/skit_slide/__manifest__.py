@@ -9,7 +9,9 @@
     'website': 'http://www.srikeshinfotech.com',
     'license': "AGPL-3",
     'data': [
+        'security/ir.model.access.csv',
         'views/slide_document.xml',
+        'views/skit_quiz.xml',
     ],
     'depends': ['website_slides'],
     'installable': True,

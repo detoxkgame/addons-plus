@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+	<record id="skit_view_slide_slide_form" model="ir.ui.view">
+    	<field name="name">skit.view.slide.slide.form</field>
+        <field name="model">slide.slide</field>
+        <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
+        <field name="arch" type="xml">
+        	<xpath expr="//form/sheet/notebook/page[3]" position="replace">
+        		<page string="Statistics">
+        			<group>
+                    	<group name="view_statistics" string="Views">
+                        	<field string="Member" name="slide_views" readonly="1"/>
+                            <field string="Public" name="public_views" readonly="1"/>
+                            <field string="Total" name="total_views"/>
+                            <hr/>
+                            <field name="comments_count" readonly="1"/>
+                        </group>
+                    </group>
+        		</page>
+            </xpath>
+        	<xpath expr="//form/sheet/notebook/page[3]" position="after">
+        		<page string="External Links">
+        			<group>
+        				<newline/>
+        				<newline/>
+        				<field name="link_ids" widget="one2many" nolabel="1">
+        					<tree editable="top">
+                    			<field name="link_name"/>
+                        		<field name="link" widget="url" placeholder="e.g https://www.odoo.com"/>
+                    		</tree>
+        				</field>
+        			</group>
+        		</page>
+            	<page string="Quiz">
+                	<group>
+                    	<group string="Rewards">
+                        	<field name="quiz_first_attempt_reward"/>
+                        	<field name="quiz_second_attempt_reward"/>
+                        	<field name="quiz_third_attempt_reward"/>
+                        	<field name="quiz_fourth_attempt_reward"/>
+                        </group>
+                        <group string="Questions">
+                        	<field name="quiz_question_ids" colspan="4" nolabel="1">
+	                        	<tree>
+	                            	<field name="quiz_question"/>                                
+	                            </tree>
+	                            <form string="Products Category">
+	                            	<sheet>
+	                               		<div class="oe_title" style="width: 100%;">
+                            				<label for="quiz_question" string="Question name" class="oe_edit_only"/>
+                            				<h1><field name="quiz_question" colspan="4" placeholder="Question Name"/></h1>
+                            				<separator />
+                        				</div>
+                        				<field name="quiz_answer_ids" nolabel="1">
+                            				<tree editable="bottom">
+                                				<field name="text_value"/>
+                                				<field name="is_correct"/>
+                            				</tree>
+                        				</field>
+	                                 </sheet>
+	                             </form>
+	                        </field>
+                        </group>
+                    </group>
+                </page>
+             </xpath>
+         </field>
+   </record>
+</odoo>
+

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_slide_question_user,slide.question.user,model_slide_question,base.group_user,1,1,1,1
+access_slide_question_manager,slide.question.manager,model_slide_question,base.group_user,1,1,1,1
+access_slide_answer_user,slide.answer.user,model_slide_answer,base.group_user,1,1,1,1
+access_slide_answer_manager,slide.answer.manager,model_slide_answer,base.group_user,1,1,1,1
+access_slide_slide_link_user,slide.slide.link.user,model_slide_slide_link,base.group_user,1,1,1,1
+access_slide_slide_link_manager,slide.slide.link.manager,model_slide_slide_link,base.group_user,1,1,1,1
