@@ -16,7 +16,7 @@
         'views/website_slides_views.xml',
         'views/res_partner_views.xml',
     ],
-    'depends': ['website_slides'],
+    'depends': ['website_slides', 'website_forum', 'rating', 'sale'],
     'installable': True,
     'application': True,
     'auto_install': False,
