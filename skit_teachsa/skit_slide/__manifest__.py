@@ -15,7 +15,6 @@
         'views/slide_options.xml',
         'views/website_slides_views.xml',
         'views/res_partner_views.xml',
-        'views/slide_statistics_view.xml'
     ],
     'depends': ['website_slides', 'website_forum', 'rating', 'sale'],
     'installable': True,

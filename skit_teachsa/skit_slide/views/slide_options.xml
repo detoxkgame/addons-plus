@@ -6,8 +6,23 @@
 		<field name="model">slide.channel</field>
 		<field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
 		<field name="arch" type="xml">
-    	<xpath expr="//form/sheet/notebook/page[2]" position="after">
-			<page string="Options">				      
+    	<xpath expr="//form/sheet/notebook" position="replace">
+    	<notebook>
+    		<page name="content" string="Content">
+                        <field name="slide_ids" colspan="4" nolabel="1" widget="slide_category_one2many" context="{'default_channel_id': active_id}">
+                            <tree>
+	                            <!-- <field name="sequence" widget="handle"/> -->
+	                            <field name="name"/>
+	                            <field name="slide_type"/>
+	                            <field name="completion_time" string="Duration" widget="float_time"/>
+	                            <field name="total_views" string="Views"/>
+                            </tree>
+                       </field>
+             </page>
+             <page name="description" string="Description">
+                         <field name="description" colspan="4" nolabel="1"/>
+             </page>
+			<page name="options" string="Options">				      
 						<group><group string="Course">						
 							<field name="channel_type" widget="radio" />
 							<field name="user_id" />
@@ -34,6 +49,26 @@
 			    		</group>
 			    		
 			    </page>
+			    <page name="statistics" string="Statistics">
+	                    <group>
+		                       <group name="statistics_nbr" class="col-4">
+		                             <field name="nbr_presentation" string="Presentations"/>
+		                             <field name="nbr_document" string="Documents"/>
+		                             <field name="nbr_video" string="Videos"/>
+		                             <field name="nbr_quizzes" string="Quizzes"/>
+		                       </group>
+		                       <group name="view_stats">
+		                            <field name="total_views" string="Visits"/>
+		                            <field string="Rating" name="rating_avg" widget="field_float_rating"/>
+		                            <label for="total_time" string="Watch Time"/>
+		                            <div>
+		                                <field name="total_time"/>
+		                                <span class="ml-2">Hours</span>
+		                           </div>
+		                       </group>
+	                     </group>
+                     </page>
+                     </notebook>
 			</xpath>
 		</field>
 	</record>
