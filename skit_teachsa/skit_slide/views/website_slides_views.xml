@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<!-- SLIDE.CHANNEL VIEWS INHERITS -->
+    	<record id="view_slide_channel_form_inherit_chanel_partner" model="ir.ui.view">
+            <field name="name">slide.channel.form.channel.partner</field>
+            <field name="model">slide.channel</field>
+            <field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='website_publish_button']" position="before">
+                	
+                	<button name="action_view_slides" type="object" icon="fa-files-o" class="oe_stat_button" groups="website.group_website_publisher">
+                    	<div class="o_field_widget o_stat_info">
+                        	<span class="o_stat_value"><field name="total_slides" nolabel="1"/></span>
+                            <span name="total_slides_label" class="o_stat_text">Contents</span>
+                        </div>
+                    </button>
+                            
+                	<button name="action_redirect_to_done_members" type="object" icon="fa-trophy" class="oe_stat_button" groups="website.group_website_publisher">
+                    	<div class="o_field_widget o_stat_info">
+                        	<span class="o_stat_value"><field name="members_done_count" nolabel="1"/></span>
+                            <span name="members_done_count_label" class="o_stat_text">Finished</span>
+                        </div>
+                    </button>
+                            
+                    <field name="channel_partner_ids" invisible="1"/>
+                    <button name="action_redirect_to_members" type="object" icon="fa-users" class="oe_stat_button" 
+                    		groups="website.group_website_publisher">
+                        <field name="members_count" string="Attendees" widget="statinfo"/>
+                    </button>
+                    
+                    <button name="action_view_ratings" type="object" icon="fa-star" class="oe_stat_button" groups="website.group_website_publisher" >
+                    	<field name="rating_count" string="Reviews" widget="statinfo"/>
+                    </button>
+                    
+                    <field name="forum_id" invisible="1"/>
+                    <button name="action_redirect_to_forum" type="object" class="oe_stat_button" attrs="{'invisible': [('forum_id', '=', False)]}" icon="fa-comment">
+	                    <field string="Forum Posts" name="forum_total_posts" widget="statinfo"/>
+	                </button>
+                </xpath>
+            </field>
+         </record>
+         
+         <!-- SLIDE.CHANNEL.PARTNER VIEWS-->
+         <record id="view_slide_channel_partner_tree" model="ir.ui.view">
+            <field name="name">slide.channel.partner.tree</field>
+            <field name="model">slide.channel.partner</field>
+            <field name="arch" type="xml">
+                <tree string="Attendees" editable="top">
+                    <field name="create_date"/>
+                    <field name="partner_id" string="Contact"/>
+                    <field name="partner_email" readonly="1" />
+                    <field name="channel_id" string="Channel" invisible="context.get('default_channel_id',False)"/>
+                    <button name="unlink" class="text-danger" string="Remove" icon="fa-times-circle" type="object"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_slide_channel_partner_tree_all" model="ir.actions.act_window">
+            <field name="name">Channel Partner</field>
+            <field name="res_model">slide.channel.partner</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'default_channel_id': active_id,
+            		}
+            </field>
+        </record>
+        
+        <!-- FORUM.POST VIEWS INHERITS -->
+    	<record id="view_view_forum_post_list_inherit_chanel_partner" model="ir.ui.view">
+            <field name="name">forum.post.form.channel.partner</field>
+            <field name="model">forum.post</field>
+            <field name="inherit_id" ref="website_forum.view_forum_post_list"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='forum_id']" position="after">
+            		<field name="views" />
+            		<field name="child_count" />
+            		<field name="favourite_count" />
+            	</xpath>
+            </field>
+        </record>
+        
+        <record id="action_slide_channels_" model="ir.actions.act_window">
+            <field name="name">Channels</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a channel
+                </p>
+            </field>
+        </record>
+        
+        <!-- MAIN ELEARNING MENU -->
+        <menuitem name="eLearning" id="menu_website_elearning"
+            parent="website.menu_website_configuration" sequence="50" groups="website.group_website_designer"/>
+        
+        <!-- COURSES MENU -->   
+        <menuitem id="menu_eleaning_courses" parent="menu_website_elearning" name="Courses"  action="website_slides.action_slide_channels" sequence="20"/>
+        
+        <!-- CONTENTS MENU -->   
+        <menuitem id="menu_eleaning_contents" parent="menu_website_elearning" name="Contents"  action="website_slides.action_slides_slides" sequence="20"/>
+    </data>
+</odoo>

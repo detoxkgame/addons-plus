@@ -13,6 +13,8 @@
         'views/slide_document.xml',
         'views/skit_quiz.xml',
         'views/slide_options.xml',
+        'views/website_slides_views.xml',
+        'views/res_partner_views.xml',
     ],
     'depends': ['website_slides'],
     'installable': True,

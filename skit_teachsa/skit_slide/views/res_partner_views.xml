@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<!-- RES.PARTNER VIEWS INHERITS -->
+    	<record id="view_partner_form_inherit_chanel" model="ir.ui.view">
+            <field name="name">res.partner.form.channel</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='category_id']" position="after">
+            		<field name="issponsor" />
+            		<field name="istutor" />
+            	</xpath>
+            </field>
+        </record>
+    	
+    </data>
+</odoo>
