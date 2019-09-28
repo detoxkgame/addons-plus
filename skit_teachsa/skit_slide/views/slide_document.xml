@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_slide_slide_form_inherit" model="ir.ui.view">
+            <field name="name">slide.slide.form.inherit</field>
+            <field name="model">slide.slide</field>
+            <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
+            <field name="arch" type="xml">
+            <data>
+                <label for="name" position="replace">
+                    <label string="Title" for="name"  />
+				</label>
+				 <xpath expr="//group[1]" position="replace">
+				 </xpath>
+				 <xpath expr="//field[@name='url']" position="before">
+				    <field name="channel_id"/>
+				 </xpath>
+				 <xpath expr="//form/sheet/notebook/page[2]" position="replace">
+				   <page string="Document">
+				   <div class="o_group">
+				      
+                        <group class="o_group o_inner_group o_group_col_6">
+                            <field name="channel_id"/>
+                            <field name="slide_type"/>
+                            <xpath expr="//field[@name='slide_type']" position="after"> 
+                               <field name="url" string="Document URL" attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>                                                    
+				            </xpath>
+				             <xpath expr="//field[@name='slide_type']" position="after"> 
+  				                   <label for="Attachment" string="Attachment" attrs="{'invisible': [('slide_type', '!=', 'document')]}"/>
+				                   <button name="Attachment" string="Upload files" attrs="{'invisible': [('slide_type', '!=', 'document')]}"/>
+ 				            </xpath>
+				            <field name="mime_type" readonly="1"/>
+                        </group>
+                        <group class="o_group o_inner_group o_group_col_6">
+                         <field name="user_id"/>
+                         <field name="website_id" groups="website.group_multi_website"/>
+                         <label for="is_preview" string="Allow Preview"/>
+				         <input type="checkbox" name="is_preview"/> 
+				         <field name="completion_time" widget="float_time"/>
+                        </group>
+                        </div>
+                    </page>
+				 </xpath>
+				 
+				 
+				 
+ 				 <!-- <xpath expr="//field[@name='slide_type']" position="after"> 
+				    <field name="url"  attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>
+ 				 </xpath> 
+ 				 <xpath expr="//field[@name='slide_type']" position="replace"> 
+				  <field name="slide_type"/>
+				  </xpath>
+				   <xpath expr="//field[@name='slide_type']" position="after"> 
+  				    <label for="Attachment" string="Attachment" attrs="{'invisible': [('slide_type', '!=', 'document')]}"/>
+				    <button name="Attachment" string="Upload files" attrs="{'invisible': [('slide_type', '!=', 'document')]}"/>
+ 				 </xpath>
+  				 <xpath expr="//field[@name='document_id']" position="after">  
+				  <field name="user_id"/>
+				  </xpath> 
+				   <xpath expr="//field[@name='user_id']" position="after"> 
+				    <label for="is_preview" string="Allow Preview"/>
+				    <input type="checkbox" name="is_preview"/> 
+				  </xpath> 
+				   <xpath expr="//field[@name='user_id']" position="after">  
+				  <field name="completion_time" widget="float_time"/>
+				  </xpath> -->
+             </data>
+            </field>
+        </record>
+     </data>
+</odoo>
