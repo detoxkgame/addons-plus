@@ -5,19 +5,39 @@
         <field name="model">slide.slide</field>
         <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
         <field name="arch" type="xml">
-        	<xpath expr="//form/sheet/notebook/page[3]" position="replace">
-        		<page string="Statistics">
-        			<group>
-                    	<group name="view_statistics" string="Views">
-                        	<field string="Member" name="slide_views" readonly="1"/>
-                            <field string="Public" name="public_views" readonly="1"/>
-                            <field string="Total" name="total_views"/>
-                            <hr/>
-                            <field name="comments_count" readonly="1"/>
+        	<xpath expr="//form/sheet/notebook" position="replace">
+        		<notebook>
+                    <page string="Document">
+                    	<group>
+                        	<field name="url" attrs="{'required': [('image', '=', False)]}"/>
+                            <field name="slide_type" readonly="1"/>
+                            <field name="document_id" readonly="1"/>
+                            <field name="mime_type" readonly="1"/>
+                            <field name="datas" readonly="1"/>
                         </group>
-                    </group>
-        		</page>
-            </xpath>
+                     </page>
+                     <page string="Description">
+                    	<field name="description"/>
+                     </page>
+                     <page string="Website">
+                         <group>
+                         	<group>
+                            	<field name="download_security"/>
+                                <field name="date_published"/>
+                                <field name="likes"/>
+                                <field name="dislikes"/>
+                            </group>
+                            <group>
+                                <field name="slide_views"/>
+                                <field name="embed_views"/>
+                                <field name="total_views"/>
+                            </group>
+                          </group>
+                          <label for="index_content"/>
+                          <field name="index_content"/>
+                       </page>
+                </notebook>
+        	</xpath>
         	<xpath expr="//form/sheet/notebook/page[3]" position="after">
         		<page string="External Links">
         			<group>
@@ -63,6 +83,19 @@
                         </group>
                     </group>
                 </page>
+                
+                <page string="Statistics">
+        			<group>
+                    	<group name="view_statistics" string="Views">
+                        	<field string="Member" name="slide_views" readonly="1"/>
+                            <field string="Public" name="public_views" readonly="1"/>
+                            <field string="Total" name="total_views"/>
+                            <hr/>
+                            <field name="comments_count" readonly="1"/>
+                        </group>
+                    </group>
+        		</page>
+        		
              </xpath>
          </field>
    </record>
