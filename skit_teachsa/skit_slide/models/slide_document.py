@@ -16,3 +16,4 @@ class Slide(models.Model):
     user_id = fields.Many2one('res.users', string="Uploaded by")
     completion_time = fields.Float("Duration")
     is_preview = fields.Boolean(string="Allow preview")
+    data = fields.Binary('File')
