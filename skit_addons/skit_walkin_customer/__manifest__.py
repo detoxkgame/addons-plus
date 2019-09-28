@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Skit Walkin Customer',
+    'name': 'POS Walkin Customer',
     'version': '0.1.0',
     'category': 'Sales, Point of sales',
     'sequence': 15,
