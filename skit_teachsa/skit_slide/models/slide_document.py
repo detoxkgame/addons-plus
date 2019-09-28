@@ -17,3 +17,4 @@ class Slide(models.Model):
     completion_time = fields.Float("Duration")
     is_preview = fields.Boolean(string="Allow preview")
     data = fields.Binary('File')
+    sequence = fields.Integer(default=10, help='Display order')
