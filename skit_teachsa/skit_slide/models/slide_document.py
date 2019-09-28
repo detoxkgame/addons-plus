@@ -4,6 +4,7 @@ from odoo import models, fields
 
 class Slide(models.Model):
     _inherit = 'slide.slide'
+
     slide_type = fields.Selection([
         ('quiz', 'Quiz'),
         ('presentation', 'Presentation'),
