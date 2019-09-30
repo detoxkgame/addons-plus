@@ -12,7 +12,7 @@
 					</label>
 					<xpath expr="//group[1]" position="replace">
 					</xpath>
-					<xpath expr="//form/sheet/notebook/page[2]" position="replace">
+					<xpath expr="//form/sheet/notebook/page[1]" position="replace">
 						<page string="Document">
 							<div class="o_group">
 								<group class="o_group o_inner_group o_group_col_6">

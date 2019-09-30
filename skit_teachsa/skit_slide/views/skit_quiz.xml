@@ -5,40 +5,15 @@
         <field name="model">slide.slide</field>
         <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
         <field name="arch" type="xml">
-        	<xpath expr="//form/sheet/notebook" position="replace">
-        		<notebook>
-                    <page string="Document">
-                    	<group>
-                        	<field name="url" attrs="{'required': [('image', '=', False)]}"/>
-                            <field name="slide_type" readonly="1"/>
-                            <field name="document_id" readonly="1"/>
-                            <field name="mime_type" readonly="1"/>
-                            <field name="datas" readonly="1"/>
-                        </group>
-                     </page>
-                     <page string="Description">
-                    	<field name="description"/>
-                     </page>
-                     <page string="Website">
-                         <group>
-                         	<group>
-                            	<field name="download_security"/>
-                                <field name="date_published"/>
-                                <field name="likes"/>
-                                <field name="dislikes"/>
-                            </group>
-                            <group>
-                                <field name="slide_views"/>
-                                <field name="embed_views"/>
-                                <field name="total_views"/>
-                            </group>
-                          </group>
-                          <label for="index_content"/>
-                          <field name="index_content"/>
-                       </page>
-                </notebook>
+        	<xpath expr="//form/sheet/notebook/page[2]" position="replace">
+        		<page string="Description">
+        			<field name="description"/>
+        		</page>
         	</xpath>
-        	<xpath expr="//form/sheet/notebook/page[3]" position="after">
+        	<xpath expr="//form/sheet/notebook/page[3]" position="replace">
+        	
+        	</xpath>
+        	<xpath expr="//form/sheet/notebook/page[2]" position="after">
         		<page string="External Links">
         			<group>
         				<newline/>
