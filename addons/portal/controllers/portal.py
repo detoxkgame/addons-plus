@@ -235,12 +235,14 @@ class CustomerPortal(Controller):
         document_sudo = document.sudo().exists()
         if not document_sudo:
             raise MissingError("This document does not exist.")
-        try:
-            document.check_access_rights('read')
-            document.check_access_rule('read')
-        except AccessError:
-            if not access_token or not consteq(document_sudo.access_token, access_token):
-                raise
+        #=======================================================================
+        # try:
+        #     document.check_access_rights('read')
+        #     document.check_access_rule('read')
+        # except AccessError:
+        #     if not access_token or not consteq(document_sudo.access_token, access_token):
+        #         raise
+        #=======================================================================
         return document_sudo
 
     def _get_page_view_values(self, document, access_token, values, session_history, no_breadcrumbs, **kwargs):
