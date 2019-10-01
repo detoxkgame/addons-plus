@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+        <record id="action_sponser" model="ir.actions.act_window">
+			<field name="name">Sponser</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('issponsor','=',1)]</field>   	
+		</record>
+        
+        <record id="skit_view_partner_tree" model="ir.ui.view">
+	        <field name="name">skit.res.partner.tree</field>
+	        <field name="model">res.partner</field>
+	        <field name="inherit_id" ref="base.view_partner_tree"/>
+	        <field name="arch" type="xml">
+	        	<xpath expr="//tree/field[@name='email']" position="after">	      
+                     <button class="oe_stat_button" name="base_website_publish_button"  type="object" icon="fa-globe">                
+                    		<field name="website_published" widget="website_button"/>                   		
+                     </button>    
+                        <field name="website_published_state"/> 
+       		</xpath>
+	        </field>
+        </record>       		
+            <menuitem id="menu_eleaning_sponser" parent="menu_website_elearning" name="Sponser"  action="skit_slide.action_sponser" sequence="20" />
+</data>
+</odoo>
