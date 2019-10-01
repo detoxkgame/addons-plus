@@ -31,37 +31,42 @@ class WetAuthSignupHome(Home):
 
         if (kw.get('login') and kw.get('customer')):
             user_sudo = request.env['res.users'].sudo().search([('login', '=', kw.get('login'))])
-            wet_otp = request.env['wet.otp.verification'].sudo().search([('mobile', '=', kw.get('login'))])
-            if wet_otp:
-                kw['otp'] = wet_otp.otp
+            if user_sudo:
+                wet_otp = request.env['wet.otp.verification'].sudo().search([('mobile', '=', kw.get('login'))])
+                if wet_otp:
+                    kw['otp'] = wet_otp.otp
+                else:
+                    digits = "0123456789"
+                    otp_no = ""
+                    for i in range(6):
+                        otp_no += digits[math.floor(random.random() * 10)]
+                    wet_otp = request.env['wet.otp.verification'].sudo().create(
+                        {'mobile': kw.get('login'),
+                         'email': user_sudo.email,
+                         'otp': otp_no})
+                    template = request.env.ref('skit_website_wet_market.wet_otp_verification', raise_if_not_found=False)
+                    mail_template = request.env['mail.template'].sudo().browse(template.id)
+                    mail_template.write({
+                        'email_to': user_sudo.email
+                    })
+                    mail_id = mail_template.send_mail(wet_otp.id, force_send=True)
+                    mail_mail_obj = request.env['mail.mail'].sudo().search(
+                            [('id', '=', mail_id)]
+                            )
+                    mail_mail_obj.send()
+                    mail_mail = request.env['mail.mail'].sudo().search(
+                            [('id', '=', mail_mail_obj.id)]
+                            )
             else:
-                digits = "0123456789"
-                otp_no = ""
-                for i in range(6):
-                    otp_no += digits[math.floor(random.random() * 10)]
-                wet_otp = request.env['wet.otp.verification'].sudo().create(
-                    {'mobile': kw.get('login'),
-                     'email': user_sudo.email,
-                     'otp': otp_no})
-                template = request.env.ref('skit_website_wet_market.wet_otp_verification', raise_if_not_found=False)
-                mail_template = request.env['mail.template'].sudo().browse(template.id)
-                mail_template.write({
-                    'email_to': user_sudo.email
-                })
-                mail_id = mail_template.send_mail(wet_otp.id, force_send=True)
-                mail_mail_obj = request.env['mail.mail'].sudo().search(
-                        [('id', '=', mail_id)]
-                        )
-                mail_mail_obj.send()
-                mail_mail = request.env['mail.mail'].sudo().search(
-                        [('id', '=', mail_mail_obj.id)]
-                        )
+                kw['no_user'] = True
 
         response = super(WetAuthSignupHome, self).web_login(*args, **kw)
         response.qcontext.update(self.get_auth_signup_config())
         if request.httprequest.method == 'GET' and request.session.uid and request.params.get('redirect'):
             # Redirect if already logged in and redirect param is present
             return http.redirect_with_hash(request.params.get('redirect'))
+        if request.params.get('login_success'):
+            return request.redirect("/shop")
         return response
 
     @http.route('/web/signup', type='http', auth='public', website=True, sitemap=False)
@@ -109,8 +114,8 @@ class WetAuthSignupHome(Home):
                         ('otp', '=', kw.get('otp'))])
                     if not wet_otp:
                         qcontext['show_otp'] = "otp"
-                        qcontext['otp_message'] = "OTP has been sent to your email address"
-                        qcontext['error'] = "OTP will expire in 10mins"
+                        #qcontext['otp_message'] = "OTP has been sent to your email address"
+                        qcontext['error'] = "Wrong OTP Number"
                         response = request.render('auth_signup.signup', qcontext)
                         response.headers['X-Frame-Options'] = 'DENY'
                         return response
