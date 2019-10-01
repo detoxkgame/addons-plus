@@ -1,18 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-    	<!-- RES.PARTNER VIEWS INHERITS -->
-    	<record id="view_partner_form_inherit_chanel" model="ir.ui.view">
-            <field name="name">res.partner.form.channel</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-            	<xpath expr="//field[@name='category_id']" position="after">
-            		<field name="issponsor" />
-            		<field name="istutor" />
-            	</xpath>
-            </field>
-        </record>
-    	
-    </data>
+	<data>
+		<!-- RES.PARTNER VIEWS INHERITS -->
+		<record id="view_partner_form_inherit_chanel" model="ir.ui.view">
+			<field name="name">res.partner.form.channel</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='category_id']" position="after">
+					<field name="issponsor" />
+					<field name="istutor" />
+				</xpath>
+				<xpath expr="//form/sheet/notebook/page[5]" position="before">
+					<page string="Testimonial">
+						<group>
+							<div class="oe_button_box" name="button_box">
+								<button class="oe_stat_button" name="publish_button"
+									type="object" icon="fa-globe">
+									<field name="website_publish" widget="website_button"
+										readonly="0" />
+								</button>
+							</div>
+						</group>
+						<group>
+							<div>
+								<field name="testimonial" colspan="4"></field>
+							</div>
+						</group>
+					</page>
+
+				</xpath>
+
+			</field>
+		</record>
+
+	</data>
 </odoo>
