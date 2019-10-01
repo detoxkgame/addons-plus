@@ -485,29 +485,37 @@ class Home(http.Controller):
             request.uid = odoo.SUPERUSER_ID
 
         values = request.params.copy()
+
         if(request.params.get('customer')):
             values['show_customer'] = True
-            if(request.params.get('login') and (not request.params.get('otp'))):
+            if(kw.get('no_user')):
                 values['login'] = request.params.get('login')
-                values['show_otp'] = "otp"
-                values['message'] = "OTP has been sent to your email address"
-                values['error'] = "OTP will expire in 10mins"
+                values['error'] = "Your mobile not registered.Please sign up."
                 response = request.render('web.login', values)
                 response.headers['X-Frame-Options'] = 'DENY'
                 return response
             else:
-                if request.params.get('otp'):
-                    wet_otp = request.env['wet.otp.verification'].sudo().search([
-                        ('mobile', '=', request.params.get('login')),
-                        ('otp', '=', request.params.get('otp'))])
-                    if not wet_otp:
-                        values['login'] = request.params.get('login')
-                        values['show_otp'] = "otp"
-                        values['message'] = "OTP has been sent to your email address"
-                        values['error'] = "OTP will expire in 10mins"
-                        response = request.render('web.login', values)
-                        response.headers['X-Frame-Options'] = 'DENY'
-                        return response
+                if(request.params.get('login') and (not request.params.get('otp'))):
+                    values['login'] = request.params.get('login')
+                    values['show_otp'] = "otp"
+                    values['message'] = "OTP has been sent to your email address"
+                    values['error'] = "OTP will expire in 10mins"
+                    response = request.render('web.login', values)
+                    response.headers['X-Frame-Options'] = 'DENY'
+                    return response
+                else:
+                    if request.params.get('otp'):
+                        wet_otp = request.env['wet.otp.verification'].sudo().search([
+                            ('mobile', '=', request.params.get('login')),
+                            ('otp', '=', request.params.get('otp'))])
+                        if not wet_otp:
+                            values['login'] = request.params.get('login')
+                            values['show_otp'] = "otp"
+                            #values['message'] = "OTP has been sent to your email address"
+                            values['error'] = "Wrong OTP Number."
+                            response = request.render('web.login', values)
+                            response.headers['X-Frame-Options'] = 'DENY'
+                            return response
         try:
             values['databases'] = http.db_list()
         except odoo.exceptions.AccessDenied:
