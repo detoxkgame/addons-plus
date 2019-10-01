@@ -90,7 +90,13 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
             route: "/shop/cart/confirm",
             params: { },
         }).then(function (data) {
-        	window.location = '/my/orders/'+parseInt(data);
+        	if(data == "address"){
+        		window.location = '/web/login?customer=true';
+        	}else{
+        		window.location = '/my/orders/'+parseInt(data);
+        	}
+        	//window.location = '/my/orders/'+parseInt(data);
+        	
         });
     },
     

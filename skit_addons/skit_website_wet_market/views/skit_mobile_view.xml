@@ -125,6 +125,7 @@
 		<xpath expr="//div[hasclass('o_portal_wrap')]" position="before">
   			<div class="timeline track_status_bar_mob">
     			<div class="container_div">
+    				<t t-if="sale_order">
 					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
    						<div class="timeline-block timeline-block-right">
       						<div class="icon_confirm marker"></div>
@@ -203,6 +204,7 @@
          						<h6>Delivered</h6>
       						</div>
    						</div>
+   					</t>
    					</t>
   				</div>  
 			</div>
