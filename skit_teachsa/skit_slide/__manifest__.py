@@ -14,6 +14,7 @@
         'views/skit_quiz.xml',
         'views/slide_options.xml',
         'views/website_slides_views.xml',
+        'views/skit_website_templates.xml',
         'views/res_partner_views.xml',
     ],
     'depends': ['website_slides', 'website_forum', 'rating', 'sale'],

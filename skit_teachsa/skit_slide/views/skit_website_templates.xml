@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="skit_slide_detail_view" inherit_id="website_slides.slide_detail_view" name="Slide Detailed View">
+	<xpath expr="//div[hasclass('mt8')]//ul[hasclass('nav-tabs')]/li" position="replace">
+		<li class="nav-item">
+        	<a href="#about" aria-controls="about" t-attf-class="nav-link#{not comments and ' active show test' or ''}" role="tab" data-toggle="tab">
+            	<i class="fa fa-home"></i> About
+            </a>
+        </li>
+	</xpath>
+	<xpath expr="//div[hasclass('mt8')]//div[hasclass('tab-content')]/div[1]" position="replace">
+		<div role="tabpanel" t-att-class="not comments and 'tab-pane fade active show in' or 'tab-pane fade'" id="about">
+        	<div t-field="slide.description"/>
+        </div>
+	</xpath>
+</template>
+</odoo>

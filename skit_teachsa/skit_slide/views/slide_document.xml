@@ -20,7 +20,7 @@
 									<field name="slide_type" />
 									<field name="url" string="Document URL"
 										attrs="{'invisible': [('slide_type', '!=', 'video')],'required':[('slide_type', 'in', 'video')]}" />
-									<field name="data" string="Attachment" attrs="{'invisible': [('slide_type', '!=', 'document'),('slide_type', '!=', 'presentation')]}"/>	
+									<field name="datas" string="Attachment" attrs="{'invisible': [('slide_type', '!=', 'document'),('slide_type', '!=', 'presentation')]}"/>	
 									<field name="mime_type" readonly="1" />
 								</group>
 								<group class="o_group o_inner_group o_group_col_6">

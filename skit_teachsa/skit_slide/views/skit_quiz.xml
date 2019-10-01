@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo> 
+<data>
 	<record id="skit_view_slide_slide_form" model="ir.ui.view">
     	<field name="name">skit.view.slide.slide.form</field>
         <field name="model">slide.slide</field>
@@ -74,5 +75,6 @@
              </xpath>
          </field>
    </record>
+   </data>
 </odoo>
 
