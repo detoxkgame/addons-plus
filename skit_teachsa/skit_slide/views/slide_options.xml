@@ -29,9 +29,10 @@
 							<field name="website_id" />
 						</group>	
 						<group string="Access Rights">						
-							<field name="enroll" widget="radio" />	
+							<field name="enroll" widget="radio" options="{'horizontal': true}"/>	
+                            <field name="product_id" attrs="{'invisible': [('enroll', '!=', 'payment')]}"></field>
 							<field name="upload_group_ids" widget="many2many_tags"/>
-							<field name="enroll_group_ids" widget="many2many_tags"/>
+							<field name="enroll_group_ids" widget="many2many_tags"/>							
 						</group>	
 						</group>		
 						
@@ -46,8 +47,11 @@
 			    		<field name="visibility" widget="radio"/>
 			    		<field name="promote_strategy" widget="radio"/>
 			    		</group>
-			    		</group>
-			    		
+			    		</group>				    		
+			    	<div attrs="{'invisible': [('enroll', '!=', 'invite')]}">
+                               <label for="enroll_msg"/>
+                               <field name="enroll_msg" colspan="4" nolabel="1"/>
+                     </div>			    		    		
 			    </page>
 			    <page name="statistics" string="Statistics">
 	                    <group>

@@ -13,10 +13,13 @@ class Slide(models.Model):
 
     website_id = fields.Many2one('website',string='Website')
 
-    enroll = fields.Selection([('P','Public'),
-                               ('On','On Invitation'),
-                               ('On','On Payment')],
+    enroll = fields.Selection([('public','Public'),
+                               ('invite','On Invitation'),
+                               ('payment','On Payment')],
                                 string='Enroll Policy')
+    product_id = fields.Many2one('product.product', string='Product',required=True)
+    enroll_msg = fields.Html(string='Enroll Message')
+
     upload_group_ids = fields.Many2many(
         'res.groups', 'rel_upload_groups', 'channel_id', 'group_id',
         string='Upload Groups', help="Groups allowed to upload presentations in this channel. If void, every user can upload.")
