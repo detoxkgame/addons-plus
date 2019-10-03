@@ -77,6 +77,14 @@ class WetAuthSignupHome(Home):
             kw['password'] = kw.get('login')
             kw['confirm_password'] = kw.get('login')
         qcontext = self.get_auth_signup_qcontext()
+        if (kw.get('login') and kw.get('customer')):
+            qcontext['show_customer'] = True
+            user_sudo = request.env['res.users'].sudo().search([('login', '=', kw.get('login'))])
+            if user_sudo:
+                qcontext['error'] = "Your mobile number already registered."
+                response = request.render('auth_signup.signup', qcontext)
+                response.headers['X-Frame-Options'] = 'DENY'
+                return response
         if(kw.get('customer')):
             qcontext['show_customer'] = True
             if(kw.get('login') and (not kw.get('otp'))):

@@ -7,7 +7,7 @@
 }
 .vendor_view_text{
 	font-size: 20px;
-    color: #8E44AD;
+    color: #676262;
 }
 
 .pos_shop_cart{
@@ -139,7 +139,7 @@
 	cursor: pointer;
 }
 .blue-bgcolor {
-    background: #3498db !important;
+    background: #4a90cc !important;
 }
 .payment-table{
 	width: 100%;
@@ -201,16 +201,16 @@
     margin-left: 20px;
 }
 .yellow_bgcolor{
-	background: #EEC808;
+	background: #E7717D;
 }
 .green_bgcolor{
-	background: #7FC406;
+	background: #94b35f;
 }
 .orange_bgcolor{
-	background: #E1790A;
+	background: #7E685A;
 }
 .pink_bgcolor{
-	background: #F512AD;
+	background: #99928c;
 }
 
 /** Media Query */
