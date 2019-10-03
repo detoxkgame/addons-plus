@@ -10,6 +10,8 @@
 				<xpath expr="//field[@name='category_id']" position="after">
 					<field name="issponsor" />
 					<field name="istutor" />
+					<field name="isparent" />
+					<field name="isstudent" />
 				</xpath>
 				<xpath expr="//form/sheet/notebook/page[5]" position="before">
 					<page string="Testimonial">
@@ -27,6 +29,17 @@
 								<field name="testimonial" colspan="4"></field>
 							</div>
 						</group>
+					</page>
+
+				</xpath>
+				<xpath expr="//form/sheet/notebook/page[6]" position="before">
+					<page string="Student" attrs="{'invisible': [('isparent', '!=', True)]}">
+					     <field name="student_id" colspan="4" nolabel="1" widget="slide_category_one2many">
+                            <tree>
+	                            <field name="name"/>
+	                            <field name="email"/>
+                            </tree>
+                       </field> 
 					</page>
 
 				</xpath>

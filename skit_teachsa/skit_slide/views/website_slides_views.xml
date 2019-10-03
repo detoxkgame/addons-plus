@@ -104,5 +104,7 @@
         
         <!-- CONTENTS MENU -->   
         <menuitem id="menu_eleaning_contents" parent="menu_website_elearning" name="Contents"  action="website_slides.action_slides_slides" sequence="20"/>
+        
+         <menuitem id="menu_elearning_customer" parent="menu_website_elearning"  name="Customers" action="base.action_partner_form" sequence="20"/>
     </data>
 </odoo>
