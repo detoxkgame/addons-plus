@@ -105,6 +105,106 @@
         <!-- CONTENTS MENU -->   
         <menuitem id="menu_eleaning_contents" parent="menu_website_elearning" name="Contents"  action="website_slides.action_slides_slides" sequence="20"/>
         
-         <menuitem id="menu_elearning_customer" parent="menu_website_elearning"  name="Customers" action="base.action_partner_form" sequence="20"/>
+        <menuitem id="menu_elearning_customer" parent="menu_website_elearning"  name="Customers" action="base.action_partner_form" sequence="20"/>
+         
+	    <!-- Inherit Channels sub-template: header -->
+	    <template id="quiz_slides_channel_header" name="Quiz Slides Channel Header" inherit_id="website_slides.slides_channel_header" priority="20">
+	    	<xpath expr="//ul[hasclass('nav-tabs-border')]" position="inside">
+	    		<li t-if="header_object.nbr_quiz" class="nav-item">
+	            	<a t-attf-href="/slides/#{slug(channel)}#{category and '/category/' + slug(category) or ''}/quiz"
+	                    t-attf-class="nav-link#{slide_type == 'quiz' and ' active' or ''}">
+	                    <span class="badge badge-pill" t-esc="header_object.nbr_quiz"/> Quiz
+	               	</a>
+	            </li> 
+	    	</xpath>
+	    </template>
+    
+	    <!-- Channel main template -->
+	    <template id="quiz_slides_home" name="Quiz Odoo Slides" inherit_id="website_slides.home" priority="20">
+	    	<xpath expr="//section/div[@class='container mt16']" position="replace">
+	    		<div class="container mt16">
+	                    <div class="row">
+	                        <div class="col-xl-12 col-lg-12 col-md-12 col-12" style="padding-left: 15px;padding-right: 15px;" t-if="channel.total == 0">
+	                            <div class="jumbotron">
+	                                <h1>No presentation published yet.</h1>
+	                                <p>
+	                                    The <i><t t-esc="channel.name"/></i> is empty.
+	                                    <span t-if="can_upload">
+	                                        Upload PDF presentations, documents, videos or infographic using the button below.
+	                                    </span>
+	                                </p>
+	                                <p>
+	                                    <!-- Public user has not right to create/write on slide-->
+	                                    <a role="button" t-if="can_upload and not is_public_user" class="btn btn-primary oe_slide_js_upload" t-attf-channel_id="#{channel.id}" aria-label="Upload Presentation" title="Upload Presentation" href="#">
+	                                        <i class="fa fa-cloud-upload"></i> Upload
+	                                    </a>
+	                                </p>
+	                            </div>
+	                        </div>
+	
+	                        <div class="col-xl-12 col-lg-12 col-md-12 col-12" t-if="slide_type or category or tag">
+	                            <div class="alert alert-success mb0" role="status" t-if="tag">
+	                                Results for <strong t-esc="tag.name"/>
+	                            </div>
+	                            <t t-if="slide_type == 'quiz'">
+	                            	<t t-call="skit_slide.quiz_slides_view"/>
+	                            </t>
+	                            <t t-else="">
+	                            	<t t-call="website_slides.slides_grid_view"/>
+	                            </t>
+	                        </div>
+	                        <div class="row text-center" t-if="slide_type or category or tag">
+	                            <t t-call="website.pager"/>
+	                        </div>
+	
+	                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 mb16" t-if="not slide_type and category_datas and not tag">
+	                            <t t-foreach="category_datas" t-as="category">
+	                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+	                                    <div class="col-xl-12 col-lg-12 col-md-12 col-12 mt8 oe_slides_bottom_border">
+	                                        <a t-if="category['id']" t-attf-href="/slides/#{slug(channel)}/category/#{category['id']}" class="h3 mt0 mb0">
+	                                            <t t-esc="category['name']"/>
+	                                        </a>
+	                                        <span t-if="not category['id']" title="Uncategorized presentation" class="h3 mt0 mb0">
+	                                            <t t-esc="category['name']"/>
+	                                        </span>
+	                                        <a t-attf-href="/slides/#{slug(channel)}/category/#{category['id']}" class="float-right" t-if="category['total'] - 4 > 0 and category['id']">
+	                                            <i class="fa fa-arrow-right"/> See all
+	                                        </a>
+	                                    </div>
+	                                </div>
+	                                <t t-call="website_slides.slides_grid_view">
+	                                    <t t-set="slides" t-value="category['slides']"/>
+	                                </t>
+	                            </t>
+	                        </div>
+	                    </div>
+	                </div>
+	    	</xpath>
+	    </template>
+	    
+	    <!-- Channel Quiz View -->
+	    <template id='quiz_slides_view' name="Quiz View">
+		    <div class="container">
+		    	<t t-foreach="slides" t-as="slide">
+			    	<div class="mt16 mb16">
+		            	<h1 class="text-center"><t t-esc="slide.name"/></h1>
+		            </div>
+		            <t t-set="question_index" t-value="0"/>
+		            <t t-foreach="slide.quiz_question_ids" t-as="question">
+		            	<t t-set="question_index" t-value="question_index+1"/>
+		            	<div class="form-group">
+		                    <div>
+			            	<h2>
+		        		    	<t t-esc="question_index"/>) <t t-esc="question.quiz_question" />
+		        		    </h2>
+		        		    <t t-foreach="question.quiz_answer_ids" t-as="option">
+		        		    	<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> <t t-esc="option.text_value"/><br/>
+		        		    </t>
+		        		    </div>
+	        		    </div>
+		            </t>
+	            </t>
+		    </div>
+	    </template>
     </data>
 </odoo>

@@ -43,6 +43,24 @@ class Channel(models.Model):
                                   compute='_compute_rating_ids')
     forum_total_posts = fields.Integer(string='Forum Posts',
                                        compute='_compute_forum_id')
+    nbr_quiz = fields.Integer('Number of Quiz', compute='_count_presentations', store=True)
+
+    @api.depends('slide_ids.slide_type', 'slide_ids.website_published')
+    def _count_presentations(self):
+        result = dict.fromkeys(self.ids, dict())
+        res = self.env['slide.slide'].read_group(
+            [('website_published', '=', True), ('channel_id', 'in', self.ids)],
+            ['channel_id', 'slide_type'], ['channel_id', 'slide_type'],
+            lazy=False)
+        for res_group in res:
+            result[res_group['channel_id'][0]][res_group['slide_type']] = result[res_group['channel_id'][0]].get(res_group['slide_type'], 0) + res_group['__count']
+        for record in self:
+            record.nbr_presentations = result[record.id].get('presentation', 0)
+            record.nbr_documents = result[record.id].get('document', 0)
+            record.nbr_videos = result[record.id].get('video', 0)
+            record.nbr_infographics = result[record.id].get('infographic', 0)
+            record.nbr_quiz = result[record.id].get('quiz', 0)
+            record.total = record.nbr_presentations + record.nbr_documents + record.nbr_videos + record.nbr_infographics + record.nbr_quiz
 
     @api.depends('channel_partner_ids')
     def _compute_channel_partner_ids(self):
@@ -100,3 +118,29 @@ class Channel(models.Model):
         action = self.env.ref('website_forum.action_forum_post').read()[0]
         action['domain'] = [('forum_id', '=', self.forum_id.id)]
         return action
+
+
+class Category(models.Model):
+    _inherit = "slide.category"
+
+    nbr_quiz = fields.Integer("Number of Quiz",
+                              compute='_count_presentations', store=True)
+
+    @api.depends('slide_ids.slide_type', 'slide_ids.website_published')
+    def _count_presentations(self):
+        result = dict.fromkeys(self.ids, dict())
+        res = self.env['slide.slide'].read_group(
+            [('website_published', '=', True), ('category_id', 'in', self.ids)],
+            ['category_id', 'slide_type'], ['category_id', 'slide_type'],
+            lazy=False)
+        for res_group in res:
+            result[res_group['category_id'][0]][res_group['slide_type']] = result[res_group['category_id'][0]].get(res_group['slide_type'], 0) + res_group['__count']
+        for record in self:
+            record.nbr_presentations = result[record.id].get('presentation', 0)
+            record.nbr_documents = result[record.id].get('document', 0)
+            record.nbr_videos = result[record.id].get('video', 0)
+            record.nbr_infographics = result[record.id].get('infographic', 0)
+            record.nbr_quiz = result[record.id].get('quiz', 0)
+            record.total = record.nbr_presentations + record.nbr_documents + record.nbr_videos + record.nbr_infographics + record.nbr_quiz
+
+
