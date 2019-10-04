@@ -17,8 +17,10 @@
         'views/skit_website_templates.xml',
         'views/res_partner_views.xml',
         'views/sponser.xml',
+        'views/grade_views.xml'
     ],
-    'depends': ['website_slides', 'website_forum', 'rating', 'sale','base'],
+    'depends': ['website_slides', 'website_forum', 'rating',
+                'sale', 'base'],
     'installable': True,
     'application': True,
     'auto_install': False,
