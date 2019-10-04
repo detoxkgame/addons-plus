@@ -45,7 +45,6 @@ class Channel(models.Model):
                                        compute='_compute_forum_id')
     nbr_quiz = fields.Integer('Number of Quiz', compute='_count_presentations',
                               store=True)
-    grade = fields.Many2one('grade', string='Grade')
     # ===========================================================================
     # directory = fields.Many2one('muk_dms.directory', string='Directory',
     #                             domain="[('is_root_directory', '=', True)]")
