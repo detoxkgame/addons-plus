@@ -7,6 +7,20 @@
             <field name="model">slide.channel</field>
             <field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
             <field name="arch" type="xml">
+                <!-- <xpath expr="//field[@name='category_ids']" position="after">
+                	<group>
+	                    <group>
+	                		<field name="directory" />
+	                	</group>
+                	</group>
+                </xpath> -->
+                <xpath expr="//field[@name='category_ids']" position="after">
+                	<group>
+	                    <group>
+	                		<field name="grade" />
+	                	</group>
+                	</group>
+                </xpath>
                 <xpath expr="//button[@name='website_publish_button']" position="before">
                 	
                 	<button name="action_view_slides" type="object" icon="fa-files-o" class="oe_stat_button" groups="website.group_website_publisher">

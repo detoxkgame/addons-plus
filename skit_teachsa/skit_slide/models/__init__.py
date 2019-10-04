@@ -6,3 +6,4 @@ from . import slide_options
 from . import res_partner
 from . import slide_channel
 from . import slide_statistics
+from . import grade

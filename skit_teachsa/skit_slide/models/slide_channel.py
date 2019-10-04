@@ -43,7 +43,13 @@ class Channel(models.Model):
                                   compute='_compute_rating_ids')
     forum_total_posts = fields.Integer(string='Forum Posts',
                                        compute='_compute_forum_id')
-    nbr_quiz = fields.Integer('Number of Quiz', compute='_count_presentations', store=True)
+    nbr_quiz = fields.Integer('Number of Quiz', compute='_count_presentations',
+                              store=True)
+    grade = fields.Many2one('grade', string='Grade')
+    # ===========================================================================
+    # directory = fields.Many2one('muk_dms.directory', string='Directory',
+    #                             domain="[('is_root_directory', '=', True)]")
+    # ===========================================================================
 
     @api.depends('slide_ids.slide_type', 'slide_ids.website_published')
     def _count_presentations(self):
