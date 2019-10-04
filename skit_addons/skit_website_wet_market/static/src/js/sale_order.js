@@ -63,9 +63,13 @@ setInterval(function(){
 	}, 3000);
 
 	$(document).ready(function(){
-		$('.pcate_menu').click(function(){
+		$('.prod_categ_menu').click(function(){
 			$(".nav_pcateg").slideToggle('slow');
 		});
+	});
+	$(function(){
+		var nav_activeText = $('.nav_pcateg').find('.nav-link.active').text();
+		$('.pcate_menu').text(nav_activeText);
 	});
 
 

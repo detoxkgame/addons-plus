@@ -70,8 +70,13 @@
     padding-top: 4px;
     padding-bottom: 4px;
 }
+.oe_website_sale .prod_categ_menu .pcate_menu{
+	display: inline;
+	font-weight: 700;
+}
 .prod_cat_icon{
 	padding-left: 4%;
+	display: inline-table;
 }
 .nav_pcateg{
 	display:none;

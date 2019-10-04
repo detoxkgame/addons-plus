@@ -304,9 +304,41 @@
 }
 
 .shop_cart{
-	padding: 0.375rem 0.75rem !important;
-    font-size: 0.8rem;
+	padding: 8px 6px 8px 6px;
+	/* padding: 0.37rem 0.37rem !important; */
+    font-size: 0.7rem;
     margin-top: 0px !important;
+}
+.css_quantity {
+    max-width: 99px;
+}
+.pro_name_price{
+	display: flex;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+#products_grid table tr{
+	display: unset;
+    width: 100%;
+}
+#products_grid table tr td{
+	height: 144px;
+    width: 33%;
+    float: left;
+    display: table;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+#products_grid table tr{
+	display: unset;
+    width: 100%;
+}
+#products_grid table tr td{
+	height: 144px;
+    width: 50%;
+    float: left;
+    display: table;
+}
 }
 .shop_prod_name{
 	color: #005452;

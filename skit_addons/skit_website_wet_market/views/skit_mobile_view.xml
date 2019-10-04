@@ -20,7 +20,7 @@
 	<template id="skit_products_categories" inherit_id="website_sale.products" name="Skit eCommerce Categories">
 		<xpath expr="//div[@id='products_grid_before']" position="replace">
 			<div class="col-lg-3 col-md-4 col-12" id="products_grid_before">
-				<div class="prod_categ_menu"><div class="pcate_menu">Product Categ<i class="fa fa-chevron-down prod_cat_icon"></i></div></div>
+				<div class="prod_categ_menu"><div class="pcate_menu">Product Categ</div><i class="fa fa-chevron-down prod_cat_icon"></i></div>
 					<ul class="nav nav-pills flex-column mt16 nav_pcateg">
                 		<li class="nav-item">
                     		<a t-att-href="keep('/shop',category=0)" t-attf-class="nav-link#{'' if category else ' active'} o_not_editable">All Products</a>

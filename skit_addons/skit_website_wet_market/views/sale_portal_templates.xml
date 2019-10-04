@@ -116,7 +116,7 @@
     	</xpath>
     	<xpath expr="//section" position="replace">      
     		<section class="shop_section">
-            	<h6>
+            	<h6 class="pro_name_price">
                 	<span itemprop="name"  class="shop_prod_name" t-att-content="product.name" t-field="product.name" />
                     <a role="button" t-if="not show_publish and not product.website_published" t-att-href="product_href" class="btn btn-secondary btn-sm btn-danger" title="This product is unpublished.">Unpublished</a>
                     <span class="shop_price" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
