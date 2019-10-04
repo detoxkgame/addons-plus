@@ -14,13 +14,7 @@
 	                	</group>
                 	</group>
                 </xpath> -->
-                <xpath expr="//field[@name='category_ids']" position="after">
-                	<group>
-	                    <group>
-	                		<field name="grade" />
-	                	</group>
-                	</group>
-                </xpath>
+                
                 <xpath expr="//button[@name='website_publish_button']" position="before">
                 	
                 	<button name="action_view_slides" type="object" icon="fa-files-o" class="oe_stat_button" groups="website.group_website_publisher">
