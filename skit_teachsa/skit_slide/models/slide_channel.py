@@ -15,7 +15,7 @@ class Tutor(models.Model):
 
     channel_id = fields.Many2one('slide.channel', string='Channel')
     partner_id = fields.Many2one('res.partner', string='Tutor',
-                                 domain="[('istutor', '=',  True)]")
+                                 domain="[('istutor', '=',  True)]", required=True)
     remarks = fields.Text('Remarks')
 
 
