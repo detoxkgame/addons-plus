@@ -24,16 +24,19 @@ class SlideLearning(models.Model):
 class SlideQuestion(models.Model):
     _name = 'slide.question'
 
-    quiz_question_line_id = fields.Many2one('slide.slide', string='Quiz Question')
+    quiz_question_line_id = fields.Many2one('slide.slide',
+                                            string='Quiz Question')
     # quiz_question = fields.Char(required=True)
-    quiz_question = fields.Html('Question Name', translate=html_translate, sanitize_attributes=False)
-    quiz_answer_ids = fields.One2many('slide.answer', 'quiz_answer_line_id', string='Answers')
+    quiz_question = fields.Html('Question Name', translate=html_translate,
+                                sanitize_attributes=False)
+    quiz_answer_ids = fields.One2many('slide.answer', 'quiz_answer_line_id',
+                                      string='Answers')
 
 
 class SlideAnswer(models.Model):
     _name = 'slide.answer'
 
-    quiz_answer_line_id = fields.Many2one('slide.question',string='Quiz Answer')
+    quiz_answer_line_id = fields.Many2one('slide.question', string='Quiz Answer')
     # text_value = fields.Char(string='Answer',required=True)
     text_value = fields.Html('Answer', translate=html_translate, sanitize_attributes=False)
     is_correct = fields.Boolean(string='Is Correct Answer')
@@ -42,7 +45,35 @@ class SlideAnswer(models.Model):
 class SlideLink(models.Model):
     _name = 'slide.slide.link'
 
-    link_line_id = fields.Many2one('slide.slide',string='Slide')
-    link_name = fields.Char(string='Title',required=True)
-    link = fields.Char(string='Link',required=True)
+    link_line_id = fields.Many2one('slide.slide', string='Slide')
+    link_name = fields.Char(string='Title', required=True)
+    link = fields.Char(string='Link', required=True)
 
+
+class QuizLog(models.Model):
+    _name = 'quiz.log'
+
+    question_id = fields.Many2one('slide.question', string='Question')
+    answer_id = fields.Many2one('slide.answer', string='Answer')
+    status = fields.Selection([('correct', 'Correct'), ('wrong', 'Wrong')],
+                              string='Status', required=True,
+                              readonly=True, copy=False)
+    partner_id = fields.Many2one('res.partner', string='Partner')
+
+
+class ContentSubscribed(models.Model):
+    _name = 'content.subscribed'
+
+    content_id = fields.Many2one('slide.slide', string='Content')
+    view_date = fields.Datetime(string="View Date & Time")
+    duration = fields.Integer(string="Duration")
+    partner_id = fields.Many2one('res.partner', string='Partner')
+
+
+class TutorRemarks(models.Model):
+    _name = 'tutor.remarks'
+
+    partner_id = fields.Many2one('res.partner', string='Partner')
+    student_remarks = fields.Text("Student Remarks")
+    rating = fields.Integer("Ratings")
+    parent_remarks = fields.Text("Parent Remarks")
