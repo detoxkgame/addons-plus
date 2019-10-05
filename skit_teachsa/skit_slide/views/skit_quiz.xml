@@ -48,7 +48,7 @@
                             				<separator />
                         				</div>
                         				<field name="quiz_answer_ids" nolabel="1">
-                            				<tree editable="bottom">
+                            				<tree>
                                 				<field name="text_value"/>
                                 				<field name="is_correct"/>
                             				</tree>
@@ -75,6 +75,19 @@
              </xpath>
          </field>
    </record>
+   
+   <record id="view_quiz_answer_form" model="ir.ui.view">
+            <field name="name">slide.answer.form</field>
+            <field name="model">slide.answer</field>
+            <field name="arch" type="xml">
+                <form string="Answer">
+                	<group>
+                		<field name="text_value"/>
+                    	<field name="is_correct"/>
+                	</group>
+                </form>
+            </field>
+        </record>
    </data>
 </odoo>
 
