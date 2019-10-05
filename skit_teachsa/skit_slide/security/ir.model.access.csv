@@ -11,3 +11,6 @@ access_slide_answer_user,slide.answer.user,model_slide_answer,base.group_user,1,
 access_slide_slide_link_public,slide.slide.link.public,model_slide_slide_link,base.group_public,1,0,0,0
 access_slide_slide_link_portal,slide.slide.link.portal,model_slide_slide_link,base.group_portal,1,0,0,0
 access_slide_slide_link_user,slide.slide.link.user,model_slide_slide_link,base.group_user,1,1,1,1
+access_tutor_tutor_public,tutor.tutor.public,model_tutor_tutor,base.group_public,1,0,0,0
+access_tutor_tutor_portal,tutor.tutor.portal,model_tutor_tutor,base.group_portal,1,0,0,0
+access_tutor_tutor_user,tutor.tutor.user,model_tutor_tutor,base.group_user,1,1,1,1

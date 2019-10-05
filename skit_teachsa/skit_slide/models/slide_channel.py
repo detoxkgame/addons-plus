@@ -10,6 +10,15 @@ class Rating(models.Model):
     channel_id = fields.Many2one('slide.channel', string='Channel')
 
 
+class Tutor(models.Model):
+    _name = "tutor.tutor"
+
+    channel_id = fields.Many2one('slide.channel', string='Channel')
+    partner_id = fields.Many2one('res.partner', string='Tutor',
+                                 domain="[('istutor', '=',  True)]")
+    remarks = fields.Text('Remarks')
+
+
 class SlideChannelPartner(models.Model):
     _name = "slide.channel.partner"
     _description = "Slide Channel Partner"
@@ -47,8 +56,9 @@ class Channel(models.Model):
                                        compute='_compute_forum_id')
     nbr_quiz = fields.Integer('Number of Quiz', compute='_count_presentations',
                               store=True)
-    partner_id = fields.Many2one('res.partner', string='Tutor',
-                                 domain="[('istutor', '=',  True)]")
+
+    tutor_ids = fields.One2many('tutor.tutor', 'channel_id',
+                                string='Tutor')
     # ===========================================================================
     # directory = fields.Many2one('muk_dms.directory', string='Directory',
     #                             domain="[('is_root_directory', '=', True)]")
