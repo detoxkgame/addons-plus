@@ -58,6 +58,7 @@
                     <field name="create_date"/>
                     <field name="partner_id" string="Contact"/>
                     <field name="partner_email" readonly="1" />
+                    <field name="t_partner_id" string="Tutor"/>
                     <field name="channel_id" string="Channel" invisible="context.get('default_channel_id',False)"/>
                     <button name="unlink" class="text-danger" string="Remove" icon="fa-times-circle" type="object"/>
                 </tree>

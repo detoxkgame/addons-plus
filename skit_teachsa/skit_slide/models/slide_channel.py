@@ -19,6 +19,8 @@ class SlideChannelPartner(models.Model):
     partner_email = fields.Char(string='Email')
     channel_id = fields.Many2one('slide.channel', string='Channel')
     iscompleted = fields.Boolean(string='Is Completed', default=False)
+    t_partner_id = fields.Many2one('res.partner', string='Tutor',
+                                   domain="[('istutor', '=',  True)]")
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
@@ -45,6 +47,8 @@ class Channel(models.Model):
                                        compute='_compute_forum_id')
     nbr_quiz = fields.Integer('Number of Quiz', compute='_count_presentations',
                               store=True)
+    partner_id = fields.Many2one('res.partner', string='Tutor',
+                                 domain="[('istutor', '=',  True)]")
     # ===========================================================================
     # directory = fields.Many2one('muk_dms.directory', string='Directory',
     #                             domain="[('is_root_directory', '=', True)]")

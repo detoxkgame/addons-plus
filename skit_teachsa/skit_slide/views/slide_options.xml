@@ -72,6 +72,13 @@
 		                       </group>
 	                     </group>
                      </page>
+                     <page name="tutor" string="Tutor">
+	                     <group>
+	                     	<group name="tutor_grp">
+	                     		<field name="partner_id" string="Tutor"/>
+	                     	</group>
+	                     </group>
+                     </page>
                      </notebook>
 			</xpath>
 		</field>
