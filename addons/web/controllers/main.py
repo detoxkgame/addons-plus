@@ -490,7 +490,9 @@ class Home(http.Controller):
             values['show_customer'] = True
             if(kw.get('no_user')):
                 values['login'] = request.params.get('login')
-                values['error'] = "Your mobile not registered.Please sign up."
+                values['error'] = "Your mobile number not registered. Please sign up."
+                values['signup_error'] = "sign up"
+                request.session['mobile_no'] = request.params.get('login')
                 response = request.render('web.login', values)
                 response.headers['X-Frame-Options'] = 'DENY'
                 return response
