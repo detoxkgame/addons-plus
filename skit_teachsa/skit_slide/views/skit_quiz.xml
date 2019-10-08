@@ -27,7 +27,7 @@
         				</field>
         			</group>
         		</page>
-            	<page string="Quiz">
+            	<page string="Quiz" attrs="{'invisible': [('slide_type', '!=', 'quiz')]}">
                 	<group>
                     	<group string="Rewards">
                         	<field name="quiz_first_attempt_reward"/>

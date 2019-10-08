@@ -14,3 +14,12 @@ access_slide_slide_link_user,slide.slide.link.user,model_slide_slide_link,base.g
 access_tutor_tutor_public,tutor.tutor.public,model_tutor_tutor,base.group_public,1,0,0,0
 access_tutor_tutor_portal,tutor.tutor.portal,model_tutor_tutor,base.group_portal,1,0,0,0
 access_tutor_tutor_user,tutor.tutor.user,model_tutor_tutor,base.group_user,1,1,1,1
+access_slide_content_subscribed_public,slide.content.subscribed.public,model_slide_content_subscribed,base.group_public,1,0,0,0
+access_slide_content_subscribed_portal,slide.content.subscribed.portal,model_slide_content_subscribed,base.group_portal,1,0,0,0
+access_slide_content_subscribed_user,slide.content.subscribed.user,model_slide_content_subscribed,base.group_user,1,1,1,1
+access_tutor_remarks_public,tutor.remarks.public,model_tutor_remarks,base.group_public,1,0,0,0
+access_tutor_remarks_portal,tutor.remarks.portal,model_tutor_remarks,base.group_portal,1,0,0,0
+access_tutor_remarks_user,tutor.remarks.user,model_tutor_remarks,base.group_user,1,1,1,1
+access_quiz_log_public,quiz.log.public,model_quiz_log,base.group_public,1,0,0,0
+access_quiz_log_portal,quiz.log.portal,model_quiz_log,base.group_portal,1,0,0,0
+access_quiz_log_user,quiz.log.user,model_quiz_log,base.group_user,1,1,1,1

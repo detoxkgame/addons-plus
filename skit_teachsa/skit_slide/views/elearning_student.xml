@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- Content Subscribed form -->
+		<record id="view_content_subscribed_form" model="ir.ui.view">
+            <field name="name">slide.content.subscribed.form.view</field>
+            <field name="model">slide.content.subscribed</field>
+            <field name="arch" type="xml">
+            	<form name="content_subscribed" string="Content Subscribed">
+	            	<sheet string="Content Subscribed">
+	            		<group>
+	            			<group>
+	            				 <field name="res_partner_id" string="Partner"/>
+							     <field name="content_id"/> 						     
+	            			</group>
+	            			<group>
+	            				<field name="view_datetime"/>   
+							     <field name="duration" string="Duration"/>		
+	            			</group>
+	            		</group>
+	            		<notebook>
+			                <page name="quiz_log" string="Quiz Log">
+				                <field name="quiz_log_ids" colspan="4" nolabel="1" widget="slide_category_one2many">
+				                       <tree>				
+				                       	   <field name="partner_id"/>	                            	
+									       <field name="question_id"/>
+									       <field name="answer_id"/> 
+									       <field name="status"/>
+									       <field name="content_subscribed_id" invisible="1"/>					                                         
+								      </tree>
+				                </field>
+			                </page>
+		                </notebook>
+	            	</sheet>
+            	</form>
+            </field>
+        </record>
+        <!-- End Content Subscribed form -->
+		<!-- Student menu action  -->
+        <record id="action_elearning_students" model="ir.actions.act_window">
+			<field name="name">Student</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.partner</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="domain">[('isstudent','=',1)]</field>   	
+			<field name="context" eval="{'default_isstudent': True}"/>
+		</record>
+    	<!-- Student Menu -->
+       <menuitem id="menu_elearning_student" parent="skit_slide.menu_website_elearning" name="Student"  action="skit_slide.action_elearning_students" sequence="21" />
+	</data>
+</odoo>

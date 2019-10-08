@@ -16,7 +16,8 @@
         'views/website_slides_views.xml',
         'views/skit_website_templates.xml',
         'views/res_partner_views.xml',
-        'views/sponser.xml'
+        'views/sponser.xml',
+        'views/elearning_student.xml',
     ],
     'depends': ['website_slides', 'website_forum', 'rating',
                 'sale', 'base'],

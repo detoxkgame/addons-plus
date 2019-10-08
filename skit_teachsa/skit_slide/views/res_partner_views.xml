@@ -43,6 +43,48 @@
 					</page>
 
 				</xpath>
+				<xpath expr="//form/sheet/notebook/page[6]" position="before">
+					<page string="Courses Subscribed" attrs="{'invisible': [('isstudent', '!=', True)]}">
+					     <field name="channel_student_partner_ids" colspan="4" nolabel="1" widget="slide_category_one2many">
+                            <tree>
+                            	<field name="channel_id" string="Course"/>
+	                            <field name="partner_id" string="Partner"/>
+	                            <field name="partner_email"/>                 
+                            </tree>
+                            <form string="Courses Subscribed">
+                            	<sheet>
+                            		<group>
+	                            		<field name="channel_id" string="Course"/>
+	                            		<field name="partner_id" string="Partner"/>
+			                            <field name="partner_email"/>		                            
+                            		</group>
+	                            	<notebook>
+	                            		<page name="content_subscribed" string="Content Subcribed">
+	                            			<field name="content_subscribed_ids" colspan="4" nolabel="1" widget="slide_category_one2many">
+	                            				<tree>					                            	
+						                            <field name="res_partner_id" string="Partner"/>
+						                            <field name="content_id"/> 
+						                            <field name="view_datetime"/>   
+						                            <field name="duration" string="Duration"/>						                                         
+					                            </tree>
+	                            			</field>
+	                            		</page>
+	                            		<page string="Totur Remarks">
+	                            			<field name="tutor_ids" colspan="4" nolabel="1" widget="slide_category_one2many" context="{'default_channel_id': active_id}">
+							                      <tree>
+								                       <field name="partner_id" string="Tutor"/>
+								                       <field name="student_remarks"/>
+								                       <field name="parent_remarks"/>
+								                       <field name="rating"/>
+							                     </tree>
+					                       </field>
+	                            		</page>
+	                            	</notebook>
+                            	</sheet>                           	
+                            </form>
+                         </field>
+					</page>
+				</xpath>
 
 			</field>
 		</record>

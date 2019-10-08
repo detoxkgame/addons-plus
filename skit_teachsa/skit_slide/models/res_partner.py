@@ -24,6 +24,10 @@ class Partner(models.Model):
     website_published_state = fields.Selection([('published','Published'),
                                ('unpublished','Un Published')],
                                 string='Published state',default='unpublished')
+    channel_student_partner_ids = fields.One2many('slide.channel.partner',
+                                                  'partner_id',
+                                                  domain=[('partner_id.isstudent', '=', True)],
+                                                  string='Channel Partner')
 
     @api.multi
     def publish_button(self):

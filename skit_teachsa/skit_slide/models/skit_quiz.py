@@ -59,15 +59,8 @@ class QuizLog(models.Model):
                               string='Status', required=True,
                               readonly=True, copy=False)
     partner_id = fields.Many2one('res.partner', string='Partner')
-
-
-class ContentSubscribed(models.Model):
-    _name = 'content.subscribed'
-
-    content_id = fields.Many2one('slide.slide', string='Content')
-    view_date = fields.Datetime(string="View Date & Time")
-    duration = fields.Integer(string="Duration")
-    partner_id = fields.Many2one('res.partner', string='Partner')
+    content_subscribed_id = fields.Many2one('slide.content.subscribed',
+                                            string='Content Subscribed')
 
 
 class TutorRemarks(models.Model):
@@ -77,3 +70,6 @@ class TutorRemarks(models.Model):
     student_remarks = fields.Text("Student Remarks")
     rating = fields.Integer("Ratings")
     parent_remarks = fields.Text("Parent Remarks")
+    channel_partner_id = fields.Many2one('slide.channel.partner',
+                                         domain="[('istutor', '=',  True)]",
+                                         string='Attendees')

@@ -25,15 +25,24 @@ class SlideChannelPartner(models.Model):
 
     partner_id = fields.Many2one('res.partner', string='Contact',
                                  required=True)
-    partner_email = fields.Char(string='Email')
+    partner_email = fields.Char(string='Email', related='partner_id.email')
     channel_id = fields.Many2one('slide.channel', string='Channel')
     iscompleted = fields.Boolean(string='Is Completed', default=False)
     t_partner_id = fields.Many2one('res.partner', string='Tutor',
                                    domain="[('istutor', '=',  True)]")
+    content_subscribed_ids = fields.One2many('slide.content.subscribed',
+                                             'res_partner_id',
+                                             string='Content Subscribed')
+    tutor_ids = fields.One2many('tutor.remarks',
+                                'channel_partner_id',
+                                string='Content Subscribed')
 
-    @api.onchange('partner_id')
-    def _onchange_partner_id(self):
-        self.partner_email = self.partner_id.email
+#     @api.onchange('partner_id')
+#     def _onchange_partner_id(self):
+#         if self.partner_id:
+#             self.update({
+#                          'partner_email': self.partner_id.email
+#                          })
 
 
 class Channel(models.Model):

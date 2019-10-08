@@ -17,7 +17,7 @@ class Slide(models.Model):
                                ('invite','On Invitation'),
                                ('payment','On Payment')],
                                 string='Enroll Policy')
-    product_id = fields.Many2one('product.product', string='Product',required=True)
+    product_id = fields.Many2one('product.product', string='Product')
     enroll_msg = fields.Html(string='Enroll Message')
 
     upload_group_ids = fields.Many2many(

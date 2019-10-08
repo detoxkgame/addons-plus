@@ -18,3 +18,6 @@ class Slide(models.Model):
     is_preview = fields.Boolean(string="Allow preview")
 #     data = fields.Binary('File')
     sequence = fields.Integer(default=10, help='Display order')
+    content_subscribed_ids = fields.One2many('slide.content.subscribed',
+                                             'content_id',
+                                             string='Content Subscribed')
