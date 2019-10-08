@@ -18,6 +18,7 @@
         'views/res_partner_views.xml',
         'views/sponser.xml',
         'views/elearning_student.xml',
+        'views/slide_grade_views.xml'
     ],
     'depends': ['website_slides', 'website_forum', 'rating',
                 'sale', 'base'],

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<!-- SLIDE.CHANNEL VIEWS INHERITS -->
+    	<record id="view_slide_channel_form_inherit_grade" model="ir.ui.view">
+            <field name="name">slide.channel.form.grade</field>
+            <field name="model">slide.channel</field>
+            <field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_ids']" position="after">
+                	<group>
+	                    <group>
+	                		<field name="product_categ_id" />
+	                	</group>
+                	</group>
+                </xpath> 
+            </field>
+        </record>
+
+    	<!-- PRODUCT.CATEGORY VIEWS INHERITS -->
+        <!-- Search option of Rooms Type -->
+        <record id="view_product_category_filter_grade" model="ir.ui.view">
+	        <field name="name">product.category.search.grade.form</field>
+	        <field name="model">product.category</field>
+	        <field name="mode">primary</field> 
+	        <field name="inherit_id" ref="product.product_category_search_view"/>
+	        <field name="arch" type="xml">
+	            <xpath expr="//field[@name='parent_id']" position="after">
+	               <filter name="filter_grade" string="Grade" domain="[('is_grade', '=', True)]"/>
+	            </xpath>
+	        </field>
+	    </record>
+        
+        <!-- Form view of grade -->
+	    <record id="view_product_category_form_grade" model="ir.ui.view">
+            <field name="name">product.category.grade.form.inherit</field>
+            <field name="model">product.category</field> 
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='parent_id']" position="after">
+            		<field name="is_grade" string="Grade"/>
+            	</xpath>
+            </field>
+        </record>
+            
+	    <!-- Tree view of grade -->
+	    <record id="view_product_category_tree_grade" model="ir.ui.view">
+            <field name="name">product.category.grade.tree.inherit</field>
+            <field name="model">product.category</field>
+            <field name="mode">primary</field> 
+            <field name="inherit_id" ref="product.product_category_list_view"/>
+            <field name="arch" type="xml">
+            	 <xpath expr="//tree" position="replace">
+				 	<tree string="Room Type">
+	                    <field name="display_name" string="Grade"/>
+	                </tree>
+				 </xpath>
+            </field>
+        </record>
+            
+	    <!-- Action for grade -->
+	    <record id="action_product_category_grade" model="ir.actions.act_window">
+	        <field name="name">Grade</field>
+	        <field name="res_model">product.category</field>
+	        <field name="view_type">form</field>
+	        <field name="search_view_id" ref="view_product_category_filter_grade"/>
+	        <field name="context" eval="{'search_default_filter_grade': 1, 'default_is_grade': True}"/>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_ids"
+				eval="[(5, 0, 0),
+				    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_product_category_tree_grade')}),
+	                (0, 0, {'view_mode': 'form', 'view_id': ref('view_product_category_form_grade')})]" />
+	    </record>
+        
+        <!-- MENU FOR GRADE -->    
+        <menuitem
+            action="skit_slide.action_product_category_grade" id="menu_product_category_elearning"
+            parent="skit_slide.menu_website_elearning" sequence="30" />
+            
+       <!-- PRODUCT.PRICELIST.ITEM VIEWS INHERITS -->
+       <record id="product_pricelist_item_form_view_inherit_slide" model="ir.ui.view">
+            <field name="name">product.pricelist.item.slide</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//h1" position="replace">
+                	<div class="oe_title">
+                    	<h1><field name="name" readonly="0" required="1"/></h1>
+                    </div>
+                </xpath> 
+               <xpath expr="//field[@name='applied_on']" position="replace">
+               	    <field name="applied_on" widget="radio" invisible="1"/>
+               </xpath> 
+               <xpath expr="//field[@name='categ_id']" position="replace">
+               		<field name="categ_id" attrs="{'invisible':[('applied_on', '!=', '2_product_category')], 'required':[('applied_on', '=', '2_product_category')]}"
+               		domain="[('is_grade','=',True)]" />
+               </xpath>
+            </field>
+        </record>
+            
+        <!-- MENU FOR PRODUCT PRICELIST --> 
+        <menuitem id="product_pricelist_item_form_view_elearning" name="Pricelists" 
+        parent="skit_slide.menu_website_elearning" 
+        action="product.product_pricelist_action2" sequence="30" />
+       
+    </data>
+</odoo>
