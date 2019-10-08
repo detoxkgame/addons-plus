@@ -66,6 +66,10 @@ class WetAuthSignupHome(Home):
             # Redirect if already logged in and redirect param is present
             return http.redirect_with_hash(request.params.get('redirect'))
         if request.params.get('login_success'):
+            wet_otp = request.env['wet.otp.verification'].sudo().search([
+                ('mobile', '=', kw.get('login'))])
+            if wet_otp:
+                wet_otp.unlink()
             return request.redirect("/shop")
         return response
 
@@ -128,6 +132,8 @@ class WetAuthSignupHome(Home):
                         response.headers['X-Frame-Options'] = 'DENY'
                         return response
 
+        if(request.session.get('mobile_no')):
+            qcontext['login'] = request.session.get('mobile_no')
         if not qcontext.get('token') and not qcontext.get('signup_enabled'):
             raise werkzeug.exceptions.NotFound()
 

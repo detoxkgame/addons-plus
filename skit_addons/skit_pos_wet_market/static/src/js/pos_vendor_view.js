@@ -98,6 +98,56 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
         this.$('#zoom_out').click(function(e){
         	self.updateZoom(-1);
         });
+        this.$('#order_status').on('change', function() {
+        	
+        	  var orders = self.pos.db.get_sorder_sorted(1000);
+        	  var contents = self.$el[0].querySelector('.checkout_orders');
+              contents.innerHTML = "";
+              var filtered_orders = orders;
+              if(this.value != "all"){
+            	  var ostate = this.value;
+            	  if(this.value == 'open'){
+            		  filtered_orders = $.grep(orders, function(v) {
+                          return v.state === "draft" || v.state === "sent";
+                      });
+            	  }else{
+            		  filtered_orders = $.grep(orders, function(v) {
+                          return v.state === ostate;
+                      });
+            	  }
+            	  
+              }
+              
+              for(var i = 0, len = Math.min(filtered_orders.length,1000); i < len; i++){
+                  var order    = filtered_orders[i];
+                  var sorderline = self.sorder_cache.get_node(order.id);
+                 
+                  if(!sorderline){
+                  	var orderlines = [];
+                  	if(self.pos.db.get_orderline_by_order(filtered_orders[i].id) != undefined){
+                  		orderlines = self.pos.db.get_orderline_by_order(filtered_orders[i].id);
+                  	}
+                      var sorderline_html = QWeb.render('ShopCartOrders',{widget: self, sorder:filtered_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+                      var sorderline = document.createElement('div');
+                      sorderline.innerHTML = sorderline_html;
+                      sorderline = sorderline.childNodes[1];
+                      self.sorder_cache.cache_node(order.id,sorderline);
+                      var state_icon = sorderline.querySelector('.order_btn');
+                      if(state_icon){
+                      	state_icon.addEventListener('click', (function(e) {
+                      		
+                          	var order_id = e.target.dataset.item;
+                          	var order_state = ($("#"+order_id).text()).trim();
+                          	self.update_order_state(order_id, order_state);
+                          	
+                          }.bind(self)));
+                      }
+                    
+                  }
+                  
+                  contents.prepend(sorderline);
+              }
+        });
        
     },
     updateZoom: function(zoom){
@@ -208,9 +258,25 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
         this.render_sorder(this.pos.db.get_sorder_sorted(1000));
     },
     
-    render_sorder: function(orders){
+    render_sorder: function(sorders){
     	var contents = this.$el[0].querySelector('.checkout_orders');
         contents.innerHTML = "";
+        var state_value = $("#order_status option:selected").val();
+        var orders = sorders;
+        if(state_value != undefined && state_value != ""){
+	        if(state_value != "all"){
+	      	  if(state_value == 'open'){
+	      		orders = $.grep(sorders, function(v) {
+	                    return v.state === "draft" || v.state === "sent";
+	                });
+	      	  }else{
+	      		orders = $.grep(sorders, function(v) {
+	                    return v.state === state_value;
+	                });
+	      	  }
+	      	  
+	        }
+        }
         for(var i = 0, len = Math.min(orders.length,1000); i < len; i++){
             var order    = orders[i];
             var sorderline = this.sorder_cache.get_node(order.id);

@@ -114,6 +114,16 @@
                 </div>
             </t>
     	</xpath>
+    	<xpath expr="//button[hasclass('btn-block')]" position="replace">
+    		<t t-if="signup_error">
+    			<button type="submit" class="btn btn-primary btn-block" >
+    				<a style="color: white;text-decoration: none;" t-attf-href="/web/signup?{{ keep_query() }}">Sign up</a>
+    			</button>
+    		</t>
+    		<t t-else="">
+    			<button type="submit" class="btn btn-primary btn-block">Log in</button>
+    		</t>
+    	</xpath>
     	
     </template> 
     

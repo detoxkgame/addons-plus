@@ -231,6 +231,24 @@
 	<t t-name="SOOrderScreenWidget">
 		<div class="pos_vendor_view screen">
 			<div class="vendor_view_header">
+				<t t-if="widget.pos.config.supplier_view">
+					<table class="pos_status_table">
+						<tbody>
+							<tr>
+								<td><span class="pos_status_span">Status:</span></td>
+								<td>
+									<select class="pos_status_select" id="order_status">
+									  <option value="all">All</option>
+									  <option value="open">Open</option>
+									  <option value="sale">Order Confirm</option>
+									  <option value="preparing">Preparing</option>
+									  <option value="ready">Ready to Delivery</option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</t>
 				<span class="vendor_view_text">Order Dashboard</span>
 				<i id="zoom_in" class="fa fa-search-plus shop_zoom" aria-hidden="true"></i>
 				<i id="zoom_out" class="fa fa-search-minus shop_zoom" aria-hidden="true"></i>

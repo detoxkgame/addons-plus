@@ -3,7 +3,8 @@
     margin: 1%;
 }
 .vendor_view_header{
-	width:98%
+	width:98%;
+	height: 6%;
 }
 .vendor_view_text{
 	font-size: 20px;
@@ -211,6 +212,29 @@
 }
 .pink_bgcolor{
 	background: #99928c;
+}
+
+.pos_status_table{
+	display: inline-block;
+    float: left;
+    margin-left: 1%;
+}
+.pos_status_span{
+	font-size: 18px;
+}
+
+.pos_status_select{
+	margin-left: 17%;
+	width: 100%;
+	display: inline-block;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+	box-sizing: border-box;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
 
 /** Media Query */
