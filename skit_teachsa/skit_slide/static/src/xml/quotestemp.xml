@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>   
+   <main t-name="View.t_quick_create" class="o_quick_create">
+        <div class="form-group">
+            <label for='name' class='col-form-label'>Quotes of the Day:</label>
+            <input type='text' name='name' class="o_input" t-att-value="widget.dataTemplate.name or None"/>
+        </div>
+    </main>
+</template> 
+
+ 

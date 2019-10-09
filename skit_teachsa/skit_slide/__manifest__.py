@@ -18,8 +18,12 @@
         'views/res_partner_views.xml',
         'views/sponser.xml',
         'views/elearning_student.xml',
-        'views/slide_grade_views.xml'
-    ],
+        'views/slide_grade_views.xml',
+        'views/quotes.xml',
+        ],
+    'qweb': [
+         'static/src/xml/quotestemp.xml',
+        ],
     'depends': ['website_slides', 'website_forum', 'rating',
                 'sale', 'base'],
     'installable': True,

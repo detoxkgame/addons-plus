@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+<template id="assets_frontend_inherit_calen" inherit_id="web.assets_backend" name="Sale frontend assets calen"> 
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/skit_slide/static/src/js/quotes.js"></script>
+            <script type="text/javascript" src="/skit_slide/static/src/js/slide_calendar_controller.js"></script>
+        </xpath>
+</template>
+
+
 <template id="skit_slide_detail_view" inherit_id="website_slides.slide_detail_view" name="Slide Detailed View">
 	<xpath expr="//div[hasclass('mt8')]//ul[hasclass('nav-tabs')]/li" position="replace">
 		<li class="nav-item">
