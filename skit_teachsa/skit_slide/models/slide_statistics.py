@@ -19,6 +19,7 @@ class ContentSubscribed(models.Model):
     _description = "Content Subscribed"
 
     duration = fields.Float('Duration')
+    seq_no = fields.Integer('Sequence No')
     view_datetime = fields.Datetime(string="View Date")
     res_partner_id = fields.Many2one('res.partner', string='Partner',
                                      domain="[('isstudent', '=',  True)]")

@@ -10,6 +10,7 @@
 	            	<sheet string="Content Subscribed">
 	            		<group>
 	            			<group>
+	            			     <field name="seq_no" string="Sequence No"/> 	 	            			     
 	            				 <field name="res_partner_id" string="Partner"/>
 							     <field name="content_id"/> 						     
 	            			</group>

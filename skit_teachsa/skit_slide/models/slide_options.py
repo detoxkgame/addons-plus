@@ -2,7 +2,7 @@
 from odoo import models, fields
 
 
-class Slide(models.Model):
+class SlideChannel(models.Model):
 
     _inherit = 'slide.channel'
 
