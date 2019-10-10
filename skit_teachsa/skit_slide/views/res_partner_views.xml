@@ -69,7 +69,7 @@
 					                            </tree>
 	                            			</field>
 	                            		</page>
-	                            		<page string="Totur Remarks">
+	                            		<page string="Tutor Remarks">
 	                            			<field name="tutor_ids" colspan="4" nolabel="1" widget="slide_category_one2many" context="{'default_channel_id': active_id}">
 							                      <tree>
 								                       <field name="partner_id" string="Tutor"/>
