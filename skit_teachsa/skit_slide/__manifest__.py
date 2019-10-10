@@ -25,7 +25,7 @@
          'static/src/xml/quotestemp.xml',
         ],
     'depends': ['website_slides', 'website_forum', 'rating',
-                'sale', 'base'],
+                'sale', 'base', 'calendar'],
     'installable': True,
     'application': True,
     'auto_install': False,
