@@ -2,7 +2,7 @@
 from odoo import api, models, fields
 from odoo.exceptions import UserError
 from datetime import datetime
-from odoo.addons import decimal_precision as dp
+# from odoo.addons import decimal_precision as dp
 from odoo.tools.translate import html_translate
 
 
@@ -29,9 +29,21 @@ class SlideQuestion(models.Model):
     # quiz_question = fields.Char(required=True)
     quiz_question = fields.Html('Question Name', translate=html_translate,
                                 sanitize_attributes=False)
+    answer_type = fields.Selection([('Single','Single Select'),
+                                    ('Multi','Multi Select'),
+                                    ('Boolean', 'Boolean')],
+                                     string="Answer Type")
+    question_number = fields.Integer(string='Question Number',compute='_compute_question_number')
+    
+    @api.depends('question_number')
+    def _compute_question_number(self):
+        for slide in self:
+            rest_of_vals = slide - self
+            no_of_lines = len(rest_of_vals)
+            self.question_number = no_of_lines
+
     quiz_answer_ids = fields.One2many('slide.answer', 'quiz_answer_line_id',
                                       string='Answers')
-
 
 class SlideAnswer(models.Model):
     _name = 'slide.answer'

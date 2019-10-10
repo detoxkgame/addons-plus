@@ -20,6 +20,7 @@
         'views/elearning_student.xml',
         'views/slide_grade_views.xml',
         'views/quotes.xml',
+        'views/question.xml',
         ],
     'qweb': [
          'static/src/xml/quotestemp.xml',

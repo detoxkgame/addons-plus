@@ -42,9 +42,13 @@
 	                            </tree>
 	                            <form string="Products Category">
 	                            	<sheet>
-	                               		<div class="oe_title" style="width: 100%;">
+	                               		<label for="question_number" string="Question Number"/>
+                                        <field name="question_number" /> 
+                                      		<div class="oe_title" style="width: 100%;">
                             				<label for="quiz_question" string="Question name" class="oe_edit_only"/>
                             				<h1><field name="quiz_question" colspan="4" placeholder="Question Name"/></h1>
+                            				<label for="answer_type" string="Answer Type"/>
+                            				<field name="answer_type"/>
                             				<separator />
                         				</div>
                         				<field name="quiz_answer_ids" nolabel="1">
