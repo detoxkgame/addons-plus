@@ -9,16 +9,33 @@
     	<xpath expr="//form/sheet/notebook" position="replace">
     	<notebook>
     		<page name="content" string="Content">
-                        <field name="slide_ids" colspan="4" nolabel="1" widget="slide_category_one2many" context="{'default_channel_id': active_id}">
-                            <tree>
-	                            <!-- <field name="sequence" widget="handle"/> -->
-	                            <field name="name"/>
-	                            <field name="slide_type"/>
-	                            <field name="completion_time" string="Duration" widget="float_time"/>
-	                            <field name="total_views" string="Views"/>
-                            </tree>
-                       </field>
-             </page>
+							
+								<field
+                                name="slide_ids"
+                                widget="section_and_note_one2many"
+                                mode="tree,kanban"
+                                context="{'default_channel_id': active_id}">
+								<tree string="Contents" editable="bottom">
+								
+									<control>
+										<create name="add_section" string="Add Section" context="{'default_display_type': 'line_section'}"/>
+										<create name="add_content" context="{'open_content_form': True}" string="Add Content"/>
+									</control>
+									<field name="display_type" invisible="1"/>
+									<field name="sequence" widget="handle" />
+
+									<field name="name" widget="section_and_note_text"/>
+
+									<field name="slide_type" />
+
+									<field name="completion_time" />
+
+									<field name="total_views" string="Views" />
+
+								</tree>
+							</field>
+							
+			</page>
              <page name="description" string="Description">
                          <field name="description" colspan="4" nolabel="1"/>
              </page>

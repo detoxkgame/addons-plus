@@ -23,4 +23,9 @@
         </div>
 	</xpath>
 </template>
+<template id="assets_backend" name="account assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+        	<script type="text/javascript" src="/skit_slide/static/src/js/slide_section_and_note_fields_backend.js"></script>
+        </xpath>
+</template>
 </odoo>

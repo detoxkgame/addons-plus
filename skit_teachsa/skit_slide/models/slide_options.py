@@ -47,3 +47,13 @@ class Slide(models.Model):
                                          ('most_voted', 'Most Voted'),
                                          ('most_viewed', 'Most Viewed')],
                                          string='Featuring Policy')
+
+
+class Slide(models.Model):
+
+    _inherit = 'slide.slide'
+    
+    display_type = fields.Selection([
+        ('line_section', "Section"),
+        ('line_note', "Note")], default=False, help="Technical field for UX purpose.")
+    
