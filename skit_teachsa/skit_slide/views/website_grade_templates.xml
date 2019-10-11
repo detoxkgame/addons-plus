@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="grade_assets_frontend" inherit_id="website.assets_frontend" name="Grade Front-end assets">
+		<xpath expr="//link[last()]" position="after">
+			<link rel="stylesheet" href="/skit_slide/static/src/css/grade.css" />
+		</xpath>
+		<xpath expr="//script[last()]" position="after">
+			<script type="text/javascript" src="/skit_slide/static/src/js/grade.js"></script>
+		</xpath>
+	</template>
+
+	<!-- GRADE TEMPLATES -->
+	<template id="website_elearning_grade">
+		<t t-call="website.layout">
+			<div class="o_portal_wrap">
+		        <!-- <div class="mt16 mb16">
+			        	<h1 class="text-center">Grades &amp; Subjects</h1>
+			    </div> -->
+			    
+		        <div class="row">
+		        	<div class="col-md-3">
+		        		<div class="main-leftpanel">
+		        			<div align="center" class="profile-image">
+		        				<img alt="User" class="img-responsive" src="/skit_slide/static/src/img/avatar.png" />
+		        			</div>
+		        			<div class="main-btn-div">
+		        				 <table style="width:100%;">
+		        					<tbody>
+		        					<tr>
+		        						<td class="user-role"><span>Student</span></td>
+		        						<td class="user-role"><span>Parent</span></td>
+		        						<td class="user-role"><span>Mentor</span></td>
+		        					</tr>
+		        					</tbody>
+		        				</table> 
+		        				
+		        			</div>
+		        		</div>
+				    </div>
+		        	<div class="grade_header_div col-12 col-md col-lg-8">
+			        	<table class="grade_table" align="center">
+			        		<tbody>
+			        			<tr>
+			        				<td style="width: 30%;"><span class="grade_span">Grades:</span></td>
+			        				<td>
+			        					<select id="grade" class="grade_select">
+			        						<option value="0"></option>
+			        						<t t-foreach="grades" t-as="grade">
+			        							<option t-att-value="grade.id"><t t-esc="grade.name"/></option>
+			        						</t>
+										</select>
+			        				</td>
+			        			</tr>
+			        		</tbody>
+			        	</table>
+		        	</div>
+		        	<div id="grade_subjects" class="grade_tab_div col-12 col-md col-lg-8">
+		        	
+		        	</div>
+		        	
+		        	<div id="grade_topics" class="grade_tab_div col-12 col-md col-lg-8">
+		        	
+		        	</div>
+		        	
+		        	<div id="grade_topics_details" class="grade_tab_div col-12 col-md col-lg-8">
+		        	
+		        	</div>
+		        	
+		        </div>
+			</div>
+		</t>
+	</template>
+	
+	<!-- Grade: Subjects and Contents -->
+	<template id="website_elearning_grade_subjects">
+		<div class="subject-card">
+			<h4 class="font-medium text-blue mt0 mb10">
+				<div class="bread-c">
+					<t t-set="total_len" t-value="len(breadcrumbs)" />
+		  			<t t-set="bcount" t-value="1" />
+					<ol class="breadcrumb pd-breadcrumb">
+						<t t-foreach="breadcrumbs" t-as="breadcrumb">
+							<t t-if="bcount == total_len">
+								<li><a ><t t-esc="breadcrumb"/></a></li>
+							</t>
+							<t t-else="">
+								<t t-if="bcount == 1">
+									<li id="root_grade"><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+								<t t-else="">
+									<li><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+							</t>
+							<t t-set="bcount" t-value="(bcount + 1)"/>
+						</t>
+					</ol>
+				</div>
+			</h4>
+			<div>	
+				<t t-foreach="channels" t-as="channel">
+					<t t-set="topics" t-value="slide_slide.sudo().search([('channel_id', '=', channel.id),('display_type', '=', 'line_section')])"/>
+					
+					<div class="col-sm-4 pdl0 mb20 pdmb0 floatleft">
+						<a href="#" class="subject-list" t-att-id="channel.id">
+							<div class="subject-list-name">
+								<h4 class="subject-name font16 mt0 mb5 text-blue" title=""><t t-esc="channel.name"/></h4>
+								<p class="ng-binding"><t t-esc="len(topics)"/> Chapters</p>
+							</div>
+							<p class="subject-click">
+								<img alt="TeachSA Logo" class="img-responsive" src="/skit_slide/static/src/img/teach_arrow.png" />
+								</p>
+						</a>
+					</div>
+				</t>
+			</div>
+		</div>
+		
+	</template>
+	
+	<template id="website_grade_subject_topics">
+		<div class="subject-card">
+			<h4 class="font-medium text-blue mt0 mb10">
+				<div class="bread-c">
+					<t t-set="total_len" t-value="len(breadcrumbs)" />
+		  			<t t-set="bcount" t-value="1" />
+					<ol class="breadcrumb pd-breadcrumb">
+						<t t-foreach="breadcrumbs" t-as="breadcrumb">
+							<t t-if="bcount == total_len">
+								<li><a ><t t-esc="breadcrumb"/></a></li>
+							</t>
+							<t t-else="">
+								<t t-if="bcount == 1">
+									<li id="root_topic"><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+								<t t-elif="bcount == 2">
+									<li id="root_subject"><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+								<t t-else="">
+									<li><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+							</t>
+							<t t-set="bcount" t-value="(bcount + 1)"/>
+						</t>
+					</ol>
+				</div>
+			</h4>
+			<div class="topic-panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+				<t t-set="i" t-value="0" />
+				<t t-foreach="topics" t-as="topic">
+				  <div class="topic-panel topic-panel-default">
+				    <div class="topic-panel-heading" role="tab" t-attf-id="heading#{topic.id}">
+				      <h4 class="topic-panel-title mb0">
+				        <a role="button" data-toggle="collapse" data-parent="#accordion" t-attf-href="#collapse#{topic.id}" aria-expanded="false" aria-controls="collapseOne">
+				          <t t-esc="topic.name"/>
+				        </a>
+				      </h4>
+				    </div>
+				    
+				    <div t-attf-id="collapse#{topic.id}" class="topic-panel-collapse collapse topic-content" role="tabpanel" aria-labelledby="headingOne">
+				      <div class="topic-panel-body">
+				      	<t t-call="skit_slide.topic_tab_view"/>
+				      </div>
+				    </div>
+				  </div>
+				  <t t-set="i" t-value="(i + 1)" />
+				</t>
+			</div>
+			
+		</div>
+	</template>
+	
+	<template id="topic_tab_view">
+		<div class="grade-tabs">
+			<nav class="grade-tab-nav">
+				<ul>
+					<t t-set="tab_count" t-value="1" />
+					<t t-foreach="contents[i]['slide'+str(topic.id)]" t-as="content">
+						<t t-if="int(content['count']) > 0">
+							<li><span t-attf-data-href="##{topic.name}-#{tab_count}"><t t-esc="content['name']" /></span></li>
+						<t t-set="tab_count" t-value="(tab_count + 1)" />
+						</t>
+					</t>
+					
+				</ul>
+			</nav>
+			<t t-set="tab_count" t-value="1" />
+			<t t-foreach="contents[i]['slide'+str(topic.id)]" t-as="content">
+				<t t-if="int(content['count']) > 0">
+					<div class="grade-tab" t-attf-id="#{topic.name}-#{tab_count}">
+				    	<div class="row">
+					        <!-- <div class="col-xl-3 col-lg-4 col-md-6 col-12 mt16 mb16" t-foreach="content['datas']" t-as="slide"> -->
+					        <div class="col-md-4" t-foreach="content['datas']" t-as="slide">
+					            <div class="card card-body pd-em document_view" t-att-id="slide.id">
+					                <a t-attf-href="#">
+					                    <img t-attf-src="/web/image/slide.slide/#{slide.id}/image_thumb" class="img-fluid img-thumbnail oe_slides_grid_thumbnail" alt="slide.name"/>
+					                </a>
+					               
+					                <div style="padding: 5px;">
+					                    <h4 class="mt4 mb8 oe_slides_ellipsis doc-text">
+					                        <a class="doc-color" t-att-title="slide.name" t-attf-href="#" t-esc="slide.name"/>
+					                    </h4>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+				    </div>
+				<t t-set="tab_count" t-value="(tab_count + 1)" />
+			    </t>
+			</t>
+		</div>
+	</template>
+	
+	<template id="topic_slide_detail_view">
+		<div class="subject-card">
+			<h4 class="font-medium text-blue mt0 mb10">
+				<div class="bread-c">
+					<t t-set="total_len" t-value="len(breadcrumbs)" />
+		  			<t t-set="bcount" t-value="1" />
+					<ol class="breadcrumb pd-breadcrumb">
+						<t t-foreach="breadcrumbs" t-as="breadcrumb">
+							<t t-if="bcount == total_len">
+								<li><a ><t t-esc="breadcrumb"/></a></li>
+							</t>
+							<t t-else="">
+								<t t-if="bcount == 1">
+									<li id="root_topic_detail"><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+								<t t-elif="bcount == 2">
+									<li id="root_subject_detail"><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+								<t t-elif="bcount == 3">
+									<li id="document_topic"><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+								<t t-else="">
+									<li><a href="#"><t t-esc="breadcrumb"/></a></li>
+								</t>
+							</t>
+							<t t-set="bcount" t-value="(bcount + 1)"/>
+						</t>
+					</ol>
+				</div>
+			</h4>
+			<div class="row">
+                <div class="col-md-12">
+                	<t t-if="slide.slide_type == 'quiz'">
+                		<div class="container">
+					    	<!-- <t t-foreach="slides" t-as="slide"> -->
+						    	<!-- <div class="mt16 mb16">
+					            	<h1 class="text-center"><t t-esc="slide.name"/></h1>
+					            </div> -->
+					            <t t-set="question_index" t-value="0"/>
+					            <span id="total_question" class="grade_display_none"><t t-esc="len(slide.quiz_question_ids)"/></span>
+					            <span id="question_no" class="grade_display_none">1</span>
+					            <span id="slide_question_id" class="grade_display_none"><t t-esc="slide.id"/></span>
+					            <t t-if="len(slide.quiz_question_ids) > 0">
+					            <div id="question_tag">
+					            <t t-foreach="slide.quiz_question_ids[0]" t-as="question">
+					            	<t t-set="question_index" t-value="question_index+1"/>
+					            	<div class="form-group">
+					                    <div>
+						            	<h2 class="dflex">
+					        		    	<t t-esc="question_index"/>) <span t-field="question.quiz_question" />
+					        		    </h2>
+					        		    <t t-foreach="question.quiz_answer_ids" t-as="option">
+					        		    	<div class="quiz-choose">
+					        		    	<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
+					        		    	<span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+					        		    	</div>
+					        		    </t>
+					        		    </div>
+				        		    </div>
+					            </t>
+					            </div>
+					            </t>
+					            <t t-if="len(slide.quiz_question_ids) > 0">
+					            	<span id="next_quiz" class="quiz-next-btn">Next</span>
+					            	<span id="submit_quiz" class="quiz-submit-btn grade_display_none">Submit</span>
+					            	<span id="previous_quiz" class="quiz-next-btn grade_display_none">Previous</span>
+					            </t>
+				            <!-- </t> -->
+					    </div>
+                	</t>
+                	<t t-else="">
+                    <div>
+                    	<t t-if="slide.datas and slide.slide_type == 'infographic'">
+                        	<img t-attf-src="/web/image/slide.slide/#{slide.id}/datas" class="img-fluid" style="width:100%" alt="Slide image"/>
+                         </t>
+                        <div t-if="slide.slide_type in ('presentation', 'document')" class="embed-responsive embed-responsive-4by3 embed-responsive-item mb8">
+                            <t t-raw="slide.embed_code"/>
+                        </div>
+                        <div t-if="slide.slide_type == 'video' and slide.document_id" class="embed-responsive embed-responsive-16by9 embed-responsive-item mb8">
+                            <t t-raw="slide.embed_code"/>
+                        </div>
+                        <div class="row">
+                            <h4 t-field="slide.name" class="col-lg-6"/>
+                            <div class="col-lg-6">
+                                <div clas="row">
+                                    <div class="col-lg-8" t-if="slide.tag_ids">
+                                        <t t-foreach="slide.tag_ids" t-as="slide_tag">
+                                            <a t-attf-href="/slides/#{slug(slide.channel_id)}/tag/#{slug(slide_tag)}"  t-attf-class="badge badge-secondary ml4 mb4 float-right #{tag and tag.id == slide_tag.id and 'badge-primary' ''}" t-field="slide_tag.name"/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </t>
+                </div>
+			</div>
+		</div>
+	</template>
+	
+	<template id="document_question">
+		<div id="question_tag">
+			<t t-foreach="quiz_question" t-as="question">
+				
+				<div class="form-group">
+					<div>
+					<h2 class="dflex">
+						<t t-esc="question_no"/>) <span t-field="question.quiz_question" />
+					</h2>
+					<t t-foreach="question.quiz_answer_ids" t-as="option">
+						<div class="quiz-choose">
+					    	<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
+					        <span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+					    </div>
+					</t>
+					</div>
+				</div>
+			</t>
+		</div>
+	</template>
+</odoo>
