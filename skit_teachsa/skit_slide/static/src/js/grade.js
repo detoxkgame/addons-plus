@@ -15,7 +15,7 @@ odoo.define('skit_slide.grade', function(require) {
 				post['categ_id'] = parseInt(grade);
 				ajax.jsonRpc('/grades-subjects/content', 'call', post).then(function (modal) { 
 					$('#grade_subjects').html(modal);
-					vertical_tab();
+					//vertical_tab();
 					breadcurmb_action();
 					subject_action();
 				});
