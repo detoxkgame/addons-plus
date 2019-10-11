@@ -1,0 +1,148 @@
+
+.skit_signup_form{
+	max-width: 800px;
+}
+.skitbtn_signup{
+	display: table;
+	float: right;
+}
+.log_div{
+	float:left;
+}
+/* .select_login,.parent_login,.student_login{
+	height: 100%;
+    width: 100%;
+    display: table;
+} */
+/* .heading_div{
+	visibility:hidden;
+	padding-top: 2%;
+	padding-bottom: 2%;
+} */
+/* .skit_login_div{
+	margin:0 auto;
+	background:#e4e4e4;
+	border-radius: 8px;
+} */
+.dob_lbl{
+	display: block;
+}
+.dob_date,.dob_month,.dob_year{
+	width: 80px;
+    display: inline-block;
+}
+.parent_sub_btn,.teacher_sub_btn{
+	display: inline-block;
+    width: 100%;
+    
+}
+.skit_add_btn{
+	display: inline-block;
+    width: 20%;
+    float: left;
+}
+.parent_sub_btn button,.teacher_sub_btn button{
+	float: right;
+    width: auto;
+}
+.skit_student_details_hidden{
+	display:none;
+}
+.skit_parent_details{
+	display: inline-block;
+}
+
+
+
+
+
+
+#tab-outer {
+  position:relative;
+  font:normal 12px Arial,Sans-Serif;  
+  /* max-width: 800px; */
+  /* margin: 50px auto; */
+  width:49%;
+  float:right;
+  padding:0px 0px;    
+}
+
+/* #tab-outer * {
+  margin:0px 0px;
+  padding:0px 0px;    
+} */
+
+#tab-wrapper {
+  list-style:none;
+  height:30px;
+  padding: 0px;
+}
+
+#tab-wrapper li {
+  margin:0px 0px 0px 2px;
+  float:left;
+  font-weight:bold;
+}
+
+#tab-wrapper li a {
+  display:block;
+  border-radius: 10px;
+  padding:0px 15px;
+  line-height:30px;
+  text-decoration:none;
+  color:black;
+  background-color:#ebedf0; 
+}
+
+#tab-wrapper li.active a {
+  background-color:#dee2e6;
+}
+
+#tab-body > div {
+  background-color:#dee2e6;
+  color:black;
+  padding:20px 25px;
+  border-bottom:4px solid #ebedf0;
+  border-radius: 10px;
+  box-shadow: 0 0 8px 4px darkgrey;
+}
+#tab-body{
+  display: flex;
+  padding-right: 3%;
+}
+
+
+
+
+
+
+
+
+#tab-list_stud{
+	border-bottom: 1px solid #c389ce;
+	height: 39px;
+	width: 80%;
+    float: left;
+}
+#tab-content_stud > .active{
+	opacity: 1;
+}
+#tab-list_stud > li > a{
+	padding: 10px 15px;
+}
+#tab-list_stud > li > a > button{
+	padding-left: 6px;
+	margin-top: -3px;
+}
+#tab-list_stud > li.active > a{
+	background-color: #fff;
+	border: 1px solid #c389ce;
+	border-bottom-color: transparent;
+	border-radius: 7px 7px 0 0;
+}
+#tab-list_stud > li{
+	display: inline-flex;
+}
+#tab-list_stud > li.active{
+	height: 39px;
+}
