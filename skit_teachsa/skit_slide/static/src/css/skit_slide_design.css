@@ -9,26 +9,11 @@
 .log_div{
 	float:left;
 }
-/* .select_login,.parent_login,.student_login{
-	height: 100%;
-    width: 100%;
-    display: table;
-} */
-/* .heading_div{
-	visibility:hidden;
-	padding-top: 2%;
-	padding-bottom: 2%;
-} */
-/* .skit_login_div{
-	margin:0 auto;
-	background:#e4e4e4;
-	border-radius: 8px;
-} */
 .dob_lbl{
 	display: block;
 }
 .dob_date,.dob_month,.dob_year{
-	width: 80px;
+	width: 66px;
     display: inline-block;
 }
 .parent_sub_btn,.teacher_sub_btn{
@@ -56,21 +41,15 @@
 
 
 
-
+/******Start code for tab outer part********/
 #tab-outer {
   position:relative;
   font:normal 12px Arial,Sans-Serif;  
-  /* max-width: 800px; */
-  /* margin: 50px auto; */
   width:49%;
   float:right;
-  padding:0px 0px;    
+  padding-right: 7%; 
+  padding-top: 2%;
 }
-
-/* #tab-outer * {
-  margin:0px 0px;
-  padding:0px 0px;    
-} */
 
 #tab-wrapper {
   list-style:none;
@@ -79,23 +58,30 @@
 }
 
 #tab-wrapper li {
-  margin:0px 0px 0px 2px;
+  margin:0px 0px 0px 4px;
   float:left;
   font-weight:bold;
 }
 
 #tab-wrapper li a {
   display:block;
-  border-radius: 10px;
   padding:0px 15px;
   line-height:30px;
   text-decoration:none;
   color:black;
-  background-color:#ebedf0; 
+  background-color:#aaa; 
+}
+#tab-wrapper li:first-child a{
+	border-bottom-left-radius: 25px;
+	border-top-left-radius: 25px;
 }
 
+#tab-wrapper li:nth-child(3) a{
+	border-bottom-right-radius: 25px;
+	border-top-right-radius: 25px;
+}
 #tab-wrapper li.active a {
-  background-color:#dee2e6;
+  background-color:#74cee4;
 }
 
 #tab-body > div {
@@ -110,6 +96,7 @@
   display: flex;
   padding-right: 3%;
 }
+/******End code for tab outer part********/
 
 
 
@@ -117,7 +104,7 @@
 
 
 
-
+/********Start code for tab list stud part**********/
 #tab-list_stud{
 	border-bottom: 1px solid #c389ce;
 	height: 39px;
@@ -146,3 +133,4 @@
 #tab-list_stud > li.active{
 	height: 39px;
 }
+/********End code for tab list stud part**********/
