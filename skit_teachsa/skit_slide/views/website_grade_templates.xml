@@ -27,13 +27,36 @@
 		        				 <table style="width:100%;">
 		        					<tbody>
 		        					<tr>
-		        						<td class="user-role"><span>Student</span></td>
-		        						<td class="user-role"><span>Parent</span></td>
-		        						<td class="user-role"><span>Mentor</span></td>
+		        						<td id="student_role" class="user-role student_li"><span>Student</span></td>
+		        						<td id="parent_role" class="user-role parent_li"><span>Parent</span></td>
+		        						<td id="mentor_role" class="user-role"><span>Mentor</span></td>
 		        					</tr>
 		        					</tbody>
 		        				</table> 
-		        				
+		        			</div>
+		        			<div>
+								<div id="student_div" class="student_ul">
+									<ul class="ul_menu">
+										<li>
+											<i class="fa fa-desktop"></i>
+											Dashboard
+										</li>
+										<li>Demo</li>
+										<li>Teachers</li>
+										<li>Parent details</li>
+									</ul>
+								</div>
+								<div id="parent_div" class="parent_ul grade_display_none">
+									<ul class="ul_menu">
+										<li>
+											<i class="fa fa-desktop"></i>
+											Dashboard
+										</li>
+										<li>Student</li>
+										<li>Subscription</li>
+										<li>Demo</li>
+									</ul>
+								</div>
 		        			</div>
 		        		</div>
 				    </div>

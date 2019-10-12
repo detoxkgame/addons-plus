@@ -26,6 +26,14 @@ odoo.define('skit_slide.grade', function(require) {
 			}
 		});
 		/** End Grade onChange */
+		$('#student_role').on('click', function(){
+			$('#student_div').removeClass("grade_display_none");
+			$('#parent_div').addClass("grade_display_none");
+		});
+		$('#parent_role').on('click', function(){
+			$('#parent_div').removeClass("grade_display_none");
+			$('#student_div').addClass("grade_display_none");
+		});
 		
 	});
 	

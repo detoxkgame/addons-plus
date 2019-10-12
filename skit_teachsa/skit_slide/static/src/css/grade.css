@@ -464,3 +464,16 @@
     border-radius: 7%;
     margin-left: 1%;
 }
+
+.ul_menu{
+	list-style-type:none;
+	font-size: 16px;
+    color: white;
+    font-weight: 500;
+}
+ul.user-role{
+	list-style-type:none;
+}
+ul.ul_menu li {
+    padding:5px;
+}
