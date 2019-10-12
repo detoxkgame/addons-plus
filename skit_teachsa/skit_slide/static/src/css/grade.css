@@ -25,7 +25,7 @@
 }
 .grade_header_div{
 	width: 100%;
-    margin-top: 6%;
+    /* margin-top: 6%; */
     position: relative;
     background: #FFF;
     /* display: inline-block; */
@@ -173,7 +173,7 @@
     padding: 20px;
     margin-bottom: 20px;
     width: 100%;
-    margin-top: 6%;
+    /* margin-top: 6%; */
     min-height: 400px;
 }
 .mb20 {
@@ -449,9 +449,10 @@
     color: white;
     text-align: center;
     cursor: pointer;
-    background: #74cee4;
+    background: #edbf47;
     width: 10%;
     border-radius: 7%;
+    margin-left: 1%;
 }
 .quiz-submit-btn{
 	float: right;
@@ -476,4 +477,7 @@ ul.user-role{
 }
 ul.ul_menu li {
     padding:5px;
+}
+.title_img{
+	width: 30%;
 }
