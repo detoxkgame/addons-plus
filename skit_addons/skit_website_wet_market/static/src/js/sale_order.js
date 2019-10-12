@@ -24,7 +24,7 @@ setInterval(function(){
         		$('#sale_confirm').find("span").removeClass("border-gray-span");
         		$('#sale_confirm').find("span").addClass("border-green-span");
         		$('#sale_confirm_img').attr('src','/skit_website_wet_market/static/src/img/confirmed_green.png');
-        		$('#msale_confirm_img').attr('src','/skit_website_fish_market/static/src/img/confirmed_green.png');
+        		$('#msale_confirm_img').attr('src','/skit_website_wet_market/static/src/img/confirmed_green.png');
         		$('.icon_confirm').addClass("active_back");
         		$('.conf_vertical_ln').addClass("active_ln");
         	}
@@ -34,7 +34,7 @@ setInterval(function(){
         		$('#sale_preparing').find("span").removeClass("border-gray-span");
         		$('#sale_preparing').find("span").addClass("border-green-span");
         		$('#sale_preparing_img').attr('src','/skit_website_wet_market/static/src/img/preparing_green.png');
-        		$('#msale_prepare_img').attr('src','/skit_website_fish_market/static/src/img/preparing_green.png');
+        		$('#msale_prepare_img').attr('src','/skit_website_wet_market/static/src/img/preparing_green.png');
         		$('.icon_preparing').addClass("active_back");
         		$('.prepare_vertical_ln').addClass("active_ln");
         	}
@@ -44,7 +44,7 @@ setInterval(function(){
         		$('#sale_ready').find("span").removeClass("border-gray-span");
         		$('#sale_ready').find("span").addClass("border-green-span");
         		$('#sale_ready_img').attr('src','/skit_website_wet_market/static/src/img/ready_green.png');
-        		$('#msale_ready_img').attr('src','/skit_website_fish_market/static/src/img/ready_green.png');
+        		$('#msale_ready_img').attr('src','/skit_website_wet_market/static/src/img/ready_green.png');
         		$('.icon_ready').addClass("active_back");
         		$('.ready_vertical_ln').addClass("active_ln");
         	}
@@ -54,7 +54,7 @@ setInterval(function(){
         		$('#sale_delivered').find("span").removeClass("border-gray-span");
         		$('#sale_delivered').find("span").addClass("border-green-span");
         		$('#sale_delivered_img').attr('src','/skit_website_wet_market/static/src/img/delivered_green.png');
-        		$('#msale_deliver_img').attr('src','/skit_website_fish_market/static/src/img/delivered_green.png');
+        		$('#msale_deliver_img').attr('src','/skit_website_wet_market/static/src/img/delivered_green.png');
         		$('.icon_delivered').addClass("active_back");
         	}
         });

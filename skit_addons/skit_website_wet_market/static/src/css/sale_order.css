@@ -313,7 +313,7 @@
     max-width: 99px;
 }
 .pro_name_price{
-	display: flex;
+	display: flow-root;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -342,6 +342,8 @@
 }
 .shop_prod_name{
 	color: #005452;
+	width: 65%;
+    display: inline-table;
 }
 
 .shop_section{
@@ -349,4 +351,6 @@
 }
 .shop_price{
 	float: right !important;
+	width: 35%;
+    text-align: right;
 }

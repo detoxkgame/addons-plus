@@ -208,7 +208,7 @@
                 <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
                 	<li id="sale_ready" class="border-gray">
 	                     <div class="ps-bot">
-	                        <p>Ready to Delivery</p>
+	                        <p>Ready to Pickup</p>
 	                    </div>
 	                    <span class="ps-sp-top border-gray-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></span>
 	                </li>
@@ -216,7 +216,7 @@
                 <t t-else="">
                 	<li id="sale_ready" class="border-green">
 	                     <div class="ps-bot">
-	                        <p>Ready to Delivery</p>
+	                        <p>Ready to Pickup</p>
 	                    </div>
 	                    <span class="ps-sp-top border-green-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></span>
 	                </li>

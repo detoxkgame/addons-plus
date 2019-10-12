@@ -129,7 +129,7 @@
 					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
    						<div class="timeline-block timeline-block-right">
       						<div class="icon_confirm marker"></div>
-      						<div class="track_img_conf"><img id="msale_confirm_img" src="/skit_website_fish_market/static/src/img/confirmed_gray.png" alt=""/></div>
+      						<div class="track_img_conf"><img id="msale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_gray.png" alt=""/></div>
       						<div class="timeline-content">
          						<h6>Confirmed</h6>
       						</div>
@@ -139,7 +139,7 @@
    					<t t-else="">
     					<div class="timeline-block timeline-block-right">
       						<div class="icon_confirm marker active"></div>
-      						<div class="track_img_conf"><img id="msale_confirm_img" src="/skit_website_fish_market/static/src/img/confirmed_green.png" alt=""/></div>
+      						<div class="track_img_conf"><img id="msale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_green.png" alt=""/></div>
       						<div class="timeline-content">
          						<h6>Confirmed</h6>
       						</div>
@@ -149,7 +149,7 @@
 					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale')">
    						<div class="timeline-block timeline-block-left">
       						<div class="icon_preparing marker"></div>
-      						<div class="track_img_prepare"><img id="msale_prepare_img" src="/skit_website_fish_market/static/src/img/preparing_gray.png" alt=""/></div>
+      						<div class="track_img_prepare"><img id="msale_prepare_img" src="/skit_website_wet_market/static/src/img/preparing_gray.png" alt=""/></div>
       						<div class="timeline-content">
          						<h6>Preparing</h6>
       						</div>
@@ -159,7 +159,7 @@
    					<t t-else="">
    						<div class="timeline-block timeline-block-left">
       						<div class="icon_preparing marker active"></div>
-      						<div class="track_img_prepare"><img id="msale_prepare_img" src="/skit_website_fish_market/static/src/img/preparing_green.png" alt=""/></div>
+      						<div class="track_img_prepare"><img id="msale_prepare_img" src="/skit_website_wet_market/static/src/img/preparing_green.png" alt=""/></div>
       						<div class="timeline-content">
          						<h6>Preparing</h6>
       						</div>
@@ -170,9 +170,9 @@
 					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
    						<div class="timeline-block timeline-block-right">
       						<div class="icon_ready marker"></div>
-      						<div class="track_img_ready"><img id="msale_ready_img" src="/skit_website_fish_market/static/src/img/ready.png" alt=""/></div>
+      						<div class="track_img_ready"><img id="msale_ready_img" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></div>
       						<div class="timeline-content">
-         						<h6>Ready to Delivery</h6> 
+         						<h6>Ready to Pickup</h6> 
       						</div>
    						</div>
    						<div class="ready_vertical_ln"></div>
@@ -180,9 +180,9 @@
    					<t t-else="">
    						<div class="timeline-block timeline-block-right">
       						<div class="icon_ready marker active"></div>
-      						<div class="track_img_ready"><img id="msale_ready_img" src="/skit_website_fish_market/static/src/img/ready_green.png" alt=""/></div>
+      						<div class="track_img_ready"><img id="msale_ready_img" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></div>
       						<div class="timeline-content">
-         						<h6>Ready to Delivery</h6> 
+         						<h6>Ready to Pickup</h6> 
       						</div>
    						</div>
    						<div class="ready_vertical_ln active_ln"></div>
@@ -190,7 +190,7 @@
 					<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing') or (sale_order.state == 'ready')">
    						<div class="timeline-block timeline-block-left">
       						<div class="icon_delivered marker"></div>
-      						<div class="track_img_deliver"><img id="msale_deliver_img" src="/skit_website_fish_market/static/src/img/delivered_gray.png" alt=""/></div>
+      						<div class="track_img_deliver"><img id="msale_deliver_img" src="/skit_website_wet_market/static/src/img/delivered_gray.png" alt=""/></div>
       						<div class="timeline-content">
          						<h6>Delivered</h6>
       						</div>
@@ -199,7 +199,7 @@
    					<t t-else="">
    						<div class="timeline-block timeline-block-left">
       						<div class="icon_delivered marker active"></div>
-      						<div class="track_img_deliver"><img id="msale_deliver_img" src="/skit_website_fish_market/static/src/img/delivered_green.png" alt=""/></div>
+      						<div class="track_img_deliver"><img id="msale_deliver_img" src="/skit_website_wet_market/static/src/img/delivered_green.png" alt=""/></div>
       						<div class="timeline-content">
          						<h6>Delivered</h6>
       						</div>
