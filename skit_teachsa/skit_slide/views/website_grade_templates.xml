@@ -17,6 +17,7 @@
 			        	<h1 class="text-center">Grades &amp; Subjects</h1>
 			    </div> -->
 			    
+
 		        <div class="row">
 		        	<div class="col-md-3">
 		        		<div class="main-leftpanel">
@@ -60,35 +61,45 @@
 		        			</div>
 		        		</div>
 				    </div>
-		        	<div class="grade_header_div col-12 col-md col-lg-8">
-			        	<table class="grade_table" align="center">
-			        		<tbody>
-			        			<tr>
-			        				<td style="width: 30%;"><span class="grade_span">Grades:</span></td>
-			        				<td>
-			        					<select id="grade" class="grade_select">
-			        						<option value="0"></option>
-			        						<t t-foreach="grades" t-as="grade">
-			        							<option t-att-value="grade.id"><t t-esc="grade.name"/></option>
-			        						</t>
-										</select>
-			        				</td>
-			        			</tr>
-			        		</tbody>
-			        	</table>
+				   <!--  <div>
+				    	<img alt="User" class="img-responsive" src="/skit_slide/static/src/img/portal_title.png" />
+				    </div> -->
+				    <div class="col-12 col-md col-lg-8">
+				    <div>
+				    	<img alt="User" class="img-responsive title_img" src="/skit_slide/static/src/img/portal_title.png" >
+				    	</img>
+				    </div>
+				    <div id="grade_div">
+			        	<div class="grade_header_div">
+				        	<table class="grade_table" align="center">
+				        		<tbody>
+				        			<tr>
+				        				<td style="width: 30%;"><span class="grade_span">Grades:</span></td>
+				        				<td>
+				        					<select id="grade" class="grade_select">
+				        						<option value="0"></option>
+				        						<t t-foreach="grades" t-as="grade">
+				        							<option t-att-value="grade.id"><t t-esc="grade.name"/></option>
+				        						</t>
+											</select>
+				        				</td>
+				        			</tr>
+				        		</tbody>
+				        	</table>
+			        	</div>
+			        	<div id="grade_subjects" class="grade_tab_div col-12 col-md col-lg-8">
+			        	
+			        	</div>
+			        	
+			        	<div id="grade_topics" class="grade_tab_div col-12 col-md col-lg-8">
+			        	
+			        	</div>
+			        	
+			        	<div id="grade_topics_details" class="grade_tab_div col-12 col-md col-lg-8">
+			        	
+			        	</div>
 		        	</div>
-		        	<div id="grade_subjects" class="grade_tab_div col-12 col-md col-lg-8">
-		        	
 		        	</div>
-		        	
-		        	<div id="grade_topics" class="grade_tab_div col-12 col-md col-lg-8">
-		        	
-		        	</div>
-		        	
-		        	<div id="grade_topics_details" class="grade_tab_div col-12 col-md col-lg-8">
-		        	
-		        	</div>
-		        	
 		        </div>
 			</div>
 		</t>
@@ -279,6 +290,7 @@
 					            <div id="question_tag">
 					            <t t-foreach="slide.quiz_question_ids[0]" t-as="question">
 					            	<t t-set="question_index" t-value="question_index+1"/>
+					            	<span id="question_id" class="grade_display_none"><t t-esc="question.id" /></span>
 					            	<div class="form-group">
 					                    <div>
 						            	<h2 class="dflex">
@@ -334,9 +346,9 @@
 	</template>
 	
 	<template id="document_question">
-		<div id="question_tag">
+		<!-- <div id="question_tag"> -->
 			<t t-foreach="quiz_question" t-as="question">
-				
+				<span id="question_id" class="grade_display_none"><t t-esc="question.id" /></span>
 				<div class="form-group">
 					<div>
 					<h2 class="dflex">
@@ -351,6 +363,6 @@
 					</div>
 				</div>
 			</t>
-		</div>
+		<!-- </div> -->
 	</template>
 </odoo>
