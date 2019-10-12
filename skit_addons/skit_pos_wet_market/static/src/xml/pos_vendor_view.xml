@@ -92,7 +92,7 @@
 	                			Preparing
 	                		</t>
 	                		<t t-elif="(sorder.state == 'ready')">
-	                			Ready to Delivery
+	                			Ready to Pickup
 	                		</t>
 	                		<t t-elif="(sorder.state == 'delivered')">
 	                			Delivered
@@ -112,7 +112,7 @@
 			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Preparing</span>
 			                		</t>
 			                		<t t-elif="(sorder.state == 'preparing')">
-			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" >Ready to Delivery</span>
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" >Ready to Pickup</span>
 			                		</t>
 			                		<t t-elif="(sorder.state == 'ready')">
 			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Delivered</span>
@@ -167,7 +167,7 @@
 	                			Preparing
 	                		</t>
 	                		<t t-elif="(sorder.state == 'ready')">
-	                			Ready to Delivery
+	                			Ready to Pickup
 	                		</t>
 	                		<t t-elif="(sorder.state == 'delivered')">
 	                			Delivered
@@ -187,7 +187,7 @@
 			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Preparing</span>
 			                		</t>
 			                		<t t-elif="(sorder.state == 'preparing')">
-			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" >Ready to Delivery</span>
+			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}" >Ready to Pickup</span>
 			                		</t>
 			                		<t t-elif="(sorder.state == 'ready')">
 			                			<span t-attf-data-item="#{sorder.id}" t-attf-id="#{sorder.id}">Delivered</span>
@@ -242,7 +242,7 @@
 									  <option value="open">Open</option>
 									  <option value="sale">Order Confirm</option>
 									  <option value="preparing">Preparing</option>
-									  <option value="ready">Ready to Delivery</option>
+									  <option value="ready">Ready to Pickup</option>
 									</select>
 								</td>
 							</tr>
