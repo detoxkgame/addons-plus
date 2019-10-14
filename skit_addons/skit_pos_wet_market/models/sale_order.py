@@ -107,7 +107,7 @@ class SaleOrder(models.Model):
             invoice._compute_residual()
         elif(order_state == "Preparing"):
             sale_order.write({'state': 'preparing'})
-        elif(order_state == "Ready to Delivery"):
+        elif(order_state == "Ready to Pickup"):
             sale_order.write({'state': 'ready'})
         elif(order_state == "Delivered"):
             sale_order.write({'state': 'delivered'})
