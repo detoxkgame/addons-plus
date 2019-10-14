@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="assets_backend" name="web_timeline assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+        <script type="text/javascript" src="/skit_web_appointment/static/src/js/view_registry.js"></script>
+        <script type="text/javascript" src="/skit_web_appointment/static/src/js/views/calendar/appointment_renderer.js"></script>
+        <script type="text/javascript" src="/skit_web_appointment/static/src/js/views/calendar/appointment_model.js"></script>
+        <script type="text/javascript" src="/skit_web_appointment/static/src/js/views/calendar/appointment_controller.js"></script>
+        <script type="text/javascript" src="/skit_web_appointment/static/src/js/views/calendar/appointment_view.js"/>
+             
+              
+            
+        </xpath>
+    </template>
+
+ <template id="ress_tests_assets" name="web_timeline test_assets" inherit_id="web.js_tests_assets">
+ <xpath expr="." position="inside">
+  <link rel="stylesheet" href="/skit_web_appointment/static/lib/fullcalendar/css/fullcalendar.css"/>
+  <script type="text/javascript" src="/skit_web_appointment/static/lib/fullcalendar/js/fullcalendar.js"></script>
+  <!-- <script type="text/javascript" src="/skit_web_appointment/static/lib/fullcalendar/js/fullcalendar-columns.js"></script> -->
+   </xpath>
+ </template>
+</odoo>
