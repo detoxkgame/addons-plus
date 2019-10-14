@@ -1,0 +1,37 @@
+/* Summernote not Support for placeholder text https://github.com/summernote/summernote/issues/581 */
+ .website-slide {
+    width: 280px !important;
+    height: 220px !important;
+    background: #f2f2f2;
+    display: flex;
+    overflow: hidden;   
+    margin-left:30px;
+} 
+ .website-slide ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 200px;
+    list-style: none;
+}
+ .website-slide ul li {
+    position: relative;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 280px;
+    height: 220px;
+    background: #ccc;
+    display: flex;
+    text-align: center;
+    line-height: 150px;
+}
+
+.img-width{
+	 margin: 0;
+    padding: 0;
+    width: 280px;
+    display: flex;
+    height: 220px;
+}

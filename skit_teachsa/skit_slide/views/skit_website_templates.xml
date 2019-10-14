@@ -8,6 +8,14 @@
         </xpath>
 </template>
 
+<template id="grade_assets_frontend" inherit_id="website.assets_frontend" name="Grade Front-end assets">
+		<xpath expr="//link[last()]" position="after">
+		    <link rel="stylesheet" href="/skit_slide/static/src/css/website.css"/>	 
+		</xpath>
+		<xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/skit_slide/static/src/js/sponser.js"></script>
+        </xpath>
+</template>
 
 <template id="skit_slide_detail_view" inherit_id="website_slides.slide_detail_view" name="Slide Detailed View">
 	<xpath expr="//div[hasclass('mt8')]//ul[hasclass('nav-tabs')]/li" position="replace">

@@ -7,3 +7,4 @@ from . import res_partner
 from . import slide_channel
 from . import slide_statistics
 from . import slide_grade
+from . import website
