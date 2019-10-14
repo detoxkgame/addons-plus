@@ -22,7 +22,8 @@
         'views/slide_grade_views.xml',
         'views/quotes.xml',
         'views/question.xml',
-        'views/website_grade_templates.xml'
+        'views/website_grade_templates.xml',
+        'views/skit_website_templates.xml',
         ],
     'qweb': [
          'static/src/xml/quotestemp.xml',
