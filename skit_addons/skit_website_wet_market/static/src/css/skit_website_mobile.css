@@ -321,3 +321,33 @@ i.fa.fa-check.active {
 	border-left: 2px solid #5bd040;
 }
 /************************/
+
+
+/*********AAttribute form design*************/
+@media only screen and (max-width: 767px) {
+.skit-cart{
+     font-size: 1rem !important;
+}
+
+.name-font{
+     font-size: 1.3rem;
+     text-align: center !important;
+     }
+ 
+.product-picture{
+    width: 70% !important;
+    margin: 0 auto !important;
+}
+
+.modal-content{
+    position: absolute  ;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, 24%);
+   
+}
+}
+.skit-cart{
+     float: right !important;
+}
+/*********AAttribute form design*************/

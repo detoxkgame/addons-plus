@@ -57,7 +57,7 @@
             	<div class="col-md-6">
                 	<t t-set="variant_img" t-value="any(product.mapped('product_variant_ids.image_variant'))"/>
                     <t t-set="image_ids"  t-value="product.product_image_ids"/>
-                    <div id="o-carousel-product" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div id="o-carousel-product" class="carousel slide product-picture" data-ride="carousel" data-interval="0">
                     	<div class="carousel-outer">
                         	<div class="carousel-inner">
                             	<div t-if="variant_img" class="carousel-item active" itemprop="image" t-field="product[:1].product_variant_id.image" t-options="{'widget': 'image', 'class': 'product_detail_img js_variant_img', 'alt-field': 'name', 'zoom': 'image', 'unique': str(product['__last_update']) + (str(product.product_variant_id['__last_update']) or '')}"/>
@@ -83,7 +83,7 @@
                      </div>
                  </div>
                  <div class="col-md-6" id="product_details">
-                 	<h1 itemprop="name" t-field="product.name">Product Name</h1>
+                 	<h1 class="product-portal name-font" itemprop="name" t-field="product.name">Product Name</h1>
                     <span itemprop="url" style="display:none;" t-esc="'%sshop/product/%s' % (request.httprequest.url_root, slug(product))"/>
                     	<form action="/shop/cart/update/attribute" method="POST">
                         	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
@@ -98,7 +98,7 @@
                                  <input type="text" style="display: none" class="form-control quantity" data-min="1" name="add_qty" t-att-value="quantity"/>
                                  <t t-call="website_sale.product_price" />
                                  <p t-if="product.has_dynamic_attributes() or len(product.product_variant_ids) &gt; 1" class="css_not_available_msg bg-danger" style="padding: 15px;">This combination does not exist.</p>
-                                 <a role="button" id="add_to_cart" class="btn btn-primary btn-lg mt8 js_check_product a-submit" href="#">Add to Cart</a>
+                                 <a role="button" id="add_to_cart" class="btn btn-primary btn-lg mt8 js_check_product a-submit skit-cart" href="#">Add to Cart</a>
                                </div>
                           </form>
                         </div>
