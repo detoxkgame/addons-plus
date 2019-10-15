@@ -4,7 +4,7 @@ odoo.define('skit_slide.grade', function(require) {
 	var ajax = require('web.ajax');
 
 	$(document).ready(function(){
-			
+		grade_action();
 		/* User Role Actions */
 		/** Student role*/
 		$('#student_role').on('click', function(){
