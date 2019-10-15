@@ -12,6 +12,7 @@
 					<field name="istutor" />
 					<field name="isparent" />
 					<field name="isstudent" />
+					<field name="slide_parents" attrs="{'invisible': [('isstudent', '!=', True)]}" widget="many2many_tags" />
 				</xpath>
 				<xpath expr="//form/sheet/notebook/page[5]" position="before">
 					<page string="Testimonial">

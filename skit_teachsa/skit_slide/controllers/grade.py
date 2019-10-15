@@ -21,7 +21,12 @@ class WebsiteGrade(http.Controller):
     def grade(self, **kw):
         request.session['quiz_answer'] = []
         grades = request.env['product.category'].sudo().search([('is_grade', '=', True)])
-        values = {'grades': grades}
+        user_id = request.env.uid
+        user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        partner_id = user.partner_id
+        values = {'grades': grades,
+                  'partner_id': partner_id.id
+                  }
         return request.render('skit_slide.website_elearning_grade', values)
 
     @http.route(['/grades-subjects/content'], type='json', auth="public", methods=['POST'], website=True)
@@ -324,3 +329,66 @@ class WebsiteGrade(http.Controller):
                   }
         request.session['quiz_answer'] = {}
         return request.env['ir.ui.view'].render_template("skit_slide.quiz_result_view", values)
+    
+    @http.route(['/user-role/student_parent/detail'], type='json',
+                auth="public", methods=['POST'], website=True)
+    def student_parent_detail(self, **kw):
+        parents = []
+        if(kw.get('user_partner_id')):
+            partner_id = request.env['res.partner'].sudo().search(
+                                                    [('id', '=',
+                                                      kw.get('user_partner_id'))
+                                                     ])
+            for parent in partner_id.slide_parents:
+                parents.append({'parent_name': parent.name,
+                                'parent_email': parent.email,
+                                })
+        values = {
+                  'parents': parents,
+                  }
+        return request.env['ir.ui.view'].render_template(
+                        "skit_slide.website_student_parent_details", values)
+
+    @http.route(['/user-role/parent_child/detail'], type='json',
+                auth="public", methods=['POST'], website=True)
+    def parent_child_detail(self, **kw):
+        childs = []
+        if(kw.get('user_partner_id')):
+            partner_id = request.env['res.partner'].sudo().search(
+                                                    [('id', '=',
+                                                      kw.get('user_partner_id'))
+                                                     ])
+            for student in partner_id.student_id:
+                childs.append({'child_name': student.name,
+                               'child_email': student.email,
+                               })
+        values = {
+                  'childs': childs,
+                  }
+        return request.env['ir.ui.view'].render_template(
+                         "skit_slide.website_parent_child_details", values)
+
+    @http.route('/grades-subjects/details', type='json', auth="public", methods=['POST'], website=True)
+    def grade_subject(self, **kw):
+        grades = request.env['product.category'].sudo().search([('is_grade', '=', True)])
+        values = {'grades': grades}
+        return request.env['ir.ui.view'].render_template('skit_slide.website_grade_subjects_details', values)
+
+    @http.route('/create_parent/details', type='json', 
+                auth="public", methods=['POST'], website=True)
+    def create_parent(self, **kw):
+        user_partner_id = int(kw.get('user_partner_id'))
+        parent_ids = request.env['res.partner'].sudo().search(
+                                                    [('id', '=',
+                                                      user_partner_id)
+                                                     ])
+        res_parent_id = request.env['res.partner'].sudo().search(
+                                [('isparent', '=', True),
+                                 ('id', 'not in',
+                                  parent_ids.slide_parents.ids),
+                                 ], order='id')
+
+        values = {'res_parent_id': res_parent_id,
+                  'user_partner_id': user_partner_id
+                  }
+        return request.env['ir.ui.view'].render_template('skit_slide.add_parent_popup', values)

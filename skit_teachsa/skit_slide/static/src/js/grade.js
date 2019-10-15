@@ -5,6 +5,60 @@ odoo.define('skit_slide.grade', function(require) {
 
 	$(document).ready(function(){
 			
+		/* User Role Actions */
+		/** Student role*/
+		$('#student_role').on('click', function(){
+			$('#student_div').removeClass("grade_display_none");
+			$('#student_role').addClass("button_active");
+			$('#parent_div').addClass("grade_display_none");
+			$('#parent_role').removeClass("button_active");
+		});
+		/** Parent role*/
+		$('#parent_role').on('click', function(){
+			$('#parent_div').removeClass("grade_display_none");
+			$('#parent_role').addClass("button_active");
+			$('#student_div').addClass("grade_display_none");
+			$('#student_role').removeClass("button_active");
+		});
+		/*End user role action*/
+
+		/** Sub menu actions*/
+		//Study details
+		$('#demo_study, #pdemo_study').on('click', function(){
+			var post = {};
+			ajax.jsonRpc('/grades-subjects/details', 'call', post).then(function (modal) { 
+				$('#user_role_div').html(modal);
+				grade_action();
+				breadcurmb_action();
+				subject_action();
+			});
+		});
+		// Parent details
+		$('#parent_view').on('click', function(){
+			var user_partner_id = $('.user_partner_id').text();
+			var post = {};
+			post['user_partner_id'] = user_partner_id;
+			ajax.jsonRpc('/user-role/student_parent/detail', 'call', post).then(function (modal) { 
+				$('#user_role_div').html(modal);
+				add_parent_action(user_partner_id);
+			});
+		});
+		
+		
+		//(Student)Child details
+		$('#student_child_view').on('click', function(){
+			var user_partner_id = $('.user_partner_id').text();
+			var post = {};
+			post['user_partner_id'] = user_partner_id;
+			ajax.jsonRpc('/user-role/parent_child/detail', 'call', post).then(function (modal) { 
+				$('#user_role_div').html(modal);
+			});
+		});
+		
+	});
+	
+	/** Grade onChange action*/
+	function grade_action(){
 		/** Start Grade onChange */
 		$('#grade').off().on('change', function(){
 			var grade = $(this).val();
@@ -26,17 +80,8 @@ odoo.define('skit_slide.grade', function(require) {
 				$('#grade_topics_details').addClass("grade_display_none");
 			}
 		});
-		/** End Grade onChange */
-		$('#student_role').off().on('click', function(){
-			$('#student_div').removeClass("grade_display_none");
-			$('#parent_div').addClass("grade_display_none");
-		});
-		$('#parent_role').off().on('click', function(){
-			$('#parent_div').removeClass("grade_display_none");
-			$('#student_div').addClass("grade_display_none");
-		});
-		
-	});
+	}
+	/** End Grade onChange */
 	
 	/** Start breadcurmb click action */
 	function breadcurmb_action(){
@@ -285,4 +330,21 @@ odoo.define('skit_slide.grade', function(require) {
 			});
 	}
 	/** End Pie Chart for quiz result */
+	
+	/** Start add parent action */
+	function add_parent_action(user_partner_id){
+		/* add parent */
+		var user_partner_id = user_partner_id;
+		$('#add-parent-card').on('click', function(){
+			var post = {};
+			var $form = $('.parent_details_view');
+			post['user_partner_id'] = user_partner_id;
+			ajax.jsonRpc('/create_parent/details', 'call', post).then(function (modal) { 
+				var $modal = $(modal);			
+      		    $modal.appendTo($form).modal();	
+			});
+		});
+	}
+	
+	/** End add parent action */
 });

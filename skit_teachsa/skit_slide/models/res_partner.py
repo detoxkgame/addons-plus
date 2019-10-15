@@ -18,9 +18,19 @@ class Partner(models.Model):
     isstudent = fields.Boolean(string='IsStudent', default=False)
     testimonial = fields.Html('Description', translate=html_translate, sanitize_attributes=False)
     website_publish = fields.Boolean( default=False)
-    parent_id = fields.Many2one('res.partner', string='Parent', domain=[('isparent', '=', True)])
-    student_id = fields.One2many('res.partner', 'parent_id',string='Children')
-                   
+    res_parent_id = fields.Many2one('res.partner', string='Parent',
+                                    domain=[('isparent', '=', True)])
+    slide_parents = fields.Many2many('res.partner', 'res_partner_rel',
+                                     'parent_id', 'partner_id',
+                                     string='Parents',
+                                     domain=[('isparent', '=', True)],
+                                     help="Parent")
+    slide_childrens = fields.Many2many('res.partner', 'res_partner_child_rel',
+                                       'parent_id', 'partner_id',
+                                       string='Children Devotee',
+                                       help="Children")
+    student_id = fields.One2many('res.partner', 'res_parent_id',
+                                 string='Children')
     website_published_state = fields.Selection([('published','Published'),
                                ('unpublished','Un Published')],
                                 string='Published state',default='unpublished')

@@ -27,23 +27,24 @@
 		        				 <table style="width:100%;">
 		        					<tbody>
 		        					<tr>
-		        						<td id="student_role" class="user-role student_li"><span>Student</span></td>
+		        						<td id="student_role" class="user-role button_active student_li"><span>Student</span></td>
 		        						<td id="parent_role" class="user-role parent_li"><span>Parent</span></td>
-		        						<td id="mentor_role" class="user-role"><span>Mentor</span></td>
+		        						<td id="mentor_role" class="user-role"><span>Teacher</span></td>
 		        					</tr>
 		        					</tbody>
 		        				</table> 
 		        			</div>
 		        			<div>
+		        				<span class="user_partner_id grade_display_none"><t t-esc="partner_id"/></span>
 								<div id="student_div" class="student_ul">
 									<ul class="ul_menu">
 										<li>
 											<i class="fa fa-desktop"></i>
 											Dashboard
 										</li>
-										<li>Demo</li>
-										<li>Teachers</li>
-										<li>Parent details</li>
+										<li id="demo_study"><i class="fa fa-book"></i> Demo</li>
+										<li id="teach_view"><img alt="Parent" class="img-responsive" src="/skit_slide/static/src/img/guru-mentor.png" /> Teachers</li>
+										<li id="parent_view" class="parent_details"><img alt="Parent" class="img-responsive" src="/skit_slide/static/src/img/parent_child_icon.png" /> Parent details</li>
 									</ul>
 								</div>
 								<div id="parent_div" class="parent_ul grade_display_none">
@@ -52,9 +53,9 @@
 											<i class="fa fa-desktop"></i>
 											Dashboard
 										</li>
-										<li>Student</li>
-										<li>Subscription</li>
-										<li>Demo</li>
+										<li id="student_child_view"> <i class="fa fa-graduation-cap"></i> Student</li>
+										<li id="subscription_view"><img alt="Parent" class="img-responsive" src="/skit_slide/static/src/img/subscription.png"/> Subscription</li>
+										<li id="pdemo_study"><i class="fa fa-book"></i> Demo</li>
 									</ul>
 								</div>
 		        			</div>
@@ -68,40 +69,49 @@
 				    		<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/grade.png" />
 				    	</img>
 				    </div>
-				    <div id="grade_div">
-			        	<div class="grade_header_div">
-				        	<table class="grade_table" align="center">
-				        		<tbody>
-				        			<tr>
-				        				<td style="width: 30%;"><span class="grade_span">Grades:</span></td>
-				        				<td>
-				        					<select id="grade" class="grade_select">
-				        						<option value="0"></option>
-				        						<t t-foreach="grades" t-as="grade">
-				        							<option t-att-value="grade.id"><t t-esc="grade.name"/></option>
-				        						</t>
-											</select>
-				        				</td>
-				        			</tr>
-				        		</tbody>
-				        	</table>
-			        	</div>
-			        	<div id="grade_subjects" class="grade_tab_div">
-			        	
-			        	</div>
-			        	
-			        	<div id="grade_topics" class="grade_tab_div">
-			        	
-			        	</div>
-			        	
-			        	<div id="grade_topics_details" class="grade_tab_div">
-			        	
-			        	</div>
+				    <div id="user_role_div">
+			        	<t t-call="skit_slide.website_grade_subjects_details"/>
 		        	</div>
 		        	</div>
 		        </div>
 			</div>
 		</t>
+	</template>
+	
+	<!-- Grade demo -->
+	<template id="website_grade_subjects_details">
+		<div class="grade_header_div">
+			<table class="grade_table" align="center">
+				<tbody>
+					<tr>
+						<td style="width: 30%;">
+							<span class="grade_span">Grades:</span>
+						</td>
+						<td>
+							<select id="grade" class="grade_select">
+								<option value="0"></option>
+								<t t-foreach="grades" t-as="grade">
+									<option t-att-value="grade.id">
+										<t t-esc="grade.name" />
+									</option>
+								</t>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="grade_subjects" class="grade_tab_div">
+	
+		</div>
+	
+		<div id="grade_topics" class="grade_tab_div">
+	
+		</div>
+	
+		<div id="grade_topics_details" class="grade_tab_div">
+	
+		</div>
 	</template>
 	
 	<!-- Grade: Subjects and Contents -->
@@ -431,4 +441,78 @@
 			</div>
 		</div>
 	</template>
+	
+	<template id="website_student_parent_details">
+		<div id="parent_details_view" class="parent_details_view">
+			<h4 class="font-medium text-blue mt0 mb20">List of Parents</h4>
+		 	<div class="parent_list pc_div_flex">	
+					<div id="add-parent-card" class="add-parent-card">
+						<p class="add_parent"><img alt="Add Parent" class="img-responsive add_parent_img" src="/skit_slide/static/src/img/add-parent-icon.png" >
+				    	</img></p>
+						<p class="text-white font21 font-medium">Add Parent</p>
+					</div>
+					<t t-if="parents">
+						<t t-foreach="parents" t-as="parent">
+						<div class="parent-card">
+							<p><img alt="Parent" class="img-responsive parent_img" src="/skit_slide/static/src/img/avatar.png" /></p>
+							<p class="text-white font-medium"><t t-esc="parent['parent_name']"/></p>
+							<p class="text-white font-medium"><t t-esc="parent['parent_email']"/></p>
+						</div>
+						</t>
+					</t>
+		 	</div>	
+		</div>
+	</template>
+	
+	<template id="website_parent_child_details">
+		<div id="child_details_view" class="child_details_view">
+		    <h4 class="font-medium text-blue mt0 mb20">List of Children</h4>
+		 	<div class="child_list pc_div_flex">	
+					<div class="add-child-card">
+						<p><img alt="Add Parent" class="img-responsive add_child_img" src="/skit_slide/static/src/img/add-child-icon.png" >
+				    	</img></p>
+						<p class="text-white font21 font-medium">Register a child</p>
+					</div>
+					<t t-if="childs">
+						<t t-foreach="childs" t-as="child">
+							<div class="child-card">
+								<p><img alt="Child" class="img-responsive child_img" src="/skit_slide/static/src/img/avatar.png" /></p>
+								<p class="text-white font-medium"><t t-esc="child['child_name']"/></p>
+								<p class="text-white font-medium"><t t-esc="child['child_email']"/></p>
+							</div>
+						</t>
+					</t>
+		 	</div>   		
+		</div>
+	</template>
+	
+	<!-- Add Parent form popup -->
+	<template id="add_parent_popup" name="parent_popup">
+		<div t-att-id="add_parent" class="modal fade show" tabindex="-1" role="dialog">
+			<div class="skitmodal-dialog modal-dialog" role="document">
+				<div class="modal-content skit-content">
+					<button class="close btn btn-primary" type="button" data-dismiss="modal" aria-label="close">
+									<i class="fa fa-times" aria-hidden="true"></i><span class="close"></span>
+					</button>
+			      	<div class="modal-body">
+				        <h4 class="cyp-modal-header mt20">Add your Parent </h4>		 
+				            <form name="linkparent" id="linkparentOrang" method="post">
+								<div class="form-group skit-formgroup">
+									<label class="skitform_label">Select Parent:</label>
+									<select id="parent_id" class="parent_input select_parent">
+										<option value="0"></option>
+										<t t-foreach="res_parent_id" t-as="parent">
+											<option t-att-value="parent.id">
+												<t t-esc="parent.name" />
+											</option>
+										</t>
+									</select>	
+								</div>
+							</form>
+			        </div>
+		        </div>
+	        </div>
+        </div>
+	</template> 
+<!-- End  -->
 </odoo>
