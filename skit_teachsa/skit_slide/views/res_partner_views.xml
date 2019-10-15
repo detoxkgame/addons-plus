@@ -59,7 +59,7 @@
 			                            <field name="partner_email"/>		                            
                             		</group>
 	                            	<notebook>
-	                            		<page name="content_subscribed" string="Content Subcribed">
+	                            		<page name="content_subscribed" string="Content Subscribed">
 	                            			<field name="content_subscribed_ids" colspan="4" nolabel="1" widget="slide_category_one2many">
 	                            				<tree>	                            				    
 	                            				    <field name="seq_no" string="Sequence No"/> 				                            	

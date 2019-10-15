@@ -31,7 +31,7 @@ class SlideChannelPartner(models.Model):
     t_partner_id = fields.Many2one('res.partner', string='Tutor',
                                    domain="[('istutor', '=',  True)]")
     content_subscribed_ids = fields.One2many('slide.content.subscribed',
-                                             'res_partner_id',
+                                             'channel_partner_id',
                                              string='Content Subscribed')
     tutor_ids = fields.One2many('tutor.remarks',
                                 'channel_partner_id',

@@ -33,8 +33,9 @@ class SlideQuestion(models.Model):
                                     ('Multi','Multi Select'),
                                     ('Boolean', 'Boolean')],
                                      string="Answer Type")
-    question_number = fields.Integer(string='Question Number',compute='_compute_question_number')
-    
+    question_number = fields.Integer(string='Question Number', compute='_compute_question_number')
+    num_correct = fields.Integer(string="Correct Options", compute="calc_correct")
+
     @api.depends('question_number')
     def _compute_question_number(self):
         for slide in self:
@@ -44,6 +45,14 @@ class SlideQuestion(models.Model):
 
     quiz_answer_ids = fields.One2many('slide.answer', 'quiz_answer_line_id',
                                       string='Answers')
+
+    @api.one
+    @api.depends('quiz_answer_ids')
+    def calc_correct(self):
+        self.num_correct = self.quiz_answer_ids.sudo().search_count([
+            ('quiz_answer_line_id', '=', self.id),
+            ('is_correct', '=', True)])
+
 
 class SlideAnswer(models.Model):
     _name = 'slide.answer'
@@ -66,7 +75,7 @@ class QuizLog(models.Model):
     _name = 'quiz.log'
 
     question_id = fields.Many2one('slide.question', string='Question')
-    answer_id = fields.Many2one('slide.answer', string='Answer')
+    answer_id = fields.Many2many('slide.answer', string='Answer')
     status = fields.Selection([('correct', 'Correct'), ('wrong', 'Wrong')],
                               string='Status', required=True,
                               readonly=True, copy=False)

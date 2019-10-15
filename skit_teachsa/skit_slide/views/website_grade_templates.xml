@@ -6,6 +6,10 @@
 		</xpath>
 		<xpath expr="//script[last()]" position="after">
 			<script type="text/javascript" src="/skit_slide/static/src/js/grade.js"></script>
+			<script type="text/javascript" src="/skit_slide/static/src/js/highcharts.js"></script>
+			<script type="text/javascript" src="/skit_slide/static/src/js/series-label.js"></script>
+			<script type="text/javascript" src="/skit_slide/static/src/js/exporting.js"></script>
+			<script type="text/javascript" src="/skit_slide/static/src/js/export-data.js"></script>
 		</xpath>
 	</template>
 
@@ -13,11 +17,6 @@
 	<template id="website_elearning_grade">
 		<t t-call="website.layout">
 			<div class="o_portal_wrap">
-		        <!-- <div class="mt16 mb16">
-			        	<h1 class="text-center">Grades &amp; Subjects</h1>
-			    </div> -->
-			    
-
 		        <div class="row">
 		        	<div class="col-md-3">
 		        		<div class="main-leftpanel">
@@ -61,12 +60,12 @@
 		        			</div>
 		        		</div>
 				    </div>
-				   <!--  <div>
-				    	<img alt="User" class="img-responsive" src="/skit_slide/static/src/img/portal_title.png" />
-				    </div> -->
+
 				    <div class="col-12 col-md col-lg-8">
-				    <div>
+				    <div class="postlogin-heading">
 				    	<img alt="User" class="img-responsive title_img" src="/skit_slide/static/src/img/portal_title.png" >
+				    		<h4 id="post_title" class="postlogin-heading_h4">Grades</h4>
+				    		<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/grade.png" />
 				    	</img>
 				    </div>
 				    <div id="grade_div">
@@ -222,7 +221,6 @@
 				<t t-if="int(content['count']) > 0">
 					<div class="grade-tab" t-attf-id="#{topic.name}-#{tab_count}">
 				    	<div class="row">
-					        <!-- <div class="col-xl-3 col-lg-4 col-md-6 col-12 mt16 mb16" t-foreach="content['datas']" t-as="slide"> -->
 					        <div class="col-md-4" t-foreach="content['datas']" t-as="slide">
 					            <div class="card card-body pd-em document_view" t-att-id="slide.id">
 					                <a t-attf-href="#">
@@ -278,10 +276,6 @@
                 <div class="col-md-12">
                 	<t t-if="slide.slide_type == 'quiz'">
                 		<div class="container">
-					    	<!-- <t t-foreach="slides" t-as="slide"> -->
-						    	<!-- <div class="mt16 mb16">
-					            	<h1 class="text-center"><t t-esc="slide.name"/></h1>
-					            </div> -->
 					            <t t-set="question_index" t-value="0"/>
 					            <span id="total_question" class="grade_display_none"><t t-esc="len(slide.quiz_question_ids)"/></span>
 					            <span id="question_no" class="grade_display_none">1</span>
@@ -298,8 +292,14 @@
 					        		    </h2>
 					        		    <t t-foreach="question.quiz_answer_ids" t-as="option">
 					        		    	<div class="quiz-choose">
-					        		    	<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
-					        		    	<span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+					        		    		<t t-if="question.num_correct == 1">
+					        		    			<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
+						        		    		<span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+					        		    		</t>
+						        		    	<t t-if="question.num_correct > 1">
+						        		    		<input type="checkbox" t-attf-name="question#{question.id}option#{option.id}" t-attf-value="#{option.id}" required="True"/> 
+							        				<span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+						        		    	</t>
 					        		    	</div>
 					        		    </t>
 					        		    </div>
@@ -308,11 +308,10 @@
 					            </div>
 					            </t>
 					            <t t-if="len(slide.quiz_question_ids) > 0">
-					            	<span id="next_quiz" class="quiz-next-btn">Next</span>
+					            	<span id="previous_quiz" class="quiz-previous-btn grade_display_none">Previous</span>
+					            	<span id="next_quiz" class="quiz-next-btn" style="margin-left: 45%;">Next</span>
 					            	<span id="submit_quiz" class="quiz-submit-btn grade_display_none">Submit</span>
-					            	<span id="previous_quiz" class="quiz-next-btn grade_display_none">Previous</span>
 					            </t>
-				            <!-- </t> -->
 					    </div>
                 	</t>
                 	<t t-else="">
@@ -346,7 +345,6 @@
 	</template>
 	
 	<template id="document_question">
-		<!-- <div id="question_tag"> -->
 			<t t-foreach="quiz_question" t-as="question">
 				<span id="question_id" class="grade_display_none"><t t-esc="question.id" /></span>
 				<div class="form-group">
@@ -356,13 +354,81 @@
 					</h2>
 					<t t-foreach="question.quiz_answer_ids" t-as="option">
 						<div class="quiz-choose">
-					    	<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
-					        <span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+							<t t-if="question.num_correct == 1">
+								<t t-if="len(checked_value) > 0">
+									<t t-foreach="checked_value" t-as="cvalue">
+										<t t-if="(cvalue == option.id)">
+											<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" 
+											required="True" checked="true"/> 
+								        	<span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+										</t>
+										<t t-else="">
+											<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
+								        	<span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+										</t>
+									</t>
+								</t>
+								<t t-else="">
+									<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> 
+							        <span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+								</t>
+							</t>
+							<t t-if="question.num_correct > 1">
+								<t t-if="len(checked_value) > 0">
+									<t t-if="(option.id) in checked_value">
+										<input type="checkbox" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" 
+											required="True" checked="true"/> 
+								        <span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+									</t>
+									<t t-else="">
+										<input type="checkbox" t-attf-name="question#{question.id}option#{option.id}" t-attf-value="#{option.id}" required="True"/> 
+								        <span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+									</t>
+								</t>
+								<t t-else="">
+									<input type="checkbox" t-attf-name="question#{question.id}option#{option.id}" t-attf-value="#{option.id}" required="True"/> 
+							        <span class="quiz-choose-ml" t-field="option.text_value"/><br/>
+								</t>
+							</t>
 					    </div>
 					</t>
 					</div>
 				</div>
 			</t>
-		<!-- </div> -->
+	</template>
+	
+	<template id="quiz_result_view">
+		<div><h1 class="text-center">Results</h1></div>
+		<div>
+			<span id="total_question" class="grade_display_none"><t t-esc="total_question"/></span>
+			<span id="correct_answer" class="grade_display_none"><t t-esc="correct_answer"/></span>
+			<span id="not_attempt" class="grade_display_none"><t t-esc="not_attempt"/></span>
+			<div class="result-div">
+				<table style="width:100%">
+					<tbody>
+						<tr>
+							<td class="result-td"><span class="result-span">No.of Questions</span></td>
+							<td class="result-td result-text"><span class="result-span"><t t-esc="total_question"/></span></td>
+						</tr>
+						<tr>
+							<td class="result-td"><span class="result-span">No.of Correct Answers</span></td>
+							<td class="result-td result-text"><span class="result-span"><t t-esc="correct_answer"/></span></td>
+						</tr>
+						<tr>
+							<td class="result-td"><span class="result-span">Percentage</span></td>
+							<td class="result-td result-text"><span class="result-span"><t t-esc="percent"/></span></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="progress" style="margin-top: 5%;">
+				  <div id="result_progress" class="progress-bar" role="progressbar" 
+				  aria-valuemin="0" aria-valuemax="100" t-attf-style="width:#{percent}">
+				    <t t-esc="percent"/>
+				  </div>
+				</div>
+			</div>
+			<div id="progress_chart" class="progress_chart">
+			</div>
+		</div>
 	</template>
 </odoo>

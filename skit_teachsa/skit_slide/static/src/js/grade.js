@@ -6,7 +6,7 @@ odoo.define('skit_slide.grade', function(require) {
 	$(document).ready(function(){
 			
 		/** Start Grade onChange */
-		$('#grade').on('change', function(){
+		$('#grade').off().on('change', function(){
 			var grade = $(this).val();
 			if(parseInt(grade) > 0){
 				$('.grade_header_div').addClass("grade_display_none");
@@ -15,7 +15,8 @@ odoo.define('skit_slide.grade', function(require) {
 				post['categ_id'] = parseInt(grade);
 				ajax.jsonRpc('/grades-subjects/content', 'call', post).then(function (modal) { 
 					$('#grade_subjects').html(modal);
-					//vertical_tab();
+					$('#post_title').text('Subjects');
+					$('#post_title_img').attr('src','/skit_slide/static/src/img/subject.png');
 					breadcurmb_action();
 					subject_action();
 				});
@@ -26,11 +27,11 @@ odoo.define('skit_slide.grade', function(require) {
 			}
 		});
 		/** End Grade onChange */
-		$('#student_role').on('click', function(){
+		$('#student_role').off().on('click', function(){
 			$('#student_div').removeClass("grade_display_none");
 			$('#parent_div').addClass("grade_display_none");
 		});
-		$('#parent_role').on('click', function(){
+		$('#parent_role').off().on('click', function(){
 			$('#parent_div').removeClass("grade_display_none");
 			$('#student_div').addClass("grade_display_none");
 		});
@@ -39,25 +40,31 @@ odoo.define('skit_slide.grade', function(require) {
 	
 	/** Start breadcurmb click action */
 	function breadcurmb_action(){
-		$('#root_grade, #root_topic, #root_topic_detail').on('click', function(){
+		$('#root_grade, #root_topic, #root_topic_detail').off().on('click', function(){
 			$('.grade_header_div').removeClass("grade_display_none");
 			$('#grade_subjects').addClass("grade_display_none");
 			$('#grade_topics').addClass("grade_display_none");
 			$('#grade_topics_details').addClass("grade_display_none");
+			$('#post_title').text('Grades');
+			$('#post_title_img').attr('src','/skit_slide/static/src/img/grade.png');
 			$(this).blur();
 		    return false;
 		});
-		$('#root_subject, #root_subject_detail').on('click', function(){
+		$('#root_subject, #root_subject_detail').off().on('click', function(){
 			$('#grade_topics_details').addClass("grade_display_none");
 			$('#grade_topics').addClass("grade_display_none");
 			$('#grade_subjects').removeClass("grade_display_none");
+			$('#post_title').text('Subjects');
+			$('#post_title_img').attr('src','/skit_slide/static/src/img/subject.png');
 			$(this).blur();
 		    return false;
 		});
-		$('#document_topic').on('click', function(){
+		$('#document_topic').off().on('click', function(){
 			$('#grade_topics_details').addClass("grade_display_none");
 			$('#grade_subjects').addClass("grade_display_none");
 			$('#grade_topics').removeClass("grade_display_none");
+			$('#post_title').text('Topics');
+			$('#post_title_img').attr('src','/skit_slide/static/src/img/topic.png');
 			$(this).blur();
 		    return false;
 		});
@@ -67,7 +74,7 @@ odoo.define('skit_slide.grade', function(require) {
 	
 	/** Start subject action */
 	function subject_action(){
-		$('.subject-list').on('click', function(){
+		$('.subject-list').off().on('click', function(){
 			var id = $(this).attr('id');
 			var post = {};
 			post['channel_id'] = parseInt(id);
@@ -75,6 +82,8 @@ odoo.define('skit_slide.grade', function(require) {
 				$('#grade_subjects').addClass("grade_display_none");
 				$('#grade_topics').html(modal);
 				$('#grade_topics').removeClass("grade_display_none");
+				$('#post_title').text('Topics');
+				$('#post_title_img').attr('src','/skit_slide/static/src/img/topic.png');
 				breadcurmb_action();
 				horizontal_tab();
 				document_action();
@@ -86,7 +95,7 @@ odoo.define('skit_slide.grade', function(require) {
 	
 	/** Start Topics horizontal tab action */
 	function horizontal_tab(){
-		$('.grade-tab-nav span').on('click', function() {
+		$('.grade-tab-nav span').off().on('click', function() {
 			  $([$(this).parent()[0], $($(this).data('href'))[0]]).addClass('active').siblings('.active').removeClass('active');
 		});
 	}
@@ -94,7 +103,7 @@ odoo.define('skit_slide.grade', function(require) {
 	
 	/** Start document Action */
 	function document_action(){
-		$('.document_view').on('click', function(){
+		$('.document_view').off().on('click', function(){
 			var id = $(this).attr('id');
 			var post = {};
 			post['slide_id'] = parseInt(id);
@@ -119,20 +128,32 @@ odoo.define('skit_slide.grade', function(require) {
 	function show_questions(){
 		
 		$('#next_quiz').off().on('click', function(){
+			var question_id = $('#question_id').text();
 			var total_question = parseInt($('#total_question').text());
 			var question_no = parseInt($('#question_no').text());
 			var slide_id = $('#slide_question_id').text();
 			var current_question_no = (question_no) + 1;
+			if(question_no >= 1){
+				$('#next_quiz').css({'margin-left': '1%'});
+				$('#previous_quiz').removeClass("grade_display_none");
+			}
 			if(current_question_no >= total_question){
 				$('#next_quiz').addClass("grade_display_none");
 				$('#previous_quiz').removeClass("grade_display_none");
 				$('#submit_quiz').removeClass("grade_display_none");
 			}
+			
+			var selected_option = []
+			$('input:checked').each(function(){
+				selected_option.push(parseInt($(this).val()));
+			});
 			$('#question_no').text(current_question_no);
 			var post = {};
 			post['question_no'] = current_question_no;
 			post['slide_id'] = slide_id;
 			post['type'] = 'next';
+			post['question_id'] = question_id;
+			post['selected_option'] = selected_option;
 			ajax.jsonRpc('/grades-subjects/topic/quiz', 'call', post).then(function (modal) { 
 				$('#question_tag').html(modal);
 				breadcurmb_action();
@@ -143,23 +164,32 @@ odoo.define('skit_slide.grade', function(require) {
 			
 		});
 		$('#previous_quiz').off().on('click', function(e){
+			var question_id = $('#question_id').text();
 			var total_question = parseInt($('#total_question').text());
 			var question_no = parseInt($('#question_no').text());
 			var slide_id = $('#slide_question_id').text();
 			var current_question_no = (question_no) - 1;
 			if(question_no <= total_question){
 				$('#submit_quiz').addClass("grade_display_none");
+				$('#next_quiz').removeClass("grade_display_none");
 			}
 			if(current_question_no <= 1){
+				$('#next_quiz').css({'margin-left': '45%'})
 				$('#next_quiz').removeClass("grade_display_none");
 				$('#previous_quiz').addClass("grade_display_none");
 				$('#submit_quiz').addClass("grade_display_none");
 			}
+			var selected_option = []
+			$('input:checked').each(function(){
+				selected_option.push(parseInt($(this).val()));
+			});
 			$('#question_no').text(current_question_no);
 			var post = {};
 			post['question_no'] = current_question_no;
 			post['slide_id'] = slide_id;
 			post['type'] = 'previous';
+			post['question_id'] = question_id;
+			post['selected_option'] = selected_option;
 			ajax.jsonRpc('/grades-subjects/topic/quiz', 'call', post).then(function (modal) { 
 				$('#question_tag').html(modal);
 				breadcurmb_action();
@@ -169,8 +199,90 @@ odoo.define('skit_slide.grade', function(require) {
 			});
 			
 		});
+		
+		$('#submit_quiz').off().on('click', function(){
+			var slide_id = $('#slide_question_id').text();
+			var question_id = $('#question_id').text();
+			var selected_option = []
+			$('input:checked').each(function(){
+				selected_option.push(parseInt($(this).val()));
+			});
+			var post = {};
+			post['slide_id'] = slide_id;
+			post['question_id'] = question_id;
+			post['selected_option'] = selected_option;
+			ajax.jsonRpc('/grades-subjects/quiz/result', 'call', post).then(function (modal) { 
+				$('#question_tag').html(modal);
+				$('#submit_quiz').addClass("grade_display_none");
+				$('#previous_quiz').addClass("grade_display_none");
+				var total_question = parseInt($('#total_question').text());
+				var correct_answer = parseInt($('#correct_answer').text());
+				var not_attempt = parseInt($('#not_attempt').text());
+				var wrong = ((total_question) - ((correct_answer) + (not_attempt)))
+				pie_chart(correct_answer, wrong, not_attempt);
+				breadcurmb_action();
+				horizontal_tab();
+				document_action();
+				show_questions();
+				
+				
+			});
+		});
 	}
 	
 	/** End show next question */
 	
+	/** Start Pie Chart for quiz result */
+	function pie_chart(correct_answer, wrong, not_attempt){
+		$('#progress_chart').html("<div id='container_progress_chart' data-oe-model='ir.ui.view' data-oe-id='1022' data-oe-field='arch' data-oe-xpath='/t[1]/div[1]'></div>");
+		Highcharts.setOptions({
+		     colors: ['#edbf47', '#e16c6c', '#74cee4']
+		    });
+		Highcharts.chart('container_progress_chart', {
+			  chart: {
+			    plotBackgroundColor: null,
+			    plotBorderWidth: null,
+			    plotShadow: false,
+			    type: 'pie'
+			  },
+			  title: {
+			    text: 'Score'
+			  },
+			  tooltip: {
+			    pointFormat: '{series.name}: <b>{point.y}</b>'
+			  },
+			  plotOptions: {
+			    pie: {
+			      allowPointSelect: true,
+			      cursor: 'pointer',
+			      dataLabels: {
+			        enabled: false,
+			        format: '<b>{point.name}</b>: {point.percentage:.1f}'
+			      },
+			      showInLegend: true
+			    }
+			  },
+			  exporting: {
+				    enabled: false
+			  },
+			  series: [{
+			    name: 'Questions',
+			    colorByPoint: true,
+			    data: [{
+				      name: 'Correct Answers',
+				      y: correct_answer,
+				     
+				    }, {
+				      name: 'Wrong Answers',
+				      y: wrong
+				    }, 
+				    {
+					  name: 'Not Attempted',
+					  y: not_attempt
+					}, 
+			    ]
+			  }]
+			});
+	}
+	/** End Pie Chart for quiz result */
 });

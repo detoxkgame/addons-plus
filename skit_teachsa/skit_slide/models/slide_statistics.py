@@ -25,6 +25,8 @@ class ContentSubscribed(models.Model):
                                      domain="[('isstudent', '=',  True)]")
     content_id = fields.Many2one('slide.slide',
                                  string='Content')
+    channel_partner_id = fields.Many2one('slide.channel.partner',
+                                         string='Channel Partner')
     quiz_log_ids = fields.One2many('quiz.log',
                                    'content_subscribed_id',
                                    string='Quiz Log')
