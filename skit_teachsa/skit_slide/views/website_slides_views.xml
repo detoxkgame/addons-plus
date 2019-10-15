@@ -59,7 +59,7 @@
                     <field name="partner_id" string="Contact"/>
                     <field name="partner_email" readonly="1" />
                     <field name="t_partner_id" string="Tutor"/>
-                    <field name="channel_id" string="Channel" invisible="context.get('default_channel_id',False)"/>
+                    <field name="channel_id" string="Subject" invisible="context.get('default_channel_id',False)"/>
                     <button name="unlink" class="text-danger" string="Remove" icon="fa-times-circle" type="object"/>
                 </tree>
             </field>
@@ -93,7 +93,7 @@
         </record>
         
         <record id="action_slide_channels_" model="ir.actions.act_window">
-            <field name="name">Channels</field>
+            <field name="name">Subject</field>
             <field name="res_model">slide.channel</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -109,7 +109,7 @@
             parent="website.menu_website_configuration" sequence="50" groups="website.group_website_designer"/>
         
         <!-- COURSES MENU -->   
-        <menuitem id="menu_eleaning_courses" parent="menu_website_elearning" name="Courses"  action="website_slides.action_slide_channels" sequence="20"/>
+        <menuitem id="menu_eleaning_courses" parent="menu_website_elearning" name="Subjects"  action="website_slides.action_slide_channels" sequence="20"/>
         
         <!-- CONTENTS MENU -->   
         <menuitem id="menu_eleaning_contents" parent="menu_website_elearning" name="Contents"  action="website_slides.action_slides_slides" sequence="20"/>

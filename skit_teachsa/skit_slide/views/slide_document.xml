@@ -16,7 +16,7 @@
 						<page string="Document">
 							<div class="o_group">
 								<group class="o_group o_inner_group o_group_col_6">
-									<field name="channel_id" string="Course" />
+									<field name="channel_id" string="Subject" />
 									<field name="slide_type" />
 									<field name="url" string="Document URL"
 										attrs="{'invisible': [('slide_type', '!=', 'video')],'required':[('slide_type', 'in', 'video')]}" />
@@ -34,11 +34,26 @@
 									</div>
 									<field name="date_published" string="Published date"/>
 								</group>
+								<footer>
+                                    <button string="Save" name="save" type="object" class="btn-primary o_sale_product_configurator_add"/>
+                                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                                </footer>
 							</div>
 						</page>
 					</xpath>
 				</data>
 			</field>
 		</record>
+		<record id="view_slide_slide_tree_inherited" model="ir.ui.view">
+            <field name="name">slide.slide.tree.inherit</field>
+            <field name="model">slide.slide</field>
+            <field name="arch" type="xml">
+                <tree string="Slides">
+                    
+                    <field name="channel_id" string="Subject"/>
+                   
+                </tree>
+            </field>
+        </record>
 	</data>
 </odoo>

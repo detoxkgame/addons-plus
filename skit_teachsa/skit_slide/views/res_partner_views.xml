@@ -47,14 +47,14 @@
 					<page string="Courses Subscribed" attrs="{'invisible': [('isstudent', '!=', True)]}">
 					     <field name="channel_student_partner_ids" colspan="4" nolabel="1" widget="slide_category_one2many">
                             <tree>
-                            	<field name="channel_id" string="Course"/>
+                            	<field name="channel_id" string="Subject"/>
 	                            <field name="partner_id" string="Partner"/>
 	                            <field name="partner_email"/>                 
                             </tree>
                             <form string="Courses Subscribed">
                             	<sheet>
                             		<group>
-	                            		<field name="channel_id" string="Course"/>
+	                            		<field name="channel_id" string="Subject"/>
 	                            		<field name="partner_id" string="Partner"/>
 			                            <field name="partner_email"/>		                            
                             		</group>
