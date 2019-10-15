@@ -31,6 +31,8 @@ odoo.define('skit_slide.grade', function(require) {
 				grade_action();
 				breadcurmb_action();
 				subject_action();
+				$('#post_title').text('Grades');
+				$('#post_title_img').attr('src','/skit_slide/static/src/img/grade.png');
 			});
 		});
 		// Parent details
@@ -39,8 +41,10 @@ odoo.define('skit_slide.grade', function(require) {
 			var post = {};
 			post['user_partner_id'] = user_partner_id;
 			ajax.jsonRpc('/user-role/student_parent/detail', 'call', post).then(function (modal) { 
-				$('#user_role_div').html(modal);
-				add_parent_action(user_partner_id);
+					$('#user_role_div').html(modal);
+					add_parent_action(user_partner_id);
+					$('#post_title').text('Parents');
+					$('#post_title_img').attr('src','/skit_slide/static/src/img/parent.png');
 			});
 		});
 		
@@ -52,6 +56,8 @@ odoo.define('skit_slide.grade', function(require) {
 			post['user_partner_id'] = user_partner_id;
 			ajax.jsonRpc('/user-role/parent_child/detail', 'call', post).then(function (modal) { 
 				$('#user_role_div').html(modal);
+				$('#post_title').text('Student');
+				$('#post_title_img').attr('src','/skit_slide/static/src/img/student.png');
 			});
 		});
 		
@@ -339,10 +345,12 @@ odoo.define('skit_slide.grade', function(require) {
 			var post = {};
 			var $form = $('.parent_details_view');
 			post['user_partner_id'] = user_partner_id;
-			ajax.jsonRpc('/create_parent/details', 'call', post).then(function (modal) { 
-				var $modal = $(modal);			
-      		    $modal.appendTo($form).modal();	
-			});
+			if(user_partner_id){
+				ajax.jsonRpc('/create_parent/details', 'call', post).then(function (modal) { 
+					var $modal = $(modal);			
+	      		    $modal.appendTo($form).modal();	
+				});
+			}
 		});
 	}
 	
