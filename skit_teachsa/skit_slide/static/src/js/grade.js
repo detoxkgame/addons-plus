@@ -13,6 +13,7 @@ odoo.define('skit_slide.grade', function(require) {
 			$('#student_role').addClass("button_active");
 			$('#parent_div').addClass("grade_display_none");
 			$('#parent_role').removeClass("button_active");
+			$('.progress_dashboard').addClass("button_active");
 		});
 		/** Parent role*/
 		$('#parent_role').on('click', function(){
@@ -20,12 +21,14 @@ odoo.define('skit_slide.grade', function(require) {
 			$('#parent_role').addClass("button_active");
 			$('#student_div').addClass("grade_display_none");
 			$('#student_role').removeClass("button_active");
+			$('.progress_dashboard').addClass("button_active");
 		});
 		/*End user role action*/
 
 		/** Sub menu actions*/
 		//Study details
 		$('#demo_study, #pdemo_study').on('click', function(){
+			$('.progress_dashboard').removeClass("button_active");
 			var post = {};
 			$('.ul_menu li').each(function(){
 				$(this).removeClass('ul_menu_active')
@@ -42,6 +45,7 @@ odoo.define('skit_slide.grade', function(require) {
 		});
 		// Parent details
 		$('#parent_view').on('click', function(){
+			$('.progress_dashboard').removeClass("button_active");
 			var user_partner_id = $('.user_partner_id').text();
 			var post = {};
 			$('.ul_menu li').each(function(){
@@ -78,6 +82,7 @@ odoo.define('skit_slide.grade', function(require) {
 		
 		//(Student)Child details
 		$('#student_child_view').on('click', function(){
+			$('.progress_dashboard').removeClass("button_active");
 			$('.ul_menu li').each(function(){
 				$(this).removeClass('ul_menu_active')
 			});

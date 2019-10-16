@@ -61,6 +61,7 @@
 	                            <field name="partner_id" string="Partner"/>
 	                            <field name="partner_email"/> 
 	                            <field name="valid_upto"/>                
+	                             <field name="total_points"/>                
                             </tree>
                             <form string="Courses Subscribed">
                             	<sheet>
@@ -73,6 +74,7 @@
 	                            		<group>
 				                            <field name="partner_email"/>
 				                            <field name="valid_upto"/>		                            
+				                            <field name="total_points"/>     	                            
 	                            		</group>
                             		</group>
 	                            	<notebook>
@@ -84,6 +86,7 @@
 						                            <field name="content_id"/> 
 						                            <field name="view_datetime"/>   
 						                            <field name="duration" string="Duration"/>						                                         
+													<field name="earned_points"/>							                                         
 					                            </tree>
 	                            			</field>
 	                            		</page>

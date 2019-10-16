@@ -17,6 +17,7 @@
 	            			<group>
 	            				<field name="view_datetime"/>   
 							     <field name="duration" string="Duration"/>		
+							     <field name="earned_points"/>		
 	            			</group>
 	            		</group>
 	            		<notebook>

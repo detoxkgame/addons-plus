@@ -57,7 +57,7 @@
 										<t t-if="isstudent">
 											<li id="study_view" class="ul_menu_active"><img alt="study" class="img-responsive" src="/skit_slide/static/src/img/study.png" /> Study</li>
 										</t>
-										<li>
+										<li class="button_active progress_dashboard">
 											<i class="fa fa-desktop"></i>
 											Dashboard
 										</li>
@@ -68,7 +68,7 @@
 								</div>
 								<div id="parent_div" class="parent_ul grade_display_none">
 									<ul class="ul_menu">
-										<li>
+										<li class="button_active progress_dashboard">
 											<i class="fa fa-desktop"></i>
 											Dashboard
 										</li>
@@ -88,15 +88,15 @@
 				    			<t t-esc="sub_title"/>
 				    		</h4>
 				    		<t t-if="isstudent">
-				    			<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/subject.png" />
+				    			<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/progress.png" />
 				    		</t>
 				    		<t t-else="">
-				    			<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/grade.png" />
+				    			<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/progress.png" />
 				    		</t>
 				    	</img>
 				    </div>
 				    <div id="user_role_div">
-			        	<t t-call="skit_slide.website_grade_subjects_details"/>
+			        	<t t-call="skit_slide.progress_chart_dashboard"/>
 		        	</div>
 		        	</div>
 		        </div>

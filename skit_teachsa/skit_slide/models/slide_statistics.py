@@ -30,3 +30,5 @@ class ContentSubscribed(models.Model):
     quiz_log_ids = fields.One2many('quiz.log',
                                    'content_subscribed_id',
                                    string='Quiz Log')
+
+    earned_points = fields.Float('Earned Points')

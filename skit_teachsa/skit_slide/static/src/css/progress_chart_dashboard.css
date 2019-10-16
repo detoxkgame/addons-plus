@@ -1,0 +1,22 @@
+.chart_dashboard_header_div {
+	width: 100%;
+	position: relative;
+	background: #FFF;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	padding: 20px;
+	margin-bottom: 20px;
+	width: 100%;
+	min-height: 400px;
+}
+
+.chart_dashboard_div {
+	margin-left: 20px;
+}
+
+.chart_dashboard_inner_div {
+	position: relative;
+	background: #FFF;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}

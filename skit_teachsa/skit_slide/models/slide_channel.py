@@ -39,6 +39,7 @@ class SlideChannelPartner(models.Model):
     product_categ_id = fields.Many2one('product.category', string='Grade',
                                        domain="[('is_grade', '=', True)]")
     valid_upto = fields.Date('Valid upto')
+    total_points = fields.Char(string='Total Points')
 
 #     @api.onchange('partner_id')
 #     def _onchange_partner_id(self):
