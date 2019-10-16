@@ -1,235 +1,347 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-    	<!-- SLIDE.CHANNEL VIEWS INHERITS -->
-    	<record id="view_slide_channel_form_inherit_chanel_partner" model="ir.ui.view">
-            <field name="name">slide.channel.form.channel.partner</field>
-            <field name="model">slide.channel</field>
-            <field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
-            <field name="arch" type="xml">
-                <!-- <xpath expr="//field[@name='category_ids']" position="after">
-                	<group>
-	                    <group>
-	                		<field name="directory" />
-	                	</group>
-                	</group>
-                </xpath> -->
-                
-                <xpath expr="//button[@name='website_publish_button']" position="before">
-                	
-                	<button name="action_view_slides" type="object" icon="fa-files-o" class="oe_stat_button" groups="website.group_website_publisher">
-                    	<div class="o_field_widget o_stat_info">
-                        	<span class="o_stat_value"><field name="total_slides" nolabel="1"/></span>
-                            <span name="total_slides_label" class="o_stat_text">Contents</span>
-                        </div>
-                    </button>
-                            
-                	<button name="action_redirect_to_done_members" type="object" icon="fa-trophy" class="oe_stat_button" groups="website.group_website_publisher">
-                    	<div class="o_field_widget o_stat_info">
-                        	<span class="o_stat_value"><field name="members_done_count" nolabel="1"/></span>
-                            <span name="members_done_count_label" class="o_stat_text">Finished</span>
-                        </div>
-                    </button>
-                            
-                    <field name="channel_partner_ids" invisible="1"/>
-                    <button name="action_redirect_to_members" type="object" icon="fa-users" class="oe_stat_button" 
-                    		groups="website.group_website_publisher">
-                        <field name="members_count" string="Attendees" widget="statinfo"/>
-                    </button>
-                    
-                    <button name="action_view_ratings" type="object" icon="fa-star" class="oe_stat_button" groups="website.group_website_publisher" >
-                    	<field name="rating_count" string="Reviews" widget="statinfo"/>
-                    </button>
-                    
-                    <field name="forum_id" invisible="1"/>
-                    <button name="action_redirect_to_forum" type="object" class="oe_stat_button" attrs="{'invisible': [('forum_id', '=', False)]}" icon="fa-comment">
-	                    <field string="Forum Posts" name="forum_total_posts" widget="statinfo"/>
-	                </button>
-                </xpath>
-            </field>
-         </record>
-         
-         <!-- SLIDE.CHANNEL.PARTNER VIEWS-->
-         <record id="view_slide_channel_partner_tree" model="ir.ui.view">
-            <field name="name">slide.channel.partner.tree</field>
-            <field name="model">slide.channel.partner</field>
-            <field name="arch" type="xml">
-                <tree string="Attendees" editable="top">
-                    <field name="create_date"/>
-                    <field name="partner_id" string="Contact"/>
-                    <field name="partner_email" readonly="1" />
-                    <field name="t_partner_id" string="Tutor"/>
-                    <field name="channel_id" string="Subject" invisible="context.get('default_channel_id',False)"/>
-                    <button name="unlink" class="text-danger" string="Remove" icon="fa-times-circle" type="object"/>
-                </tree>
-            </field>
-        </record>
-        
-        <record id="action_slide_channel_partner_tree_all" model="ir.actions.act_window">
-            <field name="name">Channel Partner</field>
-            <field name="res_model">slide.channel.partner</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
-            <field name="domain"></field>
-            <field name="context">{
-                    'default_channel_id': active_id,
-            		}
-            </field>
-        </record>
-        
-        <!-- FORUM.POST VIEWS INHERITS -->
-    	<record id="view_view_forum_post_list_inherit_chanel_partner" model="ir.ui.view">
-            <field name="name">forum.post.form.channel.partner</field>
-            <field name="model">forum.post</field>
-            <field name="inherit_id" ref="website_forum.view_forum_post_list"/>
-            <field name="arch" type="xml">
-            	<xpath expr="//field[@name='forum_id']" position="after">
-            		<field name="views" />
-            		<field name="child_count" />
-            		<field name="favourite_count" />
-            	</xpath>
-            </field>
-        </record>
-        
-        <record id="action_slide_channels_" model="ir.actions.act_window">
-            <field name="name">Subject</field>
-            <field name="res_model">slide.channel</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                    Create a channel
-                </p>
-            </field>
-        </record>
-        
-        <!-- MAIN ELEARNING MENU -->
-        <menuitem name="eLearning" id="menu_website_elearning"
-            parent="website.menu_website_configuration" sequence="50" groups="website.group_website_designer"/>
-        
-        <!-- COURSES MENU -->   
-        <menuitem id="menu_eleaning_courses" parent="menu_website_elearning" name="Subjects"  action="website_slides.action_slide_channels" sequence="20"/>
-        
-        <!-- CONTENTS MENU -->   
-        <menuitem id="menu_eleaning_contents" parent="menu_website_elearning" name="Contents"  action="website_slides.action_slides_slides" sequence="20"/>
-        
-        <menuitem id="menu_elearning_customer" parent="menu_website_elearning"  name="Customers" action="base.action_partner_form" sequence="20"/>
-         
-	    <!-- Inherit Channels sub-template: header -->
-	    <template id="quiz_slides_channel_header" name="Quiz Slides Channel Header" inherit_id="website_slides.slides_channel_header" priority="20">
-	    	<xpath expr="//ul[hasclass('nav-tabs-border')]" position="inside">
-	    		<li t-if="header_object.nbr_quiz" class="nav-item">
-	            	<a t-attf-href="/slides/#{slug(channel)}#{category and '/category/' + slug(category) or ''}/quiz"
-	                    t-attf-class="nav-link#{slide_type == 'quiz' and ' active' or ''}">
-	                    <span class="badge badge-pill" t-esc="header_object.nbr_quiz"/> Quiz
-	               	</a>
-	            </li> 
-	    	</xpath>
-	    </template>
-    
-	    <!-- Channel main template -->
-	    <template id="quiz_slides_home" name="Quiz Odoo Slides" inherit_id="website_slides.home" priority="20">
-	    	<xpath expr="//section/div[@class='container mt16']" position="replace">
-	    		<div class="container mt16">
-	                    <div class="row">
-	                        <div class="col-xl-12 col-lg-12 col-md-12 col-12" style="padding-left: 15px;padding-right: 15px;" t-if="channel.total == 0">
-	                            <div class="jumbotron">
-	                                <h1>No presentation published yet.</h1>
-	                                <p>
-	                                    The <i><t t-esc="channel.name"/></i> is empty.
-	                                    <span t-if="can_upload">
-	                                        Upload PDF presentations, documents, videos or infographic using the button below.
-	                                    </span>
-	                                </p>
-	                                <p>
-	                                    <!-- Public user has not right to create/write on slide-->
-	                                    <a role="button" t-if="can_upload and not is_public_user" class="btn btn-primary oe_slide_js_upload" t-attf-channel_id="#{channel.id}" aria-label="Upload Presentation" title="Upload Presentation" href="#">
-	                                        <i class="fa fa-cloud-upload"></i> Upload
-	                                    </a>
-	                                </p>
-	                            </div>
-	                        </div>
-	
-	                        <div class="col-xl-12 col-lg-12 col-md-12 col-12" t-if="slide_type or category or tag">
-	                            <div class="alert alert-success mb0" role="status" t-if="tag">
-	                                Results for <strong t-esc="tag.name"/>
-	                            </div>
-	                            <t t-if="slide_type == 'quiz'">
-	                            	<t t-call="skit_slide.quiz_slides_view"/>
-	                            </t>
-	                            <t t-else="">
-	                            	<t t-call="website_slides.slides_grid_view"/>
-	                            </t>
-	                        </div>
-	                        <div class="row text-center" t-if="slide_type or category or tag">
-	                            <t t-call="website.pager"/>
-	                        </div>
-	
-	                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 mb16" t-if="not slide_type and category_datas and not tag">
-	                            <t t-foreach="category_datas" t-as="category">
-	                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-	                                    <div class="col-xl-12 col-lg-12 col-md-12 col-12 mt8 oe_slides_bottom_border">
-	                                        <a t-if="category['id']" t-attf-href="/slides/#{slug(channel)}/category/#{category['id']}" class="h3 mt0 mb0">
-	                                            <t t-esc="category['name']"/>
-	                                        </a>
-	                                        <span t-if="not category['id']" title="Uncategorized presentation" class="h3 mt0 mb0">
-	                                            <t t-esc="category['name']"/>
-	                                        </span>
-	                                        <a t-attf-href="/slides/#{slug(channel)}/category/#{category['id']}" class="float-right" t-if="category['total'] - 4 > 0 and category['id']">
-	                                            <i class="fa fa-arrow-right"/> See all
-	                                        </a>
-	                                    </div>
-	                                </div>
-	                                <t t-call="website_slides.slides_grid_view">
-	                                    <t t-set="slides" t-value="category['slides']"/>
-	                                </t>
-	                            </t>
-	                        </div>
-	                    </div>
-	                </div>
-	    	</xpath>
-	    </template>
-	    
-	    <!-- Channel Quiz View -->
-	    <template id='quiz_slides_view' name="Quiz View">
-		    <div class="container">
-		    	<t t-foreach="slides" t-as="slide">
-			    	<div class="mt16 mb16">
-		            	<h1 class="text-center"><t t-esc="slide.name"/></h1>
-		            </div>
-		            <t t-set="question_index" t-value="0"/>
-		            <t t-foreach="slide.quiz_question_ids" t-as="question">
-		            	<t t-set="question_index" t-value="question_index+1"/>
-		            	<div class="form-group">
-		                    <div>
-			            	<h2>
-		        		    	<t t-esc="question_index"/>) <t t-esc="question.quiz_question" />
-		        		    </h2>
-		        		    <t t-foreach="question.quiz_answer_ids" t-as="option">
-		        		    	<input type="radio" t-attf-name="question#{question.id}" t-attf-value="#{option.id}" required="True"/> <t t-esc="option.text_value"/><br/>
-		        		    </t>
-		        		    </div>
-	        		    </div>
-		            </t>
-	            </t>
-		    </div>
-	    </template>
-	    <template id="skit_slide.front_layout"
-			inherit_id="portal.frontend_layout" name="website">
-			<xpath expr="//footer" position="before">
-				<div class="website-slide">
-					<t t-set="sponsors_list" t-value="website.get_partner()"></t>
-					<ul>
-						<t t-foreach="sponsors_list" t-as="partner">
-							<li>
-								<img class="img-width" alt=""
-									t-att-src="'/web/image/res.partner/%s/image' % partner.id" />
-							</li>
-						</t>
-					</ul>
+	<data>
+		<!-- SLIDE.CHANNEL VIEWS INHERITS -->
+		<record id="view_slide_channel_form_inherit_chanel_partner"
+			model="ir.ui.view">
+			<field name="name">slide.channel.form.channel.partner</field>
+			<field name="model">slide.channel</field>
+			<field name="inherit_id"
+				ref="website_slides.view_slide_channel_form" />
+			<field name="arch" type="xml">
+				<!-- <xpath expr="//field[@name='category_ids']" position="after"> <group> 
+					<group> <field name="directory" /> </group> </group> </xpath> -->
+
+				<xpath expr="//button[@name='website_publish_button']"
+					position="before">
+
+					<button name="action_view_slides" type="object"
+						icon="fa-files-o" class="oe_stat_button"
+						groups="website.group_website_publisher">
+						<div class="o_field_widget o_stat_info">
+							<span class="o_stat_value">
+								<field name="total_slides" nolabel="1" />
+							</span>
+							<span name="total_slides_label" class="o_stat_text">Contents</span>
+						</div>
+					</button>
+
+					<button name="action_redirect_to_done_members" type="object"
+						icon="fa-trophy" class="oe_stat_button"
+						groups="website.group_website_publisher">
+						<div class="o_field_widget o_stat_info">
+							<span class="o_stat_value">
+								<field name="members_done_count" nolabel="1" />
+							</span>
+							<span name="members_done_count_label" class="o_stat_text">Finished</span>
+						</div>
+					</button>
+
+					<field name="channel_partner_ids" invisible="1" />
+					<button name="action_redirect_to_members" type="object"
+						icon="fa-users" class="oe_stat_button"
+						groups="website.group_website_publisher">
+						<field name="members_count" string="Attendees"
+							widget="statinfo" />
+					</button>
+
+					<button name="action_view_ratings" type="object"
+						icon="fa-star" class="oe_stat_button"
+						groups="website.group_website_publisher">
+						<field name="rating_count" string="Reviews"
+							widget="statinfo" />
+					</button>
+
+					<field name="forum_id" invisible="1" />
+					<button name="action_redirect_to_forum" type="object"
+						class="oe_stat_button"
+						attrs="{'invisible': [('forum_id', '=', False)]}"
+						icon="fa-comment">
+						<field string="Forum Posts" name="forum_total_posts"
+							widget="statinfo" />
+					</button>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- SLIDE.CHANNEL.PARTNER VIEWS -->
+		<record id="view_slide_channel_partner_tree" model="ir.ui.view">
+			<field name="name">slide.channel.partner.tree</field>
+			<field name="model">slide.channel.partner</field>
+			<field name="arch" type="xml">
+				<tree string="Attendees" editable="top">
+					<field name="create_date" />
+					<field name="partner_id" string="Contact" />
+					<field name="partner_email" readonly="1" />
+					<field name="t_partner_id" string="Tutor" />
+					<field name="channel_id" string="Subject"
+						invisible="context.get('default_channel_id',False)" />
+					<button name="unlink" class="text-danger" string="Remove"
+						icon="fa-times-circle" type="object" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_slide_channel_partner_tree_all"
+			model="ir.actions.act_window">
+			<field name="name">Channel Partner</field>
+			<field name="res_model">slide.channel.partner</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="domain"></field>
+			<field name="context">{
+				'default_channel_id': active_id,
+				}
+			</field>
+		</record>
+
+		<!-- FORUM.POST VIEWS INHERITS -->
+		<record id="view_view_forum_post_list_inherit_chanel_partner"
+			model="ir.ui.view">
+			<field name="name">forum.post.form.channel.partner</field>
+			<field name="model">forum.post</field>
+			<field name="inherit_id"
+				ref="website_forum.view_forum_post_list" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='forum_id']" position="after">
+					<field name="views" />
+					<field name="child_count" />
+					<field name="favourite_count" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="action_slide_channels_"
+			model="ir.actions.act_window">
+			<field name="name">Subject</field>
+			<field name="res_model">slide.channel</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Create a channel
+				</p>
+			</field>
+		</record>
+
+		<!-- MAIN ELEARNING MENU -->
+		<menuitem name="eLearning" id="menu_website_elearning"
+			parent="website.menu_website_configuration" sequence="50"
+			groups="website.group_website_designer" />
+
+		<!-- COURSES MENU -->
+		<menuitem id="menu_eleaning_courses"
+			parent="menu_website_elearning" name="Subjects"
+			action="website_slides.action_slide_channels" sequence="20" />
+
+		<!-- CONTENTS MENU -->
+		<menuitem id="menu_eleaning_contents"
+			parent="menu_website_elearning" name="Contents"
+			action="website_slides.action_slides_slides" sequence="20" />
+
+		<menuitem id="menu_elearning_customer"
+			parent="menu_website_elearning" name="Customers"
+			action="base.action_partner_form" sequence="20" />
+
+		<!-- Inherit Channels sub-template: header -->
+		<template id="quiz_slides_channel_header"
+			name="Quiz Slides Channel Header"
+			inherit_id="website_slides.slides_channel_header" priority="20">
+			<xpath expr="//ul[hasclass('nav-tabs-border')]"
+				position="inside">
+				<li t-if="header_object.nbr_quiz" class="nav-item">
+					<a
+						t-attf-href="/slides/#{slug(channel)}#{category and '/category/' + slug(category) or ''}/quiz"
+						t-attf-class="nav-link#{slide_type == 'quiz' and ' active' or ''}">
+						<span class="badge badge-pill" t-esc="header_object.nbr_quiz" />
+						Quiz
+					</a>
+				</li>
+			</xpath>
+		</template>
+
+		<!-- Channel main template -->
+		<template id="quiz_slides_home" name="Quiz Odoo Slides"
+			inherit_id="website_slides.home" priority="20">
+			<xpath expr="//section/div[@class='container mt16']"
+				position="replace">
+				<div class="container mt16">
+					<div class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-12"
+							style="padding-left: 15px;padding-right: 15px;"
+							t-if="channel.total == 0">
+							<div class="jumbotron">
+								<h1>No presentation published yet.</h1>
+								<p>
+									The
+									<i>
+										<t t-esc="channel.name" />
+									</i>
+									is empty.
+									<span t-if="can_upload">
+										Upload PDF presentations, documents, videos or infographic using the
+										button below.
+									</span>
+								</p>
+								<p>
+									<!-- Public user has not right to create/write on slide -->
+									<a role="button" t-if="can_upload and not is_public_user"
+										class="btn btn-primary oe_slide_js_upload"
+										t-attf-channel_id="#{channel.id}"
+										aria-label="Upload Presentation" title="Upload Presentation"
+										href="#">
+										<i class="fa fa-cloud-upload"></i>
+										Upload
+									</a>
+								</p>
+							</div>
+						</div>
+
+						<div class="col-xl-12 col-lg-12 col-md-12 col-12"
+							t-if="slide_type or category or tag">
+							<div class="alert alert-success mb0" role="status" t-if="tag">
+								Results for
+								<strong t-esc="tag.name" />
+							</div>
+							<t t-if="slide_type == 'quiz'">
+								<t t-call="skit_slide.quiz_slides_view" />
+							</t>
+							<t t-else="">
+								<t t-call="website_slides.slides_grid_view" />
+							</t>
+						</div>
+						<div class="row text-center"
+							t-if="slide_type or category or tag">
+							<t t-call="website.pager" />
+						</div>
+
+						<div class="col-xl-12 col-lg-12 col-md-12 col-12 mb16"
+							t-if="not slide_type and category_datas and not tag">
+							<t t-foreach="category_datas" t-as="category">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+									<div
+										class="col-xl-12 col-lg-12 col-md-12 col-12 mt8 oe_slides_bottom_border">
+										<a t-if="category['id']"
+											t-attf-href="/slides/#{slug(channel)}/category/#{category['id']}"
+											class="h3 mt0 mb0">
+											<t t-esc="category['name']" />
+										</a>
+										<span t-if="not category['id']"
+											title="Uncategorized presentation" class="h3 mt0 mb0">
+											<t t-esc="category['name']" />
+										</span>
+										<a
+											t-attf-href="/slides/#{slug(channel)}/category/#{category['id']}"
+											class="float-right"
+											t-if="category['total'] - 4 > 0 and category['id']">
+											<i class="fa fa-arrow-right" />
+											See all
+										</a>
+									</div>
+								</div>
+								<t t-call="website_slides.slides_grid_view">
+									<t t-set="slides" t-value="category['slides']" />
+								</t>
+							</t>
+						</div>
+					</div>
 				</div>
 			</xpath>
 		</template>
-    </data>
+
+		<!-- Channel Quiz View -->
+		<template id='quiz_slides_view' name="Quiz View">
+			<div class="container">
+				<t t-foreach="slides" t-as="slide">
+					<div class="mt16 mb16">
+						<h1 class="text-center">
+							<t t-esc="slide.name" />
+						</h1>
+					</div>
+					<t t-set="question_index" t-value="0" />
+					<t t-foreach="slide.quiz_question_ids" t-as="question">
+						<t t-set="question_index" t-value="question_index+1" />
+						<div class="form-group">
+							<div>
+								<h2>
+									<t t-esc="question_index" />
+									)
+									<t t-esc="question.quiz_question" />
+								</h2>
+								<t t-foreach="question.quiz_answer_ids" t-as="option">
+									<input type="radio" t-attf-name="question#{question.id}"
+										t-attf-value="#{option.id}" required="True" />
+									<t t-esc="option.text_value" />
+									<br />
+								</t>
+							</div>
+						</div>
+					</t>
+				</t>
+			</div>
+		</template>
+		<template id="skit_slide.front_layout"
+			inherit_id="portal.frontend_layout" name="website">
+			<xpath expr="//footer" position="before">
+				<div style="width: 100%;">
+					<div class="website-slide">
+						<t t-set="sponsors_list" t-value="website.get_partner()"></t>
+						<ul>
+							<t t-foreach="sponsors_list" t-as="partner">
+								<li>
+									<img class="img-width" alt=""
+										t-att-src="'/web/image/res.partner/%s/image' % partner.id" />
+								</li>
+							</t>
+						</ul>
+					</div>
+					<div class="testimonial-slide-right">
+						<div class="testimonial-slide">
+							<t t-set="testimonial_list" t-value="website.partner_details()"></t>
+							<ul>
+								<t t-foreach="testimonial_list" t-as="partner">
+									<li style="width: 100%;">
+										<div class="container">
+											<div class="row content">
+												<div style="display: -webkit-box;">
+													<i
+														class="fa fa-1x fa-quote-left rounded-0 bg-secondary s_quotes_carousel_icon o_we_selected_image"
+														data-original-title="" title=""
+														aria-describedby="tooltip960978"></i>
+													<p class="o_default_snippet_text">
+														<span t-field="partner.testimonial" />
+													</p>
+												</div>
+												<br></br>
+												<br></br>
+												<br></br>
+												<footer style="margin-left: 75px;">
+													<div
+														style="position: relative; left: 0; top: 0;display: flex;">
+														<div class="square">
+															<img class="image-width" alt=""
+																t-att-src="'/web/image/res.partner/%s/image' % partner.sudo().id" />
+														</div>
+														<div
+															style="display: table; height: 80px; margin-left: 20px;">
+															<span class="o_default_snippet_text"
+																style="display: table-cell;vertical-align: bottom;"
+																t-esc="partner.name" />
+														</div>
+													</div>
+												</footer>
+
+											</div>
+										</div>
+
+									</li>
+								</t>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</xpath>
+		</template>
+	</data>
 </odoo>

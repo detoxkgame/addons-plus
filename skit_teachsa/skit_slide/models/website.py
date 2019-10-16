@@ -9,3 +9,8 @@ class Website(models.Model):
     def get_partner(self):
         details = request.env['res.partner'].sudo().search([('issponsor', '=', 'true')])
         return details
+    
+    def partner_details(self):       
+        details = request.env['res.partner'].sudo().search([('testimonial','!=',None),('testimonial','!=',"<p><br></p>")])
+        print (details)
+        return details

@@ -6,6 +6,8 @@
     display: flex;
     overflow: hidden;   
     margin-left:30px;
+    width: 50%; 
+    float: left;
 } 
  .website-slide ul {
     position: relative;
@@ -35,3 +37,54 @@
     display: flex;
     height: 220px;
 }
+
+.testimonial-slide-right{
+	width: 50%; 
+	float: right;
+}
+.testimonial-slide {
+	float: right;
+    width: 70%;
+    height: 220px;
+    background: #f2f2f2;
+    display: flex;
+    overflow: hidden;   
+    margin-right:30px;
+    margin: 0 0 0 0;
+} 
+
+.image-width{
+	position: absolute;
+    left: 30px;
+    top: 32px;
+    width: 35px;
+    height: 45px;
+    mix-blend-mode: multiply;
+}
+.testimonial-slide ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 280px;
+    list-style: none;
+}
+ .testimonial-slide ul li {
+    position: relative;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 280px;
+    height: 220px;
+    background: #FFFFFF;
+    display: flex;
+    text-align: center;
+    line-height: 2em;
+}
+.square {
+      width: 80px;
+      height: 80px;
+      background:#ebe4e4;
+      border-radius: 70% 30% 30% 70%/60% 40% 60% 40%;
+    }
+  
