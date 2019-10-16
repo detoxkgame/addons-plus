@@ -94,3 +94,30 @@ class TutorRemarks(models.Model):
     channel_partner_id = fields.Many2one('slide.channel.partner',
                                          domain="[('istutor', '=',  True)]",
                                          string='Attendees')
+
+
+class ResUsers(models.Model):
+    """ Res Partner """
+    _inherit = 'res.partner'
+    _description = "Inherit Res Partner"
+
+    sur_name = fields.Char(string='Sur Name')
+    age = fields.Integer(string='Age')
+    school = fields.Char(string='School')
+    dob = fields.Date(string='Date of birth')
+    grade = fields.Many2one('skit.student.grade.category', string='Grade')
+    gender = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female')], string='Gender', default='', required=False)
+
+
+class StudentGradeDetails(models.Model):
+    """
+        for student grade model
+    """
+    _name = 'skit.student.grade.category'
+    _description = 'Skit Student Grade Category'
+
+    name = fields.Char(string='Name')
+
+

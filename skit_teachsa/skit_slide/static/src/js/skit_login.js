@@ -36,7 +36,7 @@ odoo.define('skit_slide.skit_login', function (require) {
 	
 	
 	//
-	var button='<button class="close" type="button" title="Remove this page">×</button>';
+	/*var button='<button class="close" type="button" title="Remove this page">×</button>';
 	var tabID = 1;
 	function resetTab(){
 		var tabs=$("#tab-list_stud li:not(:first)");
@@ -50,36 +50,31 @@ odoo.define('skit_slide.skit_login', function (require) {
 
 	$(document).ready(function() {
 	    $('#btn-add-tab').click(function() {
+	    	alert("tabID"+tabID);
 	        tabID++;
 	        $('#tab-list_stud').append($('<li><a href="#stab' + tabID + '" role="tab" data-toggle="tab">Student ' + tabID + '<button class="close" type="button" title="Remove this page">×</button></a></li>'));
-	        //$('#tab-list_stud').append($('<li><a href="#stab' + tabID + '" role="tab" data-toggle="tab">Tab<button class="close" type="button" title="Remove this page">×</button></a></li>'));
-	        //$('#tab-content_stud').append($('<div class="tab-pane fade" id="stab' + tabID + '">Tab ' + tabID + ' content</div>'));
 	        $('#tab-content_stud').append($('<div class="tab-pane fade" id="stab' + tabID + '"></div>'));
 	        var newForm= $("#education_fields").clone();
 	        newForm.attr('id', 'education_fields stab' + tabID);
 	        newForm.removeClass('skit_student_details_hidden');
-	        //$('#education_fields').append(newForm);
 	        $('#stab'+tabID).append(newForm);
 	        var show_sfrm = $( "#tab-content_stud div.active #education_fields" );
 	        if (show_sfrm) {
 	        	$(".add_sdetail").addClass("active show in");
 	        }
-	        
 	    });
 	    $('#tab-list_stud').on('click', '.close', function() {
 	        var tabID = $(this).parents('a').attr('href');
-	        //alert("tabID"+tabID);
 	        $(this).parents('li').remove();
 	        $(tabID).remove();
 
-	        //display first tab
 	        var tabFirst = $('#tab-list_stud a:first');
 	        resetTab();
 	        tabFirst.tab('show');
 	    });
 
 	    var list = document.getElementById("tab-list_stud");
-	});
+	});*/
 	
 	//
 	

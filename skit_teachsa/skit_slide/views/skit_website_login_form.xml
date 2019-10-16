@@ -53,8 +53,8 @@
     	<xpath expr="//div[hasclass('field-confirm_password')]" position="replace">
     	</xpath>
     	<xpath expr="//div[hasclass('field-login')]" position="replace">
-    		<div style="display: inline-block;width: 100%;background-image: url(/skit_slide/static/src/img/3.jpg);background-position: 73%;
-    			background-size: cover;background-repeat: no-repeat;height: 918px;">
+    		<div style="display: inline-block;width: 100%;background-image: url(/skit_slide/static/src/img/signup.jpg);background-position: 20%;
+    			background-size: cover;background-repeat: no-repeat;height: 630px;">
         		<div id="tab-outer">
     				<ul id="tab-wrapper">
         				<li><a href="#tab1">Parent</a></li>
@@ -63,32 +63,58 @@
     				</ul>
     				<div id="tab-body">
         				<div id="tab1">
+        				<form class="proceed_parent_form" t-attf-action="/website/parent_form" role="form" method="post">
+        					<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
         					<div class="skit_parent_form">
         						<div class="skit_parent_details">
         							<h4>Parent Details</h4><br></br>
         							<div class="form-group col-md-6 log_div">
 										<label>Full Name : </label>
-										<input class="form-control form-control-sm" type="text"/>
+										<input name="name" id="name" class="form-control form-control-sm" type="text" required="required"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label>Contact Number : </label>
-										<input class="form-control form-control-sm" type="number"/>
+										<input name="contact_no" id="contact_no" class="form-control form-control-sm" type="number" required="required"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label>Email : </label>
-										<input class="form-control form-control-sm" type="email"/>
+										<input name="email" id="email" class="form-control form-control-sm" type="email" required="required"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label>Password : </label>
-										<input class="form-control form-control-sm" type="password"/>
+										<input name="password" id="password" class="form-control form-control-sm" type="password" required="required"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label>Confirm Password : </label>
-										<input class="form-control form-control-sm" type="password"/>
+										<input name="confirm_password" id="confirm_password" class="form-control form-control-sm" type="password" required="required"/>
+									</div>
+									<div class="form-group col-md-6 log_div">
+										<label>Street : </label>
+										<input name="street" id="street" class="form-control form-control-sm" type="text" required="required"/>
+									</div>
+									<div class="form-group col-md-6 log_div">
+										<label>City : </label>
+										<input name="city" id="city" class="form-control form-control-sm" type="text" required="required"/>
+									</div>
+									<div class="form-group col-md-6 log_div">
+										<label>Pincode : </label>
+										<input name="pincode" id="pincode" class="form-control form-control-sm" type="number" required="required"/>
+									</div>
+									<div class="form-group col-md-6 log_div">
+										<label>Country : </label>
+										<t t-set="country" t-value="country_id.sudo().search([])"/>
+										<select id="country_id" name="country_id" class="form-control form-control-sm">
+											<option value="">Country...</option>
+											<t t-foreach="country" t-as="c">
+												<option t-att-value="c.id">
+													<t t-esc="c.name"/>
+												</option>
+											</t>
+										</select>
 									</div>
 								</div>
 							
-								<div class="add_sdetail skit_student_details_hidden tab-pane fade" id="education_fields">
+							<!--  	<div class="add_sdetail skit_student_details_hidden tab-pane fade" id="education_fields">
 									<h4>Student Details</h4><br></br>
 									<div class="form-group field-name col-md-6 log_div">
                 						<label for="name">First Name</label>
@@ -147,20 +173,20 @@
 											<option value="">Grade 3</option>
 										</select>
 									</div>
-								</div>
-								<div class="">
+								</div>  -->
+						 		<!-- <div class="">
     								<div class="row">
         								<div class="col-md-12">
             								<p>
             								</p>
-            								<!-- Nav tabs -->
+            								Nav tabs
 								            <ul id="tab-list_stud" class="nav nav-tabs" role="tablist">
 								                <li class="active"><a href="#stab1" role="tab" data-toggle="tab">Student 1</a></li>
 								            </ul>
             								<div id="btn-add-tab" class="skit_add_btn text-center mt-3 mb-3">
 												<img class="studadd_btn" style="width: 19.5%;float: right;" src="/skit_slide/static/src/img/add.jpg" alt=""/>
 											</div>
-            								<!-- Tab panes -->
+            								Tab panes
             								<div id="tab-content_stud" class="tab-content">
                 								<div class="tab-pane fade in active" id="stab1">
                 									<form id="parent_default_stud_form" role="form" t-attf-action="/web/student_details" method="post">
@@ -229,11 +255,12 @@
             								</div>
         								</div>
     								</div>
-								</div>
+								</div>  -->
 								<div class="parent_sub_btn text-center mt-3">
 									<button type="submit" class="btn btn-primary btn-block"> Submit</button>
 								</div>
         					</div>
+        					</form>
         				</div>
         				<div id="tab2">
         					<form class="oe_signup_form skit_signup_form" role="form" method="post" t-if="not message">
@@ -247,26 +274,26 @@
             						</div>
             						<div class="form-group col-md-6 log_div">
 										<label>Sur Name</label>
-										<input required="required" class="form-control form-control-sm" type="text"/>
+										<input required="required" name="sur_name" id="sur_name" class="form-control form-control-sm" type="text"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label class="dob_lbl">Date of Birth</label>
-										<input required="required" min="1" max="31" class="form-control form-control-sm dob_date" type="number" placeholder="DD"/>
-										<input required="required" min="1" max="12" class="form-control form-control-sm dob_month" type="number" placeholder="MM"/>
-										<input required="required" maxlength="4" class="form-control form-control-sm dob_year" type="number" placeholder="YYYY"/>
+										<input name="stud_dob_date" id="stud_dob_date" required="required" min="1" max="31" class="form-control form-control-sm dob_date" type="number" placeholder="DD"/>
+										<input name="stud_dob_month" id="stud_dob_month" required="required" min="1" max="12" class="form-control form-control-sm dob_month" type="number" placeholder="MM"/>
+										<input name="stud_dob_year" id="stud_dob_year" required="required" maxlength="4" class="form-control form-control-sm dob_year" type="number" placeholder="YYYY"/>
 									</div>
             						<div class="form-group col-md-6 log_div">
 										<label>Age</label>
-										<input class="form-control form-control-sm" type="number"/>
+										<input name="age" id="age" class="form-control form-control-sm" type="number"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label style="float:left;width: inherit;">Gender</label>
 										<div class="col-md-4 log_div">
-											<input class="male_radio" type="radio"/>
+											<input name="gender" value="male" class="male_radio" type="radio"/>
 											<label>Male </label>
 										</div>
 										<div class="log_div">
-											<input class="female_radio" type="radio"/>
+											<input name="gender" value="female" class="female_radio" type="radio"/>
 											<label>Female</label>
 										</div>
 									</div>
@@ -286,18 +313,20 @@
 						            </div>
              						<div class="form-group col-md-6 log_div">
 										<label>Contact Number</label>
-										<input class="form-control form-control-sm" type="number"/>
+										<input name="mobile" id="mobile" class="form-control form-control-sm" type="number"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label>School Name</label>
-										<input class="form-control form-control-sm" type="text"/>
+										<input name="school" id="school" class="form-control form-control-sm" type="text"/>
 									</div>
 									<div class="form-group col-md-6 log_div">
 										<label>Grade</label>
-										<select required="required" id="stud_grade" name="grade" class="form-control form-control-sm">
-											<option value="">Grade 1</option>
-											<option value="">Grade 2</option>
-											<option value="">Grade 3</option>
+										<t t-set="skit_student_grade_detail_val" t-value="skit_student_grade_detail.sudo().search([])"/>
+										<select required="required" id="grade" name="grade" class="form-control form-control-sm">
+											<option value="">Grade</option>
+											<t t-foreach="skit_student_grade_detail_val" t-as="s_grade">                
+												<option t-att-value="s_grade.id" t-esc="s_grade.name"/>
+											</t>        
 										</select>
 									</div>
 									<div class="form-group col-md-6 log_div" style="visibility:hidden">

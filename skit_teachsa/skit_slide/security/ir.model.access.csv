@@ -23,3 +23,6 @@ access_tutor_remarks_user,tutor.remarks.user,model_tutor_remarks,base.group_user
 access_quiz_log_public,quiz.log.public,model_quiz_log,base.group_public,1,0,0,0
 access_quiz_log_portal,quiz.log.portal,model_quiz_log,base.group_portal,1,0,0,0
 access_quiz_log_user,quiz.log.user,model_quiz_log,base.group_user,1,1,1,1
+access_skit_student_grade_category_public,skit.student.grade.category.public,model_skit_student_grade_category,base.group_public,1,0,0,0
+access_skit_student_grade_category_portal,skit.student.grade.category.portal,model_skit_student_grade_category,base.group_portal,1,0,0,0
+access_skit_student_grade_category_user,skit.student.grade.category.user,model_skit_student_grade_category,base.group_user,1,1,1,1

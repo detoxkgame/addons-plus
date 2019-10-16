@@ -7,6 +7,14 @@
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="base.view_partner_form" />
 			<field name="arch" type="xml">
+				<xpath expr="//field[@name='vat']" position="before">
+					<field name="sur_name" />
+					<field name="dob" />
+					<field name="age" />
+					<field name="gender" widget="radio" options="{'horizontal': true}" />
+					<field name="school" />
+					<field name="grade" />
+				</xpath>
 				<xpath expr="//field[@name='category_id']" position="after">
 					<field name="issponsor" />
 					<field name="istutor" />
