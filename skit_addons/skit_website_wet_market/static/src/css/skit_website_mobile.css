@@ -326,16 +326,16 @@ i.fa.fa-check.active {
 /*********AAttribute form design*************/
 @media only screen and (max-width: 767px) {
 .skit-cart{
-     font-size: 1rem !important;
+     font-size: 0.8rem !important;
 }
 
 .name-font{
-     font-size: 1.3rem;
+     font-size: 1.0rem;
      text-align: center !important;
      }
  
 .product-picture{
-    width: 70% !important;
+    width: 50% !important;
     margin: 0 auto !important;
 }
 
@@ -344,6 +344,8 @@ i.fa.fa-check.active {
     left: 50%;
     top: 50%;
     transform: translate(-50%, 24%);
+    width: 75%;
+    margin: 0 auto;
    
 }
 }
