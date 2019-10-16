@@ -5,6 +5,7 @@ odoo.define('skit_slide.grade', function(require) {
 
 	$(document).ready(function(){
 		grade_action();
+		subject_action();
 		/* User Role Actions */
 		/** Student role*/
 		$('#student_role').on('click', function(){
@@ -26,6 +27,10 @@ odoo.define('skit_slide.grade', function(require) {
 		//Study details
 		$('#demo_study, #pdemo_study').on('click', function(){
 			var post = {};
+			$('.ul_menu li').each(function(){
+				$(this).removeClass('ul_menu_active')
+			});
+			$(this).addClass('ul_menu_active')
 			ajax.jsonRpc('/grades-subjects/details', 'call', post).then(function (modal) { 
 				$('#user_role_div').html(modal);
 				grade_action();
@@ -39,6 +44,10 @@ odoo.define('skit_slide.grade', function(require) {
 		$('#parent_view').on('click', function(){
 			var user_partner_id = $('.user_partner_id').text();
 			var post = {};
+			$('.ul_menu li').each(function(){
+				$(this).removeClass('ul_menu_active')
+			});
+			$(this).addClass('ul_menu_active')
 			post['user_partner_id'] = user_partner_id;
 			ajax.jsonRpc('/user-role/student_parent/detail', 'call', post).then(function (modal) { 
 					$('#user_role_div').html(modal);
@@ -48,9 +57,31 @@ odoo.define('skit_slide.grade', function(require) {
 			});
 		});
 		
+		/** Student Study View */
+		$('#study_view').off().on('click', function(){
+			var post = {};
+			post['is_study'] = true;
+			$('.ul_menu li').each(function(){
+				$(this).removeClass('ul_menu_active')
+			});
+			$(this).addClass('ul_menu_active')
+			ajax.jsonRpc('/grades-subjects/content', 'call', post).then(function (modal) { 
+				$('#user_role_div').html(modal);
+				var sub_title = $('#sub_title').text();
+				$('#post_title').text(sub_title);
+				$('#post_title_img').attr('src','/skit_slide/static/src/img/subject.png');
+				breadcurmb_action();
+				subject_action();
+			});
+		});
+		
 		
 		//(Student)Child details
 		$('#student_child_view').on('click', function(){
+			$('.ul_menu li').each(function(){
+				$(this).removeClass('ul_menu_active')
+			});
+			$(this).addClass('ul_menu_active')
 			var user_partner_id = $('.user_partner_id').text();
 			var post = {};
 			post['user_partner_id'] = user_partner_id;
@@ -75,7 +106,8 @@ odoo.define('skit_slide.grade', function(require) {
 				post['categ_id'] = parseInt(grade);
 				ajax.jsonRpc('/grades-subjects/content', 'call', post).then(function (modal) { 
 					$('#grade_subjects').html(modal);
-					$('#post_title').text('Subjects');
+					var sub_title = $('#sub_title').text();
+					$('#post_title').text(sub_title);
 					$('#post_title_img').attr('src','/skit_slide/static/src/img/subject.png');
 					breadcurmb_action();
 					subject_action();
@@ -106,7 +138,8 @@ odoo.define('skit_slide.grade', function(require) {
 			$('#grade_topics_details').addClass("grade_display_none");
 			$('#grade_topics').addClass("grade_display_none");
 			$('#grade_subjects').removeClass("grade_display_none");
-			$('#post_title').text('Subjects');
+			var sub_title = $('#sub_title').text();
+			$('#post_title').text(sub_title);
 			$('#post_title_img').attr('src','/skit_slide/static/src/img/subject.png');
 			$(this).blur();
 		    return false;

@@ -23,9 +23,50 @@ class WebsiteGrade(http.Controller):
         grades = request.env['product.category'].sudo().search([('is_grade', '=', True)])
         user_id = request.env.uid
         user = request.env['res.users'].sudo().search([('id', '=', user_id)])
-        partner_id = user.partner_id
+        partner = user.partner_id
+        channels = []
+        breadcrumbs = []
+        student = False
+        isparent = False
+        first_breadcurmb_active = False
+        request.session['first_breadcurmb_active'] = False
+        valid_subjects = []
+        sub_title = 'Grades'
+        slide_slide = request.env['slide.slide']
+        name = ''
+        if(partner.isparent):
+            name = partner.name
+            isparent = True
+        if(partner.isstudent):
+            name = partner.name
+            student = True
+            breadcrumbs.append('Grade')
+            student = True
+            now = datetime.now()
+            cdatetime = now.strftime("%Y-%m-%d")
+            current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
+            channel_partner = request.env['slide.channel.partner'].sudo().search([
+                ('partner_id', '=', user.partner_id.id),
+                ('valid_upto', '>=', current_date)])
+            for sub in channel_partner:
+                valid_subjects.append(sub.channel_id.id)
+            if(channel_partner):
+                channels = request.env['slide.channel'].sudo().search([
+                    ('product_categ_id', '=', channel_partner[0].product_categ_id.id)])
+                breadcrumbs.append(channel_partner[0].product_categ_id.name)
+                sub_title = channel_partner[0].product_categ_id.name
         values = {'grades': grades,
-                  'partner_id': partner_id.id
+                  'partner_id': partner.id,
+                  'isstudent': student,
+                  'name': name,
+                  'channels': channels,
+                  'breadcrumbs': breadcrumbs,
+                  'slide_slide': slide_slide,
+                  'valid_subjects': valid_subjects,
+                  'isstudent': student,
+                  'isparent': isparent,
+                  'first_breadcurmb_active': first_breadcurmb_active,
+                  'sub_title': sub_title
                   }
         return request.render('skit_slide.website_elearning_grade', values)
 
@@ -33,17 +74,53 @@ class WebsiteGrade(http.Controller):
     def grade_subjects(self, **kw):
         channels = []
         breadcrumbs = []
+        student = False
+        first_breadcurmb_active = False
+        request.session['first_breadcurmb_active'] = False
+        valid_subjects = []
         slide_slide = request.env['slide.slide']
-        breadcrumbs.append('Grade')
-        if(kw.get('categ_id')):
+        user = request.env['res.users'].sudo().search([
+            ('id', '=', int(request.env.uid))])
+
+        if(kw.get('categ_id') and (not user.partner_id.isstudent)):
+            breadcrumbs.append('Grade')
             prod_categ = request.env['product.category'].sudo().search([
                 ('id', '=', kw.get('categ_id'))])
             channels = request.env['slide.channel'].sudo().search([
                 ('product_categ_id', '=', prod_categ.id)])
             breadcrumbs.append(prod_categ.name)
+            for sub in channels:
+                valid_subjects.append(sub.id)
+        if(user.partner_id.isstudent):
+            breadcrumbs.append('Grade')
+            student = True
+            now = datetime.now()
+            cdatetime = now.strftime("%Y-%m-%d")
+            current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
+            channel_partner = request.env['slide.channel.partner'].sudo().search([
+                ('partner_id', '=', user.partner_id.id),
+                ('valid_upto', '>=', current_date)])
+            for sub in channel_partner:
+                valid_subjects.append(sub.channel_id.id)
+            if(channel_partner):
+                channels = request.env['slide.channel'].sudo().search([
+                    ('product_categ_id', '=', channel_partner[0].product_categ_id.id)])
+                breadcrumbs.append(channel_partner[0].product_categ_id.name)
+                sub_title = channel_partner[0].product_categ_id.name
+        if(kw.get('categ_id')):
+            first_breadcurmb_active = True
+            request.session['first_breadcurmb_active'] = True
+            sub_title = 'Subjects'
+
         values = {'channels': channels,
                   'breadcrumbs': breadcrumbs,
-                  'slide_slide': slide_slide}
+                  'slide_slide': slide_slide,
+                  'valid_subjects': valid_subjects,
+                  'isstudent': student,
+                  'first_breadcurmb_active': first_breadcurmb_active,
+                  'sub_title': sub_title}
+        if(kw.get('is_study')):
+            return request.env['ir.ui.view'].render_template("skit_slide.website_grade_subjects_details", values)
         return request.env['ir.ui.view'].render_template("skit_slide.website_elearning_grade_subjects", values)
 
     @http.route(['/grades-subjects/topics'], type='json', auth="public", methods=['POST'], website=True)
@@ -51,6 +128,7 @@ class WebsiteGrade(http.Controller):
         channels = []
         contents = []
         breadcrumbs = []
+        first_breadcurmb_active = request.session.get('first_breadcurmb_active')
         breadcrumbs.append('Grade')
         if(kw.get('channel_id')):
             channels = request.env['slide.channel'].sudo().search([
@@ -58,10 +136,15 @@ class WebsiteGrade(http.Controller):
             breadcrumbs.append(channels.product_categ_id.name)
             if channels:
                 breadcrumbs.append(channels[0].name)
-            slides = request.env['slide.slide'].sudo().search([
-                ('channel_id', '=', channels.id),
-                ('is_preview', '=', True),
-                ('display_type', '=', 'line_section')], order='sequence')
+            if request.env.uid == 4:
+                slides = request.env['slide.slide'].sudo().search([
+                    ('channel_id', '=', channels.id),
+                    ('is_preview', '=', True),
+                    ('display_type', '=', 'line_section')], order='sequence')
+            else:
+                slides = request.env['slide.slide'].sudo().search([
+                    ('channel_id', '=', channels.id),
+                    ('display_type', '=', 'line_section')], order='sequence')
             i = 1
             slide_size = len(slides)
             for slide in slides:
@@ -69,12 +152,19 @@ class WebsiteGrade(http.Controller):
                 next_slide = i + 1
                 if(next_slide <= slide_size):
                     next_slide_seq = slides[i].sequence
-                    document_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('sequence', '<', next_slide_seq),
-                        ('slide_type', '=', 'document')])
+                    if request.env.uid == 4:
+                        document_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'document')])
+                    else:
+                        document_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'document')])
                     documents = {}
                     documents['name'] = 'Documents'
                     documents['count'] = len(document_content)
@@ -82,12 +172,19 @@ class WebsiteGrade(http.Controller):
                     documents['datas'] = document_content
                     slide_content.append(documents)
 
-                    presentation_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('sequence', '<', next_slide_seq),
-                        ('slide_type', '=', 'presentation')])
+                    if request.env.uid == 4:
+                        presentation_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'presentation')])
+                    else:
+                        presentation_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'presentation')])
                     documents = {}
                     documents['name'] = 'Presentations'
                     documents['count'] = len(presentation_content)
@@ -95,12 +192,19 @@ class WebsiteGrade(http.Controller):
                     documents['datas'] = presentation_content
                     slide_content.append(documents)
 
-                    video_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('sequence', '<', next_slide_seq),
-                        ('slide_type', '=', 'video')])
+                    if request.env.uid == 4:
+                        video_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'video')])
+                    else:
+                        video_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'video')])
                     documents = {}
                     documents['name'] = 'Videos'
                     documents['count'] = len(video_content)
@@ -108,12 +212,19 @@ class WebsiteGrade(http.Controller):
                     documents['datas'] = video_content
                     slide_content.append(documents)
 
-                    quiz_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('sequence', '<', next_slide_seq),
-                        ('slide_type', '=', 'quiz')])
+                    if request.env.uid == 4:
+                        quiz_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'quiz')])
+                    else:
+                        quiz_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('sequence', '<', next_slide_seq),
+                            ('slide_type', '=', 'quiz')])
                     documents = {}
                     documents['name'] = 'Quiz'
                     documents['count'] = len(quiz_content)
@@ -123,11 +234,17 @@ class WebsiteGrade(http.Controller):
 
                     contents.append({'slide'+str(slide.id): slide_content})
                 else:
-                    document_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('slide_type', '=', 'document')])
+                    if request.env.uid == 4:
+                        document_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'document')])
+                    else:
+                        document_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'document')])
                     documents = {}
                     documents['name'] = 'Documents'
                     documents['count'] = len(document_content)
@@ -135,11 +252,17 @@ class WebsiteGrade(http.Controller):
                     documents['datas'] = document_content
                     slide_content.append(documents)
 
-                    presentation_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('slide_type', '=', 'presentation')])
+                    if request.env.uid == 4:
+                        presentation_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'presentation')])
+                    else:
+                        presentation_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'presentation')])
                     documents = {}
                     documents['name'] = 'Presentations'
                     documents['count'] = len(presentation_content)
@@ -147,11 +270,17 @@ class WebsiteGrade(http.Controller):
                     documents['datas'] = presentation_content
                     slide_content.append(documents)
 
-                    video_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('slide_type', '=', 'video')])
+                    if request.env.uid == 4:
+                        video_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'video')])
+                    else:
+                        video_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'video')])
                     documents = {}
                     documents['name'] = 'Videos'
                     documents['count'] = len(video_content)
@@ -159,11 +288,17 @@ class WebsiteGrade(http.Controller):
                     documents['datas'] = video_content
                     slide_content.append(documents)
 
-                    quiz_content = request.env['slide.slide'].sudo().search([
-                        ('channel_id', '=', channels.id),
-                        ('is_preview', '=', True),
-                        ('sequence', '>', slide.sequence),
-                        ('slide_type', '=', 'quiz')])
+                    if request.env.uid == 4:
+                        quiz_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('is_preview', '=', True),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'quiz')])
+                    else:
+                        quiz_content = request.env['slide.slide'].sudo().search([
+                            ('channel_id', '=', channels.id),
+                            ('sequence', '>', slide.sequence),
+                            ('slide_type', '=', 'quiz')])
                     documents = {}
                     documents['name'] = 'Quiz'
                     documents['count'] = len(quiz_content)
@@ -175,13 +310,15 @@ class WebsiteGrade(http.Controller):
                 i = i + 1
         values = {'topics': slides,
                   'breadcrumbs': breadcrumbs,
-                  'contents': contents}
+                  'contents': contents,
+                  'first_breadcurmb_active': first_breadcurmb_active}
         return request.env['ir.ui.view'].render_template("skit_slide.website_grade_subject_topics", values)
 
     @http.route(['/grades-subjects/topic/detail'], type='json', auth="public", methods=['POST'], website=True)
     def topic_detail(self, **kw):
         slide = []
         breadcrumbs = []
+        first_breadcurmb_active = request.session.get('first_breadcurmb_active')
         breadcrumbs.append('Grade')
         if(kw.get('slide_id')):
             slide = request.env['slide.slide'].sudo().search([
@@ -207,7 +344,8 @@ class WebsiteGrade(http.Controller):
                     'view_datetime': current_date,
                     })
         values = {'slide': slide,
-                  'breadcrumbs': breadcrumbs
+                  'breadcrumbs': breadcrumbs,
+                  'first_breadcurmb_active': first_breadcurmb_active
                   }
         return request.env['ir.ui.view'].render_template("skit_slide.topic_slide_detail_view", values)
 
@@ -378,7 +516,7 @@ class WebsiteGrade(http.Controller):
         values = {'grades': grades}
         return request.env['ir.ui.view'].render_template('skit_slide.website_grade_subjects_details', values)
 
-    @http.route('/create_parent/details', type='json', 
+    @http.route('/create_parent/details', type='json',
                 auth="public", methods=['POST'], website=True)
     def create_parent(self, **kw):
         user_partner_id = int(kw.get('user_partner_id'))
@@ -396,3 +534,4 @@ class WebsiteGrade(http.Controller):
                   'user_partner_id': user_partner_id
                   }
         return request.env['ir.ui.view'].render_template('skit_slide.add_parent_popup', values)
+

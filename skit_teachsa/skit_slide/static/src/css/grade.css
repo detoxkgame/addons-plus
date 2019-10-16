@@ -82,6 +82,13 @@
     margin-bottom: 0;
     font-weight: 600;
 }
+.subject-list-deactive {
+    background: lightgray;
+    border-radius: 5px;
+    padding: 15px;
+    display: block;
+    cursor: default;
+}
 .floatleft{
 	float: left;
 }
@@ -254,7 +261,7 @@
     height: 100%;
 }
 .main-btn-div{
-	margin-top: 20%;
+	margin-top: 12%;
     display: inline-block;
     width: 100%;
     padding: 3%;
@@ -350,9 +357,14 @@ ul.user-role{
 }
 ul.ul_menu li {
     padding:10px;
+    cursor: pointer;
 }
 ul.ul_menu li:hover{
 	background: #F08080;
+}
+.ul_menu_active{
+	background: #F08080;
+    color: #74cee4;
 }
 .title_img{
 	width: 25%;
@@ -532,4 +544,7 @@ ul.ul_menu li:hover{
 .add_child_img{
 	width: 30%;
 	cursor: pointer;
+}
+.txt-color{
+	color: white;
 }

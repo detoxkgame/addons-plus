@@ -12,6 +12,15 @@
 	                    <group>
 	                		<field name="product_categ_id" />
 	                	</group>
+	                	
+                	</group>
+                	<group>
+                		<group>
+	                		<field name="start_date" />
+	                	</group>
+                		<group>
+	                		<field name="end_date" />
+	                	</group>
                 	</group>
                 </xpath> 
             </field>

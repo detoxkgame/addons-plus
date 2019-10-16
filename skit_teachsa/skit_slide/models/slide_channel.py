@@ -36,6 +36,9 @@ class SlideChannelPartner(models.Model):
     tutor_ids = fields.One2many('tutor.remarks',
                                 'channel_partner_id',
                                 string='Content Subscribed')
+    product_categ_id = fields.Many2one('product.category', string='Grade',
+                                       domain="[('is_grade', '=', True)]")
+    valid_upto = fields.Date('Valid upto')
 
 #     @api.onchange('partner_id')
 #     def _onchange_partner_id(self):
@@ -68,6 +71,8 @@ class Channel(models.Model):
 
     tutor_ids = fields.One2many('tutor.tutor', 'channel_id',
                                 string='Tutor')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
     # ===========================================================================
     # directory = fields.Many2one('muk_dms.directory', string='Directory',
     #                             domain="[('is_root_directory', '=', True)]")

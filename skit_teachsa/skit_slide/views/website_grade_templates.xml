@@ -23,21 +23,40 @@
 		        			<div align="center" class="profile-image">
 		        				<img alt="User" class="img-responsive" src="/skit_slide/static/src/img/avatar.png" />
 		        			</div>
-		        			<div class="main-btn-div">
-		        				 <table style="width:100%;">
-		        					<tbody>
-		        					<tr>
-		        						<td id="student_role" class="user-role button_active student_li"><span>Student</span></td>
-		        						<td id="parent_role" class="user-role parent_li"><span>Parent</span></td>
-		        						<td id="mentor_role" class="user-role"><span>Teacher</span></td>
-		        					</tr>
-		        					</tbody>
-		        				</table> 
-		        			</div>
+		        			<t t-if="isstudent">
+		        				<div align="center" class="txt-color">
+		        					<span><t t-esc="name" /></span>
+		        				</div>
+		        			</t>
+		        			<t t-else="">
+		        				<div align="center" class="txt-color">
+		        					<span><t t-esc="name" /></span>
+		        				</div>
+			        			<div class="main-btn-div">
+			        				 <table style="width:100%;">
+			        					<tbody>
+			        					<tr>
+			        						<t t-if="isparent">
+			        							<td id="student_role" class="user-role student_li"><span>Student</span></td>
+			        							<td id="parent_role" class="user-role button_active parent_li"><span>Parent</span></td>
+			        						</t>
+			        						<t t-else="">
+			        							<td id="student_role" class="user-role button_active student_li"><span>Student</span></td>
+			        							<td id="parent_role" class="user-role parent_li"><span>Parent</span></td>
+			        						</t>
+			        						<td id="mentor_role" class="user-role"><span>Teacher</span></td>
+			        					</tr>
+			        					</tbody>
+			        				</table> 
+			        			</div>
+		        			</t>
 		        			<div>
 		        				<span class="user_partner_id grade_display_none"><t t-esc="partner_id"/></span>
 								<div id="student_div" class="student_ul">
 									<ul class="ul_menu">
+										<t t-if="isstudent">
+											<li id="study_view" class="ul_menu_active"><img alt="study" class="img-responsive" src="/skit_slide/static/src/img/study.png" /> Study</li>
+										</t>
 										<li>
 											<i class="fa fa-desktop"></i>
 											Dashboard
@@ -65,8 +84,15 @@
 				    <div class="col-12 col-md col-lg-8">
 				    <div class="postlogin-heading">
 				    	<img alt="User" class="img-responsive title_img" src="/skit_slide/static/src/img/portal_title.png" >
-				    		<h4 id="post_title" class="postlogin-heading_h4">Grades</h4>
-				    		<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/grade.png" />
+				    		<h4 id="post_title" class="postlogin-heading_h4">
+				    			<t t-esc="sub_title"/>
+				    		</h4>
+				    		<t t-if="isstudent">
+				    			<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/subject.png" />
+				    		</t>
+				    		<t t-else="">
+				    			<img alt="User" id="post_title_img" class="img-responsive postlogin-head-img" src="/skit_slide/static/src/img/grade.png" />
+				    		</t>
 				    	</img>
 				    </div>
 				    <div id="user_role_div">
@@ -80,8 +106,14 @@
 	
 	<!-- Grade demo -->
 	<template id="website_grade_subjects_details">
-		<div class="grade_header_div">
-			<table class="grade_table" align="center">
+		<t t-if="(isstudent)">
+			<t t-set="header_class" t-value="'grade_header_div grade_display_none'"/>
+		</t>
+		<t t-else="">
+			<t t-set="header_class" t-value="'grade_header_div'"/>
+		</t>
+		<div t-att-class="header_class" >
+			<table class="grade_table" align="center" t-if="(not isstudent)">
 				<tbody>
 					<tr>
 						<td style="width: 30%;">
@@ -102,7 +134,9 @@
 			</table>
 		</div>
 		<div id="grade_subjects" class="grade_tab_div">
-	
+			<t t-if="isstudent">
+				<t t-call="skit_slide.website_elearning_grade_subjects" />
+			</t>
 		</div>
 	
 		<div id="grade_topics" class="grade_tab_div">
@@ -128,7 +162,7 @@
 							</t>
 							<t t-else="">
 								<t t-if="bcount == 1">
-									<li id="root_grade"><a href="#"><t t-esc="breadcrumb"/></a></li>
+									<li id="root_grade" t-if="first_breadcurmb_active"><a href="#"><t t-esc="breadcrumb"/></a></li>
 								</t>
 								<t t-else="">
 									<li><a href="#"><t t-esc="breadcrumb"/></a></li>
@@ -142,17 +176,30 @@
 			<div>	
 				<t t-foreach="channels" t-as="channel">
 					<t t-set="topics" t-value="slide_slide.sudo().search([('channel_id', '=', channel.id),('display_type', '=', 'line_section')])"/>
-					
+					<span id="sub_title" class="grade_display_none"><t t-esc="sub_title"/></span>
 					<div class="col-sm-4 pdl0 mb20 pdmb0 floatleft">
-						<a href="#" class="subject-list" t-att-id="channel.id">
-							<div class="subject-list-name">
-								<h4 class="subject-name font16 mt0 mb5 text-blue" title=""><t t-esc="channel.name"/></h4>
-								<p class="ng-binding"><t t-esc="len(topics)"/> Chapters</p>
-							</div>
-							<p class="subject-click">
-								<img alt="TeachSA Logo" class="img-responsive" src="/skit_slide/static/src/img/teach_arrow.png" />
-								</p>
-						</a>
+						<t t-if="(channel.id) in valid_subjects">
+							<a href="#" class="subject-list" t-att-id="channel.id">
+								<div class="subject-list-name">
+									<h4 class="subject-name font16 mt0 mb5 text-blue" title=""><t t-esc="channel.name"/></h4>
+									<p class="ng-binding"><t t-esc="len(topics)"/> Chapters</p>
+								</div>
+								<p class="subject-click">
+									<img alt="TeachSA Logo" class="img-responsive" src="/skit_slide/static/src/img/teach_arrow.png" />
+									</p>
+							</a>
+						</t>
+						<t t-else="">
+							<a href="#" class="subject-list-deactive" t-att-id="channel.id">
+								<div class="subject-list-name">
+									<h4 class="subject-name font16 mt0 mb5 text-blue" title=""><t t-esc="channel.name"/></h4>
+									<p class="ng-binding"><t t-esc="len(topics)"/> Chapters</p>
+								</div>
+								<p class="subject-click">
+									<img alt="TeachSA Logo" class="img-responsive" src="/skit_slide/static/src/img/teach_arrow.png" />
+									</p>
+							</a>
+						</t>
 					</div>
 				</t>
 			</div>
@@ -173,7 +220,7 @@
 							</t>
 							<t t-else="">
 								<t t-if="bcount == 1">
-									<li id="root_topic"><a href="#"><t t-esc="breadcrumb"/></a></li>
+									<li id="root_topic" t-if="first_breadcurmb_active"><a href="#"><t t-esc="breadcrumb"/></a></li>
 								</t>
 								<t t-elif="bcount == 2">
 									<li id="root_subject"><a href="#"><t t-esc="breadcrumb"/></a></li>
@@ -267,7 +314,7 @@
 							</t>
 							<t t-else="">
 								<t t-if="bcount == 1">
-									<li id="root_topic_detail"><a href="#"><t t-esc="breadcrumb"/></a></li>
+									<li id="root_topic_detail" t-if="first_breadcurmb_active"><a href="#"><t t-esc="breadcrumb"/></a></li>
 								</t>
 								<t t-elif="bcount == 2">
 									<li id="root_subject_detail"><a href="#"><t t-esc="breadcrumb"/></a></li>
@@ -430,6 +477,10 @@
 						<tr>
 							<td class="result-td"><span class="result-span">No.of Correct Answers</span></td>
 							<td class="result-td result-text"><span class="result-span"><t t-esc="correct_answer"/></span></td>
+						</tr>
+						<tr>
+							<td class="result-td"><span class="result-span">No.of Not Attempted</span></td>
+							<td class="result-td result-text"><span class="result-span"><t t-esc="not_attempt"/></span></td>
 						</tr>
 						<tr>
 							<td class="result-td"><span class="result-span">Percentage</span></td>
