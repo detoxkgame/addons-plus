@@ -283,6 +283,10 @@ class WebsiteGrade(http.Controller):
             val[kw.get('question_id')] = kw.get('selected_option')
             request.session['quiz_answer'] = val
             answer_set = request.session.get('quiz_answer')
+        else:
+            val = {kw.get('question_id'): kw.get('selected_option')}
+            request.session['quiz_answer'] = val
+            answer_set = request.session.get('quiz_answer')
         slide = request.env['slide.slide'].sudo().search([('id', '=', int(slide_id))])
         total_question = len(slide.quiz_question_ids)
         for question in slide.quiz_question_ids:

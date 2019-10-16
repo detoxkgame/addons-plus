@@ -93,6 +93,7 @@ odoo.define('skit_slide.grade', function(require) {
 	function breadcurmb_action(){
 		$('#root_grade, #root_topic, #root_topic_detail').off().on('click', function(){
 			$('.grade_header_div').removeClass("grade_display_none");
+			$('#grade').val("0");
 			$('#grade_subjects').addClass("grade_display_none");
 			$('#grade_topics').addClass("grade_display_none");
 			$('#grade_topics_details').addClass("grade_display_none");

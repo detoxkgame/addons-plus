@@ -219,7 +219,8 @@
 					<t t-set="tab_count" t-value="1" />
 					<t t-foreach="contents[i]['slide'+str(topic.id)]" t-as="content">
 						<t t-if="int(content['count']) > 0">
-							<li><span t-attf-data-href="##{topic.name}-#{tab_count}"><t t-esc="content['name']" /></span></li>
+							<t t-set="topicname" t-value="(topic.name).replace(' ', '')"/>
+							<li><span t-attf-data-href="##{topicname}-#{tab_count}"><t t-esc="content['name']" /></span></li>
 						<t t-set="tab_count" t-value="(tab_count + 1)" />
 						</t>
 					</t>
@@ -229,7 +230,8 @@
 			<t t-set="tab_count" t-value="1" />
 			<t t-foreach="contents[i]['slide'+str(topic.id)]" t-as="content">
 				<t t-if="int(content['count']) > 0">
-					<div class="grade-tab" t-attf-id="#{topic.name}-#{tab_count}">
+					<t t-set="topicname" t-value="(topic.name).replace(' ', '')"/>
+					<div class="grade-tab" t-attf-id="#{topicname}-#{tab_count}">
 				    	<div class="row">
 					        <div class="col-md-4" t-foreach="content['datas']" t-as="slide">
 					            <div class="card card-body pd-em document_view" t-att-id="slide.id">
@@ -318,9 +320,14 @@
 					            </div>
 					            </t>
 					            <t t-if="len(slide.quiz_question_ids) > 0">
-					            	<span id="previous_quiz" class="quiz-previous-btn grade_display_none">Previous</span>
-					            	<span id="next_quiz" class="quiz-next-btn" style="margin-left: 45%;">Next</span>
-					            	<span id="submit_quiz" class="quiz-submit-btn grade_display_none">Submit</span>
+					            	<t t-if="len(slide.quiz_question_ids) == 1">
+					            		<span id="submit_quiz" class="quiz-submit-btn" style="margin-left: 45%;">Submit</span>
+					            	</t>
+					            	<t t-else="">
+						            	<span id="previous_quiz" class="quiz-previous-btn grade_display_none">Previous</span>
+						            	<span id="next_quiz" class="quiz-next-btn" style="margin-left: 45%;">Next</span>
+						            	<span id="submit_quiz" class="quiz-submit-btn grade_display_none">Submit</span>
+					            	</t>
 					            </t>
 					    </div>
                 	</t>
