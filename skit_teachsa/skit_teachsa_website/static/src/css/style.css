@@ -1,0 +1,196 @@
+/* Transparent Navigation Menu - Start*/
+/*
+*
+*
+*
+*
+*/
+ .muk_not_editable .muk_navbar_transparent {
+	 top: 34px;
+}
+ .muk_navbar_transparent {
+	 z-index: 999;
+	 color: #7b7b7b;
+	 background-color: #fff;
+}
+ @media screen and (min-width: 768px) {
+/* 	 #wrapwrap > header + main > :not(#wrap), #wrapwrap > header + main > #wrap > :first-child {
+		 padding-top: 70px;
+	} */
+	 .muk_navbar_transparent {
+		 border: 0;
+		 color: #414141;
+		 background-color: rgba(0,0,0,0);
+		 -webkit-font-smoothing: antialiased;
+		 -moz-osx-font-smoothing: grayscale;
+	}
+	 .muk_navbar_transparent .container {
+		 padding-top: 10px;
+		 padding-bottom: 10px;
+	}
+	 .muk_navbar_transparent .navbar-brand {
+		 font-size: 2.0em;
+	}
+	 .muk_navbar_transparent .navbar-brand img {
+		 max-height: 90px;
+		 margin-top: 0px;
+	}
+	 .muk_navbar_transparent li {
+		 font-size: 1.2em;
+	}
+	 .muk_navbar_transparent li:hover > a {
+		 background-color: rgba(0,0,0,0.1) ! important;
+	}
+	 .muk_navbar_transparent li a {
+		 background-color: rgba(0,0,0,0) ! important;
+	}
+	 .muk_navbar_transparent li a span {
+		 color: #414141 ! important;
+	}
+	 .muk_navbar_transparent li a b {
+		 color: #414141 ! important;
+	}
+	 .muk_navbar_transparent li.active > a span {
+		 font-weight: bold;
+		 color: #414141 ! important;
+		 border-bottom: 1px solid #414141;
+	}
+	 .muk_navbar_transparent .dropdown-menu {
+		 border: none;
+		 padding-top: 0;
+		 padding-bottom: 0;
+		 color: #414141;
+		 background-color: rgba(0,0,0,0);
+	}
+	 .muk_navbar_transparent .dropdown-menu li {
+		 border-top: 1px solid #414141;
+	}
+	 .muk_navbar_transparent .dropdown-menu li a {
+		 color: #414141;
+	}
+	 .muk_navbar_transparent .dropdown-menu li a:hover {
+		 color: #414141;
+		 background-color: rgba(0,0,0,0.1);
+	}
+	 .muk_navbar_transparent .dropdown-menu li:last-child {
+		 border-bottom: 1px solid #414141;
+	}
+	 .muk_navbar_transparent.affix {
+		 opacity: 1;
+		 color: #7b7b7b;
+		 background-color: #fff;
+	}
+	 .muk_navbar_transparent.affix .container {
+		 padding-top: 0px;
+		 padding-bottom: 0px;
+	}
+	 .muk_navbar_transparent.affix .navbar-brand {
+		 font-size: 1.5em;
+	}
+	 .muk_navbar_transparent.affix .navbar-brand img {
+		 max-height: 35px;
+		 margin-top: 8px;
+	}
+	 .muk_navbar_transparent.affix li {
+		 font-size: 1.0em;
+	}
+	 .muk_navbar_transparent.affix li:hover > a {
+		 background-color: rgba(0,0,0,0.1) ! important;
+	}
+	 .muk_navbar_transparent.affix li a {
+		 background-color: rgba(0,0,0,0) ! important;
+	}
+	 .muk_navbar_transparent.affix li a span {
+		 color: #7b7b7b ! important;
+	}
+	 .muk_navbar_transparent.affix li.active > a span {
+		 border-bottom: 0;
+		 color: #7b7b7b ! important;
+	}
+	 .muk_navbar_transparent.affix .dropdown-menu {
+		 color: #7b7b7b;
+		 background-color: #fff;
+	}
+	 .muk_navbar_transparent.affix .dropdown-menu li {
+		 border-top: 1px solid #7b7b7b;
+	}
+	 .muk_navbar_transparent.affix .dropdown-menu li a {
+		 color: #7b7b7b;
+	}
+	 .muk_navbar_transparent.affix .dropdown-menu li a:hover {
+		 color: #7b7b7b ! important;
+		 background-color: rgba(0,0,0,0.1) ! important;
+	}
+}
+ 
+
+.ml-auto {
+	float: right;
+}
+
+@media (min-width: 768px) {
+  .navbar-collapse {
+    width: auto;
+    border-top: 0;
+    box-shadow: none;
+  }
+  .navbar-collapse.collapse {
+    display: block !important;
+    height: auto !important;
+    padding-bottom: 0;
+    overflow: visible !important;
+  }
+  .navbar-collapse.in {
+    overflow-y: visible;
+  }
+  .navbar-fixed-top .navbar-collapse,
+  .navbar-static-top .navbar-collapse,
+  .navbar-fixed-bottom .navbar-collapse {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.navbar-fixed-top .navbar-collapse,
+.navbar-fixed-bottom .navbar-collapse {
+  max-height: 340px;
+}
+
+@media (max-device-width: 480px) and (orientation: landscape) {
+  .navbar-fixed-top .navbar-collapse,
+  .navbar-fixed-bottom .navbar-collapse {
+    max-height: 200px;
+  }
+}
+
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+@media (min-width: 768px) {
+  .navbar-fixed-top,
+  .navbar-fixed-bottom {
+    border-radius: 0;
+  }
+}
+
+.navbar-fixed-top {
+  top: 0;
+  border-width: 0 0 1px;
+}
+
+header .navbar-brand.logo img {
+	height: 10rem;
+}
+
+/*
+*
+*
+*
+*
+*/
+/* Transparent Navigation Menu - End*/

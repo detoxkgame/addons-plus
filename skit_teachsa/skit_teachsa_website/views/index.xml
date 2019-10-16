@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+<odoo>
+	<!-- Inherit Navbar -->
+	<template id="fixed_transparent_navbar" inherit_id="portal.frontend_layout"
+		customize_show="True" name="Transparent Menu">
+		<xpath
+			expr="//nav[contains(@class, 'navbar navbar-expand-md navbar-light bg-light')]"
+			position="attributes">
+			<attribute name="class">navbar navbar-expand-md navbar-fixed-top
+				muk_navbar_transparent</attribute>
+		</xpath>
+	</template>
+
+</odoo>

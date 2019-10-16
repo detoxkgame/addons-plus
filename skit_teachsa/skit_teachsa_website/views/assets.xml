@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+<odoo>
+	<template id="skit_website_assets" name="SKIT TeachSA Website" inherit_id="web.assets_frontend">
+		<xpath expr="//link[last()]" position="after">
+			<link rel="stylesheet" type="text/css" href="/skit_teachsa_website/static/src/css/style.css" />
+		</xpath>
+		<xpath expr="//script[last()]" position="after">
+			<script type="text/javascript" src="/skit_teachsa_website/static/src/js/script.js" />
+		</xpath>
+	</template>
+</odoo>
