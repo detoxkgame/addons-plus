@@ -42,7 +42,15 @@
 	width: 50%; 
 	float: right;
 }
-.testimonial-slide {
+.image-width{
+	position: absolute;
+    left: 30px;
+    top: 2px;
+    width: 70px;
+    height: 70px;
+    mix-blend-mode: multiply;
+}
+ .testimonial-slide {
 	float: right;
     width: 70%;
     height: 220px;
@@ -51,17 +59,8 @@
     overflow: hidden;   
     margin-right:30px;
     margin: 0 0 0 0;
-} 
-
-.image-width{
-	position: absolute;
-    left: 30px;
-    top: 32px;
-    width: 35px;
-    height: 45px;
-    mix-blend-mode: multiply;
-}
-.testimonial-slide ul {
+ }
+ .testimonial-slide ul {
     position: relative;
     margin: 0;
     padding: 0;

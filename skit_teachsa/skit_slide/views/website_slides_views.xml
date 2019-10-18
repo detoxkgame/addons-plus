@@ -180,7 +180,8 @@
 									</i>
 									is empty.
 									<span t-if="can_upload">
-										Upload PDF presentations, documents, videos or infographic using the
+										Upload PDF presentations, documents, videos or
+										infographic using the
 										button below.
 									</span>
 								</p>
@@ -297,42 +298,43 @@
 						</ul>
 					</div>
 					<div class="testimonial-slide-right">
-						<div class="testimonial-slide">
+						<div class="testimonial-slide" style="display: inline;">
 							<t t-set="testimonial_list" t-value="website.partner_details()"></t>
 							<ul>
 								<t t-foreach="testimonial_list" t-as="partner">
 									<li style="width: 100%;">
 										<div class="container">
 											<div class="row content">
-												<div style="display: -webkit-box;">
-													<i
-														class="fa fa-1x fa-quote-left rounded-0 bg-secondary s_quotes_carousel_icon o_we_selected_image"
-														data-original-title="" title=""
-														aria-describedby="tooltip960978"></i>
+												<i
+													class="fa fa-1x fa-quote-left rounded-0 bg-secondary s_quotes_carousel_icon o_we_selected_image"
+													style="position: absolute;" data-original-title="" title=""
+													aria-describedby="tooltip960978"></i>
+												<div
+													style="display: inline-flex;margin-top: 25px;margin-left: 10px;">
 													<p class="o_default_snippet_text">
-														<span t-field="partner.testimonial" />
+														<span t-field="partner.testimonial"
+															style="margin-left: 60px;" />
 													</p>
 												</div>
-												<br></br>
-												<br></br>
-												<br></br>
-												<footer style="margin-left: 75px;">
-													<div
-														style="position: relative; left: 0; top: 0;display: flex;">
-														<div class="square">
+												<footer style="margin-left: 50px;margin-top: -30px;">
+													<div>
+														<div
+															style="position: relative; left: 0; top: 0;display: flex;">
 															<img class="image-width" alt=""
-																t-att-src="'/web/image/res.partner/%s/image' % partner.sudo().id" />
+																t-att-src="'/web/image/res.partner/%s/image' % partner.id"
+																style="border-radius: 50%;" />
 														</div>
 														<div
-															style="display: table; height: 80px; margin-left: 20px;">
+															style="display: table; height: 80px; display: -webkit-inline-box; margin-left: 120px;margin-top: 40px;">
+															<span>—</span>
 															<span class="o_default_snippet_text"
 																style="display: table-cell;vertical-align: bottom;"
 																t-esc="partner.name" />
 														</div>
 													</div>
 												</footer>
-
 											</div>
+
 										</div>
 
 									</li>
