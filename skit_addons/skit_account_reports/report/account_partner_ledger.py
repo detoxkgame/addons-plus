@@ -95,6 +95,7 @@ class ReportPartnerLedger(models.AbstractModel):
         data['computed']['account_ids'] = [a for (a,) in self.env.cr.fetchall()]
         params = [tuple(data['computed']['move_state']), tuple(data['computed']['account_ids'])] + query_get_data[2]
         reconcile_clause = "" if data['form']['reconciled'] else ' AND "account_move_line".reconciled = false '
+        partner_clause = "" if not data['form']['partner_id'] else ' AND "account_move_line".partner_id = '+str(data['form']['partner_id'])+' '
         query = """
             SELECT DISTINCT "account_move_line".partner_id
             FROM """ + query_get_data[0] + """, account_account AS account, account_move AS am
@@ -104,12 +105,15 @@ class ReportPartnerLedger(models.AbstractModel):
                 AND am.state IN %s
                 AND "account_move_line".account_id IN %s
                 AND NOT account.deprecated
-                AND """ + query_get_data[1] + reconcile_clause
+                AND """ + query_get_data[1] + reconcile_clause + partner_clause
         self.env.cr.execute(query, tuple(params))
         partner_ids = [res['partner_id'] for res in self.env.cr.dictfetchall()]
         partners = obj_partner.browse(partner_ids)
         partners = sorted(partners, key=lambda x: (x.ref or '', x.name or ''))
-
+        if data['form']['partner_id']:
+            partner_param = obj_partner.browse(data['form']['partner_id']).name
+        else:
+            partner_param = ""
         return {
             'doc_ids': partner_ids,
             'doc_model': self.env['res.partner'],
@@ -118,4 +122,5 @@ class ReportPartnerLedger(models.AbstractModel):
             'time': time,
             'lines': self._lines,
             'sum_partner': self._sum_partner,
+            'partner_name': partner_param,
         }

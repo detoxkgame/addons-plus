@@ -26,6 +26,9 @@
                             <p t-if="data['form']['target_move'] == 'all'">All Entries</p>
                             <p t-if="data['form']['target_move'] == 'posted'">All Posted Entries</p>
                         </div>
+                        <div class="col-3">
+                            <t t-if="data['form']['partner_id']"><strong>Partner :</strong><p> <t t-esc="partner_name"></t> </p></t>
+                        </div>
                     </div>
         			
            			<br></br>
