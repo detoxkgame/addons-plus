@@ -12,11 +12,13 @@
                 <field name="amount_currency" string="Statement in Pricelist Currency" groups="base.group_multi_currency"/>
                 <newline/>
                 <field name="reconciled"/>
-                <newline/>
-                <newline/>
-                <field name="partner_id"/>
-                <newline/>
+               
             </xpath>
+           <xpath expr="//group[@col='4']" position="after">
+              <group col="2">
+                <field name="partner_ids" widget="many2many_tags" options="{'no_create': True}"/>
+              </group>
+           </xpath>
         </data>
        
         </field>

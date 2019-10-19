@@ -27,7 +27,7 @@
                             <p t-if="data['form']['target_move'] == 'posted'">All Posted Entries</p>
                         </div>
                         <div class="col-3">
-                            <t t-if="data['form']['partner_id']"><strong>Partner :</strong><p> <t t-esc="partner_name"></t> </p></t>
+                            <t t-if="data['form']['partner_ids']"><strong>Partner :</strong><p t-esc="', '.join([ lt or '' for lt in print_partner ])"/></t>
                         </div>
                     </div>
         			
