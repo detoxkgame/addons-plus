@@ -285,53 +285,58 @@
 		<template id="skit_slide.front_layout"
 			inherit_id="portal.frontend_layout" name="website">
 			<xpath expr="//footer" position="before">
-				<div style="width: 100%;">
-				<div>
-				    <span class="sponser">SPONSORS</span>
-					   <div class="website-slide">
-						  <t t-set="sponsors_list" t-value="website.get_partner()"></t>
-						    <ul>
-							   <t t-foreach="sponsors_list" t-as="partner">
-								 <li>
-									<img class="img-width" alt=""
-										t-att-src="'/web/image/res.partner/%s/image' % partner.id" />
-								 </li>
-							   </t>
-						   </ul>
-					    </div>
-				</div>
+
+				<div style="width: 100%; display: flex;">
+					<div style="width: 33.3%;">
+						<span class="sponser">SPONSORS</span>
+						<div class="website-slide">
+							<t t-set="sponsors_list" t-value="website.get_partner()"></t>
+							<ul>
+								<t t-foreach="sponsors_list" t-as="partner">
+									<li>
+										<img class="img-width" alt=""
+											t-att-src="'/web/image/res.partner/%s/image' % partner.id" />
+									</li>
+								</t>
+							</ul>
+						</div>
+					</div>
+
+					<div class="quotes-slide ludwig">
+						<t t-set="quotes_day" t-value="website.calender_quotes()"></t>
+						<t t-foreach="quotes_day" t-as="quotes">
+							<span class="quotes-name" t-field="quotes.name"></span>
+						</t>
+					</div>
+
 					<div class="testimonial-slide-right">
-						<div class="testimonial-slide" style="display: inline;">
+						<div class="testimonial-slide">
 							<t t-set="testimonial_list" t-value="website.partner_details()"></t>
 							<ul>
 								<t t-foreach="testimonial_list" t-as="partner">
-									<li style="width: 100%;">
+									<li>
 										<div class="container">
 											<div class="row content">
 												<i
 													class="fa fa-1x fa-quote-left rounded-0 bg-secondary s_quotes_carousel_icon o_we_selected_image"
 													style="position: absolute;" data-original-title="" title=""
 													aria-describedby="tooltip960978"></i>
-												<div
-													style="display: inline-flex;margin-top: 25px;margin-left: 10px;">
-													<p class="o_default_snippet_text">
-														<span t-field="partner.testimonial"
-															style="margin-left: 60px;" />
+
+												<div class="testimonial">
+													<p class="o_default_snippet_text testimonial-span">
+														<span t-field="partner.testimonial" />
 													</p>
 												</div>
-												<footer style="margin-left: 50px;margin-top: -30px;">
+												<footer class="footer-partner">
 													<div>
-														<div
-															style="position: relative; left: 0; top: 0;display: flex;">
+														<div class="partner-image">
 															<img class="image-width" alt=""
-																t-att-src="'/web/image/res.partner/%s/image' % partner.id"
-																style="border-radius: 50%;" />
+																t-att-src="'/web/image/res.partner/%s/image' % partner.id" />
 														</div>
-														<div
-															style="display: table; height: 80px; display: -webkit-inline-box; margin-left: 120px;margin-top: 40px;">
+														<div class="partner-name">
 															<span>—</span>
-															<span class="o_default_snippet_text"
-																style="display: table-cell;vertical-align: bottom;"
+															<span
+																class="o_default_snippet_text partner-name-span"
 																t-esc="partner.name" />
 														</div>
 													</div>

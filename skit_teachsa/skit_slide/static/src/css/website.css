@@ -1,7 +1,7 @@
 /* Summernote not Support for placeholder text https://github.com/summernote/summernote/issues/581 */
  .website-slide {
     width: 200px !important;
-    height: 190px !important;
+    height: 150px !important;
     background: #f2f2f2;
     display: flex;
     overflow: hidden;   
@@ -30,8 +30,8 @@
     float: left;
     margin: 0;
     padding: 0;
-    width: 280px;
-    height:190px;
+    width: 240px;
+    height:150px;
     background: #ccc;
     display: flex;
     text-align: center;
@@ -46,7 +46,7 @@
 }
 
 .testimonial-slide-right{
-	width: 50%; 
+	width: 50.3%; 
 	float: right;
 }
 .image-width{
@@ -56,6 +56,7 @@
     width: 70px;
     height: 70px;
     mix-blend-mode: multiply;
+    border-radius: 50%;
 }
  .testimonial-slide {
 	float: right;
@@ -66,6 +67,7 @@
     overflow: hidden;   
     margin-right:30px;
     margin: 0 0 0 0;
+    display: inline;
  }
  .testimonial-slide ul {
     position: relative;
@@ -86,6 +88,7 @@
     display: flex;
     text-align: center;
     line-height: 2em;
+    width: 100%;
 }
 .square {
       width: 80px;
@@ -94,3 +97,69 @@
       border-radius: 70% 30% 30% 70%/60% 40% 60% 40%;
     }
   
+.quotes-name{
+	font-style: italic;  
+	font-size: 21px;
+	font-weight: 400;
+	text-align: -webkit-center;
+	letter-spacing: 1px;
+}
+  
+.testimonial-span{
+	margin-left: 60px;
+} 
+.quotes-slide span {
+    align-self: flex-end;
+}
+.quotes-slide{
+	width: 33.3%; 
+	display: flex;
+	margin-bottom: 20px;
+	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 3em;
+    font-size: 2.4em;
+}
+.ludwig {
+	 position: relative;
+	 padding-left: 1em;
+	 padding-right: 1em;
+	 border-left: 0.2em solid #4d91b3;
+	 font-family: 'Roboto', serif;
+	 font-size: 2.4em;
+	 font-weight: 100;
+}
+.testimonial{
+	display: inline-flex;
+	margin-top: 25px;
+	margin-left: 10px;
+}
+.partner-image{
+	position: relative; 
+	left: 0; 
+	top: 0;
+	display: flex;
+}
+.partner-name{
+	display: table; 
+	height: 80px;
+	display: -webkit-inline-box;
+	margin-left: 120px;
+	margin-top: 40px;
+}
+.footer-partner{
+	margin-left: 35px; 
+	margin-top: -20px;
+}
+
+ .ludwig:before, .ludwig:after {
+	 content: '\201C';
+	 font-family: 'Sanchez';
+	 color: #4d91b3;
+}
+ .ludwig:after {
+	 content: '\201D';
+}
+.partner-name-span{
+	display: table-cell;
+	vertical-align: bottom;
+}
