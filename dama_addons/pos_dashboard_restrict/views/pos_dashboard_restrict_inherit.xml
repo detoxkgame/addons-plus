@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+	<record model="ir.ui.view" id="inherit_restrict_dashboard_privilege_for_user">
+	    <field name="name">inherit.restrict.dashboard.privilege.for.user</field>
+	    <field name="model">pos.config</field>
+	    <field name="inherit_id" ref="point_of_sale.view_pos_config_kanban"/>
+	    <field name="arch" type="xml">
+			<xpath expr="//div[@class='container o_kanban_card_manage_pane dropdown-menu']" position="attributes">
+				<attribute name="groups">point_of_sale.group_pos_manager</attribute>
+			</xpath>
+	    </field>
+	</record>
+
+</odoo>

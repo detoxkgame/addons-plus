@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="product_multi_barcode_form_view" model="ir.ui.view">
+            <field name="name">product.multi.barcode</field>
+            <field name="model">product.multi.barcode</field>
+            <field name="arch" type="xml">
+                <form string="Product Multi Barcode" edit="false" create="false">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="product_id" required="1"/>
+	                        <field name="available_in_pos" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_multi_barcode_tree_view" model="ir.ui.view">
+            <field name="name">product.multi.barcode</field>
+            <field name="model">product.multi.barcode</field>
+            <field name="arch" type="xml">
+                <tree string="Product Multi Barcode" create="false">
+                    <field name="name"/>
+                    <field name="product_id" options="{'no_create': True}"/>
+	                <field name="available_in_pos"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_multi_barcode_search_view" model="ir.ui.view">
+            <field name="name">product.multi.barcode</field>
+            <field name="model">product.multi.barcode</field>
+            <field name="arch" type="xml">
+                <search string="Product Multi Barcode">
+                    <field name="name" string="Barcode"/>
+                    <field name="product_id" string="Product"/>
+                    <group expand="0" string="Group By">
+                        <filter name="filter_product" string="Product" domain="" context="{'group_by':'product_id'}"/>
+	                    <filter name="filter_available_in_pos" string="Available On Pos" domain=""
+	                            context="{'group_by':'available_in_pos'}"/>
+                        <filter name="filter_barcode" string="Barcode" domain=""
+                                context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+           </field>
+        </record>
+
+		<record id="product_multi_barcode_action"
+		        model="ir.actions.act_window">
+		    <field name="name">Product Multi Barcode</field>
+		    <field name="type">ir.actions.act_window</field>
+		    <field name="res_model">product.multi.barcode</field>
+		    <field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="pos_product_multi_barcode_menu"
+		          name="Product Multi Barcode"
+		          parent="point_of_sale.pos_config_menu_catalog"
+		          action="product_multi_barcode_action"
+		          sequence="30"/>
+</odoo>

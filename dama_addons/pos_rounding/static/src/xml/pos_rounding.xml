@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template id="template" xml:space="preserve">
+    <t t-extend='OrderWidget'>
+        <t t-jquery='div.subentry' t-operation='before'>
+            <t t-if="widget.pos.config.enable_rounding">
+                <div class="subentry">Round Amount: <span class="round_value">0.00 €</span></div>
+            </t>
+            <t t-if="!widget.pos.config.enable_rounding">
+                <div class="subentry"><span class="round_value"></span></div>
+            </t>
+        </t>
+    </t>
+
+<!--    <t t-extend='PosTicket'>-->
+<!--        <t t-jquery='tr.receipt_net_amount' t-operation='before'>-->
+<!--            <t t-if="widget.pos.config.enable_rounding">-->
+<!--                <tr>-->
+<!--                    <td style="padding-bottom:5pt;">ROUND AMOUNT</td>-->
+<!--                    <td style="padding-bottom:5pt">:</td>-->
+<!--                    <td style="font-weight:bold;text-align:right;padding-bottom:5pt;padding-right:6pt">-->
+<!--                        <t t-esc="widget.format_currency(order.get_rounding_product_price())"/>-->
+<!--                    </td>-->
+<!--                    <td style="padding-bottom:5pt">:</td>-->
+<!--                    <td style="text-align:right;padding-bottom:5pt">التقريب</td>-->
+<!--                </tr>-->
+<!--            </t>-->
+<!--        </t>-->
+<!--    </t>-->
+
+    <t t-extend="ReceiptScreenWidget">
+        <t t-jquery="div.print" t-operation="replace">
+        </t>
+    </t>
+</template>

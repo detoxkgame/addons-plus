@@ -1,0 +1,135 @@
+
+.font{
+font-family:'A_Nefel_Sereke';;font-weight:100;
+}
+.arabic_font{
+
+font-family:'A_Nefel_Sereke';
+}
+
+
+.table1{
+table-layout: fixed;
+width:100%;
+margin-top:.1cm;
+}
+
+.column11{
+color:#696969;
+width:33.33%;
+vertical-align:middle;
+text-align: center;
+height:1.075cm;
+}
+
+
+.column12{
+color:#696969;
+width:33.33%;
+vertical-align:middle;
+text-align: center;
+height:1.075cm;
+}
+
+.table2{
+table-layout: fixed;
+width:100%;
+}
+
+.column21{
+color:#696969;
+width:50%;
+vertical-align:middle;
+text-align: center;
+height:1.075cm;
+}
+
+
+
+.table3{
+table-layout: fixed;
+width:100%;
+margin-bottom:.3cm;
+}
+
+.column31{
+color:#696969;
+width:33.33%;
+vertical-align:middle;
+text-align: center;
+height:1.075cm;
+
+}
+
+
+.column32{
+color:#696969;
+width:66.66%;
+vertical-align:middle;
+text-align: center;
+height:1.075cm;
+}
+
+.table5{
+width:100%;
+}
+
+
+.column1{
+color:#696969;
+text-align: center;
+font-size: 14px;
+height:1.4cm;
+width:1cm;
+
+}
+
+
+.column2{
+color:#696969;
+text-align: center;
+font-size: 14px;
+height:1.4cm;
+width:3.5cm;
+}
+
+
+.column3{
+color:#696969;
+text-align: center;
+font-size: 14px;
+height:1.4cm;
+width:8.5cm;
+}
+
+.column4{
+color:#696969;
+text-align: center;
+font-size: 14px;
+height:1.4cm;
+width:2cm;
+}
+
+
+.column5{
+color:#696969;
+text-align: center;
+font-size: 14px;
+height:1.4cm;
+width:2.5cm;
+}
+
+.column6{
+color:#696969;
+text-align: center;
+font-size: 14px;
+height:1.4cm;
+width:3.5cm;
+}
+.span_table_tr1{
+color:#696969;
+text-align:center;
+}
+
+
+

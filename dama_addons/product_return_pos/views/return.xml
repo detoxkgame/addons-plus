@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_pos_new_form_extended">
+            <field name="name">pos.order.form.extend</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pos_reference']" position="after">
+                    <field name="return_ref"/>
+                    <field name="return_status"/>
+                </xpath>
+                <xpath expr="//field[@name='lines']//tree//field[@name='qty']" position="after">
+                        <field name="returned_qty" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_pos_new_tree_extended">
+            <field name="name">pos.order.tree.extend</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pos_reference']" position="after">
+                    <field name="return_ref"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="pos_lock_mode_pos_config_inherit" model="ir.ui.view">
+            <field name="name">pos.config.form.pos.sale</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <sheet position="inside">
+                    <h2>Lock Product Return</h2>
+                    <div class="row mt16 o_settings_container" id="pos_lock_product_return">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                        <field name="lock_return"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                        <label for="lock_return"/>
+                        <br/>
+                        <label for="return_password" attrs="{'invisible':[('lock_return', '=', False)]}"/>
+                        <field name="return_password"
+                        attrs="{'invisible':[('lock_return', '=', False)], 'required':[('lock_return', '=', True)]}"
+                        password="True"/>
+                        </div>
+                        </div>
+                    </div>
+                </sheet>
+            </field>
+        </record>
+
+    </data>
+</odoo>
