@@ -1,0 +1,400 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* skit_pos_session
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-22 07:19+0000\n"
+"PO-Revision-Date: 2019-10-22 15:52+0530\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2.3\n"
+"Last-Translator: \n"
+"Language: es\n"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:167
+#, python-format
+msgid "+ Transactions  :"
+msgstr "+ Transacciones"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid ""
+"<strong>Closing Date/Time</strong>\n"
+"\t\t\t\t\t\t\t\t\t:\n"
+"\t\t\t\t\t\t\t\t\t<br/>"
+msgstr ""
+"<strong>Fecha/hora de cierre</strong>\n"
+"\t\t\t\t\t\t\t\t\t:<br>"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid ""
+"<strong>Opening Date/Time</strong>\n"
+"\t\t\t\t\t\t\t\t\t:\n"
+"\t\t\t\t\t\t\t\t\t<br/>"
+msgstr ""
+"<strong>Fecha/Hora de apertura</strong>\n"
+"\t\t\t\t\t\t\t\t\t:<br>"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid ""
+"<strong>Point of Sale</strong>\n"
+"\t\t\t\t\t\t\t\t\t:\n"
+"\t\t\t\t\t\t\t\t\t<br/>"
+msgstr ""
+"<strong>Punto de venta</strong>\n"
+"\t\t\t\t\t\t\t\t\t:<br>"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid ""
+"<strong>Responsible</strong>\n"
+"\t\t\t\t\t\t\t\t\t:\n"
+"\t\t\t\t\t\t\t\t\t<br/>"
+msgstr ""
+"<strong>Responsable</strong>\n"
+"\t\t\t\t\t\t\t\t\t:<br>"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:168
+#, python-format
+msgid "= Theoretical Closing Balance :"
+msgstr "• Saldo de cierre teórico:"
+
+#. module: skit_pos_session
+#: model:ir.model,name:skit_pos_session.model_account_bank_statement_cashbox
+msgid "Account Bank Statement Cashbox Details"
+msgstr "Extracto de cuenta bancaria detalle de caja"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:94
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+#, python-format
+msgid "Amount"
+msgstr "Cantidad"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:93
+#, python-format
+msgid "Amount*"
+msgstr "Cantidat*"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:73
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:101
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:201
+#, python-format
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: skit_pos_session
+#: model:ir.model,name:skit_pos_session.model_cash_box_in
+msgid "Cash Box In"
+msgstr "Caja de efectivo en"
+
+#. module: skit_pos_session
+#: model:ir.model,name:skit_pos_session.model_cash_box_out
+msgid "Cash Box Out"
+msgstr "Caja de efectivo"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:227
+#, python-format
+msgid "Cash Control !!!!"
+msgstr "Control de efectivo"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:24
+#, python-format
+msgid "Coin/Bill Value"
+msgstr "Moneda / Valor de Bill"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:70
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:98
+#, python-format
+msgid "Confirm"
+msgstr "Confirmar"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.pos_layout_footer
+msgid "Confirmed by:"
+msgstr "Confirmado por"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Customer Name"
+msgstr "Nombre del cliente"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Date/Time"
+msgstr "Fecha y hora"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.pos_layout_footer
+msgid "Date/Time: ............................"
+msgstr "Fecha y hora:"
+
+#. module: skit_pos_session
+#: model:ir.model.fields,field_description:skit_pos_session.field_account_bank_statement_cashbox__description
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Description"
+msgstr "Descripción"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Difference"
+msgstr "Diferencia"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:189
+#, python-format
+msgid "Difference :"
+msgstr "Diferencia"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:133
+#, python-format
+msgid "End of Session"
+msgstr "Fin de sesión"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Ending Balance"
+msgstr "Fin de sesión"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Journal"
+msgstr "Diario"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.pos_layout_footer
+msgid "Name: ..................................."
+msgstr "Nombre:"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:25
+#, python-format
+msgid "Number of Coins/Bills"
+msgstr "Número de monedas / billetes"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:260
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:283
+#, python-format
+msgid "Odoo Warning"
+msgstr "Advertencia de Odoo"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:165
+#, python-format
+msgid "Opening Balance :"
+msgstr "Saldo de apertura"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:155
+#, python-format
+msgid "Opening Date :"
+msgstr "Fecha de apertura"
+
+#. module: skit_pos_session
+#: model:ir.actions.report,name:skit_pos_session.pos_session_report
+#: model:ir.actions.report,name:skit_pos_session.pos_session_statement
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "POS Closing Summary Report"
+msgstr "Informe resumido de cierre de punto de venta"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:148
+#, python-format
+msgid "Point of Sale :"
+msgstr "Punto de venta"
+
+#. module: skit_pos_session
+#: model:ir.model,name:skit_pos_session.model_pos_session
+msgid "Point of Sale Session"
+msgstr "Sesión de punto de venta"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:130
+#, python-format
+msgid "Print"
+msgstr "Impresión"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:120
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:121
+#, python-format
+msgid "Put Money In"
+msgstr "Poner dinero"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:177
+#, python-format
+msgid "Real Closing Balance :"
+msgstr "Saldo de cierre real"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:90
+#, python-format
+msgid "Reason"
+msgstr "Razón"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:89
+#, python-format
+msgid "Reason*"
+msgstr "Razón*"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:147
+#, python-format
+msgid "Responsible :"
+msgstr "Responsable"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.pos_layout_footer
+msgid "Responsible:"
+msgstr "Responsable:"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.pos_layout_footer
+msgid "Reviewed by Finance:"
+msgstr "Revisado por Finanzas:"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:140
+#, python-format
+msgid "Session :"
+msgstr "Sesión"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:6
+#, python-format
+msgid "Sessions"
+msgstr "Sesiones"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:127
+#, python-format
+msgid "Set Closing Balance"
+msgstr "Establecer saldo final"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Starting Balance"
+msgstr "Saldo inicial"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "State"
+msgstr "Estado"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:26
+#, python-format
+msgid "SubTotal"
+msgstr "Total parcial"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:124
+#, python-format
+msgid "Take Money Out"
+msgstr "Sacar dinero"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:58
+#, python-format
+msgid "Total"
+msgstr "Total"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
+msgid "Transactions Subtotal"
+msgstr "Subtotal de transacciones"
+
+#. module: skit_pos_session
+#. openerp-web
+#: code:addons/skit_pos_session/static/src/xml/pos_session.xml:136
+#, python-format
+msgid "Validate Closing & Posting Entries"
+msgstr "Validar entradas de cierre y contabilización"
+
+#. module: skit_pos_session
+#: model_terms:ir.ui.view,arch_db:skit_pos_session.pos_layout_footer
+msgid "Verified by Supervisor:"
+msgstr "Verificado por el supervisor"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/models/pos_session.py:191
+#, python-format
+msgid "you done a Great Job"
+msgstr "has hecho un gran trabajo"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/models/pos_session.py:178
+#: code:addons/skit_pos_session/models/pos_session.py:208
+#, python-format
+msgid "you have to send more %s %s"
+msgstr "tienes que enviar más %s %s"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/models/pos_session.py:182
+#, python-format
+msgid "you have to send more amount"
+msgstr "tienes que enviar mas cantidad"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/models/pos_session.py:189
+#, python-format
+msgid "you may be missed some bills"
+msgstr "puede que te extrañen algunas facturas"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/models/pos_session.py:185
+#: code:addons/skit_pos_session/models/pos_session.py:212
+#, python-format
+msgid "you may be missed some bills equal to %s %s"
+msgstr "es posible que se le pierdan algunas facturas equivalentes a %s %s"

@@ -117,8 +117,8 @@ odoo.define('skit_pos_session.pos_session', function(require) {
 	    onclick_PutMoneyIn: function(){
 	    	var self = this;	    	
 	    	self.pos.gui.show_popup('popupMoney',{
-                'title': 'Put Money In',
-                'body': 'Fill in this form if you put money in the cash register: ',
+                'title': _t('Put Money In'),
+                'body': _t('Fill in this form if you put money in the cash register:'),
                 confirm: function(){                	
                 	var values ={};
                 	values.reason = this.$('.reason').val();
@@ -132,8 +132,8 @@ odoo.define('skit_pos_session.pos_session', function(require) {
     	            }).then(function (result) {
     	            	if(result)
     	            		self.pos.gui.show_popup('error',{
-    	            			'title': 'Put Money In',
-    	            			'body': JSON.stringify(result),				                    
+    	            			'title': _t('Put Money In'),
+    	            			'body': _t(JSON.stringify(result)),				                    
     	            		});
     	            	else
     	            		$('.session').trigger('click');
@@ -148,8 +148,8 @@ odoo.define('skit_pos_session.pos_session', function(require) {
 	    onclick_TakeMoneyOut: function(){
 	    	var self = this;	    	
 	    	self.pos.gui.show_popup('popupMoney',{
-                'title': 'Take Money Out',
-                'body': 'Describe why you take money from the cash register: ',
+                'title': _t('Take Money Out'),
+                'body': _t('Describe why you take money from the cash register:'),
                 confirm: function(){    
                 	var values ={};
                 	values.reason = this.$('.reason').val();
@@ -162,8 +162,8 @@ odoo.define('skit_pos_session.pos_session', function(require) {
     	            }).then(function(result){ 
     	            	if(result)
     	            		self.pos.gui.show_popup('error',{
-    	            			'title': 'Take Money Out',
-    	            			'body': JSON.stringify(result),	                   
+    	            			'title': _t('Take Money Out'),
+    	            			'body': _t(JSON.stringify(result)),	                   
     	            		});
     	            	else
     	            		$('.session').trigger('click');
@@ -186,7 +186,7 @@ odoo.define('skit_pos_session.pos_session', function(require) {
                 args: [0, self.pos.pos_session.id,balance,check],
             }).then(function(result){ 						
             	self.pos.gui.show_popup('popupBalance',{
-            		'title': 'Cash Control',
+            		'title': _t('Cash Control'),
             		'pos_cashbox_line': result,
             		confirm: function(){       			                   
             			var values = [];
@@ -225,7 +225,7 @@ odoo.define('skit_pos_session.pos_session', function(require) {
             				if(result)
             					self.pos.gui.show_popup('alert',{
             						'title': _t( 'Cash Control !!!!'),
-            						'body': JSON.stringify(result),	
+            						'body': _t(JSON.stringify(result)),	
             						'cancel' : function() {	
             							$('.session').trigger('click');
             						}
@@ -318,19 +318,19 @@ odoo.define('skit_pos_session.pos_session', function(require) {
 	            }).then(function(result){ 
 	            	if(result)
 	            		self.pos.gui.show_popup('popupsession',{
-	            			'title': 'Sessions',
+	            			'title': _t('Sessions'),
 	            			'pos_session': result,
 	            		}); 							
 	            	else
 	            		self.pos.gui.show_popup('error',{
-	            			'title': 'Sessions',
-	            			'body': 'No Opened Session.',	                   
+	            			'title': _t('Sessions'),
+	            			'body': _t('No Opened Session.'),	                   
 	            		});	
 	            });
 	        	
 	        	self.pos.gui.show_popup('popupsession',{
-	        		'title': 'Sessions',
-	        		'body': 'Loading...',
+	        		'title': _t('Sessions'),
+	        		'body': _t('Loading...'),
 	        	});
 	        });
 	    },		    
