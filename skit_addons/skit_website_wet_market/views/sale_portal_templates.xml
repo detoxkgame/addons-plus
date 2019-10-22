@@ -85,7 +85,7 @@
                  <div class="col-md-6" id="product_details">
                  	<h1 class="product-portal name-font" itemprop="name" t-field="product.name">Product Name</h1>
                     <span itemprop="url" style="display:none;" t-esc="'%sshop/product/%s' % (request.httprequest.url_root, slug(product))"/>
-                    	<form action="/shop/cart/update/attribute" method="POST">
+                    	<form action="/shop/cart/update" method="POST">
                         	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
                             <div class="js_product js_main_product">
                             	<t t-placeholder="select">
@@ -108,6 +108,11 @@
     
     <template id="shop_products_item" name="Shop Product" inherit_id="website_sale.products_item" priority="20">
     	<xpath expr="//div[@class='oe_product_image']" position="replace">
+    		<div class="prod_setting">
+	    		<span id="prod_setting_price" style="display:none;" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+	    		<span id="prod_setting_pid" style="display:none;" t-esc="product.id" />
+	    		<span id="product_settings" class="product-setting" t-if="product.website_published" groups="sales_team.group_sale_manager"><i class="fa fa-pencil-square-o"></i></span>
+    		</div>
     		<div class="oe_product_image">
             	<a itemprop="url">
                 	<span itemprop="image" t-attf-content="{{request.httprequest.url_root}}web/image/product.template/{{product.id}}/image" t-field="product.image" t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}" t-att-alt="product.name" />
@@ -117,12 +122,22 @@
     	<xpath expr="//section" position="replace">      
     		<section class="shop_section">
             	<h6 class="pro_name_price">
+            		<span class="publish_prod_id" style="display:none;" t-esc="product.id" />
                 	<span itemprop="name"  class="shop_prod_name" t-att-content="product.name" t-field="product.name" />
-                    <a role="button" t-if="not show_publish and not product.website_published" t-att-href="product_href" class="btn btn-secondary btn-sm btn-danger" title="This product is unpublished.">Unpublished</a>
+                    <t t-if="not show_publish and not product.website_published">
+                    	<a role="button" id="product_unpublish" t-if="not show_publish and not product.website_published" class="btn btn-secondary btn-sm btn-danger" title="This product is unpublished.">Unpublished</a>
+                    </t>
+                    <t t-else="">
+                    <t t-if="not show_publish and product.website_published" groups="sales_team.group_sale_manager">
+                    	<a role="button" id="product_publish" class="btn btn-secondary btn-sm btn-success" title="This product is published.">Published</a>
+                    </t>
+                    	
+                    </t>
+                    
                     <span class="shop_price" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                 </h6>
 			    <div style="width:100%;">
-	            	<div id="shop_cart_details">
+	            	<div id="shop_cart_details" t-if="product.website_published">
 	                	<span class="shop_prod_price" style="display:none;" t-esc="product.website_price" />
 	                   	<span class="shop_prod_id" style="display:none;" t-esc="product.id" />
 				        <div class="css_quantity input-group oe_website_spinner shop-prod" contenteditable="false">
@@ -255,4 +270,95 @@
         </xpath>
         
     </template>
+
+	<template id="shop_product_setting" name="product_popup">
+		<div role="dialog" id="modal_attendees_registration" class="modal fade" data-keyboard="false" data-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <form id="product_popup"  method="post" class="js_website_submit_form">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <div class="modal-content">
+                    <header class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel"><strong>Product: <t t-esc="product_name"/></strong></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                    </header>
+                    <main class="modal-body">
+                        <div class="container">
+                        	<table style="width:100%;">
+                        		<tbody>
+                        			<tr>
+                        				<td><span>Price</span></td>
+                        				<td><input class="form-control" type='text' id="price" name="price" t-att-value="price"/></td>
+                        			</tr>
+                        			<tr>
+                        				<td><span>Expiry Date</span></td>
+                        				<td><input type="date" class="form-control" id="expire_date" name="expire_date" t-att-value="expire_date"/></td>
+                        			</tr>
+                        			<tr>
+                        				<td><span>Attribute</span></td>
+                        				<td>
+                        					<select class="form-control" id="attribute" name="attribute">
+							                    <option disabled="1" selected="1" value="">Choose...</option>
+							                    <t t-foreach='product_attribute' t-as='attr'>
+							                    	<t t-if="(attr.id) in attribute" >
+							                    		<option selected="selected" t-att-value='attr.id'><t t-esc='attr.name'/></option>
+							                    	</t>
+							                    	<t t-else="">
+							                    		<option t-att-value='attr.id'><t t-esc='attr.name'/></option>
+							                    	</t>
+							                    </t>
+							                </select>
+                        				</td>
+                        			</tr>
+                        			<tr>
+                        				<td><span>Attribute Values</span></td>
+                        				<td>
+                        					<select class="form-control chosen" id="attribute_value" name="attribute_value" multiple="true">
+							                    <t t-foreach='attribute_values' t-as='value'>
+							                    	<t t-if="(value.id) in attribute_value" >
+							                    		<option selected="selected" t-att-value='value.id'><t t-esc='value.name'/></option>
+							                    	</t>
+							                        <t t-else="">
+							                        	<option t-att-value='value.id'><t t-esc='value.name'/></option>
+							                        </t>
+							                    </t>
+							                </select>
+                        				</td>
+                        			</tr>
+                        			<tr>
+                        				<td><span>OnHand Qty</span></td>
+                        				<td>
+                        					<div style="width: 100%;">
+	                        					<input type="number" class="form-control" style="width:50%;display: inline-block;" id="onhand_qty" name="onhand_qty" />
+	                        					<button id="stock_inventory" type="button" class="btn btn-primary" style="margin-left: 3%;">Stock</button>
+                        					</div>
+                        				</td>
+                        			</tr>
+                        		</tbody>
+                        	</table>
+                        </div>
+                    </main>
+                    <footer class="modal-footer">
+                        <div class="float-left">
+                            <button id="prod_setting_btn" type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary js_goto_event" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </footer>
+                </div>
+            </form>
+        </div>
+    </div>
+	</template> 
+	
+	<template id="wet_product_attribute" name="product_attribute">
+		<select class="form-control chosen" id="attribute_value" name="attribute_value" multiple="true">
+			<t t-foreach='attribute_values' t-as='value'>
+				<t t-if="(value.id) in attribute_value" >
+					<option selected="selected" t-att-value='value.id'><t t-esc='value.name'/></option>
+				</t>
+				<t t-else="">
+					<option t-att-value='value.id'><t t-esc='value.name'/></option>
+				</t>
+			</t>
+		</select>
+	</template>
 </odoo>

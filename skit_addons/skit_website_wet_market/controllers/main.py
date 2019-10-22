@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 
+import json
 import logging
 import werkzeug
 import odoo
@@ -15,8 +17,13 @@ from odoo.addons.web.controllers.main import ensure_db, Home
 from odoo.exceptions import UserError
 from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.tools import consteq
+from odoo.addons.website_sale.controllers.main import TableCompute
+from datetime import date, datetime, timedelta
 
 _logger = logging.getLogger(__name__)
+
+PPG = 20  # Products Per Page
+PPR = 4   # Products Per Row
 
 
 class WetAuthSignupHome(Home):
@@ -149,7 +156,7 @@ class WetAuthSignupHome(Home):
                             lang=user_sudo.lang,
                             auth_login=werkzeug.url_encode({'auth_login': user_sudo.email}),
                         ).send_mail(user_sudo.id, force_send=True)
-                return super(WetAuthSignupHome, self).web_login(*args, **kw)
+                return self.web_login(*args, **kw)
             except UserError as e:
                 qcontext['error'] = e.name or e.value
             except (SignupError, AssertionError) as e:
@@ -567,6 +574,112 @@ class ShopWebsiteSale(ProductConfiguratorController):
  
         return request.redirect("/shop/payment")
 
+    @http.route([
+        '''/shop''',
+        '''/shop/page/<int:page>''',
+        '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>''',
+        '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>/page/<int:page>'''
+    ], type='http', auth="public", website=True)
+    def shop(self, page=0, category=None, search='', ppg=False, **post):
+        if category:
+            category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
+            if not category or not category.can_access_from_current_website():
+                raise NotFound()
+
+        if ppg:
+            try:
+                ppg = int(ppg)
+            except ValueError:
+                ppg = PPG
+            post["ppg"] = ppg
+        else:
+            ppg = PPG
+
+        attrib_list = request.httprequest.args.getlist('attrib')
+        attrib_values = [[int(x) for x in v.split("-")] for v in attrib_list if v]
+        attributes_ids = {v[0] for v in attrib_values}
+        attrib_set = {v[1] for v in attrib_values}
+
+        domain = self._get_search_domain(search, category, attrib_values)
+
+        keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
+
+        compute_currency, pricelist_context, pricelist = self._get_compute_currency_and_context()
+
+        request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
+
+        url = "/shop"
+        if search:
+            post["search"] = search
+        if attrib_list:
+            post['attrib'] = attrib_list
+
+        Product = request.env['product.template']
+
+        Category = request.env['product.public.category']
+        search_categories = False
+        if search:
+            categories = Product.search(domain).mapped('public_categ_ids')
+            search_categories = Category.search([('id', 'parent_of', categories.ids)] + request.website.website_domain())
+            categs = search_categories.filtered(lambda c: not c.parent_id)
+        else:
+            categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
+
+        parent_category_ids = []
+        if category:
+            url = "/shop/category/%s" % slug(category)
+            parent_category_ids = [category.id]
+            current_category = category
+            while current_category.parent_id:
+                parent_category_ids.append(current_category.parent_id.id)
+                current_category = current_category.parent_id
+
+        product_count = Product.search_count(domain)
+        pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+        products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+
+        ProductAttribute = request.env['product.attribute']
+        if products:
+            # get all products without limit
+            selected_products = Product.search(domain, limit=False)
+            attributes = ProductAttribute.search([('attribute_line_ids.product_tmpl_id', 'in', selected_products.ids)])
+        else:
+            attributes = ProductAttribute.browse(attributes_ids)
+        user_id = http.request.env.context.get('uid')
+        current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        if not current_user.has_group('sales_team.group_sale_manager'):
+            now = datetime.now()
+            cdatetime = now.strftime("%Y-%m-%d")
+            current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
+            wet_prod_template = request.env['product.template'].sudo().search([
+                ('expire_date', '!=', False),
+                ('expire_date', '<', current_date)])
+            if wet_prod_template:
+                products = Product.search([
+                    ('id', 'in', products.ids),
+                    ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
+        values = {
+            'search': search,
+            'category': category,
+            'attrib_values': attrib_values,
+            'attrib_set': attrib_set,
+            'pager': pager,
+            'pricelist': pricelist,
+            'products': products,
+            'search_count': product_count,  # common for all searchbox
+            'bins': TableCompute().process(products, ppg),
+            'rows': PPR,
+            'categories': categs,
+            'attributes': attributes,
+            'compute_currency': compute_currency,
+            'keep': keep,
+            'parent_category_ids': parent_category_ids,
+            'search_categories_ids': search_categories and search_categories.ids,
+        }
+        if category:
+            values['main_object'] = category
+        return request.render("website_sale.products", values)
+
 
 class Home(http.Controller):
 
@@ -620,3 +733,121 @@ class Home(http.Controller):
         response = request.render('web.login', values)
         response.headers['X-Frame-Options'] = 'DENY'
         return response
+
+    @http.route('/change/product/details', type='json',
+                auth="public", methods=['POST'], website=True)
+    def product_details(self, **kw):
+        product_tmpl_id = int(kw.get('prod_id'))
+        product_template = request.env['product.template'].browse(product_tmpl_id)
+        product_attribute = request.env['product.attribute'].search([])
+        attribute_values = request.env['product.attribute.value'].search([])
+        attribute = []
+        attribute_value = []
+        for attr in product_template.attribute_line_ids:
+            attribute.append(attr.attribute_id.id)
+            for value in attr.value_ids:
+                attribute_value.append(value.id)
+        values = {
+            'price': product_template.list_price,
+            'expire_date': product_template.expire_date,
+            'product_attribute': product_attribute,
+            'attribute_values': attribute_values,
+            'attribute': attribute,
+            'attribute_value': attribute_value,
+            'product_name': product_template.name
+            }
+        return request.env['ir.ui.view'].render_template('skit_website_wet_market.shop_product_setting', values)
+
+    @http.route('/product/details/save', type='json',
+                auth="public", methods=['POST'], website=True)
+    def product_save(self, **kw):
+        values = {}
+        if(kw.get('price')):
+            values['list_price'] = kw.get('price')
+        if(kw.get('expire_date')):
+            values['expire_date'] = kw.get('expire_date')
+        product_template = request.env['product.template'].browse(int(kw.get('prod_id')))
+        product_template.write(values)
+        if(kw.get('attribute')):
+            attr_id = int(kw.get('attribute'))
+            prod_attr = request.env['product.template.attribute.line'].search([
+                ('product_tmpl_id', '=', product_template.id),
+                ('attribute_id', '=', attr_id)])
+            if(prod_attr):
+                product_template.write({'attribute_line_ids': [[1, prod_attr.id, {'value_ids': [[6, False, kw.get('attribute_value')]]}]]})
+            else:
+                for attr in product_template.attribute_line_ids:
+                    product_template.write({'attribute_line_ids': [[2, attr.id, False]]})
+                product_template.write({'attribute_line_ids': [[0, 0, {'attribute_id': attr_id, 'value_ids': [[6, False, kw.get('attribute_value')]]}]]})
+
+        return True
+
+    @http.route('/product/attribute/values', type='json',
+                auth="public", methods=['POST'], website=True)
+    def attribute_values(self, **kw):
+        product_tmpl_id = int(kw.get('prod_id'))
+        product_template = request.env['product.template'].browse(product_tmpl_id)
+        attribute_values = request.env['product.attribute.value'].search([
+            ('attribute_id', '=', int(kw.get('attribute_id')))])
+        attribute_value = []
+        for attr in product_template.attribute_line_ids:
+            for value in attr.value_ids:
+                attribute_value.append(value.id)
+        values = {
+            'attribute_values': attribute_values,
+            'attribute_value': attribute_value
+            }
+        return request.env['ir.ui.view'].render_template('skit_website_wet_market.wet_product_attribute', values)
+
+    @http.route('/create/stock/inventory', type='json',
+                auth="public", methods=['POST'], website=True)
+    def stock_inventory(self, **kw):
+        values = {}
+        qty = int(kw.get('qty'))
+        prod_qty = float(qty)
+        prod_template = request.env['product.template'].browse(int(kw.get('prod_id')))
+        prod_prod = request.env['product.product'].search([
+            ('product_tmpl_id', '=', prod_template.id)])
+        company_user = request.env.user.company_id
+        warehouse = request.env['stock.warehouse'].search([('company_id', '=', company_user.id)], limit=1)
+        if warehouse:
+            stock_inventory = request.env['stock.inventory'].create({
+                'name': prod_template.name,
+                'location_id': warehouse.lot_stock_id.id,
+                'filter': 'partial'})
+            stock_inventory.action_start()
+            exit_prod = False
+            for prod in prod_prod:
+                exit_stock = request.env['stock.inventory.line'].search([
+                    ('product_id', '=', prod.id),
+                    ('inventory_id.state', '=', 'confirm'),
+                    ('location_id', '=', warehouse.lot_stock_id.id)])
+                if(exit_stock):
+                    exit_prod = True
+                request.env['stock.inventory.line'].create({
+                    'inventory_id': stock_inventory.id,
+                    'product_id': prod.id,
+                    'product_uom_id': prod_template.uom_id.id,
+                    'location_id': warehouse.lot_stock_id.id,
+                    'product_qty': prod_qty
+                    })
+            if(exit_prod):
+                values['title'] = 'Warning'
+                values['msg'] = "You cannot have two inventory adjustments in state 'in Progess' with the same product "+prod_template.name
+                return values
+            else:
+                stock_inventory.action_validate()
+        values['title'] = 'Success'
+        values['msg'] = "Inventory created successfully."
+        return values
+
+    @http.route('/publish/product', type='json',
+                auth="public", methods=['POST'], website=True)
+    def publish_product(self, **kw):
+        product_template = request.env['product.template'].browse(int(kw.get('prod_id')))
+        if product_template:
+            if(product_template.website_published):
+                product_template.write({'website_published': False})
+            else:
+                product_template.write({'website_published': True})
+        return True

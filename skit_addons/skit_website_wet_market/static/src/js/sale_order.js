@@ -78,6 +78,9 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
     read_events: {
         'click #shop_add_to_cart': '_onShopAddCart',
         'click #shop_process_checkout': '_onShopConfirm',
+        'click #product_settings': '_onProductSetting',
+        'click #product_publish': '_onProductPublish',
+        'click #product_unpublish': '_onProductUnpublish',
     },
 
     /**
@@ -87,6 +90,100 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
         this._super.apply(this, arguments);
 
        
+    },
+    
+    _onProductPublish: function(ev){
+    	var prod_id = $(ev.currentTarget).closest('.pro_name_price').find('.publish_prod_id').text()
+    	alertify.confirm('Confirm Message','Are you sure unpublish this product.',
+			function(){
+	    		var post = {}
+	        	post['prod_id'] = prod_id;
+	        	ajax.jsonRpc('/publish/product', 'call', post).then(function (modal) { 
+	        		window.location.reload();
+	        	});
+	    	},
+	    	function(){
+	        }
+	    	);
+    },
+    
+    _onProductUnpublish: function(ev){
+    	var prod_id = $(ev.currentTarget).closest('.pro_name_price').find('.publish_prod_id').text()
+    	alertify.confirm('Confirm Message','Are you sure publish this product.',
+    			function(){
+		    		var post = {}
+		        	post['prod_id'] = prod_id;
+		        	ajax.jsonRpc('/publish/product', 'call', post).then(function (modal) { 
+		        		window.location.reload();
+		        	});
+    	    	},
+    	    	function(){
+    	        }
+    	    	);
+    },
+    
+    _onProductSetting: function(ev){
+    	var price = $(ev.currentTarget).closest('.prod_setting').find('#prod_setting_price').text(); 
+    	var prod_id = $(ev.currentTarget).closest('.prod_setting').find('#prod_setting_pid').text(); 
+    	var $form = $(ev.currentTarget).closest('.prod_setting');
+    	var post = {}
+    	post['prod_id'] = prod_id;
+    	ajax.jsonRpc('/change/product/details', 'call', post).then(function (modal) { 
+			var $modal = $(modal);	
+  		    $modal.appendTo($form).modal();	
+  		    $modal.find("#attribute_value").chosen({
+  			  width:'100%',
+  			  enable_search_threshold : 10
+  		    });
+  		    
+  		    $modal.on('change', '#attribute', function(ev){
+  		    	var attribute_id = $(this).val();
+  		    	var attr_post = {};
+  		    	attr_post['prod_id'] = prod_id;
+  		    	attr_post['attribute_id'] = attribute_id;
+  		    	ajax.jsonRpc('/product/attribute/values', 'call', attr_post).then(function (result) {
+  		    		$modal.find("#attribute_value_chosen").remove();
+  		    		$modal.find("#attribute_value").replaceWith(result);
+  		    		$modal.find("#attribute_value").chosen({
+  		  			  width:'100%',
+  		  			  enable_search_threshold : 10
+  		  		    });
+  		    	});
+  		    });
+  		    
+  		    $modal.on('click', '#stock_inventory', function(ev){
+  		    	var onhand_qty = $(ev.currentTarget).closest('table').find('#onhand_qty').val();
+  		    	if(onhand_qty == "" || onhand_qty == undefined){
+  		    		onhand_qty = 0;
+  		    	}
+  		    	var stock_prod = {};
+  		    	stock_prod['prod_id'] = prod_id;
+  		    	stock_prod['qty'] = onhand_qty;
+  		    	ajax.jsonRpc('/create/stock/inventory', 'call', stock_prod).then(function (result) {
+  		    		alertify.alert(result['title'],result['msg']);
+  		    	});
+  		    });
+  		    
+	  		$modal.on('click', '#prod_setting_btn', function (ev) {
+	  			var price = $(ev.currentTarget).closest('table').find('#price').val();
+	  			var expire_date = $(ev.currentTarget).closest('table').find('#expire_date').val();
+	  			var attribute = $(ev.currentTarget).closest('table').find( "#attribute option:selected" ).val();
+	  			var attribute_value = []
+	  			$(ev.currentTarget).closest('table').find( "#attribute_value option:selected" ).each(function(){
+	  				attribute_value.push(parseInt($(this).val()))
+	  			})
+	  			var prod_post = {};
+	  			prod_post['price'] = price;
+	  			prod_post['expire_date'] = expire_date;
+	  			prod_post['prod_id'] = prod_id;
+	  			prod_post['attribute'] = attribute
+	  			prod_post['attribute_value'] = attribute_value
+	  			ajax.jsonRpc('/product/details/save', 'call', prod_post).then(function (modal) {
+	  				$modal.modal('hide');
+	  				window.location.reload();
+	  			});
+	  		});
+		});
     },
     
     _onShopConfirm: function (ev){

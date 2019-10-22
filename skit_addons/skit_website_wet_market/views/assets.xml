@@ -4,10 +4,14 @@
     <template id="assets_frontend_inherit_wet_market" inherit_id="web.assets_frontend" name="Sale frontend assets">
         <xpath expr="link[last()]" position="after">
             <link rel="stylesheet" type="text/scss" href="/skit_website_wet_market/static/src/css/sale_order.css"/>
+            <link rel="stylesheet" type="text/scss" href="/skit_website_wet_market/static/src/css/chosen.min.css"/>
+            <link rel="stylesheet" href="/skit_website_popup/static/src/css/alertify.min.css" />
         </xpath> 
         <xpath expr="script[last()]" position="after">
             <script type="text/javascript" src="/skit_website_wet_market/static/src/js/sale_order.js"></script>
-             <script type="text/javascript" src="/skit_website_wet_market/static/src/js/product_configuration.js"></script>
+            <script type="text/javascript" src="/skit_website_wet_market/static/src/js/product_configuration.js"></script>
+            <script type="text/javascript" src="/skit_website_wet_market/static/src/js/chosen.jquery.min.js"></script>
+            <script type="text/javascript" src="/skit_website_popup/static/src/js/alertify.min.js"></script>
         </xpath>
     </template>
     

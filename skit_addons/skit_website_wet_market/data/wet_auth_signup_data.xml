@@ -10,7 +10,7 @@
             <field name="email_to">${object.email | safe}</field>
             <field name="body_html" type="html">
 					<div>
-                        Test ${object.otp},
+                        ${object.otp},
                     </div>
             </field>
             <field name="auto_delete" eval="True"/>
