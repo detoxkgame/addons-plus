@@ -107,6 +107,29 @@ class pos_session(models.Model):
                                  })
         return cashbox_line
 
+    @api.multi
+    def action_pos_session_validate(self):
+        super(pos_session, self).action_pos_session_validate()
+        if self.state == 'closed':
+            email_template = 'email_template_pos_session_report'
+            ir_model_data = self.env['ir.model.data']
+            template_id = ir_model_data.get_object_reference(
+                'skit_pos_session', email_template)[1]
+            mail_template = self.env['mail.template'].browse(template_id)
+            for mail_user in self.config_id.mail_users:
+                mail_template.write({
+                    'email_to': mail_user.partner_id.email
+                })
+                mail_id = mail_template.send_mail(self.id, force_send=True)
+
+                mail_mail_obj = self.env['mail.mail'].search(
+                        [('id', '=', mail_id)]
+                        )
+                mail_mail_obj.send()
+                self.env['mail.mail'].search(
+                        [('id', '=', mail_mail_obj.id)]
+                        )
+
 
 class AccountBankStmtCashWizard(models.Model):
     """

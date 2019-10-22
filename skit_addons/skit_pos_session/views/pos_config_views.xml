@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    	<!-- INHERIT THE POS.CONFIG -->
+		<record id="view_pos_config_form_mail" model="ir.ui.view">
+		        <field name="name">pos.config.form.view.inherit.mail</field>
+		        <field name="model">pos.config</field>
+		        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"></field>
+		        <field name="arch" type="xml">
+		        	<xpath expr="//h2[@name='order']" position="before">
+	                    <h2>Mail Users</h2>
+	                    <div class="row mt16 o_settings_container">
+	                        <div class="col-12 col-lg-6 o_setting_box" id="pos_mail_users">
+	                            <div class="o_setting_right_pane">
+	                                <span class="o_form_label">Mail Users</span>
+	                                <div class="content-group mt16">
+	                                    <field name="mail_users" widget="many2many_tags"/>
+	                                </div>
+	                            </div>
+	                        </div>
+                        </div>
+                    </xpath>
+                    
+		        </field>
+	 	</record>
+	    
+    </data>
+</odoo>

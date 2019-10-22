@@ -25,6 +25,8 @@ Point of Sale.
     'data': ['views/pos_session_templates.xml',
              'views/pos_session_action.xml',
              'report/report_pos_statement.xml',
+             'data/pos_session_report_email.xml',
+             'views/pos_config_views.xml'
              ],
     'qweb': ['static/src/xml/pos_session.xml'],
 
