@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-23 04:38+0000\n"
-"PO-Revision-Date: 2019-10-23 10:46+0530\n"
+"POT-Creation-Date: 2019-10-23 05:31+0000\n"
+"PO-Revision-Date: 2019-10-23 11:34+0530\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: code:addons/skit_pos_session/static/src/xml/pos_session.xml:167
 #, python-format
 msgid "+ Transactions  :"
-msgstr "+ Transacciones"
+msgstr "+ Transactions"
 
 #. module: skit_pos_session
 #: model_terms:ir.ui.view,arch_db:skit_pos_session.report_statementline
@@ -104,14 +104,14 @@ msgstr "Caja de efectivo"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:192
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:189
 #, python-format
 msgid "Cash Control"
 msgstr "Control de efectivo"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:230
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:227
 #, python-format
 msgid "Cash Control !!!!"
 msgstr "Control de efectivo !!!!"
@@ -158,7 +158,7 @@ msgstr "Fecha y hora"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:155
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:152
 #, python-format
 msgid "Describe why you take money from the cash register:"
 msgstr "Describa por qué toma dinero de la caja registradora"
@@ -195,7 +195,7 @@ msgstr "Balance final"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:123
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:121
 #, python-format
 msgid "Fill in this form if you put money in the cash register:"
 msgstr "Rellene este formulario si ingresa dinero en la caja registradora"
@@ -207,7 +207,7 @@ msgstr "diario"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:336
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:333
 #, python-format
 msgid "Loading..."
 msgstr "Cargando"
@@ -219,7 +219,7 @@ msgstr "Nombre"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:330
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:327
 #, python-format
 msgid "No Opened Session."
 msgstr "Sin sesión abierta"
@@ -233,8 +233,8 @@ msgstr "Número de monedas / billetes"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:263
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:286
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:260
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:283
 #, python-format
 msgid "Odoo Warning"
 msgstr "Advertencia de Odoo"
@@ -282,7 +282,7 @@ msgstr "Impresión"
 #. module: skit_pos_session
 #. openerp-web
 #: code:addons/skit_pos_session/static/src/js/pos_session.js:120
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:138
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:135
 #: code:addons/skit_pos_session/static/src/xml/pos_session.xml:121
 #, python-format
 msgid "Put Money In"
@@ -301,6 +301,12 @@ msgstr "Saldo de cierre real"
 #, python-format
 msgid "Reason"
 msgstr "Razón"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/wizard/pos_box.py:29
+#, python-format
+msgid "Reason and Amount is Required Fields "
+msgstr "Motivo y cantidad es campos obligatorios"
 
 #. module: skit_pos_session
 #. openerp-web
@@ -335,9 +341,9 @@ msgstr "Sesión"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:324
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:329
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:335
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:321
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:326
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:332
 #: code:addons/skit_pos_session/static/src/xml/pos_session.xml:6
 #, python-format
 msgid "Sessions"
@@ -369,11 +375,18 @@ msgstr "Total parcial"
 
 #. module: skit_pos_session
 #. openerp-web
-#: code:addons/skit_pos_session/static/src/js/pos_session.js:168
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:151
+#: code:addons/skit_pos_session/static/src/js/pos_session.js:165
 #: code:addons/skit_pos_session/static/src/xml/pos_session.xml:124
 #, python-format
 msgid "Take Money Out"
 msgstr "Sacar dinero"
+
+#. module: skit_pos_session
+#: code:addons/skit_pos_session/wizard/pos_box.py:25
+#, python-format
+msgid "There is no cash register for this PoS Session"
+msgstr "No hay caja registradora para esta sesión de PoS"
 
 #. module: skit_pos_session
 #. openerp-web

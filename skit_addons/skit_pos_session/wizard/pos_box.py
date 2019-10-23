@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api
+from odoo import api, _
 from odoo.addons.account.wizard.pos_box import CashBox
 
 
@@ -22,11 +22,11 @@ class Pos_Box(CashBox):
                                self.env[active_model].browse(active_ids)
                                if session.cash_register_id]
             if not bank_statements:
-                return ("There is no cash register for this PoS Session")
+                return (_("There is no cash register for this PoS Session"))
             self.with_context(context)._run(bank_statements)
             return
         else:
-            return ("Reason and Amount is Required Fields ")
+            return (_("Reason and Amount is Required Fields "))
 
 
 class Pos_BoxIn(Pos_Box):
