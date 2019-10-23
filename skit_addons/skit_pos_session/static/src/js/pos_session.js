@@ -224,7 +224,7 @@ odoo.define('skit_pos_session.pos_session', function(require) {
             			}).then(function(result){ 
             				if(result)
             					self.pos.gui.show_popup('alert',{
-            						'title': _t( 'Cash Control !!!!'),
+            						'title': _t('Cash Control !!!!'),
             						'body': _t(JSON.stringify(result)),	
             						'cancel' : function() {	
             							$('.session').trigger('click');
