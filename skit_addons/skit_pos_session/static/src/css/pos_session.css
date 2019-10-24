@@ -78,6 +78,7 @@
 	font-size: 16px;
 	font-weight: normal;
 }
+@media only screen and (min-width: 768px) {
 .pos .modal-dialog .popup.balance-popup {
 	width: 700px;
 	height: 600px;
@@ -103,6 +104,105 @@
     box-sizing: border-box;
     width: 100%;
 }
+}
+
+
 .display-hide{
 	display:none !important;
 }
+
+
+/*************Start code for session-popup in mobile view*************/
+@media only screen and (max-width: 767px) {
+.pos .modal-dialog .popup.session-popup {
+	width: 85%;
+	height: 501px;
+}
+.session_form{
+	height: 405px;
+    overflow-y: scroll;
+    margin-top: -4%;
+}
+.pos_button_box{
+	padding-right: 2px;
+    padding-left: 2px;
+}
+.pos .pos_button_box .session-button{
+	font-size: 10.5px;
+	height: 25px;
+	width: 48%;
+    float: left;
+    margin: 1%;
+}
+.pos .endsessionbutton{
+	width: 34%;
+	font-size: 12px;
+	height: 25px;
+    margin-top: 4%;
+}
+.session_form h5{
+	margin:0px;
+	padding-top: 4%;
+	padding-bottom: 4%;
+    font-size: 13px;
+}
+.session-group{
+	width:100%;
+}
+.session-group td{
+	display:block;
+	padding-bottom:0px !important;
+	padding-top:0px !important;
+}
+.session-group.text1 td,.session-group.text2 td,
+.session-group.text3 td,.session-group.text4 td,
+.session-group.text5 td{
+	float:left;
+	font-size: 13px;
+	padding-bottom:5px !important;
+	padding-top:5px !important;
+	width:40%;
+}
+.session-group.text1 td:nth-child(1),.session-group.text2 td:nth-child(1),
+.session-group.text3 td:nth-child(1),.session-group.text4 td:nth-child(1),
+.session-group.text5 td:nth-child(1){
+	text-align: right;
+}
+.session-group.text1 td:nth-child(2),.session-group.text2 td:nth-child(2),
+.session-group.text3 td:nth-child(2),.session-group.text4 td:nth-child(2),
+.session-group.text5 td:nth-child(2){
+	text-align: left;
+}
+/*******Start code for cash control popup**********/
+.pos .popup .session-balance{
+	height: 250px;
+	overflow-y: scroll;
+}
+.session-balance #cashbox-grid tbody tr:last-child{
+	line-height: 32px;
+}
+.pos .modal-dialog .popup.balance-popup input{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 30px;
+	font-size: 13px;
+}
+#cashbox-grid thead th{
+	padding: 0px;
+}
+#cashbox-grid thead tr{
+	background-color: #cecbcb;
+}
+/********End code for cash control popup*********/
+.pos .popup input{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 30px;
+	font-size: 12px;
+	width: 70%;
+}
+.box{
+	font-size: 12px;
+}
+}
+/*************End code for session-popup in mobile view*************/
