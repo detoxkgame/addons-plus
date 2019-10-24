@@ -1,4 +1,4 @@
-odoo.define('manuel', function (require) {
+odoo.define('models', function (require) {
 	"use strict";
 	var models = require('point_of_sale.models');
 	var core = require('web.core');

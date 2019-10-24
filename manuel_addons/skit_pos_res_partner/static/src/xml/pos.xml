@@ -7,13 +7,11 @@
 	  			<span class='label'>Sex</span>
 	          	<input class='detail client-Sex' name='sex' type='sex' t-att-value='partner.sex || ""'></input>
 	   		</div>
-	 	</t>
-	    	
-	 	<t t-jquery='.client-details-right div:first' t-operation='before'>
-	 		<div class='client-detail'>
+	   		<div class='client-detail'>
 				<span class='label'>Age</span>
 	  			<input class='detail client-Age' name='age' type='age' t-att-value='partner.age || ""'></input>
 	  		</div>
-		</t>
+	 	</t>
+	    	
 	</t>
 </templates>
