@@ -11,11 +11,11 @@
     'description': """
         Synchronization of POS data
     """,
-    'price': 45,
+    'price': 25,
     'currency': 'EUR',
     'images': ['images/main_screenshot.png'],
     'category': "Point of Sale",
-    'depends': ['point_of_sale', 'skit_pos_pricelist'],
+    'depends': ['point_of_sale', 'pos_cache'],
     'qweb': ['static/src/xml/pos_cache.xml'],
     'data': ['views/pos_cache_template.xml',
              'security/ir.model.access.csv',
