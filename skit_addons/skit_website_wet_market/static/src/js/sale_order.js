@@ -72,7 +72,7 @@ setInterval(function(){
 			var post = {}
 			post['login'] = login;
 			ajax.jsonRpc('/resend/otp', 'call', post).then(function (modal) { 
-        		alertify.alert("Success", "Resend OTP");
+        		alertify.alert("Success", "OTP has been resend to your email address.");
         	});
 		});
 		$('#sign_resend_otp').click(function(){
@@ -82,7 +82,7 @@ setInterval(function(){
 			post['login'] = login;
 			post['email'] = email;
 			ajax.jsonRpc('/signup/resend/otp', 'call', post).then(function (modal) { 
-        		alertify.alert("Success", "Resend OTP");
+        		alertify.alert("Success", "OTP has been resend to your email address.");
         	});
 		});
 	});
