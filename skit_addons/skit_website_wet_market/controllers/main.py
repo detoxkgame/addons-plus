@@ -123,7 +123,7 @@ class WetAuthSignupHome(Home):
                             )
                 qcontext['show_otp'] = "otp"
                 qcontext['otp_message'] = "OTP has been sent to your email address"
-                qcontext['error'] = "OTP will expire in 10mins"
+                qcontext['error'] = "OTP will expire in 10 mins"
                 response = request.render('auth_signup.signup', qcontext)
                 response.headers['X-Frame-Options'] = 'DENY'
                 return response
@@ -868,6 +868,10 @@ class Home(http.Controller):
         qty = int(kw.get('qty'))
         prod_qty = float(qty)
         prod_template = request.env['product.template'].browse(int(kw.get('prod_id')))
+        if(prod_template.type != 'product'):
+            values['title'] = 'Warning'
+            values['msg'] = "This product not a storable product."
+            return values
         prod_prod = request.env['product.product'].search([
             ('product_tmpl_id', '=', prod_template.id)])
         company_user = request.env.user.company_id
@@ -900,7 +904,7 @@ class Home(http.Controller):
             else:
                 stock_inventory.action_validate()
         values['title'] = 'Success'
-        values['msg'] = "Inventory created successfully."
+        values['msg'] = "Stock updated successfully."
         return values
 
     @http.route('/publish/product', type='json',
