@@ -66,6 +66,25 @@ setInterval(function(){
 		$('.prod_categ_menu').click(function(){
 			$(".nav_pcateg").slideToggle('slow');
 		});
+		
+		$('#resend_otp').click(function(){
+			var login = $('#login').val();
+			var post = {}
+			post['login'] = login;
+			ajax.jsonRpc('/resend/otp', 'call', post).then(function (modal) { 
+        		alertify.alert("Success", "Resend OTP");
+        	});
+		});
+		$('#sign_resend_otp').click(function(){
+			var login = $('#login').val();
+			var email = $('#email_address').val();
+			var post = {}
+			post['login'] = login;
+			post['email'] = email;
+			ajax.jsonRpc('/signup/resend/otp', 'call', post).then(function (modal) { 
+        		alertify.alert("Success", "Resend OTP");
+        	});
+		});
 	});
 	$(function(){
 		var nav_activeText = $('.nav_pcateg').find('.nav-link.active').text();

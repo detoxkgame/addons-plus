@@ -34,6 +34,9 @@
 	                <input type="text" name="otp" t-att-value="otp" id="otp" class="form-control form-control-sm" autofocus="autofocus"
 	                    autocapitalize="off"  required="required" t-att-readonly="'readonly' if only_passwords else None"/>
 	         	</div>
+	         	<div class="clearfix text-center mb-1" t-if="show_otp">
+                    <span id="sign_resend_otp" class="btn btn-primary btn-block">Resend OTP</span>
+                </div>
          	</t>
         </xpath>
         <xpath expr="//div[hasclass('field-password')]" position="replace">
@@ -89,6 +92,9 @@
 		           	<label for="otp">OTP Number</label>
 		            <input type="text" placeholder="OTP No" name="otp" t-att-value="otp" id="otp" t-attf-class="form-control #{'form-control-sm' if form_small else ''}" required="required" autofocus="autofocus" autocapitalize="off"/>
 		        </div>
+		        <div class="clearfix text-center mb-1" t-if="show_otp">
+                    <span id="resend_otp" class="btn btn-primary btn-block">Resend OTP</span>
+                </div>
 		        <div class="form-group field-customer" style="display:none">
 	                <input type="text" placeholder="Is Customer" name="customer" t-att-value="true" id="customer" t-attf-class="form-control #{'form-control-sm' if form_small else ''}" />
 	            </div>

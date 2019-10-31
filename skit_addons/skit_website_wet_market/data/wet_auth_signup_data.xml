@@ -10,7 +10,12 @@
             <field name="email_to">${object.email | safe}</field>
             <field name="body_html" type="html">
 					<div>
-                        ${object.otp},
+						<p>Dear Sir/Madam,</p>
+						<br />
+						<p>
+				         Your one time password (OTP) for wet market login is : ${object.otp}<br /></p>
+                        <br />
+       					<p>Thanking You!</p>
                     </div>
             </field>
             <field name="auto_delete" eval="True"/>

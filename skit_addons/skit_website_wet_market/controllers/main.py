@@ -19,6 +19,7 @@ from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.tools import consteq
 from odoo.addons.website_sale.controllers.main import TableCompute
 from datetime import date, datetime, timedelta
+from odoo.addons.http_routing.models.ir_http import slug
 
 _logger = logging.getLogger(__name__)
 
@@ -202,6 +203,67 @@ class WetAuthSignupHome(Home):
             values['lang'] = request.lang
         self._signup_with_values(qcontext.get('token'), values)
         request.env.cr.commit()
+
+    @http.route(['/resend/otp'], type='json', auth="public", methods=['POST'],
+                website=True, csrf=False)
+    def resend_otp(self, **post):
+        user_sudo = request.env['res.users'].sudo().search([('login', '=', post.get('login'))])
+        if user_sudo:
+            wet_otp = request.env['wet.otp.verification'].sudo().search([('mobile', '=', post.get('login'))])
+            if wet_otp:
+                wet_otp.unlink()
+            digits = "0123456789"
+            otp_no = ""
+            for i in range(6):
+                otp_no += digits[math.floor(random.random() * 10)]
+            wet_otp = request.env['wet.otp.verification'].sudo().create(
+                        {'mobile': post.get('login'),
+                         'email': user_sudo.email,
+                         'otp': otp_no})
+            template = request.env.ref('skit_website_wet_market.wet_otp_verification', raise_if_not_found=False)
+            mail_template = request.env['mail.template'].sudo().browse(template.id)
+            mail_template.write({
+                        'email_to': user_sudo.email
+                    })
+            mail_id = mail_template.send_mail(wet_otp.id, force_send=True)
+            mail_mail_obj = request.env['mail.mail'].sudo().search(
+                            [('id', '=', mail_id)]
+                            )
+            mail_mail_obj.send()
+            mail_mail = request.env['mail.mail'].sudo().search(
+                            [('id', '=', mail_mail_obj.id)]
+                            )
+        return True
+
+    @http.route(['/signup/resend/otp'], type='json', auth="public", methods=['POST'],
+                website=True, csrf=False)
+    def signup_resend_otp(self, **post):
+        wet_otp = request.env['wet.otp.verification'].sudo().search([
+            ('mobile', '=', post.get('login'))])
+        if wet_otp:
+            wet_otp.unlink()
+        digits = "0123456789"
+        otp_no = ""
+        for i in range(6):
+            otp_no += digits[math.floor(random.random() * 10)]
+        wet_otp = request.env['wet.otp.verification'].sudo().create(
+                        {'mobile': post.get('login'),
+                         'email': post.get('email'),
+                         'otp': otp_no})
+        template = request.env.ref('skit_website_wet_market.wet_otp_verification', raise_if_not_found=False)
+        mail_template = request.env['mail.template'].sudo().browse(template.id)
+        mail_template.write({
+                        'email_to': post.get('email')
+                    })
+        mail_id = mail_template.send_mail(wet_otp.id, force_send=True)
+        mail_mail_obj = request.env['mail.mail'].sudo().search(
+                            [('id', '=', mail_id)]
+                            )
+        mail_mail_obj.send()
+        mail_mail = request.env['mail.mail'].sudo().search(
+                            [('id', '=', mail_mail_obj.id)]
+                            )
+        return True
 
 
 class WebsiteCustomerPortal(CustomerPortal):
