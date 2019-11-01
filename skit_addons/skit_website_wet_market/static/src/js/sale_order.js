@@ -90,6 +90,17 @@ setInterval(function(){
 		var nav_activeText = $('.nav_pcateg').find('.nav-link.active').text();
 		$('.pcate_menu').text(nav_activeText);
 	});
+	
+	$(document).ready(function(ev){
+		var post = {};
+		ajax.jsonRpc('/check/website/user', 'call', post).then(function (result) {
+				if(result){
+				}
+				else{
+					$(".shop-prod,#shop_add_to_cart").show();
+				}
+	    	});
+	});
 
 
 sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfiguratorMixin, {

@@ -20,6 +20,9 @@ from odoo.tools import consteq
 from odoo.addons.website_sale.controllers.main import TableCompute
 from datetime import date, datetime, timedelta
 from odoo.addons.http_routing.models.ir_http import slug
+from odoo import api, fields, models, tools, SUPERUSER_ID, ADMINUSER_ID, _
+from odoo import api, models
+
 
 _logger = logging.getLogger(__name__)
 
@@ -917,3 +920,18 @@ class Home(http.Controller):
             else:
                 product_template.write({'website_published': True})
         return True
+
+    @http.route(['/check/website/user'], type='json', auth="public", methods=['POST'], website=True)
+    def check_user(self, **post):
+        """ Software Implementation"""
+        user_id = http.request.env.context.get('uid')
+        if request.env['res.users'].browse(request.uid).has_group('base.group_user'):
+            is_admin = False
+            if(request.env.user.has_group('sales_team.group_sale_manager')
+               and request.env.user.has_group('stock.group_stock_manager')
+               and request.env.user.has_group('account.group_account_manager')
+               and request.env.user.has_group('point_of_sale.group_pos_manager')
+               and request.env.user.has_group('website.group_website_designer')
+               and request.env.user.has_group('base.group_system')):
+                is_admin = True
+            return is_admin
