@@ -142,6 +142,15 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                           	
                           }.bind(self)));
                       }
+                      var del_icon = sorderline.querySelector('.del_btn');
+                      if(del_icon){
+                    	  del_icon.addEventListener('click', (function(e) {
+                      		
+                          	var order_id = e.target.dataset.item;
+                          	self.delete_order(order_id);
+                          	
+                          }.bind(self)));
+                      }
                     
                   }
                   
@@ -224,6 +233,24 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
     	}
     },
     
+    delete_order: function(order_id){
+    	var self = this;
+    	alert(order_id)
+    	this.gui.show_popup('confirm',{
+			'title': _t('Warning'),
+			'body': _t('Are you sure want to delete this order?'),
+			confirm: function(){
+				self._rpc({
+					model: 'sale.order',
+					method: 'delete_order',
+					args: [0, order_id],
+				}).then(function(result){ 
+					console.log("Order Deleted.");
+				});
+			},
+		});
+    },
+    
     update_order_cache: function(order_ids) {
         var self = this;
         var order = {};
@@ -247,6 +274,13 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                 		var order_id = state_icon.getAttribute('order_id');
                     	var order_state = ($("#"+order_id).text()).trim();
                     	self.update_order_state(order_id, order_state);
+                    }.bind(this)));
+                }
+                var del_icon = sorderline.querySelector('.del_btn');
+                if(del_icon){
+                	del_icon.addEventListener('click', (function() {
+                		var order_id = del_icon.getAttribute('order_id');
+                    	self.del_order(order_id);
                     }.bind(this)));
                 }
             }
@@ -298,6 +332,15 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                     	var order_id = e.target.dataset.item;
                     	var order_state = ($("#"+order_id).text()).trim();
                     	this.update_order_state(order_id, order_state);
+                    	
+                    }.bind(this)));
+                }
+                var del_icon = sorderline.querySelector('.del_btn');
+                if(del_icon){
+                	del_icon.addEventListener('click', (function(e) {
+                		
+                    	var order_id = e.target.dataset.item;
+                    	this.delete_order(order_id);
                     	
                     }.bind(this)));
                 }

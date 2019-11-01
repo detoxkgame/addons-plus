@@ -76,10 +76,22 @@
 			<t t-if="((widget.pos.config.supplier_view) and (sorder.state != 'delivered'))">
 			<div t-attf-id="cart-#{sorder.id}" t-att-class='"pos-cart-slide " + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_zoom1" : "") + ((slevel == 3) ? "pos_zoom2" : "") + ((slevel == 4) ? "pos_zoom3" : "")'>
 				<ul t-attf-class="pos-cart">
-	            	<li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
-	                	<span class="pos-order-no">Order No : <t t-esc="sorder.name"/> </span>
-	                   	<span class="pos-order-date">Date : <t t-esc="sorder.create_date"/> </span>
-	                </li>
+	            	
+	                <t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
+	                	<li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li pd0 " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
+		                	<span class="pos-order-no w41">Order No : <t t-esc="sorder.name"/> </span>
+		                   	<span class="pos-order-date open_date">Date : <t t-esc="sorder.create_date"/> </span>
+		                   	<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
+		                   		<span t-attf-data-item="#{sorder.id}" class="del_btn">X</span>
+		                   	</t>
+		                </li>
+	                </t>
+	                <t t-else="">
+	                	<li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
+		                	<span class="pos-order-no">Order No : <t t-esc="sorder.name"/> </span>
+		                   	<span class="pos-order-date">Date : <t t-esc="sorder.create_date"/> </span>
+		                </li>
+	                </t>
 	                <li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
 	                	<span class="pos-order-no">Status : 
 	                		<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">

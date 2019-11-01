@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     state = fields.Selection(selection_add=[('preparing', 'Preparing'),
-                                            ('ready', 'Ready to Delivery'),
+                                            ('ready', 'Ready to Pickup'),
                                             ('delivered', 'Delivered'),
                                             ('payment', 'Payment')],
                              string='Status', readonly=True, copy=False,
@@ -96,6 +96,7 @@ class SaleOrder(models.Model):
                 invoice_line_val = {
                                     'product_id': line.product_id.id,
                                     'account_id': journal_id.default_debit_account_id.id,
+                                    'quantity': line.product_uom_qty,
                                     'price_unit': line.price_unit,
                                     'name': line.product_id.name,
                                     'invoice_line_tax_ids': [(6, 0, line.tax_id.ids)],
@@ -105,22 +106,33 @@ class SaleOrder(models.Model):
             invoice._compute_amount()
             invoice.compute_taxes()
             invoice._compute_residual()
+            for invoice in sale_order.invoice_ids:
+                invoice.action_invoice_open()
         elif(order_state == "Preparing"):
             sale_order.write({'state': 'preparing'})
         elif(order_state == "Ready to Pickup"):
             sale_order.write({'state': 'ready'})
         elif(order_state == "Delivered"):
             sale_order.write({'state': 'delivered'})
-            for invoice in sale_order.invoice_ids:
-                invoice.action_invoice_open()
             for picking in sale_order.picking_ids:
                 if(picking.state != "cancel"):
                     for smove in picking.move_ids_without_package:
                         smove.write({'quantity_done': smove.product_uom_qty})
                     picking.button_validate()
+            for invoice in sale_order.invoice_ids:
+                if invoice.state == 'paid':
+                    sale_order.write({'state': 'payment'})
         else:
             sale_order.write({'state': 'payment'})
 
+        return True
+
+    @api.multi
+    def delete_order(self, order_id):
+        sale_order = self.env['sale.order'].sudo().search([
+            ('id', '=', int(order_id))])
+        sale_order.action_cancel()
+        sale_order.unlink()
         return True
 
     @api.multi

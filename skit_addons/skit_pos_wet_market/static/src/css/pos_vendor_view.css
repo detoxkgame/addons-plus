@@ -236,7 +236,27 @@
     padding-top: 7px;
     padding-bottom: 7px;
 }
-
+.w41{
+	width: 41% !important;
+}
+.open_date{
+	width: 49% !important;
+    margin-right: 2%;
+}
+.pd0{
+	padding-right: 0px !important;
+}
+.del_btn{
+	color: blue;
+    float: right;
+    margin-top: -1%;
+    padding: 1%;
+    height: 12px;
+    width: 12px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
 /** Media Query */
 @media only screen and (min-width : 992px) and (max-width: 1338px){
 	.pos-cart-slide{

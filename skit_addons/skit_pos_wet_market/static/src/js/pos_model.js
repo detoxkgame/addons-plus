@@ -15,7 +15,7 @@ var _t = core._t;
 	   {
 	        model:  'sale.order',
 	        fields: [],	
-	        domain: [['state','not in', ['cancel', 'payment']]],
+	        domain: [['state','in', ['cancel', 'payment']]],
 	        order:  _.map(['id','name'], function (name) { return {name: name}; }),
 	        loaded: function(self,orders){
 	            self.orders = orders;

@@ -83,7 +83,9 @@ var OptionalShopProductsModal = Dialog.extend(ServicesMixin, ProductConfigurator
         var uri = this._getUri("/website/show_optional_products_shop");
         var getModalContent = ajax.jsonRpc(uri, 'call', {
         	product_id: self.rootShopProduct.product_id,
-        	quantity: self.rootShopProduct.quantity,
+            variant_values: self.rootShopProduct.variant_values,
+            pricelist_id: self.pricelistId || false,
+            add_qty: self.rootShopProduct.quantity,
         	kwargs: {
                 context: _.extend({
                     'quantity': self.rootShopProduct.quantity

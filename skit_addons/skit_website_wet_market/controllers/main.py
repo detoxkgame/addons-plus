@@ -20,9 +20,9 @@ from odoo.tools import consteq
 from odoo.addons.website_sale.controllers.main import TableCompute
 from datetime import date, datetime, timedelta
 from odoo.addons.http_routing.models.ir_http import slug
+from odoo.addons.payment.controllers.portal import PaymentProcessing
 from odoo import api, fields, models, tools, SUPERUSER_ID, ADMINUSER_ID, _
 from odoo import api, models
-
 
 _logger = logging.getLogger(__name__)
 
@@ -238,6 +238,16 @@ class WetAuthSignupHome(Home):
                             )
         return True
 
+    @http.route(['/saleorder/delete'], type='json', auth="public", methods=['POST'],
+                website=True, csrf=False)
+    def delete_sorder(self, **post):
+        if(post.get('order_id')):
+            sale_order = request.env['sale.order'].sudo().search([
+                ('id', '=', int(post.get('order_id')))])
+            sale_order.action_cancel()
+            sale_order.unlink()
+            return True
+
     @http.route(['/signup/resend/otp'], type='json', auth="public", methods=['POST'],
                 website=True, csrf=False)
     def signup_resend_otp(self, **post):
@@ -274,7 +284,23 @@ class WebsiteCustomerPortal(CustomerPortal):
     @http.route(['/sorder/<int:order_id>'], type='json', auth="public", website=True)
     def update_order_status(self, order_id=None,  **post):
         sale_order = request.env['sale.order'].search([('id', '=', order_id)])
-        return sale_order.state
+        invoice_id = 0
+        for invoice in sale_order.invoice_ids:
+            invoice_id = invoice.id
+        values = {'state': sale_order.state,
+                  'invoice': invoice_id}
+        return values
+
+    @http.route(['/sorder/invoice/<int:invoice_id>'], type='json', auth="public", website=True)
+    def update_invoice_order_status(self, invoice_id=None,  **post):
+        invoices = request.env['account.invoice'].search([('id', '=', invoice_id)])
+        sale_order = request.env['sale.order'].search([('name', '=', invoices.origin)])
+        invoice_id = 0
+        for invoice in sale_order.invoice_ids:
+            invoice_id = invoice.id
+        values = {'state': sale_order.state,
+                  'invoice': invoice_id}
+        return values
 
     def _prepare_portal_layout_values(self):
         values = super(WebsiteCustomerPortal, self)._prepare_portal_layout_values()
@@ -450,6 +476,21 @@ class WebsiteCustomerPortal(CustomerPortal):
         })
         return request.render("account.portal_my_invoices", values)
 
+    @http.route(['/my/invoices/<int:invoice_id>'], type='http', auth="public", website=True)
+    def portal_my_invoice_detail(self, invoice_id, access_token=None, report_type=None, download=False, **kw):
+        try:
+            invoice_sudo = self._document_check_access('account.invoice', invoice_id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        sale_order = request.env['sale.order'].sudo().search([('name', '=', invoice_sudo.origin)])
+        if report_type in ('html', 'pdf', 'text'):
+            return self._show_report(model=invoice_sudo, report_type=report_type, report_ref='account.account_invoices', download=download)
+
+        values = self._invoice_get_page_view_values(invoice_sudo, access_token, **kw)
+        PaymentProcessing.remove_payment_transaction(invoice_sudo.transaction_ids)
+        values['sale_order'] = sale_order
+        return request.render("account.portal_invoice_page", values)
+
 #===============================================================================
 #     @http.route(['/my/orders', '/my/orders/page/<int:page>'], type='http', auth="user", website=True)
 #     def portal_my_orders(self, page=1, date_begin=None, date_end=None, sortby=None, **kw):
@@ -572,9 +613,11 @@ class ShopWebsiteSale(ProductConfiguratorController):
         return order.id
 
     @http.route(['/website/show_optional_products_shop_website'], type='json', auth="public", methods=['POST'], website=True)
-    def show_optional_products_shop_website(self, product_id, quantity, **kw):
+    def show_optional_products_shop_website(self, product_id, variant_values, pricelist_id, add_qty, **kw):
+
         product = request.env['product.template'].sudo().search([
             ('id', '=', int(product_id))])
+        combination = request.env['product.template.attribute.value'].browse(variant_values)
         product_context = dict(request.env.context,
                                active_id=product.id,
                                partner=request.env.user.partner_id)
@@ -596,12 +639,22 @@ class ShopWebsiteSale(ProductConfiguratorController):
         from_currency = request.env.user.company_id.currency_id
         to_currency = pricelist.currency_id
         compute_currency = lambda price: from_currency._convert(price, to_currency, request.env.user.company_id, fields.Date.today())
-
         if not product_context.get('pricelist'):
             product_context['pricelist'] = pricelist.id
             product = product.with_context(product_context)
+
+        no_variant_attribute_values = combination.filtered(
+            lambda product_template_attribute_value: product_template_attribute_value.attribute_id.create_variant == 'no_variant'
+        )
+        if no_variant_attribute_values:
+            product = product.with_context(no_variant_attribute_values=no_variant_attribute_values)
+
         return request.env['ir.ui.view'].render_template("skit_website_wet_market.optional_products_modal_test", {
             'search': "",
+            'combination': combination,
+            'reference_product': product,
+            'variant_values': variant_values,
+            'handle_stock': False,
             'category': category,
             'pricelist': pricelist,
             'attrib_values': attrib_values,
@@ -611,25 +664,37 @@ class ShopWebsiteSale(ProductConfiguratorController):
             'categories': categs,
             'main_object': product,
             'product': product,
-            'quantity': quantity,
+            'quantity': add_qty,
+            'add_qty': add_qty,
             'optional_product_ids': [p.with_context({'active_id': p.id}) for p in product.optional_product_ids],
             'get_attribute_exclusions': self._get_attribute_exclusions,
             })
 
+    def _get_attribute_exclusions(self, product, reference_product=None):
+        """deprecated, use product method"""
+        parent_combination = request.env['product.template.attribute.value']
+        if reference_product:
+            parent_combination |= reference_product.product_template_attribute_value_ids
+            if reference_product.env.context.get('no_variant_attribute_values'):
+                # Add "no_variant" attribute values' exclusions
+                # They are kept in the context since they are not linked to this product variant
+                parent_combination |= reference_product.env.context.get('no_variant_attribute_values')
+        return product._get_attribute_exclusions(parent_combination)
+
     @http.route(['/shop/confirm_order'], type='http', auth="public", website=True)
     def confirm_order(self, **post):
         order = request.website.sale_get_order()
- 
+
         redirection = self.checkout_redirection(order)
         if redirection:
             return redirection
- 
+
         order.onchange_partner_shipping_id()
         order.order_line._compute_tax_id()
         request.session['sale_last_order_id'] = order.id
         request.website.sale_get_order(update_pricelist=True)
         extra_step = request.env.ref('website_sale.extra_info_option')
-        print(order.partner_id.signup_url)
+
         if(request.session.get('customer_url')):
             order.write({'state': 'sent'})
             request.website.sale_reset()
@@ -639,6 +704,114 @@ class ShopWebsiteSale(ProductConfiguratorController):
  
         return request.redirect("/shop/payment")
 
+#===============================================================================
+#     @http.route([
+#         '''/shop''',
+#         '''/shop/page/<int:page>''',
+#         '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>''',
+#         '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>/page/<int:page>'''
+#     ], type='http', auth="public", website=True)
+#     def shop(self, page=0, category=None, search='', ppg=False, **post):
+#         if category:
+#             category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
+#             if not category or not category.can_access_from_current_website():
+#                 raise NotFound()
+# 
+#         if ppg:
+#             try:
+#                 ppg = int(ppg)
+#             except ValueError:
+#                 ppg = PPG
+#             post["ppg"] = ppg
+#         else:
+#             ppg = PPG
+# 
+#         attrib_list = request.httprequest.args.getlist('attrib')
+#         attrib_values = [[int(x) for x in v.split("-")] for v in attrib_list if v]
+#         attributes_ids = {v[0] for v in attrib_values}
+#         attrib_set = {v[1] for v in attrib_values}
+# 
+#         domain = self._get_search_domain(search, category, attrib_values)
+# 
+#         keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
+# 
+#         compute_currency, pricelist_context, pricelist = self._get_compute_currency_and_context()
+# 
+#         request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
+# 
+#         url = "/shop"
+#         if search:
+#             post["search"] = search
+#         if attrib_list:
+#             post['attrib'] = attrib_list
+# 
+#         Product = request.env['product.template']
+# 
+#         Category = request.env['product.public.category']
+#         search_categories = False
+#         if search:
+#             categories = Product.search(domain).mapped('public_categ_ids')
+#             search_categories = Category.search([('id', 'parent_of', categories.ids)] + request.website.website_domain())
+#             categs = search_categories.filtered(lambda c: not c.parent_id)
+#         else:
+#             categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
+# 
+#         parent_category_ids = []
+#         if category:
+#             url = "/shop/category/%s" % slug(category)
+#             parent_category_ids = [category.id]
+#             current_category = category
+#             while current_category.parent_id:
+#                 parent_category_ids.append(current_category.parent_id.id)
+#                 current_category = current_category.parent_id
+# 
+#         product_count = Product.search_count(domain)
+#         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+#         products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+# 
+#         ProductAttribute = request.env['product.attribute']
+#         if products:
+#             # get all products without limit
+#             selected_products = Product.search(domain, limit=False)
+#             attributes = ProductAttribute.search([('attribute_line_ids.product_tmpl_id', 'in', selected_products.ids)])
+#         else:
+#             attributes = ProductAttribute.browse(attributes_ids)
+#         user_id = http.request.env.context.get('uid')
+#         current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+#         if not current_user.has_group('sales_team.group_sale_manager'):
+#             now = datetime.now()
+#             cdatetime = now.strftime("%Y-%m-%d")
+#             current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
+#             wet_prod_template = request.env['product.template'].sudo().search([
+#                 ('expire_date', '!=', False),
+#                 ('expire_date', '<', current_date)])
+#             if wet_prod_template:
+#                 products = Product.search([
+#                     ('id', 'in', products.ids),
+#                     ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
+#         values = {
+#             'search': search,
+#             'category': category,
+#             'attrib_values': attrib_values,
+#             'attrib_set': attrib_set,
+#             'pager': pager,
+#             'pricelist': pricelist,
+#             'products': products,
+#             'search_count': product_count,  # common for all searchbox
+#             'bins': TableCompute().process(products, ppg),
+#             'rows': PPR,
+#             'categories': categs,
+#             'attributes': attributes,
+#             'compute_currency': compute_currency,
+#             'keep': keep,
+#             'parent_category_ids': parent_category_ids,
+#             'search_categories_ids': search_categories and search_categories.ids,
+#         }
+#         if category:
+#             values['main_object'] = category
+#         return request.render("website_sale.products", values)
+#===============================================================================
+
     @http.route([
         '''/shop''',
         '''/shop/page/<int:page>''',
@@ -646,6 +819,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
         '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>/page/<int:page>'''
     ], type='http', auth="public", website=True)
     def shop(self, page=0, category=None, search='', ppg=False, **post):
+        add_qty = int(post.get('add_qty', 1))
         if category:
             category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
             if not category or not category.can_access_from_current_website():
@@ -669,7 +843,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
         keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
 
-        compute_currency, pricelist_context, pricelist = self._get_compute_currency_and_context()
+        pricelist_context, pricelist = self._get_pricelist_context()
 
         request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
 
@@ -679,12 +853,13 @@ class ShopWebsiteSale(ProductConfiguratorController):
         if attrib_list:
             post['attrib'] = attrib_list
 
-        Product = request.env['product.template']
+        Product = request.env['product.template'].with_context(bin_size=True)
 
         Category = request.env['product.public.category']
         search_categories = False
+        search_product = Product.search(domain)
         if search:
-            categories = Product.search(domain).mapped('public_categ_ids')
+            categories = search_product.mapped('public_categ_ids')
             search_categories = Category.search([('id', 'parent_of', categories.ids)] + request.website.website_domain())
             categs = search_categories.filtered(lambda c: not c.parent_id)
         else:
@@ -699,17 +874,19 @@ class ShopWebsiteSale(ProductConfiguratorController):
                 parent_category_ids.append(current_category.parent_id.id)
                 current_category = current_category.parent_id
 
-        product_count = Product.search_count(domain)
+        product_count = len(search_product)
         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
         products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
 
         ProductAttribute = request.env['product.attribute']
         if products:
             # get all products without limit
-            selected_products = Product.search(domain, limit=False)
-            attributes = ProductAttribute.search([('attribute_line_ids.product_tmpl_id', 'in', selected_products.ids)])
+            attributes = ProductAttribute.search([('attribute_line_ids.value_ids', '!=', False), ('attribute_line_ids.product_tmpl_id', 'in', search_product.ids)])        
         else:
             attributes = ProductAttribute.browse(attributes_ids)
+
+        compute_currency = self._get_compute_currency(pricelist, products[:1])
+
         user_id = http.request.env.context.get('uid')
         current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
         if not current_user.has_group('sales_team.group_sale_manager'):
@@ -730,6 +907,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
             'attrib_set': attrib_set,
             'pager': pager,
             'pricelist': pricelist,
+            'add_qty': add_qty,
             'products': products,
             'search_count': product_count,  # common for all searchbox
             'bins': TableCompute().process(products, ppg),
@@ -935,3 +1113,4 @@ class Home(http.Controller):
                and request.env.user.has_group('base.group_system')):
                 is_admin = True
             return is_admin
+

@@ -18,7 +18,7 @@ setInterval(function(){
 		var order_id = order[1];
 		var url = "/sorder/" + parseInt(order_id);
         ajax.jsonRpc(url, 'call', {}).then(function (data) {
-        	if(data == "sale"){
+        	if(data['state'] == "sale"){
         		$('#sale_confirm').removeClass("border-gray");
         		$('#sale_confirm').addClass("border-green");
         		$('#sale_confirm').find("span").removeClass("border-gray-span");
@@ -27,8 +27,9 @@ setInterval(function(){
         		$('#msale_confirm_img').attr('src','/skit_website_wet_market/static/src/img/confirmed_green.png');
         		$('.icon_confirm').addClass("active_back");
         		$('.conf_vertical_ln').addClass("active_ln");
+        		window.location.href="/my/invoices/"+data['invoice']
         	}
-        	else if(data == "preparing"){
+        	else if(data['state'] == "preparing"){
         		$('#sale_preparing').removeClass("border-gray");
         		$('#sale_preparing').addClass("border-green");
         		$('#sale_preparing').find("span").removeClass("border-gray-span");
@@ -38,7 +39,7 @@ setInterval(function(){
         		$('.icon_preparing').addClass("active_back");
         		$('.prepare_vertical_ln').addClass("active_ln");
         	}
-        	else if(data == "ready"){
+        	else if(data['state'] == "ready"){
         		$('#sale_ready').removeClass("border-gray");
         		$('#sale_ready').addClass("border-green");
         		$('#sale_ready').find("span").removeClass("border-gray-span");
@@ -48,7 +49,56 @@ setInterval(function(){
         		$('.icon_ready').addClass("active_back");
         		$('.ready_vertical_ln').addClass("active_ln");
         	}
-        	else if(data == "delivered"){
+        	else if(data['state'] == "delivered" || data['state'] == "payment"){
+        		$('#sale_delivered').removeClass("border-gray");
+        		$('#sale_delivered').addClass("border-green");
+        		$('#sale_delivered').find("span").removeClass("border-gray-span");
+        		$('#sale_delivered').find("span").addClass("border-green-span");
+        		$('#sale_delivered_img').attr('src','/skit_website_wet_market/static/src/img/delivered_green.png');
+        		$('#msale_deliver_img').attr('src','/skit_website_wet_market/static/src/img/delivered_green.png');
+        		$('.icon_delivered').addClass("active_back");
+        	}
+        });
+	}
+	
+	var invoice_url = window.location.href;
+	var invoice = invoice_url.match(/my\/invoices\/([0-9]+)/);
+	if(invoice != null){
+		var invoice_id = invoice[1];
+		var url = "/sorder/invoice/" + parseInt(invoice_id);
+        ajax.jsonRpc(url, 'call', {}).then(function (data) {
+        	if(data['state'] == "sale"){
+        		$('#sale_confirm').removeClass("border-gray");
+        		$('#sale_confirm').addClass("border-green");
+        		$('#sale_confirm').find("span").removeClass("border-gray-span");
+        		$('#sale_confirm').find("span").addClass("border-green-span");
+        		$('#sale_confirm_img').attr('src','/skit_website_wet_market/static/src/img/confirmed_green.png');
+        		$('#msale_confirm_img').attr('src','/skit_website_wet_market/static/src/img/confirmed_green.png');
+        		$('.icon_confirm').addClass("active_back");
+        		$('.conf_vertical_ln').addClass("active_ln");
+        		window.location.href="/my/invoices/"+data['invoice']
+        	}
+        	else if(data['state'] == "preparing"){
+        		$('#sale_preparing').removeClass("border-gray");
+        		$('#sale_preparing').addClass("border-green");
+        		$('#sale_preparing').find("span").removeClass("border-gray-span");
+        		$('#sale_preparing').find("span").addClass("border-green-span");
+        		$('#sale_preparing_img').attr('src','/skit_website_wet_market/static/src/img/preparing_green.png');
+        		$('#msale_prepare_img').attr('src','/skit_website_wet_market/static/src/img/preparing_green.png');
+        		$('.icon_preparing').addClass("active_back");
+        		$('.prepare_vertical_ln').addClass("active_ln");
+        	}
+        	else if(data['state'] == "ready"){
+        		$('#sale_ready').removeClass("border-gray");
+        		$('#sale_ready').addClass("border-green");
+        		$('#sale_ready').find("span").removeClass("border-gray-span");
+        		$('#sale_ready').find("span").addClass("border-green-span");
+        		$('#sale_ready_img').attr('src','/skit_website_wet_market/static/src/img/ready_green.png');
+        		$('#msale_ready_img').attr('src','/skit_website_wet_market/static/src/img/ready_green.png');
+        		$('.icon_ready').addClass("active_back");
+        		$('.ready_vertical_ln').addClass("active_ln");
+        	}
+        	else if(data['state'] == "delivered" || data['state'] == "payment"){
         		$('#sale_delivered').removeClass("border-gray");
         		$('#sale_delivered').addClass("border-green");
         		$('#sale_delivered').find("span").removeClass("border-gray-span");
@@ -84,6 +134,25 @@ setInterval(function(){
 			ajax.jsonRpc('/signup/resend/otp', 'call', post).then(function (modal) { 
         		alertify.alert("Success", "OTP has been resend to your email address.");
         	});
+		});
+		$('.cancel_order').click(function(){
+			var order_id = $(this).attr('id');
+			alertify.confirm("Are you sure want to delete this order?",
+					function(){
+				var post = {}
+				post['order_id'] = order_id;
+				ajax.jsonRpc('/saleorder/delete', 'call', post).then(function (modal) { 
+					alertify.alert()
+					  .setting({
+					    'label':'Goto Shop',
+					    'message': 'Your order canceled. ',
+					    'onok': function(){ window.location="/shop";}
+					  }).show();
+	        	});
+			},
+			function(){
+				
+			});
 		});
 	});
 	$(function(){
@@ -253,7 +322,10 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
         	 }else{
         		 self.rootShopProduct = {
         				 product_id: prod_id,
-        				 quantity: cart_qty
+        				 quantity: cart_qty,
+        				 product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
+        	             variant_values: self.getSelectedVariantValues($form.find('.js_product')),
+        	             no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product'))
         	     };
 
         		 self.optionalShopProductsModal = new OptionalShopProductsModal($form, {

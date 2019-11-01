@@ -331,6 +331,7 @@
     box-shadow: 0 0 9px 4px #CCC;
 }
 }
+
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
 #products_grid table tr{
 	display: unset;
@@ -396,6 +397,15 @@
     padding: 50px 40px 70px 40px;
     display: block;
     z-index: 100;
+}
+.w100{
+	width:100%;
+}
+.cancel_order{
+	width: 20%;
+    float: right;
+    margin-bottom: 2%;
+    display: inline-block;
 }
 .shop-prod,#shop_add_to_cart{
 	display: none;
