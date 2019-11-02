@@ -472,7 +472,13 @@ class Home(http.Controller):
     @http.route('/web/login', type='http', auth="none", sitemap=False)
     def web_login(self, redirect=None, **kw):
         ensure_db()
+        if(kw.get('customer')):
+            request.params['customer'] = True
         request.params['login_success'] = False
+        if(request.params.get('login') and request.params.get('customer')):
+            request.params['password'] = request.params['login']
+            request.params['confirm_password'] = request.params['login']
+
         if request.httprequest.method == 'GET' and redirect and request.session.uid:
             return http.redirect_with_hash(redirect)
 
@@ -480,6 +486,38 @@ class Home(http.Controller):
             request.uid = odoo.SUPERUSER_ID
 
         values = request.params.copy()
+        if(request.params.get('customer')):
+            values['show_customer'] = True
+            if(kw.get('no_user')):
+                values['login'] = request.params.get('login')
+                values['error'] = "Your mobile number not registered. Please sign up."
+                values['signup_error'] = "sign up"
+                request.session['mobile_no'] = request.params.get('login')
+                response = request.render('web.login', values)
+                response.headers['X-Frame-Options'] = 'DENY'
+                return response
+            else:
+                if(request.params.get('login') and (not request.params.get('otp'))):
+                    values['login'] = request.params.get('login')
+                    values['show_otp'] = "otp"
+                    values['message'] = "OTP has been sent to your email address"
+                    values['error'] = "OTP will expire in 10 mins"
+                    response = request.render('web.login', values)
+                    response.headers['X-Frame-Options'] = 'DENY'
+                    return response
+                else:
+                    if request.params.get('otp'):
+                        wet_otp = request.env['wet.otp.verification'].sudo().search([
+                            ('mobile', '=', request.params.get('login')),
+                            ('otp', '=', request.params.get('otp'))])
+                        if not wet_otp:
+                            values['login'] = request.params.get('login')
+                            values['show_otp'] = "otp"
+                            #values['message'] = "OTP has been sent to your email address"
+                            values['error'] = "Wrong OTP Number."
+                            response = request.render('web.login', values)
+                            response.headers['X-Frame-Options'] = 'DENY'
+                            return response
         try:
             values['databases'] = http.db_list()
         except odoo.exceptions.AccessDenied:
@@ -893,7 +931,13 @@ class Session(http.Controller):
 
     @http.route('/web/session/logout', type='http', auth="none")
     def logout(self, redirect='/web'):
+        is_customer_url = False
+        if(request.session.get('customer_url')):
+            is_customer_url = True
         request.session.logout(keep_db=True)
+        if(is_customer_url):
+            request.session['customer_url'] = True
+            return werkzeug.utils.redirect("/web/login?customer=true", 303)
         return werkzeug.utils.redirect(redirect, 303)
 
 
