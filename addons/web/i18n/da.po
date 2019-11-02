@@ -3,27 +3,28 @@
 # * web
 # 
 # Translators:
-# Martin Trigaux, 2018
-# Hans Henrik Gabelgaard <hhg@gabelgaard.org>, 2018
 # Kenneth Hansen <kenneth@vkdata.dk>, 2018
-# Morten Schou <ms@msteknik.dk>, 2018
 # Jesper Carstensen <jc@danodoo.dk>, 2018
-# Jarnhold Nattestad <nattestads@gmail.com>, 2018
-# Pernille Kristensen <pernillekristensen1994@gmail.com>, 2018
-# Sanne Kristensen <sanne@vkdata.dk>, 2018
-# Ejner Sønniksen <ejner@vkdata.dk>, 2018
-# lhmflexerp <lhm@flexerp.dk>, 2018
 # peso <peer.sommerlund@gmail.com>, 2018
-# jonas jensen <j.jensen@tcomp.dk>, 2018
 # Visti Kristensen <visti@vkdata.dk>, 2018
 # Jonathan Stein <cgs@image.dk>, 2018
+# Hans Henrik Gabelgaard <hhg@gabelgaard.org>, 2018
+# jonas jensen <j.jensen@tcomp.dk>, 2018
+# Morten Schou <ms@msteknik.dk>, 2018
+# Jarnhold Nattestad <nattestads@gmail.com>, 2018
+# lhmflexerp <lhm@flexerp.dk>, 2018
+# Sanne Kristensen <sanne@vkdata.dk>, 2018
+# Martin Trigaux, 2019
+# Pernille Kristensen <pernillekristensen1994@gmail.com>, 2019
+# Ejner Sønniksen <ejner@vkdata.dk>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:49+0000\n"
-"PO-Revision-Date: 2018-10-08 06:49+0000\n"
-"Last-Translator: Jonathan Stein <cgs@image.dk>, 2018\n"
+"POT-Creation-Date: 2019-02-13 07:03+0000\n"
+"PO-Revision-Date: 2018-08-24 09:33+0000\n"
+"Last-Translator: Ejner Sønniksen <ejner@vkdata.dk>, 2019\n"
 "Language-Team: Danish (https://www.transifex.com/odoo/teams/41243/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -59,7 +60,7 @@ msgstr "eller"
 #: code:addons/web/static/src/js/views/kanban/kanban_column.js:156
 #, python-format
 msgid " records"
-msgstr "poster"
+msgstr "posteringer"
 
 #. module: web
 #. openerp-web
@@ -187,13 +188,6 @@ msgstr "'%s' kan ikke konverteres til dato, datotid eller tid"
 
 #. module: web
 #. openerp-web
-#: code:addons/web/static/src/xml/menu.xml:101
-#, python-format
-msgid "(Enterprise Edition)"
-msgstr "(Enterprise udgave)"
-
-#. module: web
-#. openerp-web
 #: code:addons/web/static/src/xml/base.xml:298
 #, python-format
 msgid "(change)"
@@ -229,8 +223,28 @@ msgid "1 record"
 msgstr ""
 
 #. module: web
+#: model_terms:ir.ui.view,arch_db:web.external_layout_background
+msgid "<i class=\"fa fa-at\" role=\"img\" aria-label=\"Email\" title=\"Email\"/>"
+msgstr ""
+
+#. module: web
+#: model_terms:ir.ui.view,arch_db:web.external_layout_background
+msgid "<i class=\"fa fa-building-o\" role=\"img\" aria-label=\"Fiscal number\"/>"
+msgstr ""
+
+#. module: web
+#: model_terms:ir.ui.view,arch_db:web.external_layout_background
+msgid "<i class=\"fa fa-globe\" role=\"img\" aria-label=\"Website\" title=\"Website\"/>"
+msgstr ""
+
+#. module: web
+#: model_terms:ir.ui.view,arch_db:web.external_layout_background
+msgid "<i class=\"fa fa-phone\" role=\"img\" aria-label=\"Phone\" title=\"Phone\"/>"
+msgstr ""
+
+#. module: web
 #. openerp-web
-#: code:addons/web/static/src/js/chrome/action_manager.js:577
+#: code:addons/web/static/src/js/chrome/action_manager.js:574
 #, python-format
 msgid ""
 "A popup window has been blocked. You may need to change your browser "
@@ -368,7 +382,7 @@ msgstr "Tilføj betingelse"
 #: code:addons/web/static/src/js/views/list/list_editable_renderer.js:78
 #, python-format
 msgid "Add a line"
-msgstr ""
+msgstr "Tilføj en linje"
 
 #. module: web
 #. openerp-web
@@ -621,7 +635,7 @@ msgstr "Tilgængelige felter"
 #: code:addons/web/static/src/xml/web_calendar.xml:56
 #, python-format
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #. module: web
 #. openerp-web
@@ -890,7 +904,7 @@ msgstr "Kontrol"
 #: code:addons/web/static/src/js/services/crash_manager.js:129
 #, python-format
 msgid "Copied !"
-msgstr "Kopieret !"
+msgstr "Kopieret!"
 
 #. module: web
 #. openerp-web
@@ -898,7 +912,7 @@ msgstr "Kopieret !"
 #: code:addons/web/static/src/xml/base.xml:961
 #, python-format
 msgid "Copy Text"
-msgstr "Kopiér Tekst"
+msgstr "Kopiér tekst"
 
 #. module: web
 #. openerp-web
@@ -1079,13 +1093,7 @@ msgstr "Database"
 
 #. module: web
 #. openerp-web
-#: code:addons/web/static/src/xml/menu.xml:107
-#, python-format
-msgid "Database expiration:"
-msgstr "Database udløb:"
-
-#. module: web
-#. openerp-web
+#: code:addons/web/static/src/js/views/search/groupby_menu.js:52
 #: code:addons/web/static/src/xml/base.xml:558
 #: code:addons/web/static/src/xml/web_calendar.xml:80
 #, python-format
@@ -1196,7 +1204,7 @@ msgstr "Er du sikker på du vil slette dette filter fra favoritter?"
 #. module: web
 #: model:ir.model.fields,field_description:web.field_report_layout__view_id
 msgid "Document Template"
-msgstr "Dokument Skabelon"
+msgstr "Dokument skabelon"
 
 #. module: web
 #. openerp-web
@@ -1232,7 +1240,7 @@ msgstr "Domæne:"
 #: code:addons/web/static/src/js/core/misc.js:16
 #, python-format
 msgid "Don't leave yet,<br />it's still loading..."
-msgstr "Forlad ikke,<br />indlæser stadigt..."
+msgstr "Forlad ikke siden endnu,<br />indlæser stadigt..."
 
 #. module: web
 #. openerp-web
@@ -1247,7 +1255,7 @@ msgstr "Download xls"
 #: code:addons/web/static/src/xml/base.xml:1556
 #, python-format
 msgid "Dropdown menu"
-msgstr ""
+msgstr "Dropdown menu"
 
 #. module: web
 #. openerp-web
@@ -1287,7 +1295,7 @@ msgstr "Redigér fase"
 #: code:addons/web/static/src/xml/base.xml:608
 #, python-format
 msgid "Edit Domain"
-msgstr "Redigér Domæne"
+msgstr "Redigér domæne"
 
 #. module: web
 #. openerp-web
@@ -1340,7 +1348,7 @@ msgstr "Fejl"
 #: code:addons/web/controllers/main.py:823
 #, python-format
 msgid "Error, password not changed !"
-msgstr "Fejl, password ikke ændret !"
+msgstr "Fejl, password ikke ændret!"
 
 #. module: web
 #. openerp-web
@@ -1426,7 +1434,7 @@ msgstr "Eksternt ID"
 #: code:addons/web/static/src/xml/base.xml:826
 #, python-format
 msgid "External link"
-msgstr ""
+msgstr "Eksternt link"
 
 #. module: web
 #. openerp-web
@@ -1639,9 +1647,16 @@ msgid "Group by: %s"
 msgstr "Sortér efter: %s"
 
 #. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/graph/graph_renderer.js:214
+#, python-format
+msgid "Grouped"
+msgstr "Grupperet"
+
+#. module: web
 #: model:ir.model,name:web.model_ir_http
 msgid "HTTP Routing"
-msgstr ""
+msgstr "HTTP Routing"
 
 #. module: web
 #. openerp-web
@@ -1856,7 +1871,7 @@ msgstr "Sidst opdateret den"
 #: code:addons/web/static/src/js/views/search/time_range_menu_options.js:17
 #, python-format
 msgid "Last Week"
-msgstr "Sidste Uge"
+msgstr "Sidste uge"
 
 #. module: web
 #. openerp-web
@@ -2111,6 +2126,7 @@ msgstr "Modifikationer:"
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/search/groupby_menu.js:54
 #: code:addons/web/static/src/xml/base.xml:560
 #: code:addons/web/static/src/xml/web_calendar.xml:82
 #, python-format
@@ -2281,7 +2297,6 @@ msgstr "Objekt:"
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/core/dialog.js:59
-#: code:addons/web/static/src/xml/menu.xml:100
 #, python-format
 msgid "Odoo"
 msgstr "Odoo"
@@ -2377,6 +2392,12 @@ msgstr "Ved ændring:"
 #, python-format
 msgid "Only Integer Value should be valid."
 msgstr "Kun hele tal bør være gyldige."
+
+#. module: web
+#: code:addons/web/static/src/js/fields/basic_fields.js:1982
+#, python-format
+msgid "Only Integer or Float Value should be valid."
+msgstr ""
 
 #. module: web
 #: code:addons/web/controllers/main.py:502
@@ -2617,6 +2638,7 @@ msgstr ""
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/xml/base.xml:741
+#: code:addons/web/static/src/xml/base.xml:1505
 #: code:addons/web/static/src/xml/web_calendar.xml:75
 #, python-format
 msgid "Previous"
@@ -2655,6 +2677,7 @@ msgstr ""
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/search/groupby_menu.js:55
 #: code:addons/web/static/src/xml/base.xml:561
 #, python-format
 msgid "Quarter"
@@ -2738,7 +2761,7 @@ msgstr "Fjern alle"
 #: code:addons/web/static/src/js/fields/basic_fields.js:1966
 #, python-format
 msgid "Remove from Favorites"
-msgstr "Fjern fra Favoritter"
+msgstr "Fjern fra favoritter"
 
 #. module: web
 #. openerp-web
@@ -2848,7 +2871,7 @@ msgstr ""
 #: code:addons/web/static/src/js/views/view_dialogs.js:146
 #, python-format
 msgid "Save & New"
-msgstr "Gem & Ny"
+msgstr "Gem & ny"
 
 #. module: web
 #. openerp-web
@@ -3060,6 +3083,13 @@ msgstr "Speciel:"
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/graph/graph_renderer.js:215
+#, python-format
+msgid "Stacked"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/js/core/misc.js:14
 #, python-format
 msgid "Still loading..."
@@ -3070,7 +3100,7 @@ msgstr "Indlæser stadigt..."
 #: code:addons/web/static/src/js/core/misc.js:15
 #, python-format
 msgid "Still loading...<br />Please be patient."
-msgstr "Indlæser stadig... <br />Vent Venligst."
+msgstr "Indlæser stadig... <br />Vent venligst."
 
 #. module: web
 #. openerp-web
@@ -3235,7 +3265,7 @@ msgstr "Fejl ved upload af din fil"
 #: code:addons/web/static/src/js/views/search/time_range_menu_options.js:13
 #, python-format
 msgid "This Month"
-msgstr "Denne Måned"
+msgstr "Denne måned"
 
 #. module: web
 #. openerp-web
@@ -3547,6 +3577,14 @@ msgstr "Fejl ved godkendelse"
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/pivot/pivot_model.js:240
+#: code:addons/web/static/src/js/views/pivot/pivot_renderer.js:174
+#, python-format
+msgid "Variation"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/js/tools/debug_manager.js:287
 #: code:addons/web/static/src/xml/base.xml:258
 #, python-format
@@ -3603,6 +3641,7 @@ msgstr "Web:"
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/search/groupby_menu.js:53
 #: code:addons/web/static/src/xml/base.xml:559
 #: code:addons/web/static/src/xml/web_calendar.xml:81
 #, python-format
@@ -3659,6 +3698,7 @@ msgstr "XML ID:"
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/search/groupby_menu.js:56
 #: code:addons/web/static/src/xml/base.xml:562
 #, python-format
 msgid "Year"
@@ -3748,7 +3788,8 @@ msgstr ""
 #: code:addons/web/static/src/js/services/crash_manager.js:212
 #, python-format
 msgid "Your Odoo session expired. Please refresh the current web page."
-msgstr "Din OpenERP session er udløbet. Genindlæs aktuelle web side."
+msgstr ""
+"Din Odoo session er udløbet. Genindlæs venligst den aktuelle web side."
 
 #. module: web
 #. openerp-web
@@ -3778,14 +3819,14 @@ msgstr "en dag siden"
 #: code:addons/web/static/src/js/core/translation.js:109
 #, python-format
 msgid "about a minute ago"
-msgstr "For ca. et minut siden"
+msgstr "for ca. et minut siden"
 
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/js/core/translation.js:115
 #, python-format
 msgid "about a month ago"
-msgstr "For ca. en måned siden"
+msgstr "for ca. en måned siden"
 
 #. module: web
 #. openerp-web
@@ -3799,7 +3840,7 @@ msgstr "cirka et år siden"
 #: code:addons/web/static/src/js/core/translation.js:111
 #, python-format
 msgid "about an hour ago"
-msgstr "For ca. en time siden"
+msgstr "for ca. en time siden"
 
 #. module: web
 #. openerp-web
@@ -3879,10 +3920,24 @@ msgstr "er efter"
 
 #. module: web
 #. openerp-web
+#: code:addons/web/static/src/js/views/search/search_filters.js:190
+#, python-format
+msgid "is after or equal to"
+msgstr ""
+
+#. module: web
+#. openerp-web
 #: code:addons/web/static/src/js/views/search/search_filters.js:189
 #, python-format
 msgid "is before"
 msgstr "er før"
+
+#. module: web
+#. openerp-web
+#: code:addons/web/static/src/js/views/search/search_filters.js:191
+#, python-format
+msgid "is before or equal to"
+msgstr ""
 
 #. module: web
 #. openerp-web

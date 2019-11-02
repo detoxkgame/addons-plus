@@ -6,15 +6,17 @@
 # Martin Trigaux, 2018
 # Ricardo Martins <ricardo.nbs.martins@gmail.com>, 2018
 # Ricardo Correia <rcorreiavv@gmail.com>, 2018
-# MS, 2018
+# MS <manuelarodsilva@gmail.com>, 2018
 # Nuno Silva <nuno.silva@arxi.pt>, 2018
+# Diogo Fonseca <dsf@thinkopensolutions.pt>, 2018
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:49+0000\n"
-"PO-Revision-Date: 2018-10-08 06:49+0000\n"
-"Last-Translator: Nuno Silva <nuno.silva@arxi.pt>, 2018\n"
+"POT-Creation-Date: 2019-03-29 10:09+0000\n"
+"PO-Revision-Date: 2018-08-24 09:17+0000\n"
+"Last-Translator: Diogo Fonseca <dsf@thinkopensolutions.pt>, 2018\n"
 "Language-Team: Portuguese (https://www.transifex.com/odoo/teams/41243/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,11 +66,20 @@ msgstr ""
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_order_form_with_carrier
 msgid "<i class=\"fa fa-arrow-right\"/> Add to order"
-msgstr ""
+msgstr "<i class=\"fa fa-arrow-right\"/>Adicionar à Venda"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_order_form_with_carrier
 msgid "<i class=\"fa fa-arrow-right\"/> Get rate"
+msgstr ""
+
+#. module: delivery
+#: model_terms:ir.ui.view,arch_db:delivery.view_order_form_with_carrier
+msgid ""
+"<i class=\"fa fa-check text-success\" role=\"img\" aria-label=\"Rating OK\" "
+"title=\"Rating OK\" "
+"attrs=\"{'invisible':['|','|',('carrier_id','=',False),('state','not "
+"in',('draft','sent')),('delivery_rating_success','=',False)]}\"/>"
 msgstr ""
 
 #. module: delivery
@@ -81,11 +92,6 @@ msgid ""
 msgstr ""
 
 #. module: delivery
-#: model_terms:ir.ui.view,arch_db:delivery.choose_delivery_package_view_form
-msgid "<span>kg</span>"
-msgstr "<span>kg</span>"
-
-#. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.report_delivery_document2
 #: model_terms:ir.ui.view,arch_db:delivery.report_shipping2
 msgid "<strong>Carrier</strong>"
@@ -94,12 +100,12 @@ msgstr "<strong>Transportadora</strong>"
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.report_delivery_document2
 msgid "<strong>Shipping Weight</strong>"
-msgstr ""
+msgstr "<strong>Peso da encomenda</strong>"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.report_delivery_document2
 msgid "<strong>Tracking Number</strong>"
-msgstr ""
+msgstr "<strong>Número do localizador</strong>"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.report_shipping2
@@ -138,7 +144,7 @@ msgstr "Arquivado"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_sale_order__available_carrier_ids
 msgid "Available Carriers"
-msgstr ""
+msgstr "Transportadores Disponíveis "
 
 #. module: delivery
 #: selection:delivery.carrier,delivery_type:0
@@ -178,7 +184,7 @@ msgstr "Condição"
 #. module: delivery
 #: model:ir.model,name:delivery.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "config configurações"
 
 #. module: delivery
 #: model:ir.model,name:delivery.model_res_partner
@@ -212,7 +218,7 @@ msgstr ""
 #. module: delivery
 #: model_terms:ir.actions.act_window,help:delivery.action_delivery_carrier_form
 msgid "Define a new delivery method"
-msgstr ""
+msgstr "Definir novo método de entrega."
 
 #. module: delivery
 #: model:product.category,name:delivery.product_category_deliveries
@@ -232,21 +238,22 @@ msgstr ""
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_delivery_price_rule_form
 msgid "Delivery Cost"
-msgstr ""
+msgstr "Custo de entrega"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_picking_withcarrier_out_form
 msgid "Delivery Information"
-msgstr ""
+msgstr "Informação da Entrega"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_sale_order__delivery_message
 msgid "Delivery Message"
-msgstr ""
+msgstr "Mensagem de Entrega"
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_delivery_carrier__name
 #: model:ir.model.fields,field_description:delivery.field_res_partner__property_delivery_carrier_id
+#: model:ir.model.fields,field_description:delivery.field_res_users__property_delivery_carrier_id
 #: model:ir.model.fields,field_description:delivery.field_sale_order__carrier_id
 msgid "Delivery Method"
 msgstr "Método de Entrega"
@@ -296,7 +303,7 @@ msgstr ""
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_delivery_carrier_form
 msgid "Destination Availability"
-msgstr ""
+msgstr "Disponibilidade de Destino"
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_delivery_carrier__sequence
@@ -382,7 +389,7 @@ msgstr ""
 #. module: delivery
 #: selection:delivery.carrier,integration_level:0
 msgid "Get Rate"
-msgstr ""
+msgstr "Receber taxa"
 
 #. module: delivery
 #: selection:delivery.carrier,integration_level:0
@@ -566,20 +573,20 @@ msgstr "Pacote"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_product_packaging__shipper_package_code
 msgid "Package Code"
-msgstr ""
+msgstr "Código da encomenda"
 
 #. module: delivery
 #: code:addons/delivery/models/stock_picking.py:35
 #: code:addons/delivery/models/stock_picking.py:122
 #, python-format
 msgid "Package Details"
-msgstr ""
+msgstr "Detalhes da Encomenda"
 
 #. module: delivery
 #: code:addons/delivery/wizard/choose_delivery_package.py:52
 #, python-format
 msgid "Package too heavy!"
-msgstr ""
+msgstr "Encomenda demasiado pesada"
 
 #. module: delivery
 #: model:ir.model,name:delivery.model_stock_quant_package
@@ -590,7 +597,7 @@ msgstr "Bateladas"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_choose_delivery_package__stock_quant_package_id
 msgid "Physical Package"
-msgstr ""
+msgstr "Bateladas Físicas"
 
 #. module: delivery
 #: code:addons/delivery/models/sale_order.py:82
@@ -625,7 +632,7 @@ msgstr "Regras de Preços"
 #. module: delivery
 #: model:ir.model,name:delivery.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
-msgstr ""
+msgstr "Movimentos do produto (movimentos de stock)"
 
 #. module: delivery
 #: model:ir.model,name:delivery.model_product_packaging
@@ -679,7 +686,7 @@ msgstr "Guardar"
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_picking_withcarrier_out_form
 msgid "Send Confirmation Email"
-msgstr ""
+msgstr "Enviar email de confirmação"
 
 #. module: delivery
 #: model_terms:ir.ui.view,arch_db:delivery.view_picking_withcarrier_out_form
@@ -766,6 +773,7 @@ msgstr ""
 
 #. module: delivery
 #: model:ir.model.fields,help:delivery.field_res_partner__property_delivery_carrier_id
+#: model:ir.model.fields,help:delivery.field_res_users__property_delivery_carrier_id
 msgid "This delivery method will be used when invoicing from picking."
 msgstr "Este método de entrega será usado quando a faturação do picking."
 
@@ -787,12 +795,12 @@ msgstr "Rastreamento"
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_stock_picking__carrier_tracking_ref
 msgid "Tracking Reference"
-msgstr ""
+msgstr "Referencia do rastreamento "
 
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_stock_picking__carrier_tracking_url
 msgid "Tracking URL"
-msgstr ""
+msgstr "Rastreamento URL"
 
 #. module: delivery
 #: model:ir.model,name:delivery.model_stock_picking
@@ -860,6 +868,11 @@ msgstr ""
 #. module: delivery
 #: model:ir.model.fields,field_description:delivery.field_stock_picking__shipping_weight
 msgid "Weight for Shipping"
+msgstr ""
+
+#. module: delivery
+#: model:ir.model.fields,field_description:delivery.field_choose_delivery_package__weight_uom_name
+msgid "Weight unit of measure label"
 msgstr ""
 
 #. module: delivery

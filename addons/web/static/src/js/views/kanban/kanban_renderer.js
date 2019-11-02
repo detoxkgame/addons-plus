@@ -127,6 +127,7 @@ var KanbanRenderer = BasicRenderer.extend({
      * Called each time the renderer is attached into the DOM.
      */
     on_attach_callback: function () {
+        this._isInDom = true;
         _.invoke(this.widgets, 'on_attach_callback');
         if (this.quickCreate) {
             this.quickCreate.on_attach_callback();
@@ -136,6 +137,7 @@ var KanbanRenderer = BasicRenderer.extend({
      * Called each time the renderer is detached from the DOM.
      */
     on_detach_callback: function () {
+        this._isInDom = false;
         _.invoke(this.widgets, 'on_detach_callback');
     },
 
@@ -242,7 +244,6 @@ var KanbanRenderer = BasicRenderer.extend({
      */
     updateState: function (state) {
         this._setState(state);
-        this._toggleNoContentHelper();
         return this._super.apply(this, arguments);
     },
 
@@ -377,13 +378,11 @@ var KanbanRenderer = BasicRenderer.extend({
      * @private
      */
     _renderView: function () {
+        var self = this;
         var oldWidgets = this.widgets;
         this.widgets = [];
-        this.$el.empty();
 
         var isGrouped = !!this.state.groupedBy.length;
-        this.$el.toggleClass('o_kanban_grouped', isGrouped);
-        this.$el.toggleClass('o_kanban_ungrouped', !isGrouped);
         var fragment = document.createDocumentFragment();
         // render the kanban view
         this.defs = [];
@@ -392,12 +391,19 @@ var KanbanRenderer = BasicRenderer.extend({
         } else {
             this._renderUngrouped(fragment);
         }
-        this.$el.append(fragment);
-        this._toggleNoContentHelper();
         var defs = this.defs;
-        return this._super.apply(this, arguments).then(function () {
+        delete this.defs;
+        defs.push(this._super.apply(this, arguments));
+        return $.when.apply($, defs).then(function () {
             _.invoke(oldWidgets, 'destroy');
-            return $.when.apply(null, defs);
+            self.$el.empty();
+            self.$el.toggleClass('o_kanban_grouped', isGrouped);
+            self.$el.toggleClass('o_kanban_ungrouped', !isGrouped);
+            self.$el.append(fragment);
+            self._toggleNoContentHelper();
+            if (self._isInDom) {
+                _.invoke(self.widgets, 'on_attach_callback');
+            }
         });
     },
     /**
@@ -430,7 +436,8 @@ var KanbanRenderer = BasicRenderer.extend({
     _setState: function (state) {
         this.state = state;
 
-        var groupByField = state.groupedBy[0];
+        // split groupedBy field with ':' as it can be date/datetime field
+        var groupByField = state.groupedBy.length && state.groupedBy[0].split(":")[0];
         var groupByFieldAttrs = state.fields[groupByField];
         var groupByFieldInfo = state.fieldsInfo.kanban[groupByField];
         // Deactivate the drag'n'drop if the groupedBy field:

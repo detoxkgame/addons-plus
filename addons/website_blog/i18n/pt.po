@@ -3,19 +3,22 @@
 # * website_blog
 # 
 # Translators:
-# Martin Trigaux, 2018
 # Manuela Silva <inactive+h_manuela_rodsilva@transifex.com>, 2018
 # Ricardo Martins <ricardo.nbs.martins@gmail.com>, 2018
-# MS, 2018
 # Joao Felix <jrmfelix@gmail.com>, 2018
 # Nuno Silva <nuno.silva@arxi.pt>, 2018
+# Martin Trigaux, 2018
+# Manuela Silva <manuelarodsilva@gmail.com>, 2018
+# Diogo Fonseca <dsf@thinkopensolutions.pt>, 2018
+# Pedro Castro Silva <pedrocs@exo.pt>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:49+0000\n"
-"PO-Revision-Date: 2018-10-08 06:49+0000\n"
-"Last-Translator: Nuno Silva <nuno.silva@arxi.pt>, 2018\n"
+"POT-Creation-Date: 2019-01-09 10:32+0000\n"
+"PO-Revision-Date: 2018-08-24 09:33+0000\n"
+"Last-Translator: Pedro Castro Silva <pedrocs@exo.pt>, 2019\n"
 "Language-Team: Portuguese (https://www.transifex.com/odoo/teams/41243/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -172,8 +175,40 @@ msgid ""
 msgstr ""
 
 #. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.blog_post_view_kanban
+msgid "<i class=\"fa fa-clock-o\" role=\"img\" aria-label=\"Post date\" title=\"Post date\"/>"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.tag_category
+msgid ""
+"<i class=\"fa fa-tag\" role=\"img\" aria-label=\"Tag category\" title=\"Tag "
+"category\"/>"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
+msgid ""
+"<span class=\"fa fa-calendar mr8\" role=\"img\" aria-label=\"Post date\" "
+"title=\"Post date\"/>"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
+msgid ""
+"<span class=\"fa fa-exclamation-triangle ml8\" title=\"Unpublished\" "
+"role=\"img\" aria-label=\"Unpublished\"/>"
+msgstr ""
+
+#. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.latest_blogs
 msgid "<span class=\"fa fa-folder-open\"/> In"
+msgstr ""
+
+#. module: website_blog
+#: model_terms:ir.ui.view,arch_db:website_blog.blog_post_complete
+#: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
+msgid "<span class=\"fa fa-tags\" role=\"img\" aria-label=\"Tags\" title=\"Tags\"/>"
 msgstr ""
 
 #. module: website_blog
@@ -269,7 +304,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_attachment_count
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Conta Anexada"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__author_id
@@ -550,7 +585,7 @@ msgstr "Seguidores (Parceiros)"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
 msgid "Full Screen"
-msgstr ""
+msgstr "Ecrã completo"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_1
@@ -639,7 +674,7 @@ msgstr "Se selecionado, as novas mensagens requerem a sua atenção."
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_has_error
 #: model:ir.model.fields,help:website_blog.field_blog_post__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Se selecionado, algumas mensagens tem um erro de entrega."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
@@ -723,7 +758,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
 msgid "LinkedIn"
-msgstr ""
+msgstr "LinkedIn"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -734,7 +769,7 @@ msgstr "Baixo"
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_main_attachment_id
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Anexos Principais"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.website_blog
@@ -745,7 +780,7 @@ msgstr "Médio"
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_has_error
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Gerir erro de entrega"
 
 #. module: website_blog
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_ids
@@ -849,7 +884,7 @@ msgstr "Número de Ações"
 #: model:ir.model.fields,field_description:website_blog.field_blog_blog__message_has_error_counter
 #: model:ir.model.fields,field_description:website_blog.field_blog_post__message_has_error_counter
 msgid "Number of error"
-msgstr ""
+msgstr "Número de erro"
 
 #. module: website_blog
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_needaction_counter
@@ -861,7 +896,7 @@ msgstr "Número de mensagens que requerem uma ação"
 #: model:ir.model.fields,help:website_blog.field_blog_blog__message_has_error_counter
 #: model:ir.model.fields,help:website_blog.field_blog_post__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Numero de mensagens com um Erro de entrega."
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.s_latest_posts_options
@@ -1207,7 +1242,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_blog.blog_post_short
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_follow_us
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.opt_blog_rc_status

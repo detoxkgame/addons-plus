@@ -234,15 +234,13 @@ class CustomerPortal(Controller):
         document = request.env[model_name].browse([document_id])
         document_sudo = document.sudo().exists()
         if not document_sudo:
-            raise MissingError("This document does not exist.")
-        #=======================================================================
-        # try:
-        #     document.check_access_rights('read')
-        #     document.check_access_rule('read')
-        # except AccessError:
-        #     if not access_token or not consteq(document_sudo.access_token, access_token):
-        #         raise
-        #=======================================================================
+            raise MissingError(_("This document does not exist."))
+        try:
+            document.check_access_rights('read')
+            document.check_access_rule('read')
+        except AccessError:
+            if not access_token or not consteq(document_sudo.access_token, access_token):
+                raise
         return document_sudo
 
     def _get_page_view_values(self, document, access_token, values, session_history, no_breadcrumbs, **kwargs):
@@ -271,12 +269,12 @@ class CustomerPortal(Controller):
 
     def _show_report(self, model, report_type, report_ref, download=False):
         if report_type not in ('html', 'pdf', 'text'):
-            raise UserError("Invalid report type: %s" % report_type)
+            raise UserError(_("Invalid report type: %s") % report_type)
 
         report_sudo = request.env.ref(report_ref).sudo()
 
         if not isinstance(report_sudo, type(request.env['ir.actions.report'])):
-            raise UserError("%s is not the reference of a report" % report_ref)
+            raise UserError(_("%s is not the reference of a report") % report_ref)
 
         method_name = 'render_qweb_%s' % (report_type)
         report = getattr(report_sudo, method_name)([model.id], data={'report_type': report_type})[0]

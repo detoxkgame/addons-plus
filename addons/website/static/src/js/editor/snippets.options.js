@@ -271,6 +271,7 @@ options.registry.carousel = options.Class.extend({
      * @override
      */
     _setActive: function () {
+        this._super.apply(this, arguments);
         this.$el.find('[data-interval]').removeClass('active')
             .filter('[data-interval=' + this.$target.attr('data-interval') + ']').addClass('active');
     },
@@ -641,11 +642,11 @@ var FacebookPageDialog = weWidgets.Dialog.extend({
      */
     _renderPreview: function () {
         var self = this;
-        var match = this.fbData.href.match(/^(?:https?:\/\/)?(?:www\.)?(?:fb|facebook)\.com\/(\w+)/);
+        var match = this.fbData.href.match(/^(?:https?:\/\/)?(?:www\.)?(?:fb|facebook)\.com\/(?:([\w.]+)|[^/?#]+-([0-9]{15,16}))(?:$|[\/?# ])/);
         if (match) {
             // Check if the page exists on Facebook or not
             $.ajax({
-                url: 'https://graph.facebook.com/' + match[1] + '/picture',
+                url: 'https://graph.facebook.com/' + (match[2] || match[1]) + '/picture',
                 statusCode: {
                     200: function () {
                         self._toggleWarning(true);

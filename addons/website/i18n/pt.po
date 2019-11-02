@@ -3,19 +3,23 @@
 # * website
 # 
 # Translators:
-# Martin Trigaux, 2018
-# Ricardo Martins <ricardo.nbs.martins@gmail.com>, 2018
-# MS, 2018
-# Nuno Silva <nuno.silva@arxi.pt>, 2018
 # Daniel C Santos <dcs@thinkopensolutions.pt>, 2018
 # Joao Felix <jrmfelix@gmail.com>, 2018
+# Martin Trigaux, 2018
+# Ricardo Martins <ricardo.nbs.martins@gmail.com>, 2018
+# Nuno Silva <nuno.silva@arxi.pt>, 2018
+# Diogo Fonseca <dsf@thinkopensolutions.pt>, 2018
+# Manuela Silva <manuelarodsilva@gmail.com>, 2018
+# Pedro Castro Silva <pedrocs@exo.pt>, 2019
+# Reinaldo Ramos <reinaldo.ramos@arxi.pt>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:48+0000\n"
-"PO-Revision-Date: 2018-10-08 06:48+0000\n"
-"Last-Translator: Joao Felix <jrmfelix@gmail.com>, 2018\n"
+"POT-Creation-Date: 2019-03-29 10:08+0000\n"
+"PO-Revision-Date: 2018-08-24 09:33+0000\n"
+"Last-Translator: Reinaldo Ramos <reinaldo.ramos@arxi.pt>, 2019\n"
 "Language-Team: Portuguese (https://www.transifex.com/odoo/teams/41243/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -76,6 +80,11 @@ msgstr "&times;"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.list_website_pages
 msgid "' did not match any pages."
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.500
+msgid "(!!! This view will be removed )"
 msgstr ""
 
 #. module: website
@@ -483,6 +492,11 @@ msgstr ""
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
+msgid "<i class=\"fa fa-minus\"/>Remove Tab"
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-minus\"/>Thickness"
 msgstr ""
 
@@ -500,6 +514,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-picture-o\"/>Background Image"
 msgstr "<i class=\"fa fa-picture-o\"/>Imagem de Fundo"
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.snippet_options
+msgid "<i class=\"fa fa-plus\"/>Add Tab"
+msgstr ""
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.language_selector
@@ -566,6 +585,28 @@ msgid "<i class=\"fa fa-trash-o\"/>Remove Slide"
 msgstr "<i class=\"fa fa-trash-o\"/>Remover Cursor"
 
 #. module: website
+#: model_terms:ir.ui.view,arch_db:website.list_website_pages
+msgid "<i title=\"Is the page SEO optimized?\" class=\"fa fa-search\"/>"
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.list_website_pages
+msgid ""
+"<i title=\"Is the page included in the main menu?\" class=\"fa fa-thumb-"
+"tack\"/>"
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.list_website_pages
+msgid "<i title=\"Is the page indexed by search engines?\" class=\"fa fa-globe\"/>"
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.list_website_pages
+msgid "<i title=\"Is the page published?\" class=\"fa fa-eye\"/>"
+msgstr ""
+
+#. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_comparisons
 msgid "<i>Instant setup, satisfied or reimbursed.</i>"
 msgstr "<i>Configuração instantânea, satisfeito ou reembolsado.</i>"
@@ -578,6 +619,9 @@ msgid ""
 "<p><b>That's it.</b> Your homepage is live.</p><p>Continue adding more pages"
 " to your site or edit this page to make it even more awesome.</p>"
 msgstr ""
+"<p><b>E é isto.</b> A sua página inicial está publicada.</p><p>Continue a "
+"adicionar mais páginas ao seu site ou edite esta página para a que fique "
+"ainda melhor.</p>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_page_ir_ui_view
@@ -609,6 +653,20 @@ msgid ""
 msgstr ""
 
 #. module: website
+#: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-globe\" title=\"Values set here are website-"
+"specific.\" groups=\"website.group_multi_website\"/>"
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.company_description
+msgid ""
+"<span class=\"fa fa-map-marker fa-fw mt16\" role=\"img\" aria-"
+"label=\"Address\" title=\"Address\"/>"
+msgstr ""
+
+#. module: website
 #: model_terms:ir.ui.view,arch_db:website.user_navbar
 msgid "<span class=\"fa fa-pencil\"/>Edit"
 msgstr "<span class=\"fa fa-pencil\"/>Editar"
@@ -617,6 +675,11 @@ msgstr "<span class=\"fa fa-pencil\"/>Editar"
 #: model_terms:ir.ui.view,arch_db:website.user_navbar
 msgid "<span class=\"fa fa-plus\"/>New"
 msgstr "<span class=\"fa fa-plus\"/>Novo"
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.list_website_pages
+msgid "<span class=\"fa fa-sort fa-lg\" role=\"img\" aria-label=\"Sort\" title=\"Sort\"/>"
+msgstr ""
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_facebook_page
@@ -667,6 +730,13 @@ msgstr ""
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.user_navbar
 msgid ""
+"<span title=\"Mobile preview\" role=\"img\" aria-label=\"Mobile preview\" "
+"class=\"fa fa-mobile\"/>"
+msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.user_navbar
+msgid ""
 "<span/>\n"
 "                            <span class=\"css_publish\">Unpublished</span>\n"
 "                            <span class=\"css_unpublish\">Published</span>"
@@ -678,6 +748,8 @@ msgid ""
 "<span>Contact us</span>\n"
 "                        <i class=\"fa fa-1x fa-fw fa-arrow-circle-right ml-1\"/>"
 msgstr ""
+"<span>Contacte-nos</span>\n"
+"                        <i class=\"fa fa-1x fa-fw fa-arrow-circle-right ml-1\"/>"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.layout_footer_copyright
@@ -1221,7 +1293,7 @@ msgstr "Componentes"
 #. module: website
 #: model:ir.model,name:website.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "config configurações"
 
 #. module: website
 #: model:ir.ui.menu,name:website.menu_website_global_configuration
@@ -1256,7 +1328,7 @@ msgstr "Contacto"
 #: model_terms:ir.ui.view,arch_db:website.404
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Contact Us"
-msgstr "Contactar-nos"
+msgstr "Contacte-nos"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.contactus
@@ -1267,7 +1339,7 @@ msgstr "Contactar-nos"
 #: model:website.menu,name:website.menu_contactus
 #: model_terms:website.page,arch_db:website.contactus_page
 msgid "Contact us"
-msgstr "Contactar-nos"
+msgstr "Contacte-nos"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.contactus
@@ -1276,6 +1348,8 @@ msgid ""
 "Contact us about anything related to our company or services.<br/>\n"
 "                                                                We'll do our best to get back to you as soon as possible."
 msgstr ""
+"Contacte-nos acerca de tudo o que seja relacionado com a nossa empressa ou serviços.<br/>\n"
+"                                                                Faremos o melhor para lhe responder assim que possível."
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings__cdn_activated
@@ -1346,7 +1420,7 @@ msgstr "Personalizar"
 #: model:ir.model.fields,field_description:website.field_res_config_settings__auth_signup_uninvited
 #: model:ir.model.fields,field_description:website.field_website__auth_signup_uninvited
 msgid "Customer Account"
-msgstr ""
+msgstr "Conta do Cliente"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.user_navbar
@@ -1636,7 +1710,7 @@ msgstr ""
 #: code:addons/website/static/src/xml/website.contentMenu.xml:7
 #, python-format
 msgid "Dropdown menu"
-msgstr ""
+msgstr "Criar novo Contrato"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_features_grid
@@ -2096,7 +2170,7 @@ msgstr "Editor de HTML/CSS"
 #. module: website
 #: model:ir.model,name:website.model_ir_http
 msgid "HTTP Routing"
-msgstr ""
+msgstr "Rota HTTP"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_page_ir_ui_view
@@ -2189,7 +2263,7 @@ msgstr "Início"
 #: model_terms:ir.ui.view,arch_db:website.bs_debug_page_ir_ui_view
 #: model_terms:website.page,arch_db:website.bs_debug_page
 msgid "Home <span class=\"sr-only\">(current)</span>"
-msgstr ""
+msgstr "Início <span class=\"sr-only\">(atual)</span>"
 
 #. module: website
 #. openerp-web
@@ -2200,7 +2274,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website.404
 #, python-format
 msgid "Homepage"
-msgstr "Pagina Inicial"
+msgstr "Página Inicial"
 
 #. module: website
 #. openerp-web
@@ -2269,6 +2343,8 @@ msgid ""
 "If this field is empty, the view applies to all users. Otherwise, the view "
 "applies to the users of those groups only."
 msgstr ""
+"Se este campo estiver vazio, a vista será aplicada a todos os utilizadores. "
+"Caso contrário, a vista aplicar-se-á apenas a utilizadores desses grupos."
 
 #. module: website
 #: model:ir.model.fields,help:website.field_website_page__active
@@ -2516,7 +2592,7 @@ msgstr "Ano Passado"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.theme_customize
 msgid "Layout"
-msgstr ""
+msgstr "Aspeto"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_text_image
@@ -2585,7 +2661,7 @@ msgstr "Associar a minha Conta de Analítica"
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "LinkedIn"
-msgstr ""
+msgstr "LinkedIn"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings__social_linkedin
@@ -2656,7 +2732,7 @@ msgstr "Maçonaria"
 #: model_terms:ir.ui.view,arch_db:website.403
 #: model_terms:ir.ui.view,arch_db:website.404
 msgid "Maybe you were looking for one of these popular pages ?"
-msgstr "Talvez você estava a procura de uma dessas páginas populares  ?"
+msgstr "Talvez estivesse à procura de uma destas páginas populares?"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.snippet_options
@@ -2820,6 +2896,11 @@ msgstr ""
 #: model_terms:website.page,arch_db:website.bs_debug_page
 msgid "Navbar"
 msgstr ""
+
+#. module: website
+#: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
+msgid "New"
+msgstr "Novo"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.user_navbar
@@ -3180,7 +3261,7 @@ msgstr "Menu Ascendente"
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_menu__parent_path
 msgid "Parent Path"
-msgstr ""
+msgstr "Caminho ascendente "
 
 #. module: website
 #: model:ir.model.fields,help:website.field_website__partner_id
@@ -3263,13 +3344,6 @@ msgstr "Utilizador Público"
 #, python-format
 msgid "Publish"
 msgstr "Publicar"
-
-#. module: website
-#. openerp-web
-#: code:addons/website/static/src/xml/website.pageProperties.xml:137
-#, python-format
-msgid "Publish date"
-msgstr ""
 
 #. module: website
 #. openerp-web
@@ -3849,6 +3923,13 @@ msgid "The installation of an App is already in progress."
 msgstr ""
 
 #. module: website
+#. openerp-web
+#: code:addons/website/static/src/xml/website.seo.xml:93
+#, python-format
+msgid "The language of the keyword and related keywords."
+msgstr ""
+
+#. module: website
 #: model_terms:ir.ui.view,arch_db:website.403
 msgid "The page you were looking for could not be authorized."
 msgstr "A página que você estava a procura não pode ser autorizado."
@@ -3860,10 +3941,10 @@ msgid ""
 "                        typed the address incorrectly, but it has most probably been removed due\n"
 "                        to the recent website reorganisation."
 msgstr ""
-"A página que você estava a procura não pode ser encontrado; é possível que você\n"
+"A página que você estava à procura não foi encontrada; é possível que\n"
 "                        tenha digitado o endereço incorretamente, mas\n"
-"                        foi removido mais provavelmente\n"
-"                       devido ao  recente webiste reorganização."
+"                        é mais provável que tenha sido removida\n"
+"                       devido a uma recente reorganização do website."
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.500
@@ -3946,6 +4027,7 @@ msgid ""
 "This page does not exist, but you can create it as you are administrator of "
 "this site."
 msgstr ""
+"Esta página não existe, mas como administrador deste site pode criá-la."
 
 #. module: website
 #: code:addons/website/models/website.py:333
@@ -4069,7 +4151,7 @@ msgstr ""
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings__social_twitter
@@ -4279,12 +4361,12 @@ msgstr "Tipo de Vista"
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_page__mode
 msgid "View inheritance mode"
-msgstr ""
+msgstr "Modo de herança da vista"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_page__inherit_children_ids
 msgid "Views which inherit from this one"
-msgstr ""
+msgstr "Vista que herdam desta"
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.one_page_line

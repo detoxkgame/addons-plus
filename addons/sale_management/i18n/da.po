@@ -8,17 +8,20 @@
 # jonas jensen <j.jensen@tcomp.dk>, 2018
 # Morten Schou <ms@msteknik.dk>, 2018
 # Jesper Carstensen <jc@danodoo.dk>, 2018
-# Pernille Kristensen <pernillekristensen1994@gmail.com>, 2018
-# Sanne Kristensen <sanne@vkdata.dk>, 2018
-# Ejner Sønniksen <ejner@vkdata.dk>, 2018
 # lhmflexerp <lhm@flexerp.dk>, 2018
+# Sanne Kristensen <sanne@vkdata.dk>, 2018
+# Kenneth Hansen <kenneth@vkdata.dk>, 2018
+# Pernille Kristensen <pernillekristensen1994@gmail.com>, 2019
+# Joe Hansen <joedalton2@yahoo.dk>, 2019
+# Ejner Sønniksen <ejner@vkdata.dk>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-08 06:48+0000\n"
-"PO-Revision-Date: 2018-10-08 06:48+0000\n"
-"Last-Translator: lhmflexerp <lhm@flexerp.dk>, 2018\n"
+"POT-Creation-Date: 2019-08-08 13:50+0000\n"
+"PO-Revision-Date: 2018-08-24 09:24+0000\n"
+"Last-Translator: Ejner Sønniksen <ejner@vkdata.dk>, 2019\n"
 "Language-Team: Danish (https://www.transifex.com/odoo/teams/41243/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,17 +41,9 @@ msgid "4 Person Desk"
 msgstr ""
 
 #. module: sale_management
-#: model_terms:ir.ui.view,arch_db:sale_management.res_config_settings_view_form
-msgid ""
-"<em attrs=\"{'invisible': "
-"[('module_sale_quotation_builder','=',False)]}\">Warning: this option will "
-"install the Website app.</em>"
-msgstr ""
-
-#. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_portal_content_inherit_sale_management
 msgid "<span>Discount</span>"
-msgstr ""
+msgstr "<span>Rabat</span>"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.report_saleorder_document_inherit_sale_management
@@ -63,28 +58,28 @@ msgstr "Aktiv"
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_template_view_form
 msgid "Add a note"
-msgstr ""
+msgstr "Tilføj et notat"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_form_quote
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_template_view_form
 msgid "Add a product"
-msgstr ""
+msgstr "Tilføj et produkt"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_template_view_form
 msgid "Add a section"
-msgstr ""
+msgstr "Tilføj en sektion"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_portal_content_inherit_sale_management
 msgid "Add one"
-msgstr ""
+msgstr "Tilføj en"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_portal_content_inherit_sale_management
 msgid "Add to cart"
-msgstr ""
+msgstr "Tilføj til kurv"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_form_quote
@@ -112,9 +107,17 @@ msgid "Attributes"
 msgstr "Egenskaber"
 
 #. module: sale_management
+#: code:addons/sale_management/models/sale_order_template.py:39
+#, python-format
+msgid ""
+"Before archiving \"%s\" please select another default template in the "
+"settings."
+msgstr ""
+
+#. module: sale_management
 #: model:ir.model,name:sale_management.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Konfigurer opsætning"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_template_view_form
@@ -173,13 +176,15 @@ msgstr "Beskrivelse"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.res_config_settings_view_form
-msgid "Design your quotation templates using building blocks<br/>"
+msgid ""
+"Design your quotation templates using building blocks<br/>\n"
+"                            <em attrs=\"{'invisible': [('module_sale_quotation_builder','=',False)]}\">Warning: this option will install the Website app.</em>"
 msgstr ""
 
 #. module: sale_management
 #: model:ir.model,name:sale_management.model_digest_digest
 msgid "Digest"
-msgstr ""
+msgstr "Opsummering"
 
 #. module: sale_management
 #: model:ir.model.fields,field_description:sale_management.field_sale_order_option__discount
@@ -206,6 +211,7 @@ msgstr "Vis type"
 #, python-format
 msgid "Do not have access, skip this data for user's digest email"
 msgstr ""
+"Har ikke adgang, spring over disse data til brugerens opsummerings e-mail"
 
 #. module: sale_management
 #: sql_constraint:sale.order.template.line:0
@@ -298,17 +304,17 @@ msgstr ""
 #. module: sale_management
 #: model:sale.order.template.option,name:sale_management.sale_order_template_option_1
 msgid "Office Chair"
-msgstr ""
+msgstr "Kontorstol"
 
 #. module: sale_management
 #: model:ir.model.fields,field_description:sale_management.field_sale_order_template__require_payment
 msgid "Online Payment"
-msgstr "Online Betaling"
+msgstr "Online betaling"
 
 #. module: sale_management
 #: model:ir.model.fields,field_description:sale_management.field_sale_order_template__require_signature
 msgid "Online Signature"
-msgstr "Online Underskrift"
+msgstr "Online underskrift"
 
 #. module: sale_management
 #: model:ir.model.fields,field_description:sale_management.field_sale_order_template__sale_order_template_option_ids
@@ -411,7 +417,7 @@ msgstr "Fjern"
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_portal_content_inherit_sale_management
 msgid "Remove one"
-msgstr ""
+msgstr "Fjern én"
 
 #. module: sale_management
 #: model:ir.model.fields,help:sale_management.field_sale_order_template__require_signature
@@ -435,7 +441,7 @@ msgstr ""
 #. module: sale_management
 #: model:ir.model,name:sale_management.model_sale_order
 msgid "Sale Order"
-msgstr "Salgs ordre"
+msgstr "Salgsordre"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.digest_digest_view_form
@@ -455,7 +461,7 @@ msgstr "Salgsordrereference"
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_form_quote
 msgid "Sales Quotation Template Lines"
-msgstr "Tilbudsskabelon Salgslinjer"
+msgstr "Tilbudsskabelon salgslinjer"
 
 #. module: sale_management
 #: model_terms:ir.ui.view,arch_db:sale_management.sale_order_template_view_search
@@ -528,9 +534,17 @@ msgid ""
 msgstr ""
 
 #. module: sale_management
-#: code:addons/sale_management/models/sale_order.py:178
+#: code:addons/sale_management/models/sale_order.py:198
 #, python-format
 msgid "You cannot add options to a confirmed order."
+msgstr ""
+
+#. module: sale_management
+#: code:addons/sale_management/models/sale_order_template.py:90
+#, python-format
+msgid ""
+"You cannot change the type of a sale quote line. Instead you should delete "
+"the current line and create a new line of the proper type."
 msgstr ""
 
 #. module: sale_management

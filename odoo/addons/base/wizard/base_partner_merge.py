@@ -6,6 +6,7 @@ import functools
 import itertools
 import logging
 import psycopg2
+import datetime
 
 from odoo import api, fields, models
 from odoo import SUPERUSER_ID, _
@@ -129,14 +130,14 @@ class MergePartnerAutomatic(models.TransientModel):
                 # unique key treated
                 query = """
                     UPDATE "%(table)s" as ___tu
-                    SET %(column)s = %%s
+                    SET "%(column)s" = %%s
                     WHERE
-                        %(column)s = %%s AND
+                        "%(column)s" = %%s AND
                         NOT EXISTS (
                             SELECT 1
                             FROM "%(table)s" as ___tw
                             WHERE
-                                %(column)s = %%s AND
+                                "%(column)s" = %%s AND
                                 ___tu.%(value)s = ___tw.%(value)s
                         )""" % query_dic
                 for partner in src_partners:
@@ -144,7 +145,7 @@ class MergePartnerAutomatic(models.TransientModel):
             else:
                 try:
                     with mute_logger('odoo.sql_db'), self._cr.savepoint():
-                        query = 'UPDATE "%(table)s" SET %(column)s = %%s WHERE %(column)s IN %%s' % query_dic
+                        query = 'UPDATE "%(table)s" SET "%(column)s" = %%s WHERE "%(column)s" IN %%s' % query_dic
                         self._cr.execute(query, (dst_partner.id, tuple(src_partners.ids),))
 
                         # handle the recursivity with parent relation
@@ -258,7 +259,7 @@ class MergePartnerAutomatic(models.TransientModel):
             :param extra_checks: pass False to bypass extra sanity check (e.g. email address)
         """
         # super-admin can be used to bypass extra checks
-        if self.env.uid == SUPERUSER_ID:
+        if self.env.user._is_admin():
             extra_checks = False
 
         Partner = self.env['res.partner']
@@ -390,11 +391,11 @@ class MergePartnerAutomatic(models.TransientModel):
 
     @api.model
     def _get_ordered_partner(self, partner_ids):
-        """ Helper : returns a `res.partner` recordset ordered by create_date/active fields
+        """ Helper : returns a `res.partner` recordset ordered by id/create_date/active fields
             :param partner_ids : list of partner ids to sort
         """
         return self.env['res.partner'].browse(partner_ids).sorted(
-            key=lambda p: (p.active, (p.create_date or '')),
+            key=lambda p: (p.active, (p.create_date or datetime.datetime(1970, 1, 1), p.id)),
             reverse=True,
         )
 

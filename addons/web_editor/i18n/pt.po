@@ -3,20 +3,23 @@
 # * web_editor
 # 
 # Translators:
-# Martin Trigaux, 2018
 # Dawilson Daio <dawilsondaio@gmail.com>, 2018
 # Ricardo Martins <ricardo.nbs.martins@gmail.com>, 2018
 # Vitor Fernandes <vmlf01@gmail.com>, 2018
-# MS, 2018
 # Joao Felix <jrmfelix@gmail.com>, 2018
+# Martin Trigaux, 2018
+# Manuela Silva <manuelarodsilva@gmail.com>, 2018
 # Nuno Silva <nuno.silva@arxi.pt>, 2018
+# Diogo Fonseca <dsf@thinkopensolutions.pt>, 2018
+# Pedro Castro Silva <pedrocs@exo.pt>, 2019
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server saas~11.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-02 10:06+0000\n"
-"PO-Revision-Date: 2018-10-02 10:06+0000\n"
-"Last-Translator: Nuno Silva <nuno.silva@arxi.pt>, 2018\n"
+"PO-Revision-Date: 2018-08-24 09:33+0000\n"
+"Last-Translator: Pedro Castro Silva <pedrocs@exo.pt>, 2019\n"
 "Language-Team: Portuguese (https://www.transifex.com/odoo/teams/41243/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -577,7 +580,7 @@ msgstr "Livre"
 #: code:addons/web_editor/static/src/js/editor/rte.summernote.js:1055
 #, python-format
 msgid "Full Screen"
-msgstr ""
+msgstr "Ecrã completo"
 
 #. module: web_editor
 #. openerp-web
@@ -589,7 +592,7 @@ msgstr "Fullscreen"
 #. module: web_editor
 #: model:ir.model,name:web_editor.model_ir_http
 msgid "HTTP Routing"
-msgstr ""
+msgstr "Rota HTTP"
 
 #. module: web_editor
 #. openerp-web

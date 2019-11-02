@@ -9,16 +9,17 @@
 # JonathanStein <jstein@image.dk>, 2018
 # Jesper Carstensen <jc@danodoo.dk>, 2018
 # Pernille Kristensen <pernillekristensen1994@gmail.com>, 2018
-# Sanne Kristensen <sanne@vkdata.dk>, 2018
-# Ejner Sønniksen <ejner@vkdata.dk>, 2018
 # lhmflexerp <lhm@flexerp.dk>, 2018
+# Sanne Kristensen <sanne@vkdata.dk>, 2018
+# Ejner Sønniksen <ejner@vkdata.dk>, 2019
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server saas~11.5\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-21 13:18+0000\n"
-"PO-Revision-Date: 2018-09-21 13:18+0000\n"
-"Last-Translator: lhmflexerp <lhm@flexerp.dk>, 2018\n"
+"POT-Creation-Date: 2019-01-09 10:32+0000\n"
+"PO-Revision-Date: 2018-08-24 09:19+0000\n"
+"Last-Translator: Ejner Sønniksen <ejner@vkdata.dk>, 2019\n"
 "Language-Team: Danish (https://www.transifex.com/odoo/teams/41243/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,6 +54,11 @@ msgid ""
 "* 'Display the button' displays the chat button on the pages.\n"
 "* 'Auto popup' displays the button and automatically open the conversation pane.\n"
 "* 'Hide the button' hides the chat button on the pages."
+msgstr ""
+
+#. module: im_livechat
+#: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_kanban
+msgid "<i class=\"fa fa-user\" role=\"img\" aria-label=\"User\" title=\"User\"/>"
 msgstr ""
 
 #. module: im_livechat
@@ -111,12 +117,12 @@ msgstr "Auto popup timer"
 #. module: im_livechat
 #: model:ir.model,name:im_livechat.model_ir_autovacuum
 msgid "Automatic Vacuum"
-msgstr ""
+msgstr "Automatisk sletning"
 
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.mail_channel_view_form
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_report_channel__duration
@@ -187,7 +193,7 @@ msgstr ""
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_mail_channel__channel_type
 msgid "Channel Type"
-msgstr "Type af Kanal"
+msgstr "Type af kanal"
 
 #. module: im_livechat
 #: model:ir.ui.menu,name:im_livechat.support_channels
@@ -288,7 +294,7 @@ msgstr "Kundebedømmelse "
 #. module: im_livechat
 #: model:ir.model.fields,help:im_livechat.field_im_livechat_channel__button_text
 msgid "Default text displayed on the Livechat Support Button"
-msgstr "Standardtekst som vises på Livechat Support Knappen"
+msgstr "Standardtekst som vises på Livechat support knappen"
 
 #. module: im_livechat
 #: model_terms:ir.actions.act_window,help:im_livechat.im_livechat_channel_action
@@ -308,12 +314,12 @@ msgstr ""
 #: code:addons/im_livechat/static/src/xml/im_livechat.xml:7
 #, python-format
 msgid "Did we correctly answer your question ?"
-msgstr "Svarede vi korrekt på dit spørgsmål ?"
+msgstr "Svarede vi korrekt på dit spørgsmål?"
 
 #. module: im_livechat
 #: model:ir.model,name:im_livechat.model_mail_channel
-msgid "Discussion channel"
-msgstr "Diskussionskanal"
+msgid "Discussion Channel"
+msgstr ""
 
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_channel__display_name
@@ -358,8 +364,8 @@ msgstr "Forklar din note"
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_form
 msgid ""
-"For website built with Odoo CMS, please install the website_livechat module."
-" Then go to Website Admin &gt; Configuration &gt; Settings and select the "
+"For websites built with the Odoo CMS, please install the website_livechat "
+"module. Then go to Website &gt; Configuration &gt; Settings and select the "
 "Website Live Chat Channel you want to add on your website."
 msgstr ""
 
@@ -387,7 +393,7 @@ msgstr "Gruppér efter..."
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_kanban
 msgid "Happy face"
-msgstr ""
+msgstr "Glad ansigt"
 
 #. module: im_livechat
 #: selection:im_livechat.channel.rule,action:0
@@ -511,7 +517,7 @@ msgstr "Livechat"
 #: model:ir.model,name:im_livechat.model_im_livechat_channel
 #: model_terms:ir.ui.view,arch_db:im_livechat.rating_rating_view_search_livechat
 msgid "Livechat Channel"
-msgstr "<span>Livechat Kanal</span>"
+msgstr "<span>Livechat kanal</span>"
 
 #. module: im_livechat
 #: model:ir.model,name:im_livechat.model_im_livechat_channel_rule
@@ -521,7 +527,7 @@ msgstr ""
 #. module: im_livechat
 #: selection:mail.channel,channel_type:0
 msgid "Livechat Conversation"
-msgstr "Livechat Samtale"
+msgstr "Livechat samtale"
 
 #. module: im_livechat
 #: model:ir.model,name:im_livechat.model_im_livechat_report_channel
@@ -592,7 +598,7 @@ msgstr "Navn"
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_kanban
 msgid "Neutral face"
-msgstr ""
+msgstr "Neutralt ansigt"
 
 #. module: im_livechat
 #: model_terms:ir.actions.act_window,help:im_livechat.rating_rating_action_livechat_report
@@ -684,30 +690,9 @@ msgstr ""
 
 #. module: im_livechat
 #: model:ir.model,name:im_livechat.model_rating_rating
-#: model:ir.model.fields,field_description:im_livechat.field_mail_channel__rating_ids
 #: model_terms:ir.ui.view,arch_db:im_livechat.mail_channel_view_tree
 msgid "Rating"
 msgstr "Bedømmelse"
-
-#. module: im_livechat
-#: model:ir.model.fields,field_description:im_livechat.field_mail_channel__rating_last_feedback
-msgid "Rating Last Feedback"
-msgstr "Bedømmelse af seneste Feedback"
-
-#. module: im_livechat
-#: model:ir.model.fields,field_description:im_livechat.field_mail_channel__rating_last_image
-msgid "Rating Last Image"
-msgstr "Bedømmelse af seneste billede"
-
-#. module: im_livechat
-#: model:ir.model.fields,field_description:im_livechat.field_mail_channel__rating_last_value
-msgid "Rating Last Value"
-msgstr "Sidste bedømmelse"
-
-#. module: im_livechat
-#: model:ir.model.fields,field_description:im_livechat.field_mail_channel__rating_count
-msgid "Rating count"
-msgstr "Antal bedømmelser"
 
 #. module: im_livechat
 #. openerp-web
@@ -737,11 +722,6 @@ msgid "Ratings for livechat channel"
 msgstr "Bedømmelser af livechat kanal"
 
 #. module: im_livechat
-#: model:ir.model.fields,help:im_livechat.field_mail_channel__rating_last_feedback
-msgid "Reason of the rating"
-msgstr "Grunde til ratingen"
-
-#. module: im_livechat
 #: model:ir.model.fields,help:im_livechat.field_im_livechat_channel_rule__regex_url
 msgid ""
 "Regular expression specifying the web pages this rule will be applied on."
@@ -761,7 +741,7 @@ msgstr "Regler"
 #. module: im_livechat
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_kanban
 msgid "Sad face"
-msgstr ""
+msgstr "Ked af det ansigt"
 
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_channel__script_external
@@ -843,7 +823,7 @@ msgstr "Startdato for samtalen"
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_channel__button_text
 msgid "Text of the Button"
-msgstr "Knappens Tekst"
+msgstr "Knappens tekst"
 
 #. module: im_livechat
 #: model:ir.model.fields,help:im_livechat.field_im_livechat_channel__input_placeholder
@@ -904,7 +884,7 @@ msgstr ""
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_channel__image_small
 msgid "Thumbnail"
-msgstr ""
+msgstr "Thumbnail"
 
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_report_operator__time_to_answer
@@ -955,7 +935,7 @@ msgstr ""
 #. module: im_livechat
 #: model:ir.actions.act_window,name:im_livechat.im_livechat_channel_action
 msgid "Website Live Chat Channels"
-msgstr "Hjemmeside Live Chat Kanaler"
+msgstr "Hjemmeside Livechat kanaler"
 
 #. module: im_livechat
 #: model:ir.model.fields,field_description:im_livechat.field_im_livechat_channel__default_message
@@ -999,7 +979,7 @@ msgstr "fx YourWebsite.com"
 #: model_terms:ir.ui.view,arch_db:im_livechat.im_livechat_channel_view_form
 msgid "or copy this url and send it by email to your customers or suppliers:"
 msgstr ""
-"eller kopier denne url og send den pr. email til dine kunder eller "
+"eller kopier denne URL og send den pr. e-mail til dine kunder eller "
 "leverandører:"
 
 #. module: im_livechat
