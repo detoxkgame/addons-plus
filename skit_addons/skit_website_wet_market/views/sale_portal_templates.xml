@@ -222,122 +222,6 @@
 	</template>
     
     <template id="sale_order_portal_status_test" name="Sales Order Portal Content" inherit_id="sale.sale_order_portal_template" priority="20">
-   		
-   		<xpath expr="//div[hasclass('alert-warning')]" position="before">
-   		<div t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
-	   		<button type="button" class="btn btn-secondary btn-block cancel_order" t-att-id="sale_order.id">
-				Cancel Order
-			</button>
-		</div>
-   		<div class="track_status_bar_nor">
-        	<span class="track-span"> Track Order </span>
-        	<section class="ps-timeline-sec">
-        <div class="container">
-            <ol class="ps-timeline">
-            	<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
-            		<li id="sale_confirm" class="border-gray">
-	                    <div class="ps-bot">
-	                        <p>Confirmed</p>
-	                    </div>
-	                    <span class="ps-sp-top border-gray-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_gray.png" alt=""/></span>
-	                </li>
-            	</t>
-            	<t t-else="">
-            		<li id="sale_confirm" class="border-green">
-	                    <div class="ps-bot">
-	                        <p>Confirmed</p>
-	                    </div>
-	                   <span class="ps-sp-top border-green-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_green.png" alt=""/></span>
-	                </li>
-            	</t>
-                <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale')">
-                	<li id="sale_preparing" class="border-gray">
-	                     <div class="ps-bot">
-	                        <p>Preparing</p>
-	                    </div>
-	                    <span class="ps-sp-bot border-gray-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_gray.png" alt=""/></span>
-	                </li>
-                </t>
-                <t t-else="">
-                	<li id="sale_preparing" class="border-green">
-	                     <div class="ps-bot">
-	                        <p>Preparing</p>
-	                    </div>
-	                    <span class="ps-sp-bot border-green-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_green.png" alt=""/></span>
-	                </li>
-                </t>
-                <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
-                	<li id="sale_ready" class="border-gray">
-	                     <div class="ps-bot">
-	                        <p>Ready to Pickup</p>
-	                    </div>
-	                    <span class="ps-sp-top border-gray-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></span>
-	                </li>
-                </t>
-                <t t-else="">
-                	<li id="sale_ready" class="border-green">
-	                     <div class="ps-bot">
-	                        <p>Ready to Pickup</p>
-	                    </div>
-	                    <span class="ps-sp-top border-green-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></span>
-	                </li>
-                </t>
-                 <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing') or (sale_order.state == 'ready')">
-                 	<li id="sale_delivered" class="border-gray">
-	                     <div class="ps-bot">
-	                        <p>Delivered</p>
-	                    </div>
-	                    <span class="ps-sp-bot border-gray-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_gray.png" alt=""/></span>
-	                </li>
-                 </t>
-                 <t t-else="">
-                 	<li id="sale_delivered" class="border-green">
-	                     <div class="ps-bot">
-	                        <p>Delivered</p>
-	                    </div>
-	                    <span class="ps-sp-bot border-green-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_green.png" alt=""/></span>
-	                </li>
-                 </t>
-                
-            </ol>
-        </div>
-    </section>
-    </div>
-        </xpath>
-        <xpath expr="//ul[hasclass('list-group-flush')]/li[1]" position="replace">
-   			<li class="list-group-item flex-grow-1">
-				<a t-if="sale_order.has_to_be_signed(True)" role="button" class="btn btn-primary btn-block mb8" data-toggle="modal"
-						data-target="#modalaccept" href="#">
-						<i class="fa fa-check" />
-						Accept &amp; Sign
-				</a>
-				<!-- <a t-elif="sale_order.has_to_be_paid(True)" role="button" class="btn btn-primary btn-block mb8" data-toggle="modal"
-						data-target="#modalaccept" href="#">
-						<i class="fa fa-check" />
-						<t t-if="not sale_order.signature">Accept &amp; Pay</t>
-						<t t-else="">Pay now</t>
-				</a> -->
-				<div class="o_download_pdf btn-toolbar flex-sm-nowrap">
-						<div class="btn-group flex-grow-1 mr-1 mb-1">
-								<a class="btn btn-secondary btn-block o_download_btn"
-										t-att-href="sale_order.get_portal_url(report_type='pdf', download=True)" title="Download"
-								>
-										<i class="fa fa-download" />
-										Download
-								</a>
-						</div>
-						<div class="btn-group flex-grow-1 mb-1">
-								<a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print"
-										t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print"
-										target="_blank"
-								>
-										<i class="fa fa-print" />
-										Print
-								</a>
-						</div>
-				</div>
-		</li>
-   		</xpath>
    		<xpath expr="//div[@id='quote_content']" position="replace">
    			<!-- Page content -->
                 <div id="quote_content" class="col-12 col-lg justify-content-end">
@@ -493,6 +377,122 @@
                     </div>
                 </div><!-- // #quote_content -->
    		</xpath>
+   		<xpath expr="//div[hasclass('alert-warning')]" position="before">
+   		<div t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
+	   		<button type="button" class="btn btn-secondary btn-block cancel_order" t-att-id="sale_order.id">
+				Cancel Order
+			</button>
+		</div>
+   		<div class="track_status_bar_nor">
+        	<span class="track-span"> Track Order </span>
+        	<section class="ps-timeline-sec">
+        <div class="container">
+            <ol class="ps-timeline">
+            	<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
+            		<li id="sale_confirm" class="border-gray">
+	                    <div class="ps-bot">
+	                        <p>Confirmed</p>
+	                    </div>
+	                    <span class="ps-sp-top border-gray-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_gray.png" alt=""/></span>
+	                </li>
+            	</t>
+            	<t t-else="">
+            		<li id="sale_confirm" class="border-green">
+	                    <div class="ps-bot">
+	                        <p>Confirmed</p>
+	                    </div>
+	                   <span class="ps-sp-top border-green-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_green.png" alt=""/></span>
+	                </li>
+            	</t>
+                <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale')">
+                	<li id="sale_preparing" class="border-gray">
+	                     <div class="ps-bot">
+	                        <p>Preparing</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-gray-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_gray.png" alt=""/></span>
+	                </li>
+                </t>
+                <t t-else="">
+                	<li id="sale_preparing" class="border-green">
+	                     <div class="ps-bot">
+	                        <p>Preparing</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-green-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_green.png" alt=""/></span>
+	                </li>
+                </t>
+                <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
+                	<li id="sale_ready" class="border-gray">
+	                     <div class="ps-bot">
+	                        <p>Ready to Pickup</p>
+	                    </div>
+	                    <span class="ps-sp-top border-gray-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></span>
+	                </li>
+                </t>
+                <t t-else="">
+                	<li id="sale_ready" class="border-green">
+	                     <div class="ps-bot">
+	                        <p>Ready to Pickup</p>
+	                    </div>
+	                    <span class="ps-sp-top border-green-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></span>
+	                </li>
+                </t>
+                 <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing') or (sale_order.state == 'ready')">
+                 	<li id="sale_delivered" class="border-gray">
+	                     <div class="ps-bot">
+	                        <p>Delivered</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-gray-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_gray.png" alt=""/></span>
+	                </li>
+                 </t>
+                 <t t-else="">
+                 	<li id="sale_delivered" class="border-green">
+	                     <div class="ps-bot">
+	                        <p>Delivered</p>
+	                    </div>
+	                    <span class="ps-sp-bot border-green-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_green.png" alt=""/></span>
+	                </li>
+                 </t>
+                
+            </ol>
+        </div>
+    </section>
+    </div>
+        </xpath>
+        <xpath expr="//ul[hasclass('list-group-flush')]/li[1]" position="replace">
+   			<li class="list-group-item flex-grow-1">
+				<a t-if="sale_order.has_to_be_signed(True)" role="button" class="btn btn-primary btn-block mb8" data-toggle="modal"
+						data-target="#modalaccept" href="#">
+						<i class="fa fa-check" />
+						Accept &amp; Sign
+				</a>
+				<!-- <a t-elif="sale_order.has_to_be_paid(True)" role="button" class="btn btn-primary btn-block mb8" data-toggle="modal"
+						data-target="#modalaccept" href="#">
+						<i class="fa fa-check" />
+						<t t-if="not sale_order.signature">Accept &amp; Pay</t>
+						<t t-else="">Pay now</t>
+				</a> -->
+				<div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+						<div class="btn-group flex-grow-1 mr-1 mb-1">
+								<a class="btn btn-secondary btn-block o_download_btn"
+										t-att-href="sale_order.get_portal_url(report_type='pdf', download=True)" title="Download"
+								>
+										<i class="fa fa-download" />
+										Download
+								</a>
+						</div>
+						<div class="btn-group flex-grow-1 mb-1">
+								<a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print"
+										t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print"
+										target="_blank"
+								>
+										<i class="fa fa-print" />
+										Print
+								</a>
+						</div>
+				</div>
+		</li>
+   		</xpath>
+   		
         <xpath expr="//div[hasclass('o_download_pdf')]" position="replace">
         	<div class="o_download_pdf btn-toolbar flex-sm-nowrap mob_dwnld_btn">
             	<div class="btn-group flex-grow-1 mr-1 mb-1">

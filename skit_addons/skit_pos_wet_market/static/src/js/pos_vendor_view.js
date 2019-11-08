@@ -237,7 +237,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
     	var self = this;
     	this.gui.show_popup('confirm',{
 			'title': _t('Warning'),
-			'body': _t('Are you sure want to delete this order?'),
+			'body': _t('Are you sure want to cancel this order?'),
 			confirm: function(){
 				self._rpc({
 					model: 'sale.order',
