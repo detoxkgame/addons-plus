@@ -48,7 +48,7 @@ class SaleOrder(models.Model):
     def write(self, vals):
         result = super(SaleOrder, self).write(vals)
         if self.check_fields_to_send(vals):
-            if (self.state == 'payment'):
+            if (self.state == 'payment' or self.state == 'cancel'):
                 self.send_field_updates(self.ids, action='unlink')
             else:
                 self.send_field_updates(self.ids)

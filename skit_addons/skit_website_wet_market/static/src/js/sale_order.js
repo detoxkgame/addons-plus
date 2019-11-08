@@ -148,10 +148,9 @@ setInterval(function(){
 				$('#loading').show();
 				ajax.jsonRpc('/saleorder/delete', 'call', post).then(function (modal) { 
 					$('#loading').hide();
-					alertify.alert()
+					alertify.alert('Warning','Your order cancelled.')
 					  .setting({
 					    'label':'Goto Shop',
-					    'message': 'Your order cancelled. ',
 					    'onok': function(){ window.location="/shop";}
 					  }).show();
 	        	});

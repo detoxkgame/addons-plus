@@ -249,7 +249,7 @@ class WetAuthSignupHome(Home):
             sale_order = request.env['sale.order'].sudo().search([
                 ('id', '=', int(post.get('order_id')))])
             sale_order.action_cancel()
-            sale_order.unlink()
+            sale_order.write({'state': 'cancel'})
             return True
 
     @http.route(['/signup/resend/otp'], type='json', auth="public", methods=['POST'],
