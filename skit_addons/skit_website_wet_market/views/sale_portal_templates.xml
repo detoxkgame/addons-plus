@@ -23,6 +23,25 @@
 		</xpath>
 	</template> -->
 	
+	<template id="wet_short_cart_summary" name="Wet Short Cart right column" inherit_id="website_sale.short_cart_summary" priority="20">
+		<xpath expr="//div[hasclass('js_cart_summary')]" position="replace">
+			<div class="card js_cart_summary" t-if="website_sale_order and website_sale_order.website_order_line" >
+	            <div class="card-body">
+	                <h4 class="d-none d-xl-block">Order Total</h4>
+	                <hr class="d-none d-xl-block"/>
+	                <div>
+	                    <t t-call="website_sale.total">
+	                        <t t-set='no_rowspan'>1</t>
+	                    </t>
+	                    <!-- <a role="button" t-if="website_sale_order and website_sale_order.website_order_line" class="btn btn-secondary float-right d-none d-xl-inline-block" href="/shop/checkout?express=1">
+	                        <span>Process Checkout</span>
+	                    </a> -->
+	                </div>
+	            </div>
+	        </div>
+		</xpath>
+	</template>
+	
 	
     <template id="shop_website_cart" name="Shop Product" inherit_id="website_sale.cart" priority="20">
     	<xpath expr="//div[hasclass('oe_cart')]//div/a[hasclass('float-right')]" position="replace">
