@@ -279,7 +279,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                 if(del_icon){
                 	del_icon.addEventListener('click', (function() {
                 		var order_id = del_icon.getAttribute('order_id');
-                    	self.del_order(order_id);
+                    	self.delete_order(order_id);
                     }.bind(this)));
                 }
             }

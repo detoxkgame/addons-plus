@@ -287,7 +287,7 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/sorder/<int:order_id>'], type='json', auth="public", website=True)
     def update_order_status(self, order_id=None,  **post):
-        sale_order = request.env['sale.order'].search([('id', '=', order_id)])
+        sale_order = request.env['sale.order'].sudo().search([('id', '=', order_id)])
         invoice_id = 0
         for invoice in sale_order.invoice_ids:
             invoice_id = invoice.id

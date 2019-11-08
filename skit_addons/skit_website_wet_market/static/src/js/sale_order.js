@@ -58,6 +58,13 @@ setInterval(function(){
         		$('#msale_deliver_img').attr('src','/skit_website_wet_market/static/src/img/delivered_green.png');
         		$('.icon_delivered').addClass("active_back");
         	}
+        	else if(data['state'] == "cancel"){
+        		alertify.alert('Warning','Your order cancelled.')
+				  .setting({
+				    'label':'Goto Shop',
+				    'onok': function(){ window.location="/shop";}
+				  }).show();
+        	}
         });
 	}
 	

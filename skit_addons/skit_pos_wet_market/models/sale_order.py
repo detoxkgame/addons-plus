@@ -132,7 +132,7 @@ class SaleOrder(models.Model):
         sale_order = self.env['sale.order'].sudo().search([
             ('id', '=', int(order_id))])
         sale_order.action_cancel()
-        sale_order.unlink()
+        sale_order.write({'state': 'cancel'})
         return True
 
     @api.multi

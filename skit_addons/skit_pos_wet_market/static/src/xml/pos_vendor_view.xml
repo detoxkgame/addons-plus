@@ -68,6 +68,7 @@
             </div>
         </div>
     </t>
+    
 	
 	<!-- Display the Shop Cart Orders -->
 	<t t-name="ShopCartOrders">
@@ -82,7 +83,7 @@
 		                	<span class="pos-order-no w41">Order No : <t t-esc="sorder.name"/> </span>
 		                   	<span class="pos-order-date open_date">Date : <t t-esc="sorder.create_date"/> </span>
 		                   	<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
-		                   		<span t-attf-data-item="#{sorder.id}" class="del_btn">X</span>
+		                   		<span t-attf-data-item="#{sorder.id}" t-attf-order_id="#{sorder.id}" class="del_btn">X</span>
 		                   	</t>
 		                </li>
 	                </t>
