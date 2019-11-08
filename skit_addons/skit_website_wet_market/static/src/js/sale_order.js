@@ -148,7 +148,7 @@ setInterval(function(){
 		});
 		$('.cancel_order').click(function(){
 			var order_id = $(this).attr('id');
-			alertify.confirm("Are you sure want to cancel this order?",
+			alertify.confirm('Confirm', "Are you sure want to cancel this order?",
 					function(){
 				var post = {}
 				post['order_id'] = order_id;
