@@ -315,8 +315,8 @@
 .pro_name_price{
 	display: flow-root;
 }
-/* @media only screen and (min-width: 1200px){
-#products_grid table tr{
+@media only screen and (min-width: 1200px){
+#products_grid table tr.tr_product_row{
 	display: unset;
     width: 100%;
 }
@@ -330,10 +330,14 @@
 	margin: 1%;
     box-shadow: 0 0 9px 4px #CCC;
 }
-} */
-
+#product_popup table tr td{
+	height: auto;
+    float: none;
+    display: -webkit-inline-box;
+}
+}
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
-#products_grid table tr{
+#products_grid table tr.tr_product_row{
 	display: unset;
     width: 100%;
 }
@@ -346,10 +350,15 @@
 .oe_product{
 	margin: 1%;
     box-shadow: 0 0 9px 4px #CCC;
+}
+#product_popup table tr td{
+	height: auto;
+    float: none;
+    display: -webkit-inline-box;
 }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-#products_grid table tr{
+#products_grid table tr.tr_product_row{
 	display: unset;
     width: 100%;
 }
@@ -362,6 +371,11 @@
 .oe_product{
 	margin: 1%;
     box-shadow: 0 0 9px 4px #CCC;
+}
+#product_popup table tr td{
+	height: auto;
+    float: none;
+    display: -webkit-inline-box;
 }
 }
 .shop_prod_name{

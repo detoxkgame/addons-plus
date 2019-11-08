@@ -235,7 +235,7 @@ section#details h3{
    border: 2px solid #F5F7FA;
    background: #b8b8b8;
    margin-top: 11px;
-   z-index: 9999;
+   /* z-index: 9999; */
    text-align:center;
    position: relative;
    left:4px;
@@ -322,9 +322,49 @@ i.fa.fa-check.active {
 }
 /************************/
 
+/*******Popup for "Pay With"*******/
+@media only screen and (max-width: 767px) {
+.modal-content{
+	width: 85%;
+    margin: 10% auto;
+}
+.modal-header{
+	padding: 0.5rem;
+}
+.modal-header .modal-title{
+	font-size: 1rem;
+}
+.modal-footer button{
+	font-size: 0.7rem !important;
+}
+/*****"Pay with" popup in mobile view while click "pay now"********/
+.o_payment_form{
+	margin-top: 0rem !important;
+}
+.o_payment_form .card-body{
+	padding: 0.5rem !important;
+}
+#o_payment_form_pay{
+	font-size: 0.7rem;
+}
+/*****"Pay with" popup in mobile view while click "pay now"********/
+/*********Product attribute popup********/
+.oe_optional_products_modal #product_details h1{
+	font-size: 1rem;
+}
+.oe_optional_products_modal #product_details #add_to_cart{
+	font-size: 0.6rem;
+}
+.oe_optional_products_modal #product_details .css_editable_mode_hidden{
+	font-size: 1rem;
+}
+/*********Product attribute popup*********/
+}
+/******Popup for "Pay With"********/
+
 
 /*********AAttribute form design*************/
-@media only screen and (max-width: 767px) {
+/* @media only screen and (max-width: 767px) {
 .skit-cart{
      font-size: 0.8rem !important;
 }
@@ -348,8 +388,9 @@ i.fa.fa-check.active {
     margin: 0 auto;
    
 }
-}
+} */
 .skit-cart{
      float: right !important;
 }
 /*********AAttribute form design*************/
+
