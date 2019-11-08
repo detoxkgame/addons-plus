@@ -235,7 +235,6 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
     
     delete_order: function(order_id){
     	var self = this;
-    	alert(order_id)
     	this.gui.show_popup('confirm',{
 			'title': _t('Warning'),
 			'body': _t('Are you sure want to delete this order?'),

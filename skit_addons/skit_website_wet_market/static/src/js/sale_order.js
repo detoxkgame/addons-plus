@@ -118,20 +118,24 @@ setInterval(function(){
 		});
 		
 		$('#resend_otp').click(function(){
+			$('#loading').show();
 			var login = $('#login').val();
 			var post = {}
 			post['login'] = login;
 			ajax.jsonRpc('/resend/otp', 'call', post).then(function (modal) { 
+				$('#loading').hide();
         		alertify.alert("Success", "OTP has been resend to your email address.");
         	});
 		});
 		$('#sign_resend_otp').click(function(){
+			$('#loading').show();
 			var login = $('#login').val();
 			var email = $('#email_address').val();
 			var post = {}
 			post['login'] = login;
 			post['email'] = email;
 			ajax.jsonRpc('/signup/resend/otp', 'call', post).then(function (modal) { 
+				$('#loading').hide();
         		alertify.alert("Success", "OTP has been resend to your email address.");
         	});
 		});
@@ -141,7 +145,9 @@ setInterval(function(){
 					function(){
 				var post = {}
 				post['order_id'] = order_id;
+				$('#loading').show();
 				ajax.jsonRpc('/saleorder/delete', 'call', post).then(function (modal) { 
+					$('#loading').hide();
 					alertify.alert()
 					  .setting({
 					    'label':'Goto Shop',

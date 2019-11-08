@@ -122,13 +122,20 @@
     	</xpath>
     	<xpath expr="//button[hasclass('btn-block')]" position="replace">
     		<t t-if="signup_error">
-    			<button type="submit" class="btn btn-primary btn-block" >
-    				<a style="color: white;text-decoration: none;" t-attf-href="/web/signup?{{ keep_query() }}">Sign up</a>
+    			<button type="button" class="btn btn-primary btn-block" >
+    				<a style="color: white;text-decoration: none;width: 100%;display: inline-block;" t-attf-href="/web/signup?{{ keep_query() }}">Sign up</a>
     			</button>
     		</t>
     		<t t-else="">
     			<button type="submit" class="btn btn-primary btn-block">Log in</button>
     		</t>
+    		<div id="loading">
+				<div id="loading-image">
+					<img src="/web/static/src/img/spin.png" style="animation: fa-spin 1s infinite steps(12);"></img>
+					<br></br><br></br>
+					<span id="loading-text">Loading...</span>
+				</div>
+			</div>
     	</xpath>
     	
     </template> 

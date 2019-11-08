@@ -21,8 +21,10 @@ from odoo.addons.website_sale.controllers.main import TableCompute
 from datetime import date, datetime, timedelta
 from odoo.addons.http_routing.models.ir_http import slug
 from odoo.addons.payment.controllers.portal import PaymentProcessing
-from odoo import api, fields, models, tools, SUPERUSER_ID, ADMINUSER_ID, _
-from odoo import api, models
+#===============================================================================
+# from odoo import api, fields, models, tools, SUPERUSER_ID, ADMINUSER_ID, _
+# from odoo import api, models
+#===============================================================================
 
 _logger = logging.getLogger(__name__)
 
