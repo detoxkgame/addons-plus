@@ -324,7 +324,7 @@
 	height: 144px;
     width: 30%;
     float: left;
-    display: table;
+    /* display: table; */
 }
 .oe_product{
 	margin: 1%;
@@ -345,7 +345,7 @@
 	height: 144px;
     width: 30%;
     float: left;
-    display: table;
+    /* display: table; */
 }
 .oe_product{
 	margin: 1%;
@@ -366,7 +366,7 @@
 	height: 144px;
     width: 48%;
     float: left;
-    display: table;
+    /* display: table; */
 }
 .oe_product{
 	margin: 1%;
