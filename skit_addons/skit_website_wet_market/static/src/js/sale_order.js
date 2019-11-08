@@ -141,7 +141,7 @@ setInterval(function(){
 		});
 		$('.cancel_order').click(function(){
 			var order_id = $(this).attr('id');
-			alertify.confirm("Are you sure want to delete this order?",
+			alertify.confirm("Are you sure want to cancel this order?",
 					function(){
 				var post = {}
 				post['order_id'] = order_id;
@@ -151,7 +151,7 @@ setInterval(function(){
 					alertify.alert()
 					  .setting({
 					    'label':'Goto Shop',
-					    'message': 'Your order canceled. ',
+					    'message': 'Your order cancelled. ',
 					    'onok': function(){ window.location="/shop";}
 					  }).show();
 	        	});

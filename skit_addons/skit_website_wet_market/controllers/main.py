@@ -83,7 +83,9 @@ class WetAuthSignupHome(Home):
                 ('mobile', '=', kw.get('login'))])
             if wet_otp:
                 wet_otp.unlink()
-            return request.redirect("/shop")
+            current_user = request.env['res.users'].sudo().search([('login', '=', kw.get('login'))])
+            if not current_user.has_group('sales_team.group_sale_manager'):
+                return request.redirect("/shop")
         return response
 
     @http.route('/web/signup', type='http', auth='public', website=True, sitemap=False)
@@ -1087,7 +1089,7 @@ class Home(http.Controller):
             else:
                 stock_inventory.action_validate()
         values['title'] = 'Success'
-        values['msg'] = "Stock updated successfully."
+        values['msg'] = "Stock successfully updated."
         return values
 
     @http.route('/publish/product', type='json',
