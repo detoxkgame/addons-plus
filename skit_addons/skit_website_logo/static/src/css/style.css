@@ -1,0 +1,14 @@
+.skit_logo > span {
+    position: absolute;
+    z-index: 1;
+}
+
+header .navbar-brand.logo img {
+	height: 5em;
+}
+
+.o_header_affix.affixed img{
+	background-color: #f8f9fa;
+	padding: 0.5em;
+	margin-top: -1em;
+}
