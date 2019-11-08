@@ -76,7 +76,7 @@ setInterval(function(){
         		$('#msale_confirm_img').attr('src','/skit_website_wet_market/static/src/img/confirmed_green.png');
         		$('.icon_confirm').addClass("active_back");
         		$('.conf_vertical_ln').addClass("active_ln");
-        		window.location.href="/my/invoices/"+data['invoice']
+        		//window.location.href="/my/invoices/"+data['invoice']
         	}
         	else if(data['state'] == "preparing"){
         		$('#sale_preparing').removeClass("border-gray");
