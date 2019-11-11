@@ -74,6 +74,11 @@
 	color: white !important;
 	text-align: left;
 }
+.pos-open-order-no{
+	display: inline-block;
+	color: white !important;
+	text-align: left;
+}
 .pos-order-date{
 	width: 52% !important;
 	display: inline-block;
@@ -119,7 +124,7 @@
      
 } 
 .pos-cart-slide{
-	width: 24%;
+	width: 97%;
 	float: left;
 	display: inline-block;
 	margin-right: 1%;
@@ -164,13 +169,13 @@
 }
 
 .pos_zoom1{
-	width: 32% !important;
+	width: 33% !important;
 }
 .pos_zoom2{
-	width: 49% !important;
+	width: 50% !important;
 }
 .pos_zoom3{
-	width: 99% !important;
+	width: 100% !important;
 }
 .pos_header_zoom1{
 	font-size: 16px !important;
@@ -213,7 +218,15 @@
 .pink_bgcolor{
 	background: #99928c;
 }
-
+.wd_zoom1{
+	width: 43% !important;
+}
+.wd_zoom2{
+	width: 44% !important;
+}
+.wd_zoom3{
+	width: 45% !important;
+}
 .pos_status_table{
 	display: inline-block;
     float: left;
@@ -237,7 +250,7 @@
     padding-bottom: 7px;
 }
 .w41{
-	width: 41% !important;
+	width: 41%;
 }
 .open_date{
 	width: 49% !important;
@@ -256,7 +269,17 @@
     background-color: white;
     border-radius: 50%;
     cursor: pointer;
+    font-size: 2vh;
 }
+.shop_order_view{
+	margin-top: 1%;
+}
+.all_orders_div{
+	width: 25%;
+    float: left;
+}
+
+
 /** Media Query */
 @media only screen and (min-width : 992px) and (max-width: 1338px){
 	.pos-cart-slide{

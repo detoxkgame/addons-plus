@@ -69,7 +69,6 @@
         </div>
     </t>
     
-	
 	<!-- Display the Shop Cart Orders -->
 	<t t-name="ShopCartOrders">
 		<div>
@@ -80,7 +79,7 @@
 	            	
 	                <t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
 	                	<li t-attf-id="header-#{sorder.id}" t-att-class='"pos-cart-header-li pd0 " + ((sorder.state == "draft") or (sorder.state == "sent") ? "yellow_bgcolor ":"") + ((sorder.state == "sale") ? "green_bgcolor " : "") + ((sorder.state == "preparing") ? "orange_bgcolor " : "") + ((sorder.state == "ready") ? "pink_bgcolor " : "") + ((slevel == 1) ? "" : "") + ((slevel == 2) ? "pos_header_zoom1" : "") + ((slevel == 3) ? "pos_header_zoom2" : "") + ((slevel == 4) ? "pos_header_zoom3" : "")'>
-		                	<span class="pos-order-no w41">Order No : <t t-esc="sorder.name"/> </span>
+		                	<span class="pos-open-order-no w41">Order No : <t t-esc="sorder.name"/> </span>
 		                   	<span class="pos-order-date open_date">Date : <t t-esc="sorder.create_date"/> </span>
 		                   	<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
 		                   		<span t-attf-data-item="#{sorder.id}" t-attf-order_id="#{sorder.id}" class="del_btn">X</span>
@@ -266,7 +265,17 @@
 				<i id="zoom_in" class="fa fa-search-plus shop_zoom" aria-hidden="true"></i>
 				<i id="zoom_out" class="fa fa-search-minus shop_zoom" aria-hidden="true"></i>
 			</div>
-			 <div class="checkout_orders">
+			 <div class="checkout_orders shop_order_view">
+			 	<div class="first_orders all_orders_div"></div>
+			    <div class="second_orders all_orders_div"></div>
+			    <div class="third_orders all_orders_div"></div>
+			    <div class="fourth_orders all_orders_div"></div>
+             </div>
+             <div class="all_checkout_orders shop_order_view">
+             	<div class="open_orders all_orders_div"></div>
+			    <div class="confirm_orders all_orders_div"></div>
+			    <div class="prepare_orders all_orders_div"></div>
+			    <div class="ready_orders all_orders_div"></div>
              </div>
 		</div>
 	</t>

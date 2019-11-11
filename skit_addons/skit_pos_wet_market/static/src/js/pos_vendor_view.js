@@ -101,10 +101,31 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
         this.$('#order_status').on('change', function() {
         	
         	  var orders = self.pos.db.get_sorder_sorted(1000);
-        	  var contents = self.$el[0].querySelector('.checkout_orders');
-              contents.innerHTML = "";
+        	  
               var filtered_orders = orders;
+              var open_orders = [];
+              var confirm_orders = [];
+              var prepare_orders = [];
+              var pickup_orders = [];
               if(this.value != "all"){
+            	  var opencontents = self.$el[0].querySelector('.all_checkout_orders .open_orders');
+            	  opencontents.innerHTML = "";
+            	  var confirmcontents = self.$el[0].querySelector('.all_checkout_orders .confirm_orders');
+            	  confirmcontents.innerHTML = "";
+            	  var preparecontents = self.$el[0].querySelector('.all_checkout_orders .prepare_orders');
+            	  preparecontents.innerHTML = "";
+            	  var readycontents = self.$el[0].querySelector('.all_checkout_orders .ready_orders');
+            	  readycontents.innerHTML = "";  
+            	  
+            	  var firstcontents = self.$el[0].querySelector('.checkout_orders .first_orders');
+	        	  firstcontents.innerHTML = "";
+          	      var secondcontents = self.$el[0].querySelector('.checkout_orders .second_orders');
+          	      secondcontents.innerHTML = "";
+          	      var thirdcontents = self.$el[0].querySelector('.checkout_orders .third_orders');
+          	      thirdcontents.innerHTML = "";
+          	      var fourthcontents = self.$el[0].querySelector('.checkout_orders .fourth_orders');
+          	      fourthcontents.innerHTML = "";
+            	  
             	  var ostate = this.value;
             	  if(this.value == 'open'){
             		  filtered_orders = $.grep(orders, function(v) {
@@ -115,47 +136,254 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                           return v.state === ostate;
                       });
             	  }
+            	  var j = 0;
+            	  for(var i = 0, len = Math.min(filtered_orders.length,1000); i < len; i++){
+                      var order    = filtered_orders[i];
+                      var sorderline = self.sorder_cache.get_node(order.id);
+                     
+                      if(j == 0){
+                    	  var contents = self.$el[0].querySelector('.checkout_orders .first_orders');
+                      }
+                      if(j == 1){
+                    	  var contents = self.$el[0].querySelector('.checkout_orders .second_orders');
+                      }
+                      if(j == 2){
+                    	  var contents = self.$el[0].querySelector('.checkout_orders .third_orders');
+                      }
+                      if(j == 3){
+                    	  var contents = self.$el[0].querySelector('.checkout_orders .fourth_orders');
+                      }
+                      if(!sorderline){
+                      	var orderlines = [];
+                      	if(self.pos.db.get_orderline_by_order(filtered_orders[i].id) != undefined){
+                      		orderlines = self.pos.db.get_orderline_by_order(filtered_orders[i].id);
+                      	}
+                          var sorderline_html = QWeb.render('ShopCartOrders',{widget: self, sorder:filtered_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+                          var sorderline = document.createElement('div');
+                          sorderline.innerHTML = sorderline_html;
+                          sorderline = sorderline.childNodes[1];
+                          self.sorder_cache.cache_node(order.id,sorderline);
+                          var state_icon = sorderline.querySelector('.order_btn');
+                          if(state_icon){
+                          	state_icon.addEventListener('click', (function(e) {
+                          		
+                              	var order_id = e.target.dataset.item;
+                              	var order_state = ($("#"+order_id).text()).trim();
+                              	self.update_order_state(order_id, order_state);
+                              	
+                              }.bind(self)));
+                          }
+                          var del_icon = sorderline.querySelector('.del_btn');
+                          if(del_icon){
+                        	  del_icon.addEventListener('click', (function(e) {
+                          		
+                              	var order_id = e.target.dataset.item;
+                              	self.delete_order(order_id);
+                              	
+                              }.bind(self)));
+                          }
+                          
+                      }
+                      
+                      if(j == 3){
+                    	  j = 0;
+                      }else{
+                    	  j++;
+                      }
+                      
+                      contents.prepend(sorderline);
+                  }
             	  
+              }else{
+            	  var opencontents = self.$el[0].querySelector('.all_checkout_orders .open_orders');
+            	  opencontents.innerHTML = "";
+            	  var confirmcontents = self.$el[0].querySelector('.all_checkout_orders .confirm_orders');
+            	  confirmcontents.innerHTML = "";
+            	  var preparecontents = self.$el[0].querySelector('.all_checkout_orders .prepare_orders');
+            	  preparecontents.innerHTML = "";
+            	  var readycontents = self.$el[0].querySelector('.all_checkout_orders .ready_orders');
+            	  readycontents.innerHTML = "";  
+            	  
+            	    var firstcontents = self.$el[0].querySelector('.checkout_orders .first_orders');
+  	        	    firstcontents.innerHTML = "";
+            	    var secondcontents = self.$el[0].querySelector('.checkout_orders .second_orders');
+            	    secondcontents.innerHTML = "";
+            	    var thirdcontents = self.$el[0].querySelector('.checkout_orders .third_orders');
+            	    thirdcontents.innerHTML = "";
+            	    var fourthcontents = self.$el[0].querySelector('.checkout_orders .fourth_orders');
+            	    fourthcontents.innerHTML = "";
+            	    
+	  	        	open_orders = $.grep(filtered_orders, function(v) {
+	  	                return v.state === "draft" || v.state === "sent";
+	  	            });
+	  	        	confirm_orders = $.grep(filtered_orders, function(v) {
+	  	                return v.state === "sale";
+	  	            });
+	  	        	prepare_orders = $.grep(filtered_orders, function(v) {
+	  	                return v.state === "preparing";
+	  	            });
+	  	        	pickup_orders = $.grep(filtered_orders, function(v) {
+	  	                return v.state === "ready";
+	  	            });
+	  	        	var contents = self.$el[0].querySelector('.all_checkout_orders .open_orders'); 
+	  	        	for(var i = 0, len = Math.min(open_orders.length,1000); i < len; i++){
+	  	                var order    = open_orders[i];
+	  	                var sorderline = self.sorder_cache.get_node(order.id);
+	  	               
+	  	                if(!sorderline){
+	  	                	var orderlines = [];
+	  	                	if(self.pos.db.get_orderline_by_order(open_orders[i].id) != undefined){
+	  	                		orderlines = self.pos.db.get_orderline_by_order(open_orders[i].id);
+	  	                	}
+	  	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: self, sorder:open_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	  	                    var sorderline = document.createElement('div');
+	  	                    sorderline.innerHTML = sorderline_html;
+	  	                    sorderline = sorderline.childNodes[1];
+	  	                  self.sorder_cache.cache_node(order.id,sorderline);
+	  	                    var state_icon = sorderline.querySelector('.order_btn');
+	  	                    if(state_icon){
+	  	                    	state_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	var order_state = ($("#"+order_id).text()).trim();
+	  	                        	self.update_order_state(order_id, order_state);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                    var del_icon = sorderline.querySelector('.del_btn');
+	  	                    if(del_icon){
+	  	                    	del_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	self.delete_order(order_id);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                  
+	  	                }
+	  	                
+	  	                contents.prepend(sorderline);
+	  	            }
+	  	        	var contents = self.$el[0].querySelector('.all_checkout_orders .confirm_orders'); 
+	  	        	for(var i = 0, len = Math.min(confirm_orders.length,1000); i < len; i++){
+	  	                var order    = confirm_orders[i];
+	  	                var sorderline = self.sorder_cache.get_node(order.id);
+	  	               
+	  	                if(!sorderline){
+	  	                	var orderlines = [];
+	  	                	if(self.pos.db.get_orderline_by_order(confirm_orders[i].id) != undefined){
+	  	                		orderlines = self.pos.db.get_orderline_by_order(confirm_orders[i].id);
+	  	                	}
+	  	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:confirm_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	  	                    var sorderline = document.createElement('div');
+	  	                    sorderline.innerHTML = sorderline_html;
+	  	                    sorderline = sorderline.childNodes[1];
+	  	                    self.sorder_cache.cache_node(order.id,sorderline);
+	  	                    var state_icon = sorderline.querySelector('.order_btn');
+	  	                    if(state_icon){
+	  	                    	state_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	var order_state = ($("#"+order_id).text()).trim();
+	  	                        	self.update_order_state(order_id, order_state);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                    var del_icon = sorderline.querySelector('.del_btn');
+	  	                    if(del_icon){
+	  	                    	del_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	self.delete_order(order_id);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                  
+	  	                }
+	  	                
+	  	                contents.prepend(sorderline);
+	  	            }
+	  	        	var contents = self.$el[0].querySelector('.all_checkout_orders .prepare_orders'); 
+	  	        	for(var i = 0, len = Math.min(prepare_orders.length,1000); i < len; i++){
+	  	                var order    = prepare_orders[i];
+	  	                var sorderline = self.sorder_cache.get_node(order.id);
+	  	               
+	  	                if(!sorderline){
+	  	                	var orderlines = [];
+	  	                	if(self.pos.db.get_orderline_by_order(prepare_orders[i].id) != undefined){
+	  	                		orderlines = self.pos.db.get_orderline_by_order(prepare_orders[i].id);
+	  	                	}
+	  	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:prepare_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	  	                    var sorderline = document.createElement('div');
+	  	                    sorderline.innerHTML = sorderline_html;
+	  	                    sorderline = sorderline.childNodes[1];
+	  	                    self.sorder_cache.cache_node(order.id,sorderline);
+	  	                    var state_icon = sorderline.querySelector('.order_btn');
+	  	                    if(state_icon){
+	  	                    	state_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	var order_state = ($("#"+order_id).text()).trim();
+	  	                        	self.update_order_state(order_id, order_state);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                    var del_icon = sorderline.querySelector('.del_btn');
+	  	                    if(del_icon){
+	  	                    	del_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	self.delete_order(order_id);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                  
+	  	                }
+	  	                
+	  	                contents.prepend(sorderline);
+	  	            }
+	  	        	var contents = self.$el[0].querySelector('.all_checkout_orders .ready_orders'); 
+	  	        	for(var i = 0, len = Math.min(pickup_orders.length,1000); i < len; i++){
+	  	                var order    = pickup_orders[i];
+	  	                var sorderline = self.sorder_cache.get_node(order.id);
+	  	               
+	  	                if(!sorderline){
+	  	                	var orderlines = [];
+	  	                	if(self.pos.db.get_orderline_by_order(pickup_orders[i].id) != undefined){
+	  	                		orderlines = self.pos.db.get_orderline_by_order(pickup_orders[i].id);
+	  	                	}
+	  	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:pickup_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	  	                    var sorderline = document.createElement('div');
+	  	                    sorderline.innerHTML = sorderline_html;
+	  	                    sorderline = sorderline.childNodes[1];
+	  	                  self.sorder_cache.cache_node(order.id,sorderline);
+	  	                    var state_icon = sorderline.querySelector('.order_btn');
+	  	                    if(state_icon){
+	  	                    	state_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	var order_state = ($("#"+order_id).text()).trim();
+	  	                        	self.update_order_state(order_id, order_state);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                    var del_icon = sorderline.querySelector('.del_btn');
+	  	                    if(del_icon){
+	  	                    	del_icon.addEventListener('click', (function(e) {
+	  	                    		
+	  	                        	var order_id = e.target.dataset.item;
+	  	                        	self.delete_order(order_id);
+	  	                        	
+	  	                        }.bind(self)));
+	  	                    }
+	  	                  
+	  	                }
+	  	                
+	  	                contents.prepend(sorderline);
+	  	            }
               }
               
-              for(var i = 0, len = Math.min(filtered_orders.length,1000); i < len; i++){
-                  var order    = filtered_orders[i];
-                  var sorderline = self.sorder_cache.get_node(order.id);
-                 
-                  if(!sorderline){
-                  	var orderlines = [];
-                  	if(self.pos.db.get_orderline_by_order(filtered_orders[i].id) != undefined){
-                  		orderlines = self.pos.db.get_orderline_by_order(filtered_orders[i].id);
-                  	}
-                      var sorderline_html = QWeb.render('ShopCartOrders',{widget: self, sorder:filtered_orders[i], sorderlines:orderlines, slevel:zoomLevel});
-                      var sorderline = document.createElement('div');
-                      sorderline.innerHTML = sorderline_html;
-                      sorderline = sorderline.childNodes[1];
-                      self.sorder_cache.cache_node(order.id,sorderline);
-                      var state_icon = sorderline.querySelector('.order_btn');
-                      if(state_icon){
-                      	state_icon.addEventListener('click', (function(e) {
-                      		
-                          	var order_id = e.target.dataset.item;
-                          	var order_state = ($("#"+order_id).text()).trim();
-                          	self.update_order_state(order_id, order_state);
-                          	
-                          }.bind(self)));
-                      }
-                      var del_icon = sorderline.querySelector('.del_btn');
-                      if(del_icon){
-                    	  del_icon.addEventListener('click', (function(e) {
-                      		
-                          	var order_id = e.target.dataset.item;
-                          	self.delete_order(order_id);
-                          	
-                          }.bind(self)));
-                      }
-                    
-                  }
-                  
-                  contents.prepend(sorderline);
-              }
+              
         });
        
     },
@@ -164,45 +392,67 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
     	if(mutelevel > 0 && mutelevel <= 4){
 	    	zoomLevel += zoom;
 	    	if(zoomLevel == 1){
-	    		$('.pos-cart-slide').removeClass('pos_zoom1');
+	    		$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom1');
+	    		$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom1');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
 	        	$('.cart_list_span').removeClass('pos_list_zoom1');
+	        	$('.w41').removeClass('wd_zoom1');
 	    	}
 	    	if(zoomLevel == 2){
-	    		$('.pos-cart-slide').removeClass('pos_zoom2');
+	    		$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom2');
+	    		$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom2');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
 	        	$('.cart_list_span').removeClass('pos_list_zoom2');
-	    		$('.pos-cart-slide').addClass('pos_zoom1');
+	        	$('.w41').removeClass('wd_zoom2');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').addClass('pos_zoom1');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').addClass('pos_zoom1');
 	        	$('.pos-cart-header-li').addClass('pos_header_zoom1');
 	        	$('.cart_list_span').addClass('pos_list_zoom1');
+	        	$('.w41').addClass('wd_zoom1');
 	    	}
 	    	if(zoomLevel == 3){
-	    		$('.pos-cart-slide').removeClass('pos_zoom1');
+	    		$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom1');
+	    		$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom1');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
 	        	$('.cart_list_span').removeClass('pos_list_zoom1');
-	    		$('.pos-cart-slide').removeClass('pos_zoom2');
+	        	$('.w41').removeClass('wd_zoom1');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom2');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom2');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
 	        	$('.cart_list_span').removeClass('pos_list_zoom2');
-	        	$('.pos-cart-slide').removeClass('pos_zoom3');
+	        	$('.w41').removeClass('wd_zoom2');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom3');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom3');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom3');
 	        	$('.cart_list_span').removeClass('pos_list_zoom3');
-	    		$('.pos-cart-slide').addClass('pos_zoom2');
+	        	$('.w41').removeClass('wd_zoom3');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').addClass('pos_zoom2');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').addClass('pos_zoom2');
 	        	$('.pos-cart-header-li').addClass('pos_header_zoom2');
 	        	$('.cart_list_span').addClass('pos_list_zoom2');
+	        	$('.w41').addClass('wd_zoom2');
 	    	}
 	    	if(zoomLevel == 4){
-	    		$('.pos-cart-slide').removeClass('pos_zoom1');
+	    		$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom1');
+	    		$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom1');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom1');
 	        	$('.cart_list_span').removeClass('pos_list_zoom1');
-	    		$('.pos-cart-slide').removeClass('pos_zoom2');
+	        	$('.w41').removeClass('wd_zoom1');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom2');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom2');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom2');
 	        	$('.cart_list_span').removeClass('pos_list_zoom2');
-	    		$('.pos-cart-slide').removeClass('pos_zoom3');
+	        	$('.w41').removeClass('wd_zoom2');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').removeClass('pos_zoom3');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').removeClass('pos_zoom3');
 	        	$('.pos-cart-header-li').removeClass('pos_header_zoom3');
 	        	$('.cart_list_span').removeClass('pos_list_zoom3');
-	    		$('.pos-cart-slide').addClass('pos_zoom3');
+	        	$('.w41').removeClass('wd_zoom3');
+	        	$('.open_orders, .confirm_orders, .prepare_orders, .ready_orders').addClass('pos_zoom3');
+	        	$('.first_orders, .second_orders, .third_orders, .fourth_orders').addClass('pos_zoom3');
 	        	$('.pos-cart-header-li').addClass('pos_header_zoom3');
 	        	$('.cart_list_span').addClass('pos_list_zoom3');
+	        	$('.w41').addClass('wd_zoom3');
 	    	}
     	}
     	
@@ -292,63 +542,370 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
     },
     
     render_sorder: function(sorders){
-    	var contents = this.$el[0].querySelector('.checkout_orders');
-        contents.innerHTML = "";
+    	/*var contents = this.$el[0].querySelector('.checkout_orders');
+        contents.innerHTML = "";*/
         var state_value = $("#order_status option:selected").val();
         var orders = sorders;
+        var open_orders = [];
+        var confirm_orders = [];
+        var prepare_orders = [];
+        var pickup_orders = [];
         if(state_value != undefined && state_value != ""){
-	        if(state_value != "all"){
-	      	  if(state_value == 'open'){
-	      		orders = $.grep(sorders, function(v) {
-	                    return v.state === "draft" || v.state === "sent";
-	                });
-	      	  }else{
-	      		orders = $.grep(sorders, function(v) {
-	                    return v.state === state_value;
-	                });
-	      	  }
-	      	  
+	        if(state_value == "all"){
+	        	
+	        	var opencontents = this.$el[0].querySelector('.all_checkout_orders .open_orders');
+          	    opencontents.innerHTML = "";
+          	    var confirmcontents = this.$el[0].querySelector('.all_checkout_orders .confirm_orders');
+          	    confirmcontents.innerHTML = "";
+          	    var preparecontents = this.$el[0].querySelector('.all_checkout_orders .prepare_orders');
+          	    preparecontents.innerHTML = "";
+          	    var readycontents = this.$el[0].querySelector('.all_checkout_orders .ready_orders');
+          	    readycontents.innerHTML = "";
+
+	        	var firstcontents = this.$el[0].querySelector('.checkout_orders .first_orders');
+	        	firstcontents.innerHTML = "";
+          	    var secondcontents = this.$el[0].querySelector('.checkout_orders .second_orders');
+          	    secondcontents.innerHTML = "";
+          	    var thirdcontents = this.$el[0].querySelector('.checkout_orders .third_orders');
+          	    thirdcontents.innerHTML = "";
+          	    var fourthcontents = this.$el[0].querySelector('.checkout_orders .fourth_orders');
+          	    fourthcontents.innerHTML = "";
+	        	
+	        	open_orders = $.grep(sorders, function(v) {
+	                return v.state === "draft" || v.state === "sent";
+	            });
+	        	confirm_orders = $.grep(sorders, function(v) {
+	                return v.state === "sale";
+	            });
+	        	prepare_orders = $.grep(sorders, function(v) {
+	                return v.state === "preparing";
+	            });
+	        	pickup_orders = $.grep(sorders, function(v) {
+	                return v.state === "ready";
+	            });
+	        	var contents = this.$el[0].querySelector('.all_checkout_orders .open_orders'); 
+	        	for(var i = 0, len = Math.min(open_orders.length,1000); i < len; i++){
+	                var order    = open_orders[i];
+	                var sorderline = this.sorder_cache.get_node(order.id);
+	               
+	                if(!sorderline){
+	                	var orderlines = [];
+	                	if(this.pos.db.get_orderline_by_order(open_orders[i].id) != undefined){
+	                		orderlines = this.pos.db.get_orderline_by_order(open_orders[i].id);
+	                	}
+	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:open_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	                    var sorderline = document.createElement('div');
+	                    sorderline.innerHTML = sorderline_html;
+	                    sorderline = sorderline.childNodes[1];
+	                    this.sorder_cache.cache_node(order.id,sorderline);
+	                    var state_icon = sorderline.querySelector('.order_btn');
+	                    if(state_icon){
+	                    	state_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	var order_state = ($("#"+order_id).text()).trim();
+	                        	this.update_order_state(order_id, order_state);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                    var del_icon = sorderline.querySelector('.del_btn');
+	                    if(del_icon){
+	                    	del_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	this.delete_order(order_id);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                  
+	                }
+	                
+	                contents.prepend(sorderline);
+	            }
+	        	var contents = this.$el[0].querySelector('.all_checkout_orders .confirm_orders'); 
+	        	for(var i = 0, len = Math.min(confirm_orders.length,1000); i < len; i++){
+	                var order    = confirm_orders[i];
+	                var sorderline = this.sorder_cache.get_node(order.id);
+	               
+	                if(!sorderline){
+	                	var orderlines = [];
+	                	if(this.pos.db.get_orderline_by_order(confirm_orders[i].id) != undefined){
+	                		orderlines = this.pos.db.get_orderline_by_order(confirm_orders[i].id);
+	                	}
+	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:confirm_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	                    var sorderline = document.createElement('div');
+	                    sorderline.innerHTML = sorderline_html;
+	                    sorderline = sorderline.childNodes[1];
+	                    this.sorder_cache.cache_node(order.id,sorderline);
+	                    var state_icon = sorderline.querySelector('.order_btn');
+	                    if(state_icon){
+	                    	state_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	var order_state = ($("#"+order_id).text()).trim();
+	                        	this.update_order_state(order_id, order_state);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                    var del_icon = sorderline.querySelector('.del_btn');
+	                    if(del_icon){
+	                    	del_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	this.delete_order(order_id);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                  
+	                }
+	                
+	                contents.prepend(sorderline);
+	            }
+	        	var contents = this.$el[0].querySelector('.all_checkout_orders .prepare_orders'); 
+	        	for(var i = 0, len = Math.min(prepare_orders.length,1000); i < len; i++){
+	                var order    = prepare_orders[i];
+	                var sorderline = this.sorder_cache.get_node(order.id);
+	               
+	                if(!sorderline){
+	                	var orderlines = [];
+	                	if(this.pos.db.get_orderline_by_order(prepare_orders[i].id) != undefined){
+	                		orderlines = this.pos.db.get_orderline_by_order(prepare_orders[i].id);
+	                	}
+	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:prepare_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	                    var sorderline = document.createElement('div');
+	                    sorderline.innerHTML = sorderline_html;
+	                    sorderline = sorderline.childNodes[1];
+	                    this.sorder_cache.cache_node(order.id,sorderline);
+	                    var state_icon = sorderline.querySelector('.order_btn');
+	                    if(state_icon){
+	                    	state_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	var order_state = ($("#"+order_id).text()).trim();
+	                        	this.update_order_state(order_id, order_state);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                    var del_icon = sorderline.querySelector('.del_btn');
+	                    if(del_icon){
+	                    	del_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	this.delete_order(order_id);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                  
+	                }
+	                
+	                contents.prepend(sorderline);
+	            }
+	        	var contents = this.$el[0].querySelector('.all_checkout_orders .ready_orders'); 
+	        	for(var i = 0, len = Math.min(pickup_orders.length,1000); i < len; i++){
+	                var order    = pickup_orders[i];
+	                var sorderline = this.sorder_cache.get_node(order.id);
+	               
+	                if(!sorderline){
+	                	var orderlines = [];
+	                	if(this.pos.db.get_orderline_by_order(pickup_orders[i].id) != undefined){
+	                		orderlines = this.pos.db.get_orderline_by_order(pickup_orders[i].id);
+	                	}
+	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:pickup_orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	                    var sorderline = document.createElement('div');
+	                    sorderline.innerHTML = sorderline_html;
+	                    sorderline = sorderline.childNodes[1];
+	                    this.sorder_cache.cache_node(order.id,sorderline);
+	                    var state_icon = sorderline.querySelector('.order_btn');
+	                    if(state_icon){
+	                    	state_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	var order_state = ($("#"+order_id).text()).trim();
+	                        	this.update_order_state(order_id, order_state);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                    var del_icon = sorderline.querySelector('.del_btn');
+	                    if(del_icon){
+	                    	del_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	this.delete_order(order_id);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                  
+	                }
+	                
+	                contents.prepend(sorderline);
+	            }
+	        }else{
+	        	var firstcontents = this.$el[0].querySelector('.checkout_orders .first_orders');
+	        	firstcontents.innerHTML = "";
+          	    var secondcontents = this.$el[0].querySelector('.checkout_orders .second_orders');
+          	    secondcontents.innerHTML = "";
+          	    var thirdcontents = this.$el[0].querySelector('.checkout_orders .third_orders');
+          	    thirdcontents.innerHTML = "";
+          	    var fourthcontents = this.$el[0].querySelector('.checkout_orders .fourth_orders');
+          	    fourthcontents.innerHTML = "";
+
+	        	var opencontents = this.$el[0].querySelector('.all_checkout_orders .open_orders');
+          	    opencontents.innerHTML = "";
+          	    var confirmcontents = this.$el[0].querySelector('.all_checkout_orders .confirm_orders');
+          	    confirmcontents.innerHTML = "";
+          	    var preparecontents = this.$el[0].querySelector('.all_checkout_orders .prepare_orders');
+          	    preparecontents.innerHTML = "";
+          	    var readycontents = this.$el[0].querySelector('.all_checkout_orders .ready_orders');
+          	    readycontents.innerHTML = "";
+	        	if(state_value != undefined && state_value != ""){
+	    	        if(state_value != "all"){
+	    	      	  if(state_value == 'open'){
+	    	      		orders = $.grep(sorders, function(v) {
+	    	                    return v.state === "draft" || v.state === "sent";
+	    	                });
+	    	      	  }else{
+	    	      		orders = $.grep(sorders, function(v) {
+	    	                    return v.state === state_value;
+	    	                });
+	    	      	  }
+	    	      	  
+	    	        }
+	            }
+	        	var j = 0;
+	            for(var i = 0, len = Math.min(orders.length,1000); i < len; i++){
+	                var order    = orders[i];
+	                var sorderline = this.sorder_cache.get_node(order.id);
+	               
+	                if(j == 0){
+	                	  var contents = this.$el[0].querySelector('.checkout_orders .first_orders');
+	                  }
+	                  if(j == 1){
+	                	  var contents = this.$el[0].querySelector('.checkout_orders .second_orders');
+	                  }
+	                  if(j == 2){
+	                	  var contents = this.$el[0].querySelector('.checkout_orders .third_orders');
+	                  }
+	                  if(j == 3){
+	                	  var contents = this.$el[0].querySelector('.checkout_orders .fourth_orders');
+	                  }
+	                if(!sorderline){
+	                	var orderlines = [];
+	                	if(this.pos.db.get_orderline_by_order(orders[i].id) != undefined){
+	                		orderlines = this.pos.db.get_orderline_by_order(orders[i].id);
+	                	}
+	                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:orders[i], sorderlines:orderlines, slevel:zoomLevel});
+	                    var sorderline = document.createElement('div');
+	                    sorderline.innerHTML = sorderline_html;
+	                    sorderline = sorderline.childNodes[1];
+	                    this.sorder_cache.cache_node(order.id,sorderline);
+	                    var state_icon = sorderline.querySelector('.order_btn');
+	                    if(state_icon){
+	                    	state_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	var order_state = ($("#"+order_id).text()).trim();
+	                        	this.update_order_state(order_id, order_state);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                    var del_icon = sorderline.querySelector('.del_btn');
+	                    if(del_icon){
+	                    	del_icon.addEventListener('click', (function(e) {
+	                    		
+	                        	var order_id = e.target.dataset.item;
+	                        	this.delete_order(order_id);
+	                        	
+	                        }.bind(this)));
+	                    }
+	                  
+	                }
+	                if(j == 3){
+	                	  j = 0;
+	                }else{
+	                	  j++;
+	                }
+	                contents.prepend(sorderline);
+	            }
 	        }
-        }
-        for(var i = 0, len = Math.min(orders.length,1000); i < len; i++){
-            var order    = orders[i];
-            var sorderline = this.sorder_cache.get_node(order.id);
-           
-            if(!sorderline){
-            	var orderlines = [];
-            	if(this.pos.db.get_orderline_by_order(orders[i].id) != undefined){
-            		orderlines = this.pos.db.get_orderline_by_order(orders[i].id);
-            	}
-                var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:orders[i], sorderlines:orderlines, slevel:zoomLevel});
-                var sorderline = document.createElement('div');
-                sorderline.innerHTML = sorderline_html;
-                sorderline = sorderline.childNodes[1];
-                this.sorder_cache.cache_node(order.id,sorderline);
-                var state_icon = sorderline.querySelector('.order_btn');
-                if(state_icon){
-                	state_icon.addEventListener('click', (function(e) {
-                		
-                    	var order_id = e.target.dataset.item;
-                    	var order_state = ($("#"+order_id).text()).trim();
-                    	this.update_order_state(order_id, order_state);
-                    	
-                    }.bind(this)));
+        }else{
+        	
+        	var firstcontents = this.$el[0].querySelector('.checkout_orders .first_orders');
+        	firstcontents.innerHTML = "";
+      	    var secondcontents = this.$el[0].querySelector('.checkout_orders .second_orders');
+      	    secondcontents.innerHTML = "";
+      	    var thirdcontents = this.$el[0].querySelector('.checkout_orders .third_orders');
+      	    thirdcontents.innerHTML = "";
+      	    var fourthcontents = this.$el[0].querySelector('.checkout_orders .fourth_orders');
+      	    fourthcontents.innerHTML = "";
+
+        	var opencontents = this.$el[0].querySelector('.all_checkout_orders .open_orders');
+      	    opencontents.innerHTML = "";
+      	    var confirmcontents = this.$el[0].querySelector('.all_checkout_orders .confirm_orders');
+      	    confirmcontents.innerHTML = "";
+      	    var preparecontents = this.$el[0].querySelector('.all_checkout_orders .prepare_orders');
+      	    preparecontents.innerHTML = "";
+      	    var readycontents = this.$el[0].querySelector('.all_checkout_orders .ready_orders');
+      	    readycontents.innerHTML = "";
+
+        	var j = 0;
+        	for(var i = 0, len = Math.min(orders.length,1000); i < len; i++){
+                var order    = orders[i];
+                var sorderline = this.sorder_cache.get_node(order.id);
+
+                if(j == 0){
+              	  var contents = this.$el[0].querySelector('.checkout_orders .first_orders');
                 }
-                var del_icon = sorderline.querySelector('.del_btn');
-                if(del_icon){
-                	del_icon.addEventListener('click', (function(e) {
-                		
-                    	var order_id = e.target.dataset.item;
-                    	this.delete_order(order_id);
-                    	
-                    }.bind(this)));
+                if(j == 1){
+              	  var contents = this.$el[0].querySelector('.checkout_orders .second_orders');
                 }
-              
+                if(j == 2){
+              	  var contents = this.$el[0].querySelector('.checkout_orders .third_orders');
+                }
+                if(j == 3){
+              	  var contents = this.$el[0].querySelector('.checkout_orders .fourth_orders');
+                }
+                if(!sorderline){
+                	var orderlines = [];
+                	if(this.pos.db.get_orderline_by_order(orders[i].id) != undefined){
+                		orderlines = this.pos.db.get_orderline_by_order(orders[i].id);
+                	}
+                    var sorderline_html = QWeb.render('ShopCartOrders',{widget: this, sorder:orders[i], sorderlines:orderlines, slevel:zoomLevel});
+                    var sorderline = document.createElement('div');
+                    sorderline.innerHTML = sorderline_html;
+                    sorderline = sorderline.childNodes[1];
+                    this.sorder_cache.cache_node(order.id,sorderline);
+                    var state_icon = sorderline.querySelector('.order_btn');
+                    if(state_icon){
+                    	state_icon.addEventListener('click', (function(e) {
+                    		
+                        	var order_id = e.target.dataset.item;
+                        	var order_state = ($("#"+order_id).text()).trim();
+                        	this.update_order_state(order_id, order_state);
+                        	
+                        }.bind(this)));
+                    }
+                    var del_icon = sorderline.querySelector('.del_btn');
+                    if(del_icon){
+                    	del_icon.addEventListener('click', (function(e) {
+                    		
+                        	var order_id = e.target.dataset.item;
+                        	this.delete_order(order_id);
+                        	
+                        }.bind(this)));
+                    }
+                  
+                }
+                if(j == 3){
+              	  j = 0;
+	            }else{
+	              j++;
+	            }
+                contents.prepend(sorderline);
             }
-            
-            contents.prepend(sorderline);
         }
+       
     },
+    
 
 });
 gui.define_screen({name:'supplier_view', widget: SOOrderScreenWidget});
