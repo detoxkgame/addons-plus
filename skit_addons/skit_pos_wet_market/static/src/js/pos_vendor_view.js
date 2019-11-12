@@ -108,6 +108,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
               var prepare_orders = [];
               var pickup_orders = [];
               if(this.value != "all"){
+            	  self.$('.arrows').addClass("wet_display_none");
             	  var opencontents = self.$el[0].querySelector('.all_checkout_orders .open_orders');
             	  opencontents.innerHTML = "";
             	  var confirmcontents = self.$el[0].querySelector('.all_checkout_orders .confirm_orders');
@@ -195,6 +196,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
                   }
             	  
               }else{
+            	  self.$('.arrows').removeClass("wet_display_none");
             	  var opencontents = self.$el[0].querySelector('.all_checkout_orders .open_orders');
             	  opencontents.innerHTML = "";
             	  var confirmcontents = self.$el[0].querySelector('.all_checkout_orders .confirm_orders');
@@ -828,7 +830,7 @@ var SOOrderScreenWidget = screens.ScreenWidget.extend({
 	            }
 	        }
         }else{
-        	
+        	self.$('.arrows').addClass("wet_display_none");
         	var firstcontents = this.$el[0].querySelector('.checkout_orders .first_orders');
         	firstcontents.innerHTML = "";
       	    var secondcontents = this.$el[0].querySelector('.checkout_orders .second_orders');

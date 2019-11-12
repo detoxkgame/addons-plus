@@ -82,7 +82,9 @@
 		                	<span class="pos-open-order-no w41">Order No : <t t-esc="sorder.name"/> </span>
 		                   	<span class="pos-order-date open_date">Date : <t t-esc="sorder.create_date"/> </span>
 		                   	<t t-if="(sorder.state == 'draft') or (sorder.state == 'sent')">
-		                   		<span t-attf-data-item="#{sorder.id}" t-attf-order_id="#{sorder.id}" class="del_btn">X</span>
+		                   		<span t-attf-data-item="#{sorder.id}" t-attf-order_id="#{sorder.id}" class="del_btn">
+		                   		<i class="fa fa-times" aria-hidden="false"></i>
+		                   		</span>
 		                   	</t>
 		                </li>
 	                </t>
@@ -272,6 +274,20 @@
 			    <div class="fourth_orders all_orders_div"></div>
              </div>
              <div class="all_checkout_orders shop_order_view">
+             	<div class="arrows">
+					<div class="arrow step1">
+						<span>Open</span>
+					</div>
+					<div class="arrow step2">
+						<span>Order Confirm</span>
+					</div>
+					<div class="arrow step3">
+						<span>Preparing</span>
+					</div>
+					<div class="arrow step4">
+						<span>Ready to Pickup</span>
+					</div>
+				</div>
              	<div class="open_orders all_orders_div"></div>
 			    <div class="confirm_orders all_orders_div"></div>
 			    <div class="prepare_orders all_orders_div"></div>
