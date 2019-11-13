@@ -219,7 +219,7 @@ setInterval(function(){
 	  				alertify.alert("Success", "Your changes updated successfully.");
 	  			});
 			}else{
-				alertify.alert("Warning", "Please select the atleast one row.");
+				alertify.alert("Warning", "Please select at least one row.");
 			}
 		});
 		
@@ -247,7 +247,7 @@ setInterval(function(){
 			    });
 			    
 			}else{
-				alertify.alert("Warning", "Please select the atleast one row.");
+				alertify.alert("Warning", "Please select at least one row.");
 			}
 		});
 		
