@@ -891,19 +891,22 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
         compute_currency = self._get_compute_currency(pricelist, products[:1])
 
-        user_id = http.request.env.context.get('uid')
-        current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
-        if not current_user.has_group('sales_team.group_sale_manager'):
-            now = datetime.now()
-            cdatetime = now.strftime("%Y-%m-%d")
-            current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
-            wet_prod_template = request.env['product.template'].sudo().search([
-                ('expire_date', '!=', False),
-                ('expire_date', '<', current_date)])
-            if wet_prod_template:
-                products = Product.search([
-                    ('id', 'in', products.ids),
-                    ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
+        """ Remove Expire date """
+        #=======================================================================
+        # user_id = http.request.env.context.get('uid')
+        # current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        # if not current_user.has_group('sales_team.group_sale_manager'):
+        #     now = datetime.now()
+        #     cdatetime = now.strftime("%Y-%m-%d")
+        #     current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
+        #     wet_prod_template = request.env['product.template'].sudo().search([
+        #         ('expire_date', '!=', False),
+        #         ('expire_date', '<', current_date)])
+        #     if wet_prod_template:
+        #         products = Product.search([
+        #             ('id', 'in', products.ids),
+        #             ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
+        #=======================================================================
         values = {
             'search': search,
             'category': category,
@@ -926,6 +929,116 @@ class ShopWebsiteSale(ProductConfiguratorController):
         if category:
             values['main_object'] = category
         return request.render("website_sale.products", values)
+
+    @http.route([
+        '''/shop/product/grid'''
+    ], type='http', auth="public", website=True)
+    def product_grid(self, page=0, category=None, search='', ppg=False, **post):
+        if category:
+            category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
+            if not category or not category.can_access_from_current_website():
+                raise NotFound()
+
+        if ppg:
+            try:
+                ppg = int(ppg)
+            except ValueError:
+                ppg = PPG
+            post["ppg"] = ppg
+        else:
+            ppg = PPG
+
+        attrib_list = request.httprequest.args.getlist('attrib')
+        attrib_values = [[int(x) for x in v.split("-")] for v in attrib_list if v]
+        attributes_ids = {v[0] for v in attrib_values}
+        attrib_set = {v[1] for v in attrib_values}
+
+        domain = self._get_search_domain(search, category, attrib_values)
+
+        keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
+
+        compute_currency, pricelist_context, pricelist = self._get_compute_currency_and_context()
+
+        request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
+
+        url = "/shop"
+        if search:
+            post["search"] = search
+        if attrib_list:
+            post['attrib'] = attrib_list
+
+        Product = request.env['product.template']
+
+        Category = request.env['product.public.category']
+        search_categories = False
+        if search:
+            categories = Product.search(domain).mapped('public_categ_ids')
+            search_categories = Category.search([('id', 'parent_of', categories.ids)] + request.website.website_domain())
+            categs = search_categories.filtered(lambda c: not c.parent_id)
+        else:
+            categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
+
+        parent_category_ids = []
+        if category:
+            url = "/shop/category/%s" % slug(category)
+            parent_category_ids = [category.id]
+            current_category = category
+            while current_category.parent_id:
+                parent_category_ids.append(current_category.parent_id.id)
+                current_category = current_category.parent_id
+
+        product_count = Product.search_count(domain)
+        pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+        products = Product.search(domain,  offset=pager['offset'], order=self._get_search_order(post))
+
+        ProductAttribute = request.env['product.attribute']
+        if products:
+            # get all products without limit
+            selected_products = Product.search(domain, limit=False)
+            attributes = ProductAttribute.search([('attribute_line_ids.product_tmpl_id', 'in', selected_products.ids)])
+        else:
+            attributes = ProductAttribute.browse(attributes_ids)
+        """ Remove Expire date """
+        #=======================================================================
+        # user_id = http.request.env.context.get('uid')
+        # current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        # if not current_user.has_group('sales_team.group_sale_manager'):
+        #     now = datetime.now()
+        #     cdatetime = now.strftime("%Y-%m-%d")
+        #     current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
+        #     wet_prod_template = request.env['product.template'].sudo().search([
+        #         ('expire_date', '!=', False),
+        #         ('expire_date', '<', current_date)])
+        #     if wet_prod_template:
+        #         products = Product.search([
+        #             ('id', 'in', products.ids),
+        #             ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
+        #=======================================================================
+        product_attribute = request.env['product.attribute'].search([])
+        attribute_values = request.env['product.attribute.value'].search([])
+        values = {
+            'search': search,
+            'category': category,
+            'attrib_values': attrib_values,
+            'attrib_set': attrib_set,
+            'pager': pager,
+            'pricelist': pricelist,
+            'products': products,
+            'search_count': product_count,  # common for all searchbox
+            'bins': TableCompute().process(products, ppg),
+            'rows': PPR,
+            'categories': categs,
+            'attributes': attributes,
+            'compute_currency': compute_currency,
+            'keep': keep,
+            'parent_category_ids': parent_category_ids,
+            'search_categories_ids': search_categories and search_categories.ids,
+            'product_attribute': product_attribute,
+            'attribute_values': attribute_values
+        }
+        if category:
+            values['main_object'] = category
+        return request.render("skit_website_wet_market.product_grid_view", values)
 
 
 class Home(http.Controller):
@@ -995,7 +1108,7 @@ class Home(http.Controller):
             for value in attr.value_ids:
                 attribute_value.append(value.id)
         values = {
-            'price': product_template.list_price,
+            'price': product_template.website_price,
             'expire_date': product_template.expire_date,
             'product_attribute': product_attribute,
             'attribute_values': attribute_values,
@@ -1009,11 +1122,23 @@ class Home(http.Controller):
                 auth="public", methods=['POST'], website=True)
     def product_save(self, **kw):
         values = {}
-        if(kw.get('price')):
-            values['list_price'] = kw.get('price')
-        if(kw.get('expire_date')):
-            values['expire_date'] = kw.get('expire_date')
         product_template = request.env['product.template'].browse(int(kw.get('prod_id')))
+        if(kw.get('price')):
+            pricelist = request.env['product.pricelist'].search([], limit=1)
+            pricelist_item = request.env['product.pricelist.item'].search([
+                    ('pricelist_id', '=', pricelist.id),
+                    ('product_tmpl_id', '=',  product_template.id)])
+            if pricelist_item:
+                pricelist_item.update({'fixed_price': kw.get('price')})
+            else:
+                request.env['product.pricelist.item'].create(
+                        {'pricelist_id': pricelist.id,
+                         'product_tmpl_id': product_template.id,
+                         'fixed_price': kw.get('price')})
+        #=======================================================================
+        # if(kw.get('expire_date')):
+        #     values['expire_date'] = kw.get('expire_date')
+        #=======================================================================
         product_template.write(values)
         if(kw.get('attribute')):
             attr_id = int(kw.get('attribute'))
@@ -1027,6 +1152,38 @@ class Home(http.Controller):
                     product_template.write({'attribute_line_ids': [[2, attr.id, False]]})
                 product_template.write({'attribute_line_ids': [[0, 0, {'attribute_id': attr_id, 'value_ids': [[6, False, kw.get('attribute_value')]]}]]})
 
+        return True
+
+    @http.route('/grid_product/details/save', type='json',
+                auth="public", methods=['POST'], website=True)
+    def grid_product_save(self, **kw):
+        for prod in kw:
+            prod_detail = kw.get(prod)
+            product_template = request.env['product.template'].browse(int(prod_detail.get('prod_id')))
+            if(prod_detail.get('price')):
+                pricelist = request.env['product.pricelist'].search([], limit=1)
+                pricelist_item = request.env['product.pricelist.item'].search([
+                    ('pricelist_id', '=', pricelist.id),
+                    ('product_tmpl_id', '=',  product_template.id)])
+                if pricelist_item:
+                    pricelist_item.update({'fixed_price': prod_detail.get('price')})
+                else:
+                    request.env['product.pricelist.item'].create(
+                        {'pricelist_id': pricelist.id,
+                         'product_tmpl_id': product_template.id,
+                         'fixed_price': prod_detail.get('price')})
+
+            if(prod_detail.get('attribute')):
+                attr_id = int(prod_detail.get('attribute'))
+                prod_attr = request.env['product.template.attribute.line'].search([
+                    ('product_tmpl_id', '=', product_template.id),
+                    ('attribute_id', '=', attr_id)])
+                if(prod_attr):
+                    product_template.write({'attribute_line_ids': [[1, prod_attr.id, {'value_ids': [[6, False, prod_detail.get('attribute_value')]]}]]})
+                else:
+                    for attr in product_template.attribute_line_ids:
+                        product_template.write({'attribute_line_ids': [[2, attr.id, False]]})
+                    product_template.write({'attribute_line_ids': [[0, 0, {'attribute_id': attr_id, 'value_ids': [[6, False, prod_detail.get('attribute_value')]]}]]})
         return True
 
     @http.route('/product/attribute/values', type='json',
@@ -1045,6 +1202,23 @@ class Home(http.Controller):
             'attribute_value': attribute_value
             }
         return request.env['ir.ui.view'].render_template('skit_website_wet_market.wet_product_attribute', values)
+
+    @http.route('/grid_product/attribute/values', type='json',
+                auth="public", methods=['POST'], website=True)
+    def grid_attribute_values(self, **kw):
+        product_tmpl_id = int(kw.get('prod_id'))
+        product_template = request.env['product.template'].browse(product_tmpl_id)
+        attribute_values = request.env['product.attribute.value'].search([
+            ('attribute_id', '=', int(kw.get('attribute_id')))])
+        attribute_value = []
+        for attr in product_template.attribute_line_ids:
+            for value in attr.value_ids:
+                attribute_value.append(value.id)
+        values = {
+            'attribute_values': attribute_values,
+            'attribute_value': attribute_value
+            }
+        return request.env['ir.ui.view'].render_template('skit_website_wet_market.wet_grid_product_attribute', values)
 
     @http.route('/create/stock/inventory', type='json',
                 auth="public", methods=['POST'], website=True)
@@ -1088,6 +1262,56 @@ class Home(http.Controller):
                 return values
             else:
                 stock_inventory.action_validate()
+        values['title'] = 'Success'
+        values['msg'] = "Stock successfully updated."
+        return values
+
+    @http.route('/grid/create/stock/inventory', type='json',
+                auth="public", methods=['POST'], website=True)
+    def grid_stock_inventory(self, **kw):
+        values = {}
+        company_user = request.env.user.company_id
+        warehouse = request.env['stock.warehouse'].search([('company_id', '=', company_user.id)], limit=1)
+        if warehouse:
+            stock_inventory = request.env['stock.inventory'].create({
+                'name': warehouse.name,
+                'location_id': warehouse.lot_stock_id.id,
+                'filter': 'partial'})
+            exit_prod = False
+            prod_names = ""
+            for stock in kw:
+                stock_detail = kw.get(stock)
+                qval = stock_detail.get('qty')
+                if qval != "":
+                    qty = int(qval)
+                    prod_qty = float(qty)
+                    prod_template = request.env['product.template'].browse(int(stock_detail.get('prod_id')))
+                    prod = request.env['product.product'].search([
+                        ('product_tmpl_id', '=', prod_template.id)])
+                    exit_stock = request.env['stock.inventory.line'].search([
+                        ('product_id', '=', prod.id),
+                        ('inventory_id.state', '=', 'confirm'),
+                        ('location_id', '=', warehouse.lot_stock_id.id)])
+                    if(exit_stock):
+                        exit_prod = True
+                        if prod_names == "":
+                            prod_names = prod_template.name
+                        else:
+                            prod_names = prod_names +","+ prod_template.name
+                    else:
+                        request.env['stock.inventory.line'].create({
+                            'inventory_id': stock_inventory.id,
+                            'product_id': prod.id,
+                            'product_uom_id': prod_template.uom_id.id,
+                            'location_id': warehouse.lot_stock_id.id,
+                            'product_qty': prod_qty
+                            })
+            stock_inventory.action_start()
+            stock_inventory.action_validate()
+            if(exit_prod):
+                values['title'] = 'Warning'
+                values['msg'] = "You cannot have two inventory adjustments in state 'in Progess' with the same product "+prod_names+". Other products stock updated successfully."
+                return values
         values['title'] = 'Success'
         values['msg'] = "Stock successfully updated."
         return values

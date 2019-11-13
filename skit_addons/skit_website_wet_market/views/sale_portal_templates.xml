@@ -543,10 +543,10 @@
                         				<td><span>Price</span></td>
                         				<td><input class="form-control" type='text' id="price" name="price" t-att-value="price"/></td>
                         			</tr>
-                        			<tr>
+                        			<!-- <tr>
                         				<td><span>Expiry Date</span></td>
                         				<td><input type="date" class="form-control" id="expire_date" name="expire_date" t-att-value="expire_date"/></td>
-                        			</tr>
+                        			</tr> -->
                         			<tr>
                         				<td><span>Attribute</span></td>
                         				<td>
@@ -694,5 +694,134 @@
     </section>
     </div>
         </xpath>
+	</template>
+	
+	<!-- Grid View for Products -->
+	<template id="wet_grid_product_attribute" name="grid_product_attribute">
+		<select class="form-control chosen" id="grid_attribute_value" name="grid_attribute_value" multiple="true">
+			<t t-foreach='attribute_values' t-as='value'>
+				<t t-if="(value.id) in attribute_value" >
+					<option selected="selected" t-att-value='value.id'><t t-esc='value.name'/></option>
+				</t>
+				<t t-else="">
+					<option t-att-value='value.id'><t t-esc='value.name'/></option>
+				</t>
+			</t>
+		</select>
+	</template>
+	
+	<template id="wet_sort" name="Sort" inherit_id="website_sale.products" priority="20">
+    	<xpath expr="//div[hasclass('products_pager')]" position="inside">
+    		<div class="ml-2 product_sort_grid" groups="sales_team.group_sale_manager">
+    			<a role="button" href="/shop/product/grid" class="btn btn-secondary" title="Grid">
+                   <i class="fa fa-list" aria-hidden="false"></i>
+                </a>
+    		</div>
+    	</xpath>
+    </template>
+    
+    <template id="product_grid_view" name="Product Gird View">
+		<t t-call="website.layout">
+		<div class="row">
+		<div class="container">
+		<div id="tableID">
+		<div class="grid_save_div">
+			<button type="button" class="stock_btn">Stock Update</button>
+			<button type="button" class="save_changed_btn">Save Changes</button>
+		</div>
+		  <table class="table-list" data-currentpage="1">
+		    <thead>
+			    <tr class="table_head_rows">
+			      <th><input type="checkbox" id="all_products" /></th>
+			      <th><button type="button" class="sort" data-sort="sortName">Name<i class="caret"></i></button></th>
+			      <th><button type="button" class="sort" data-sort="sortPrice">Price<i class="caret"></i></button></th>
+			      <!-- <th><button type="button" class="sort textright" data-sort="sortDate">Expiry Date<i class="caret"></i></button></th> -->
+			      <th>Attribute</th>
+			      <th>Attribute Values</th>
+			      <th>OnHand Qty</th>
+			     </tr>
+		    </thead>
+		
+		    <tbody class="list">
+		    	<t t-foreach="products" t-as="product">
+		        	<tr t-att-id="product.id">
+			        	<td><input type="checkbox" class="product_row" /> </td>
+			            <td class="sortName"><t t-esc="product.name"/></td>
+			            <td class="sortPrice">
+			            	<input type="text" class="form-control" id="product_price" t-att-value="product.website_price" />
+			            </td>
+			            <td>
+			            	<select class="form-control grid_attribute" id="grid_attribute" name="attribute">
+								<option disabled="1" selected="1" value="">Choose...</option>
+								<t t-foreach='product_attribute' t-as='attr'>
+									<t t-set="att_select" t-value="False" />
+									<t t-foreach='product.attribute_line_ids' t-as='att_line'>
+										<t t-if="(attr.id) == att_line.attribute_id.id" >
+											<t t-set="att_select" t-value="True" />
+										     <option selected="selected" t-att-value='attr.id'><t t-esc='attr.name'/></option>
+										</t>
+									</t>
+									<t t-if="not (att_select)">
+										<option t-att-value='attr.id'><t t-esc='attr.name'/></option>
+									</t>
+								</t>
+							</select>
+			            </td>
+			            <td>
+			            	<select class="form-control grid_attribute_value chosen" id="grid_attribute_value" name="attribute_value" multiple="true">
+								<t t-foreach='attribute_values' t-as='value'>
+									<t t-set="att_select" t-value="False" />
+									<t t-foreach='product.attribute_line_ids' t-as='att_line'>
+										<t t-foreach='att_line.value_ids' t-as='value_id'>
+										<t t-if="(value.id) == value_id.id" >
+											<option selected="selected" t-att-value='value.id'><t t-esc='value.name'/></option>
+										</t>
+										</t>
+									</t>
+									<t t-if="not (att_select)">
+										<option t-att-value='value.id'><t t-esc='value.name'/></option>
+									</t>
+								</t>
+							</select>
+			            </td>
+			            <td>
+				            <t t-if="product.type != 'product'">
+				            	<input type="number" class="form-control" id="onhand_qty" name="onhand_qty" disabled="disabled"/>
+				            </t>
+				            <t t-else="">
+				            	<input type="number" class="form-control" id="onhand_qty" name="onhand_qty" />
+				            </t>
+			            
+			            </td>
+			    	</tr>
+		    	</t>
+		    </tbody>
+		    <tfoot>
+		      <tr>
+		        <td colspan="3" class="table-footer">
+		          <div class="table-pagination">
+		            <button type="button" class="btn-tablepage jTablePagePrev">&lt;</button>
+		            <ul class="pagination"></ul>
+		            <button type="button" class="btn-tablepage jTablePageNext">&gt;</button>
+		          </div>
+		          <div class="table-filter ">
+		            <input class="search " placeholder="Search "/>
+		          </div>
+		
+		        </td>
+		      </tr>
+		    </tfoot>
+		  </table>
+		</div>
+	</div>
+	</div>
+	<div id="loading">
+				<div id="loading-image">
+					<img src="/web/static/src/img/spin.png" style="animation: fa-spin 1s infinite steps(12);"></img>
+					<br></br><br></br>
+					<span id="loading-text">Loading...</span>
+				</div>
+	</div>
+	</t>
 	</template>
 </odoo>

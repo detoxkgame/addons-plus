@@ -120,6 +120,137 @@ setInterval(function(){
 	}, 3000);
 
 	$(document).ready(function(){
+
+		$(".grid_attribute_value").chosen({
+			  width:'100%',
+			  enable_search_threshold : 10
+		});
+		
+		$('.grid_attribute').on('change', function(ev){
+				var self = $(this);
+		    	var attribute_id = $(this).val();
+		    	var prod_id = $(this).closest('tr').attr('id');
+		    	var attr_post = {};
+		    	attr_post['prod_id'] = prod_id;
+		    	attr_post['attribute_id'] = attribute_id;
+		    	ajax.jsonRpc('/grid_product/attribute/values', 'call', attr_post).then(function (result) {
+		    		self.closest('tr').find("#grid_attribute_value_chosen").remove();
+		    		self.closest('tr').find("#grid_attribute_value").replaceWith(result);
+		    		self.closest('tr').find("#grid_attribute_value").chosen({
+		  			  width:'100%',
+		  			  enable_search_threshold : 10
+		  		    });
+		    	});
+		});
+		
+		$("#all_products").change(function(){  //"select all" change
+			var table= $(this).closest('table');
+			$('td input:checkbox',table).prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
+		});
+		$('.product_row').change(function(){ 
+			//uncheck "select all", if one of the listed checkbox item is unchecked
+		    if(false == $(this).prop("checked")){ //if this item is unchecked
+		        $("#all_products").prop('checked', false); //change "select all" checked status to false
+		    }
+			//check "select all" if all checkbox items are checked
+			if ($('.product_row:checked').length == $('.product_row').length ){
+				$("#all_products").prop('checked', true);
+			}
+		});
+		
+		var pagingRows = 7;
+
+		var paginationOptions = {
+		    innerWindow: 1,
+		    left: 0,
+		    right: 0
+		};
+		var options = {
+		  valueNames: [ 'sortName', 'sortPrice', 'sortDate' ],
+		  page: pagingRows,
+		  plugins: [ ListPagination(paginationOptions) ],
+		};
+
+		var tableList = new List('tableID', options);
+
+		$('.jTablePageNext').on('click', function(){
+		    var list = $('.pagination').find('li');
+		    $.each(list, function(position, element){
+		        if($(element).is('.active')){
+		            $(list[position+1]).trigger('click');
+		        }
+		    })
+		});
+		$('.jTablePagePrev').on('click', function(){
+		    var list = $('.pagination').find('li');
+		    $.each(list, function(position, element){
+		        if($(element).is('.active')){
+		            $(list[position-1]).trigger('click');
+		        }
+		    })
+		});
+		
+		$('.save_changed_btn').click(function(){
+			var count = $('.table-list tbody input[type="checkbox"]:checked').length;
+			if(count > 0){
+				$('#loading').show();
+				var prod_array = {};
+				$('.table-list tbody input[type="checkbox"]:checked').each(function(){
+					var prod_id = $(this).closest('tr').attr('id');
+					var price = $(this).closest('tr').find('#product_price').val();
+		  			var attribute = $(this).closest('tr').find( "#grid_attribute option:selected" ).val();
+		  			var attribute_value = []
+		  			$(this).closest('tr').find( "#grid_attribute_value option:selected" ).each(function(){
+		  				attribute_value.push(parseInt($(this).val()))
+		  			})
+		  			var prod_post = {};
+		  			prod_post['price'] = price;
+		  			prod_post['prod_id'] = prod_id;
+		  			prod_post['attribute'] = attribute
+		  			prod_post['attribute_value'] = attribute_value
+		  			prod_array[prod_id] = prod_post;
+				});
+				
+				ajax.jsonRpc('/grid_product/details/save', 'call', prod_array).then(function (modal) {
+	  				$('#loading').hide();
+	  				var table= $('.table-list');
+	  				$('td input:checkbox',table).prop('checked', false);
+	  				$("#all_products").prop('checked', false);
+	  				alertify.alert("Success", "Your changes updated successfully.");
+	  			});
+			}else{
+				alertify.alert("Warning", "Please select the atleast one row.");
+			}
+		});
+		
+		$('.stock_btn').click(function(){
+			var count = $('.table-list tbody input[type="checkbox"]:checked').length;
+			if(count > 0){
+				$('#loading').show();
+				var stock_array = {};
+				$('.table-list tbody input[type="checkbox"]:checked').each(function(){
+					var prod_id = $(this).closest('tr').attr('id');
+					var onhand_qty = $(this).closest('tr').find('#onhand_qty').val();
+		  			
+		  			var stock_prod = {};
+			    	stock_prod['prod_id'] = prod_id;
+			    	stock_prod['qty'] = onhand_qty;
+			    	stock_array[prod_id] = stock_prod;
+				});
+				
+			    ajax.jsonRpc('/grid/create/stock/inventory', 'call', stock_array).then(function (result) {
+			    	$('#loading').hide();
+			    	var table= $('.table-list');
+	  				$('td input:checkbox',table).prop('checked', false);
+	  				$("#all_products").prop('checked', false);
+			    	alertify.alert(result['title'],result['msg']);
+			    });
+			    
+			}else{
+				alertify.alert("Warning", "Please select the atleast one row.");
+			}
+		});
+		
 		$('.prod_categ_menu').click(function(){
 			$(".nav_pcateg").slideToggle('slow');
 		});
@@ -171,6 +302,13 @@ setInterval(function(){
 		var nav_activeText = $('.nav_pcateg').find('.nav-link.active').text();
 		$('.pcate_menu').text(nav_activeText);
 	});
+	function comparer(index) {
+	    return function(a, b) {
+	        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+	        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+	    }
+	}
+	function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 	
 	$(document).ready(function(ev){
 		var post = {};
@@ -277,7 +415,7 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
   		    
 	  		$modal.on('click', '#prod_setting_btn', function (ev) {
 	  			var price = $(ev.currentTarget).closest('table').find('#price').val();
-	  			var expire_date = $(ev.currentTarget).closest('table').find('#expire_date').val();
+	  			//var expire_date = $(ev.currentTarget).closest('table').find('#expire_date').val();
 	  			var attribute = $(ev.currentTarget).closest('table').find( "#attribute option:selected" ).val();
 	  			var attribute_value = []
 	  			$(ev.currentTarget).closest('table').find( "#attribute_value option:selected" ).each(function(){
@@ -285,7 +423,7 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
 	  			})
 	  			var prod_post = {};
 	  			prod_post['price'] = price;
-	  			prod_post['expire_date'] = expire_date;
+	  			//prod_post['expire_date'] = expire_date;
 	  			prod_post['prod_id'] = prod_id;
 	  			prod_post['attribute'] = attribute
 	  			prod_post['attribute_value'] = attribute_value

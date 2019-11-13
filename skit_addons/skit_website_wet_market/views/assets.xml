@@ -12,6 +12,8 @@
             <script type="text/javascript" src="/skit_website_wet_market/static/src/js/product_configuration.js"></script>
             <script type="text/javascript" src="/skit_website_wet_market/static/src/js/chosen.jquery.min.js"></script>
             <script type="text/javascript" src="/skit_website_popup/static/src/js/alertify.min.js"></script>
+            <script type="text/javascript" src="/skit_website_wet_market/static/src/js/list.min.js"></script>
+            <script type="text/javascript" src="/skit_website_wet_market/static/src/js/list.pagination.min.js"></script>
         </xpath>
     </template>
     
