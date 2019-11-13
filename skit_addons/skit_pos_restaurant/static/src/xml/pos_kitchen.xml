@@ -457,6 +457,9 @@
 		            <span class="order-button square deleteorder-button">
 		                <i class='fa fa-minus' role="img" aria-label="Delete order" title="Delete order"/>
 		            </span>
+		            <span class="icon order-button square show_ordersbtn" title="Show_Orders">
+						<i class="fa fa-chevron-down"></i>
+					</span>
 		        </div>
 			</t>
 		</t>
