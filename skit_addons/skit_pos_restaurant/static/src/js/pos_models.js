@@ -37,6 +37,11 @@ odoo.define('pos_models', function(require){
 	    },
 	    
 		set_kitchen_reverse: function(orderline){
+			if(this.pos.get_order() == null || this.pos.get_order == undefined){
+	    		var updateorders = this.pos.get('orders').models;
+	    		this.pos.set_order(updateorders[0]);
+	    		this.set('selectedOrder',updateorders[0]);
+	    	}
 	    	this.pos.get_order().select_orderline(orderline);
 	        var order = this.pos.get_order();
 	        if (order.get_selected_orderline()) {
@@ -55,6 +60,11 @@ odoo.define('pos_models', function(require){
 	    },
 	    
 	    set_kitchen_forward: function(orderline){
+	    	if(this.pos.get_order() == null || this.pos.get_order == undefined){
+	    		var updateorders = this.pos.get('orders').models;
+	    		this.pos.set_order(updateorders[0]);
+	    		this.set('selectedOrder',updateorders[0]);
+	    	}
 	    	this.pos.get_order().select_orderline(orderline);
 	    	var order = this.pos.get_order();
 	        if (order.get_selected_orderline()) {

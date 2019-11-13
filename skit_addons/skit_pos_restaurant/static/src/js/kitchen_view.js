@@ -109,7 +109,9 @@ base_models.PosModel = base_models.PosModel.extend({
 			    	 
 			     }
 		     }
-		     this.set_order(orders[0]);
+	         if(orders.length > 0){
+	        	 this.set_order(orders[0]);
+	         }
 		 }
      },
 });
@@ -145,7 +147,7 @@ screens.OrderWidget.include({
 	            var orders = this.pos.get_order_list();
 	            for (var j = 0; j < orders.length; j++) {
 	            	var list_container = el_node.querySelector('.orderlines'+orders[j].uid);
-		            var order = orders[j]
+	            	var order = orders[j]
 
 		            var orderlines = order.get_orderlines();
 		            if(orderlines.length <= 0){
@@ -162,7 +164,10 @@ screens.OrderWidget.include({
 		            		if(orderlines[i].get_kitchen_state() != 'delivered'){
 		            			is_categ_order = true;
 			            		var orderline = this.render_orderline(orderlines[i]);
-					            list_container.appendChild(orderline);
+					            if(list_container != null){
+					            	list_container.appendChild(orderline);
+					            }
+			            		
 			            	}
 		                }
 		              
