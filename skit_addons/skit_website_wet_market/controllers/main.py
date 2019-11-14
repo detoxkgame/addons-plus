@@ -844,6 +844,10 @@ class ShopWebsiteSale(ProductConfiguratorController):
         attrib_set = {v[1] for v in attrib_values}
 
         domain = self._get_search_domain(search, category, attrib_values)
+        user_id = http.request.env.context.get('uid')
+        current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        if current_user.has_group('sales_team.group_sale_manager'):
+            domain.append(('company_id', '=', current_user.company_id.id))
 
         keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
 
@@ -907,6 +911,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
         #             ('id', 'in', products.ids),
         #             ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
         #=======================================================================
+
         values = {
             'search': search,
             'category': category,
@@ -954,6 +959,10 @@ class ShopWebsiteSale(ProductConfiguratorController):
         attrib_set = {v[1] for v in attrib_values}
 
         domain = self._get_search_domain(search, category, attrib_values)
+        user_id = http.request.env.context.get('uid')
+        current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        if current_user.has_group('sales_team.group_sale_manager'):
+            domain.append(('company_id', '=', current_user.company_id.id))
 
         keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
 
@@ -1124,17 +1133,21 @@ class Home(http.Controller):
         values = {}
         product_template = request.env['product.template'].browse(int(kw.get('prod_id')))
         if(kw.get('price')):
-            pricelist = request.env['product.pricelist'].search([], limit=1)
-            pricelist_item = request.env['product.pricelist.item'].search([
-                    ('pricelist_id', '=', pricelist.id),
-                    ('product_tmpl_id', '=',  product_template.id)])
-            if pricelist_item:
-                pricelist_item.update({'fixed_price': kw.get('price')})
-            else:
-                request.env['product.pricelist.item'].create(
-                        {'pricelist_id': pricelist.id,
-                         'product_tmpl_id': product_template.id,
-                         'fixed_price': kw.get('price')})
+            user_id = http.request.env.context.get('uid')
+            current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+            pricelist = request.env['product.pricelist'].search([
+                ('company_id', '=', current_user.company_id.id)], limit=1)
+            if pricelist:
+                pricelist_item = request.env['product.pricelist.item'].search([
+                        ('pricelist_id', '=', pricelist.id),
+                        ('product_tmpl_id', '=',  product_template.id)])
+                if pricelist_item:
+                    pricelist_item.update({'fixed_price': kw.get('price')})
+                else:
+                    request.env['product.pricelist.item'].create(
+                            {'pricelist_id': pricelist.id,
+                             'product_tmpl_id': product_template.id,
+                             'fixed_price': kw.get('price')})
         #=======================================================================
         # if(kw.get('expire_date')):
         #     values['expire_date'] = kw.get('expire_date')
@@ -1161,17 +1174,21 @@ class Home(http.Controller):
             prod_detail = kw.get(prod)
             product_template = request.env['product.template'].browse(int(prod_detail.get('prod_id')))
             if(prod_detail.get('price')):
-                pricelist = request.env['product.pricelist'].search([], limit=1)
-                pricelist_item = request.env['product.pricelist.item'].search([
-                    ('pricelist_id', '=', pricelist.id),
-                    ('product_tmpl_id', '=',  product_template.id)])
-                if pricelist_item:
-                    pricelist_item.update({'fixed_price': prod_detail.get('price')})
-                else:
-                    request.env['product.pricelist.item'].create(
-                        {'pricelist_id': pricelist.id,
-                         'product_tmpl_id': product_template.id,
-                         'fixed_price': prod_detail.get('price')})
+                user_id = http.request.env.context.get('uid')
+                current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+                pricelist = request.env['product.pricelist'].search([
+                    ('company_id', '=', current_user.company_id.id)], limit=1)
+                if pricelist:
+                    pricelist_item = request.env['product.pricelist.item'].search([
+                        ('pricelist_id', '=', pricelist.id),
+                        ('product_tmpl_id', '=',  product_template.id)])
+                    if pricelist_item:
+                        pricelist_item.update({'fixed_price': prod_detail.get('price')})
+                    else:
+                        request.env['product.pricelist.item'].create(
+                            {'pricelist_id': pricelist.id,
+                             'product_tmpl_id': product_template.id,
+                             'fixed_price': prod_detail.get('price')})
 
             if(prod_detail.get('attribute')):
                 attr_id = int(prod_detail.get('attribute'))
