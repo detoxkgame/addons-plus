@@ -53,7 +53,7 @@ odoo.define('pos_models', function(require){
 	        		order.get_selected_orderline().set_kitchen_state('cooking');
 	        	}
 	        	if(kitchen_state == 'cooking'){
-	        		order.get_selected_orderline().set_kitchen_state('start');
+	        		order.get_selected_orderline().set_kitchen_state('queue');
 	        	}
 	        	
 	        }
@@ -69,7 +69,7 @@ odoo.define('pos_models', function(require){
 	    	var order = this.pos.get_order();
 	        if (order.get_selected_orderline()) {
 	        	var kitchen_state = order.get_selected_orderline().get_kitchen_state();
-	        	if(kitchen_state == 'start'){
+	        	if(kitchen_state == 'queue'){
 	        		order.get_selected_orderline().set_kitchen_state('cooking');
 	        	}
 	        	if(kitchen_state == 'cooking'){
@@ -104,7 +104,7 @@ odoo.define('pos_models', function(require){
         initialize: function(){
             var self = this;
             OrderlineSuper.prototype.initialize.apply(this, arguments);
-            this.kitchen_state = 'start';
+            this.kitchen_state = 'queue';
             
         },
         clone: function() {
