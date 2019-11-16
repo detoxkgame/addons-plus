@@ -56,16 +56,23 @@
 .pos-table-no{
 	display: inline-block;
 	color: white !important;
+	width:45%
 }
 .pos-table-time{
 	/* width: 50% !important;
 	display: inline-block; */
 	color: white !important;
-/* 	margin-left:72%; */
-	margin-left: 60px;
+	/* margin-left:72%;  */
+	/* margin-left: 60px; */
+	width:30%;
+	display:inline-block;
+	
 }
 .pos-order-name{
 	color: white !important;
+	dispaly:50%
+	
+	
 }
 .pos-kit-status-div{
 	width:40%; 
@@ -111,6 +118,7 @@
 }
 .pos-width100{
 	width:100% !important;
+	height:100% !important;
 }
 .red-color{
 	color: #dc7633 !important;
@@ -200,4 +208,39 @@
     -o-animation: up-right 1s infinite;
     animation: up-right 1s infinite;
 }
-       
+
+/* start code - kitchen view alignment  */
+
+@media only screen and (min-width: 320px) and (max-width: 992px) {
+	.pos-kit-order > .pos-lines {
+		width: 100%;
+		margin:2% 0% !important;
+		
+	}
+}
+
+@media only screen and (min-width: 993px){ 
+	.pos-kit-order > .pos-lines {
+		height:136px;
+		width: 48%;
+		margin:1% 1% !important;
+		background: #d6eaf8;		 
+	}
+}
+@media only screen and (min-width: 1440px){ 
+	.pos-kit-order > .pos-lines {
+	height: 136px;
+    width: 31.33%;
+    margin: 1% 1% !important;}
+}
+	
+
+ @media only screen and (min-width: 768px) and (max-width: 1023px) {
+.pos .pos-rightheader {
+left: 314px;
+} 
+ }
+ 
+/* End code - kitchen view alignment */
+	
+
