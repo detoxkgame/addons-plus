@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		  <record id="pos_config_view_form_inherit_receipt" model="ir.ui.view">
+			<field name="name">pos.config.form.inherit.receipt</field>
+			<field name="model">pos.config</field>
+			<field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@id='iface_invoicing']" position="after">
+					<div name="receipt_print" class="col-xs-12 col-md-6 o_setting_box">
+						<div class="o_setting_right_pane">
+                                <label for="print_paper_size" string="Receipt Paper Format"/>
+                                <div class="text-muted">
+                                     Print receipts on customer request
+                                </div>
+                                <div class="content-group mt16">
+                                	<div class="row mt16">
+                                        <label string="Paper Size" for="print_paper_size" class="col-lg-3 o_light_label"/>
+                                        <field name="print_paper_size"/>
+                                    </div>
+                                   
+                                </div>
+                        </div>
+	                </div>					
+	 			</xpath>
+	 		</field>
+		</record> 
+ 	</data>
+</odoo>

@@ -1,0 +1,5 @@
+/* POS Ticket receipt width overwrite */
+
+.pos .pos-sale-ticket {
+	width:219.21px !important;
+}

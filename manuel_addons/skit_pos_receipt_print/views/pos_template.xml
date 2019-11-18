@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>       
+        <template id="assets" inherit_id="point_of_sale.assets">
+          <xpath expr="." position="inside">
+          	<link rel="stylesheet" href="/skit_pos_receipt_print/static/src/css/pos.css" /> 
+          </xpath>
+        </template>
+    </data>
+</openerp>
