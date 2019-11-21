@@ -209,38 +209,39 @@
     animation: up-right 1s infinite;
 }
 
-/* start code - kitchen view alignment  */
-
+/* start code - kitchen view alignment(Module done by Bhuvaneswari)*/
+/* To change the number of table in each column */
 @media only screen and (min-width: 320px) and (max-width: 992px) {
 	.pos-kit-order > .pos-lines {
 		width: 100%;
-		margin:2% 0% !important;
-		
+		margin:2% 0% !important;	/* Here the number of table in each row will be One */
 	}
 }
 
-@media only screen and (min-width: 993px){ 
+@media only screen and (min-width: 993px) and (max-width:1439px) { 
 	.pos-kit-order > .pos-lines {
-		height:136px;
-		width: 48%;
+		width: 48%; /* Here the number of table in each row will be Two  */
 		margin:1% 1% !important;
 		background: #d6eaf8;		 
 	}
-}
-@media only screen and (min-width: 1440px){ 
+} 
+
+  @media only screen and (min-width: 1440px){ 
 	.pos-kit-order > .pos-lines {
-	height: 136px;
-    width: 31.33%;
+    width: 31.33%;/* Here the number of table in each row will be Three */
     margin: 1% 1% !important;}
 }
-	
+/*To keep the close & other two button in same line */
+@media only screen and (min-width: 768px) and (max-width:1400px) {
+	.pos .oe_status .oe_icon {
+		margin: auto 2px;
+	}
+	.pos .pos-rightheader {
+		left: auto !important;
+	}
+	.pos .oe_status {
+		display: inline-flex;
+	}
+}
 
- @media only screen and (min-width: 768px) and (max-width: 1023px) {
-.pos .pos-rightheader {
-left: 314px;
-} 
- }
- 
 /* End code - kitchen view alignment */
-	
-
