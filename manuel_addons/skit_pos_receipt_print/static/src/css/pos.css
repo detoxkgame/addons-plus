@@ -1,5 +1,12 @@
 /* POS Ticket receipt width overwrite */
 
-.pos .pos-sale-ticket {
-	width:219.21px !important;
-}
+@media print {
+	 .pos .smallsize{
+        width: 195px !important;
+        font-size: 12px !important;
+    }
+    .pos .mediumsize{
+        width: 230px !important;
+        font-size: 12px !important;
+    }
+	}
