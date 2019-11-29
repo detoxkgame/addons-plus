@@ -17,9 +17,9 @@
     'depends': ['product','sale','base'],
     'data': [
         'views/product.xml',
-        'views/sale_quotation.xml'
+        'views/sale.xml'
     ],
-#     'installable': True,
-#     'auto_install': False,
-#     'application': True,
+    'installable': True,
+    'auto_install': False,
+    'application': True,
 }

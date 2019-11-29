@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+      	<!-- Sale Order Form Inherit -->
+   		<record id="skit_view_order_form_inherit" model="ir.ui.view">
+            <field name="name">skit.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='partner_id']" position="after">
+            		<field name="journal_id"/>
+                </xpath>
+                <xpath expr="//field[@name='validity_date']" position="before">
+            		<field name="sale_type"/>
+            		<field name="branch"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+            		<field name="isassociate_project"/>
+            		<button name="project_document" string="Create Project Document" class="btn btn-primary"
+            		attrs="{'invisible': [('isassociate_project', '=', False)] }"  type="button"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
