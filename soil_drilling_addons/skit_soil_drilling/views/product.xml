@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    	<record id="skit_product_template_view" model="ir.ui.view">
+			<field name="name">product.template.common.form</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_form_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@name='options']//div[1]" position="replace">
+				 	<group name = "options" groups="base.group_user">
+				  		<div class="oe_title">
+                  			<field name="sale_ok"/>
+                  			<label for="sale_ok"/>
+                	 	</div >
+                   		<div >
+							<field name ="lab_work" />
+					 		<label for="lab_work"/>
+						</div>
+	                 	<field name="soil_test_type"  
+	                 		attrs="{'invisible': [('lab_work', '=', False)]}" >
+	                 	</field>
+                	</group>
+				</xpath>
+				<xpath expr="//group[@name='group_standard_price']"   position="after">
+					<group>
+						<field name ="soil_test_type1"  widget="radio" options="{'horizontal': true}" 
+				       		 attrs="{'invisible': [('lab_work', '=', False)]}" >
+				       	</field>
+				    </group>  
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

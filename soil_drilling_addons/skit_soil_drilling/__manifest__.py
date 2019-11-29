@@ -14,10 +14,12 @@
     'website': "http://www.srikeshinfotech.com",
     'category': 'Project',
     'version': '0.1',
-    'depends': ['base'],
+    'depends': ['product','sale','base'],
     'data': [
+        'views/product.xml',
+        'views/sale_quotation.xml'
     ],
-    'installable': False,
-    'auto_install': False,
-    'application': True,
+#     'installable': True,
+#     'auto_install': False,
+#     'application': True,
 }
