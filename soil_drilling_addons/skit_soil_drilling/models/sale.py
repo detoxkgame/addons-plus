@@ -17,3 +17,16 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).create(vals)
         res['name'] = vals['name'].replace('SO', 'JO')
         return res
+    
+class sale_order_line(models.Model):
+    _inherit="sale.order.line"
+    
+    date = fields.Date(string="Date")
+    test_desired=fields.Selection([
+        ('lab','Laboratory Options'),
+        ('soil','Soil Drilling')],'Test Desired',required="True")
+    section=fields.Selection([
+        ('concrete','Concrete'),
+        ('steel','Steel'),
+        ('chemical','Chemical'),
+        ('soil','Soil')],'Section',required="True")    

@@ -21,5 +21,28 @@
                 </xpath>
             </field>
         </record>
+        <record id="view_order_form_sales" model="ir.ui.view">
+            <field name="name">sale.order.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+             	<xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="before">
+					<field name="date" />
+					<field name="test_desired"/>
+				</xpath>
+				<xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
+					<field name="section"/>
+				</xpath>
+				<xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="replace">
+				 	<field name="product_id" string="Services"
+                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                         attrs="{
+                                'readonly': [('product_updatable', '=', False)],
+                               'required': [('display_type', '=', False)],
+                               }"
+                             force_save="1"/>
+                </xpath>                              
+           	</field>
+         </record>
     </data>
 </odoo>
