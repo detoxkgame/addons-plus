@@ -17,7 +17,7 @@
                 <xpath expr="//field[@name='payment_term_id']" position="after">
             		<field name="isassociate_project"/>
             		<button name="project_document" string="Create Project Document" class="btn btn-primary"
-            		attrs="{'invisible': [('isassociate_project', '=', False)] }"  type="button"/>
+            		attrs="{'invisible': [('isassociate_project', '=', False)] }"  type="object"/>
                 </xpath>
             </field>
         </record>

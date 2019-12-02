@@ -14,7 +14,7 @@
     'website': "http://www.srikeshinfotech.com",
     'category': 'Project',
     'version': '0.1',
-    'depends': ['product','sale','base'],
+    'depends': ['product','sale','base','project'],
     'data': [
         'views/product.xml',
         'views/sale.xml'
