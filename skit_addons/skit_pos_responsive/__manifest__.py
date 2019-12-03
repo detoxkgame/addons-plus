@@ -17,7 +17,7 @@
     'category': 'point_of_sale',
     'version': '10.0.0.1',
     'images': ['images/main_screenshot.png'],
-    'depends': ['point_of_sale','pos_restaurant','barcodes'],
+    'depends': ['point_of_sale','pos_restaurant'],
     'qweb': ['static/src/xml/pos.xml',
      ],
     'data': [
