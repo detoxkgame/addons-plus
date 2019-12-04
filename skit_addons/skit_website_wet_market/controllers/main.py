@@ -893,7 +893,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
         Category = request.env['product.public.category']
         search_categories = False
-        search_product = Product.search(domain)
+        search_product = Product.sudo().search(domain)
         if search:
             categories = search_product.mapped('public_categ_ids')
             search_categories = Category.search([('id', 'parent_of', categories.ids), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
@@ -912,7 +912,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
         product_count = len(search_product)
         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-        products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+        products = Product.sudo().search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
 
         ProductAttribute = request.env['product.attribute']
         if products:
