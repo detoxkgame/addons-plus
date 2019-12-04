@@ -457,38 +457,90 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
     	var price = $(ev.currentTarget).closest('#shop_cart_details').find('.shop_prod_price').text();
     	var prod_id = $(ev.currentTarget).closest('#shop_cart_details').find('.shop_prod_id').text();
     	this._rpc({
-             route: "/shop/product/cart/update",
-             params: {
-                 product_id: parseInt(prod_id, 10),
-                 price: price,
-                 qty: cart_qty
-                 
-             },
-         }).then(function (data) {
-        	 if(data != undefined && data.indexOf('quantity') != -1){
-        		 var qty = data.replace('quantity', '');
-        		 $('#float_new_web_cart_quantity').text(qty);
-         	 	 $('.my_cart_quantity').text(qty);
-         	 	 //alertify.alert('Success', 'Product added to cart.')
-        	 }else{
-        		 self.rootShopProduct = {
-        				 product_id: prod_id,
-        				 quantity: cart_qty,
-        				 product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
-        	             variant_values: self.getSelectedVariantValues($form.find('.js_product')),
-        	             no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product'))
-        	     };
+            route: "/cart/exit/company",
+            params: {
+            },
+        }).then(function (data) {
+      	 if(data){
+      		self._rpc({
+                route: "/shop/product/cart/update",
+                params: {
+                    product_id: parseInt(prod_id, 10),
+                    price: price,
+                    qty: cart_qty
+                    
+                },
+            }).then(function (data) {
+           	 if(data != undefined && data.indexOf('quantity') != -1){
+           		 var qty = data.replace('quantity', '');
+           		 $('#float_new_web_cart_quantity').text(qty);
+            	 	 $('.my_cart_quantity').text(qty);
+            	 	 //alertify.alert('Success', 'Product added to cart.')
+           	 }else{
+           		 self.rootShopProduct = {
+           				 product_id: prod_id,
+           				 quantity: cart_qty,
+           				 product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
+           	             variant_values: self.getSelectedVariantValues($form.find('.js_product')),
+           	             no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product'))
+           	     };
 
-        		 self.optionalShopProductsModal = new OptionalShopProductsModal($form, {
-        			 rootShopProduct: self.rootShopProduct,
-        			 isWebsite: true,
-                     okButtonText: _t('Close'),
-                     cancelButtonText: _t(''),
-                     title: _t('Add to cart')
-                 }).open();
-        	 }
-        	
-         });
+           		 self.optionalShopProductsModal = new OptionalShopProductsModal($form, {
+           			 rootShopProduct: self.rootShopProduct,
+           			 isWebsite: true,
+                        okButtonText: _t('Close'),
+                        cancelButtonText: _t(''),
+                        title: _t('Add to cart')
+                    }).open();
+           	 }
+           	
+            });
+      	 }else{
+      		alertify.confirm('Confirm Message','You have order for another shop.Are you confirm to clear this order.',
+			function(){
+      			self._rpc({
+                    route: "/shop/product/cart/update",
+                    params: {
+                        product_id: parseInt(prod_id, 10),
+                        price: price,
+                        qty: cart_qty,
+                        sorder: true
+                        
+                    },
+                }).then(function (data) {
+               	 if(data != undefined && data.indexOf('quantity') != -1){
+               		 var qty = data.replace('quantity', '');
+               		 $('#float_new_web_cart_quantity').text(qty);
+                	 	 $('.my_cart_quantity').text(qty);
+                	 	 //alertify.alert('Success', 'Product added to cart.')
+               	 }else{
+               		 self.rootShopProduct = {
+               				 product_id: prod_id,
+               				 quantity: cart_qty,
+               				 product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
+               	             variant_values: self.getSelectedVariantValues($form.find('.js_product')),
+               	             no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product'))
+               	     };
+
+               		 self.optionalShopProductsModal = new OptionalShopProductsModal($form, {
+               			 rootShopProduct: self.rootShopProduct,
+               			 isWebsite: true,
+                            okButtonText: _t('Close'),
+                            cancelButtonText: _t(''),
+                            title: _t('Add to cart')
+                        }).open();
+               	 }
+               	
+                });
+			},
+			function(){
+			}
+			).set('labels', {ok:'OK', cancel:'Cancel'});
+      		 
+      	 }
+        });
+    	
+    	
          
     },
 

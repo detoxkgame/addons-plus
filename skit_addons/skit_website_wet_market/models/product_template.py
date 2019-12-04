@@ -8,3 +8,12 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     expire_date = fields.Date(string='Expire Date')
+    wetmarket_company_ids = fields.Many2many('res.company',
+                                             string="WetMarket Companies")
+
+
+class ProductPublicCategory(models.Model):
+    _inherit = 'product.public.category'
+
+    wetmarket_company_ids = fields.Many2many('res.company',
+                                             string="WetMarket Companies")

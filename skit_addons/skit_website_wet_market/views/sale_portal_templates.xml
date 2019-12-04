@@ -625,67 +625,67 @@
         <div class="container">
             <ol class="ps-timeline">
             	<t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent')">
-            		<li id="sale_confirm" class="border-gray">
+            		<li id="sale_confirm_invoice" class="border-gray">
 	                    <div class="ps-bot">
 	                        <p>Confirmed</p>
 	                    </div>
-	                    <span class="ps-sp-top border-gray-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_gray.png" alt=""/></span>
+	                    <span class="ps-sp-top border-gray-span"><img id="sale_confirm_img_inv" src="/skit_website_wet_market/static/src/img/confirmed_gray.png" alt=""/></span>
 	                </li>
             	</t>
             	<t t-else="">
-            		<li id="sale_confirm" class="border-green">
+            		<li id="sale_confirm_invoice" class="border-green">
 	                    <div class="ps-bot">
 	                        <p>Confirmed</p>
 	                    </div>
-	                   <span class="ps-sp-top border-green-span"><img id="sale_confirm_img" src="/skit_website_wet_market/static/src/img/confirmed_green.png" alt=""/></span>
+	                   <span class="ps-sp-top border-green-span"><img id="sale_confirm_img_inv" src="/skit_website_wet_market/static/src/img/confirmed_green.png" alt=""/></span>
 	                </li>
             	</t>
                 <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale')">
-                	<li id="sale_preparing" class="border-gray">
+                	<li id="sale_preparing_invoice" class="border-gray">
 	                     <div class="ps-bot">
 	                        <p>Preparing</p>
 	                    </div>
-	                    <span class="ps-sp-bot border-gray-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_gray.png" alt=""/></span>
+	                    <span class="ps-sp-bot border-gray-span"><img id="sale_preparing_img_inv" src="/skit_website_wet_market/static/src/img/preparing_gray.png" alt=""/></span>
 	                </li>
                 </t>
                 <t t-else="">
-                	<li id="sale_preparing" class="border-green">
+                	<li id="sale_preparing_invoice" class="border-green">
 	                     <div class="ps-bot">
 	                        <p>Preparing</p>
 	                    </div>
-	                    <span class="ps-sp-bot border-green-span"><img id="sale_preparing_img" src="/skit_website_wet_market/static/src/img/preparing_green.png" alt=""/></span>
+	                    <span class="ps-sp-bot border-green-span"><img id="sale_preparing_img_inv" src="/skit_website_wet_market/static/src/img/preparing_green.png" alt=""/></span>
 	                </li>
                 </t>
                 <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing')">
-                	<li id="sale_ready" class="border-gray">
+                	<li id="sale_ready_invoice" class="border-gray">
 	                     <div class="ps-bot">
 	                        <p>Ready to Pickup</p>
 	                    </div>
-	                    <span class="ps-sp-top border-gray-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></span>
+	                    <span class="ps-sp-top border-gray-span"><img id="sale_ready_img_inv" src="/skit_website_wet_market/static/src/img/ready.png" alt=""/></span>
 	                </li>
                 </t>
                 <t t-else="">
-                	<li id="sale_ready" class="border-green">
+                	<li id="sale_ready_invoice" class="border-green">
 	                     <div class="ps-bot">
 	                        <p>Ready to Pickup</p>
 	                    </div>
-	                    <span class="ps-sp-top border-green-span"><img id="sale_ready_img" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></span>
+	                    <span class="ps-sp-top border-green-span"><img id="sale_ready_img_inv" src="/skit_website_wet_market/static/src/img/ready_green.png" alt=""/></span>
 	                </li>
                 </t>
                  <t t-if="(sale_order.state == 'draft') or (sale_order.state == 'sent') or (sale_order.state == 'sale') or (sale_order.state == 'preparing') or (sale_order.state == 'ready')">
-                 	<li id="sale_delivered" class="border-gray">
+                 	<li id="sale_delivered_invoice" class="border-gray">
 	                     <div class="ps-bot">
 	                        <p>Delivered</p>
 	                    </div>
-	                    <span class="ps-sp-bot border-gray-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_gray.png" alt=""/></span>
+	                    <span class="ps-sp-bot border-gray-span"><img id="sale_delivered_img_inv" src="/skit_website_wet_market/static/src/img/delivered_gray.png" alt=""/></span>
 	                </li>
                  </t>
                  <t t-else="">
-                 	<li id="sale_delivered" class="border-green">
+                 	<li id="sale_delivered_invoice" class="border-green">
 	                     <div class="ps-bot">
 	                        <p>Delivered</p>
 	                    </div>
-	                    <span class="ps-sp-bot border-green-span"><img id="sale_delivered_img" src="/skit_website_wet_market/static/src/img/delivered_green.png" alt=""/></span>
+	                    <span class="ps-sp-bot border-green-span"><img id="sale_delivered_img_inv" src="/skit_website_wet_market/static/src/img/delivered_green.png" alt=""/></span>
 	                </li>
                  </t>
                 

@@ -85,7 +85,7 @@ class WetAuthSignupHome(Home):
                 wet_otp.unlink()
             current_user = request.env['res.users'].sudo().search([('login', '=', kw.get('login'))])
             if not current_user.has_group('sales_team.group_sale_manager'):
-                return request.redirect("/shop")
+                return request.redirect("/")
         return response
 
     @http.route('/web/signup', type='http', auth='public', website=True, sitemap=False)
@@ -297,8 +297,8 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/sorder/invoice/<int:invoice_id>'], type='json', auth="public", website=True)
     def update_invoice_order_status(self, invoice_id=None,  **post):
-        invoices = request.env['account.invoice'].search([('id', '=', invoice_id)])
-        sale_order = request.env['sale.order'].search([('name', '=', invoices.origin)])
+        invoices = request.env['account.invoice'].sudo().search([('id', '=', invoice_id)])
+        sale_order = request.env['sale.order'].sudo().search([('name', '=', invoices.origin)])
         invoice_id = 0
         for invoice in sale_order.invoice_ids:
             invoice_id = invoice.id
@@ -407,7 +407,7 @@ class WebsiteCustomerPortal(CustomerPortal):
             domain += [('create_date', '>', date_begin), ('create_date', '<=', date_end)]
 
         # count for pager
-        order_count = SaleOrder.search_count(domain)
+        order_count = SaleOrder.sudo().search_count(domain)
         # pager
         pager = portal_pager(
             url="/my/orders",
@@ -417,7 +417,7 @@ class WebsiteCustomerPortal(CustomerPortal):
             step=self._items_per_page
         )
         # content according to pager and archive selected
-        orders = SaleOrder.search(domain, order=sort_order, limit=self._items_per_page, offset=pager['offset'])
+        orders = SaleOrder.sudo().search(domain, order=sort_order, limit=self._items_per_page, offset=pager['offset'])
         request.session['my_orders_history'] = orders.ids[:100]
 
         values.update({
@@ -565,8 +565,23 @@ class ShopWebsiteSale(ProductConfiguratorController):
         )
         return request.redirect("/shop")
 
+    @http.route(['/cart/exit/company'], type='json', auth="public", methods=['POST'], website=True, csrf=False)
+    def order_company_exist(self, **post):
+        order = request.website.sale_get_order()
+        user = request.env.user
+        if(user.company_id.id == order.company_id.id):
+            return True
+        else:
+            return False
+
     @http.route(['/shop/product/cart/update'], type='json', auth="public", methods=['POST'], website=True, csrf=False)
-    def shop_cart_update(self, product_id, price, qty):
+    def shop_cart_update(self, product_id, price, qty, sorder=None):
+        if sorder:
+            order = request.website.sale_get_order()
+            for line in order.order_line:
+                line.unlink()
+            user = request.env.user
+            order.update({'company_id': user.company_id.id})
         product_tmpl = request.env['product.template'].sudo().search([
             ('id', '=', int(product_id))])
         product = request.env['product.product'].sudo().search([
@@ -846,8 +861,20 @@ class ShopWebsiteSale(ProductConfiguratorController):
         domain = self._get_search_domain(search, category, attrib_values)
         user_id = http.request.env.context.get('uid')
         current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
+        """ Filter the product based on Company
+            if admin it take user current company
+            else customer selected company
+        """
         if current_user.has_group('sales_team.group_sale_manager'):
             domain.append(('company_id', '=', current_user.company_id.id))
+        else:
+            if current_user.has_group('base.group_portal') and post.get('id'):
+                com_ids = [int(post.get('id'))]
+                current_user.update({'company_id': int(post.get('id'))})
+                domain.append(('wetmarket_company_ids', 'in', com_ids))
+            else:
+                if current_user.has_group('base.group_portal'):
+                    domain.append(('wetmarket_company_ids', 'in', current_user.company_id.ids))
 
         keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
 
@@ -868,10 +895,10 @@ class ShopWebsiteSale(ProductConfiguratorController):
         search_product = Product.search(domain)
         if search:
             categories = search_product.mapped('public_categ_ids')
-            search_categories = Category.search([('id', 'parent_of', categories.ids)] + request.website.website_domain())
+            search_categories = Category.search([('id', 'parent_of', categories.ids), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
             categs = search_categories.filtered(lambda c: not c.parent_id)
         else:
-            categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
+            categs = Category.search([('parent_id', '=', False), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
 
         parent_category_ids = []
         if category:
