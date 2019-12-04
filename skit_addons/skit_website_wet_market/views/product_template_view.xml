@@ -26,4 +26,16 @@
             	</xpath>
             </field>
     </record>
+    
+    <!-- Inherit product.pricelist.item view -->
+	<record model="ir.ui.view" id="product_pricelist_item_form_view_wet_market">
+            <field name="name">product.pricelist.item.wet.market</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='min_quantity']" position="after">
+            		<field name="min_amount" />
+            	</xpath>
+            </field>
+    </record>
 </odoo>

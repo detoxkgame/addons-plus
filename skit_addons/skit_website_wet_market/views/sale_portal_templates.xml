@@ -171,8 +171,25 @@
 	    		<span id="prod_setting_price" style="display:none;" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
 	    		<span id="prod_setting_pid" style="display:none;" t-esc="product.id" />
 	    		<span id="product_settings" class="product-setting" t-if="product.website_published" groups="sales_team.group_sale_manager"><i class="fa fa-pencil-square-o"></i></span>
+    			<t t-set="prod_items" t-value="prod_list_item.sudo().search([('product_tmpl_id', '=', product.id)], order='id desc', limit=1)"/>
+    			<t t-if="not prod_items">
+    				<t t-set="prod_items" t-value="prod_list_item.sudo().search([('applied_on', '=', '3_global')], order='id desc', limit=1)"/>
+    			</t>
+    			<t t-if="((prod_items) and (prod_items.compute_price == 'percentage'))">
+    				<span>
+    					<i class="fa fa-star prod_discount"></i><t t-esc="prod_items.percent_price"/> % off on orders
+    					<t t-if="prod_items.min_amount">
+    						above <t t-esc="prod_items.min_amount" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+    					</t>
+    					<t t-else="">
+    						<t t-if="prod_items.min_quantity">
+    						above  <t t-esc="prod_items.min_quantity" /> qty.
+    					</t>
+    					</t>
+    				</span>
+    			</t>
     		</div>
-    		<div class="oe_product_image">
+    		<div class="oe_product_image" style="top: 17px !important;">
             	<a itemprop="url">
                 	<span itemprop="image" t-attf-content="{{request.httprequest.url_root}}web/image/product.template/{{product.id}}/image" t-field="product.image" t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}" t-att-alt="product.name" />
                 </a>
@@ -192,8 +209,7 @@
                     </t>
                     	
                     </t>
-                    
-                    <span class="shop_price" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    <span class="shop_price" t-esc="product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                 </h6>
 			    <div style="width:100%;">
 	            	<div id="shop_cart_details" t-if="product.website_published">

@@ -958,6 +958,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
             'keep': keep,
             'parent_category_ids': parent_category_ids,
             'search_categories_ids': search_categories and search_categories.ids,
+            'prod_list_item': request.env['product.pricelist.item']
         }
         if category:
             values['main_object'] = category
@@ -1071,7 +1072,8 @@ class ShopWebsiteSale(ProductConfiguratorController):
             'parent_category_ids': parent_category_ids,
             'search_categories_ids': search_categories and search_categories.ids,
             'product_attribute': product_attribute,
-            'attribute_values': attribute_values
+            'attribute_values': attribute_values,
+            'prod_list_item': request.env['product.pricelist.item']
         }
         if category:
             values['main_object'] = category

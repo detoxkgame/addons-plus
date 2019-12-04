@@ -467,7 +467,7 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
                 params: {
                     product_id: parseInt(prod_id, 10),
                     price: price,
-                    qty: cart_qty
+                    qty: parseInt(cart_qty)
                     
                 },
             }).then(function (data) {
@@ -479,7 +479,7 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
            	 }else{
            		 self.rootShopProduct = {
            				 product_id: prod_id,
-           				 quantity: cart_qty,
+           				 quantity: parseInt(cart_qty),
            				 product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
            	             variant_values: self.getSelectedVariantValues($form.find('.js_product')),
            	             no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product'))
@@ -503,7 +503,7 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
                     params: {
                         product_id: parseInt(prod_id, 10),
                         price: price,
-                        qty: cart_qty,
+                        qty: parseInt(cart_qty),
                         sorder: true
                         
                     },
@@ -516,7 +516,7 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
                	 }else{
                		 self.rootShopProduct = {
                				 product_id: prod_id,
-               				 quantity: cart_qty,
+               				 quantity: parseInt(cart_qty),
                				 product_custom_attribute_values: self.getCustomVariantValues($form.find('.js_product')),
                	             variant_values: self.getSelectedVariantValues($form.find('.js_product')),
                	             no_variant_attribute_values: self.getNoVariantAttributeValues($form.find('.js_product'))

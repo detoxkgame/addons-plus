@@ -619,3 +619,10 @@ tr:last-child td { height:auto; }
 	background: #00A09D;
     color: white;
 }
+.prod_discount{
+	background: #f7992f;
+    color: white;
+    padding: 1%;
+    border-radius: 13%;
+    margin-right: 1%;
+}
