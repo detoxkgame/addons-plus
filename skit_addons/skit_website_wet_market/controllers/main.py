@@ -569,18 +569,19 @@ class ShopWebsiteSale(ProductConfiguratorController):
     def order_company_exist(self, **post):
         order = request.website.sale_get_order()
         user = request.env.user
-        if(user.company_id.id == order.company_id.id):
+        if(user.company_id.id == order.company_id.id or (len(order.order_line.ids) <= 0)):
             return True
         else:
             return False
 
     @http.route(['/shop/product/cart/update'], type='json', auth="public", methods=['POST'], website=True, csrf=False)
     def shop_cart_update(self, product_id, price, qty, sorder=None):
+        order = request.website.sale_get_order()
+        user = request.env.user
         if sorder:
-            order = request.website.sale_get_order()
             for line in order.order_line:
                 line.unlink()
-            user = request.env.user
+        if order:
             order.update({'company_id': user.company_id.id})
         product_tmpl = request.env['product.template'].sudo().search([
             ('id', '=', int(product_id))])
@@ -840,7 +841,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
     def shop(self, page=0, category=None, search='', ppg=False, **post):
         add_qty = int(post.get('add_qty', 1))
         if category:
-            category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
+            category = request.env['product.public.category'].sudo().search([('id', '=', int(category))], limit=1)
             if not category or not category.can_access_from_current_website():
                 raise NotFound()
 
@@ -892,13 +893,13 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
         Category = request.env['product.public.category']
         search_categories = False
-        search_product = Product.search(domain)
+        search_product = Product.sudo().search(domain)
         if search:
             categories = search_product.mapped('public_categ_ids')
-            search_categories = Category.search([('id', 'parent_of', categories.ids), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
+            search_categories = Category.sudo().search([('id', 'parent_of', categories.ids), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
             categs = search_categories.filtered(lambda c: not c.parent_id)
         else:
-            categs = Category.search([('parent_id', '=', False), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
+            categs = Category.sudo().search([('parent_id', '=', False), ('wetmarket_company_ids', 'in', current_user.company_id.ids)] + request.website.website_domain())
 
         parent_category_ids = []
         if category:
@@ -911,12 +912,12 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
         product_count = len(search_product)
         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-        products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+        products = Product.sudo().search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
 
         ProductAttribute = request.env['product.attribute']
         if products:
             # get all products without limit
-            attributes = ProductAttribute.search([('attribute_line_ids.value_ids', '!=', False), ('attribute_line_ids.product_tmpl_id', 'in', search_product.ids)])        
+            attributes = ProductAttribute.sudo().search([('attribute_line_ids.value_ids', '!=', False), ('attribute_line_ids.product_tmpl_id', 'in', search_product.ids)])        
         else:
             attributes = ProductAttribute.browse(attributes_ids)
 
