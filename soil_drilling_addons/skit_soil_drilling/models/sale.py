@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, models, fields,_
+from odoo.addons import decimal_precision as dp
 
 
 class SaleOrder(models.Model):
@@ -11,6 +12,10 @@ class SaleOrder(models.Model):
                                 ('soil drilling', _('Soil Drilling'))], string='Sale Type',default='laboratory')
     branch = fields.Char("Branch")
     isassociate_project = fields.Boolean('Associated to a Project', default=False)
+    no_of_boreholes = fields.Integer("No.of Boreholes", default=1)
+    depth = fields.Float("Depth", digits=dp.get_precision('Product Price'))
+    intervals = fields.Float("Interval", digits=dp.get_precision('Product Price'))
+    scope_note = fields.Text("Scope of Work")
     task_no_id = fields.One2many('sale.order.line', 'order_id',"Task numbers", states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True, auto_join=True)
 
     @api.model

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_scope_work_user,skit.scope.work,model_skit_scope_work,base.group_user,1,1,1,1
+access_scope_work_manager,skit.scope.work,model_skit_scope_work,base.group_public,1,1,1,1

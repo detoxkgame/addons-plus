@@ -37,7 +37,7 @@
                                }"
                              force_save="1"/>
                 </xpath>
-                <xpath   expr="//field[@name='order_line']" position="after">
+                <xpath expr="//field[@name='order_line']" position="after">
                		<group>
                     	<group>
                         	<div class="oe_inline">
@@ -69,11 +69,20 @@
            	</xpath>
             <xpath  expr="//group[@name='sale_total']" position="replace">
             </xpath>
-             <xpath  expr="//page[@name='order_lines']" position="replace">
-              <page string="Scope of Work" attrs="{'invisible': [('sale_type','!=','soil drilling')]}">
-              </page>
-              
-             </xpath>
+            
+           <!--  Added New Tab in Sale order window -->
+            <xpath expr="//page[@name='other_information']" position="after">
+				<page string="Scope of Work" attrs="{'invisible': [('sale_type','!=','soil drilling')]}">
+					<form>
+						<group>
+							<field name="no_of_boreholes"/>
+							<field name="depth"/>
+							<field name="intervals"/>
+						</group>
+						<field name="scope_note" placeholder="Scope of Work Notes...."/>
+					</form>
+				</page>
+			</xpath>
          </field>
        </record> 
     </data>
