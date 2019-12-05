@@ -8,6 +8,8 @@ class Company(models.Model):
 
     @api.model
     def create(self, vals):
+        """ create a new company update the company for
+        all portal users. """
         company = super(Company, self).create(vals)
         res = self._cr.execute('''
             SELECT id

@@ -445,7 +445,6 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
         	}else{
         		window.location = '/my/orders/'+parseInt(data);
         	}
-        	//window.location = '/my/orders/'+parseInt(data);
         	
         });
     },
@@ -475,7 +474,6 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
            		 var qty = data.replace('quantity', '');
            		 $('#float_new_web_cart_quantity').text(qty);
             	 	 $('.my_cart_quantity').text(qty);
-            	 	 //alertify.alert('Success', 'Product added to cart.')
            	 }else{
            		 self.rootShopProduct = {
            				 product_id: prod_id,
@@ -512,7 +510,6 @@ sAnimations.registry.WebsiteShopCart = sAnimations.Class.extend(ProductConfigura
                		 var qty = data.replace('quantity', '');
                		 $('#float_new_web_cart_quantity').text(qty);
                 	 	 $('.my_cart_quantity').text(qty);
-                	 	 //alertify.alert('Success', 'Product added to cart.')
                	 }else{
                		 self.rootShopProduct = {
                				 product_id: prod_id,

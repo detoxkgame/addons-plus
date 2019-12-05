@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api, fields, models, _
+from odoo import api, models
 
 
 class AccountInvoice(models.Model):
@@ -11,6 +10,7 @@ class AccountInvoice(models.Model):
     def action_invoice_paid(self):
         res = super(AccountInvoice, self).action_invoice_paid()
         for invoice in self:
-            sale_order = self.env['sale.order'].sudo().search([('name', '=', invoice.origin)])
+            sale_order = self.env['sale.order'].sudo().search([
+                ('name', '=', invoice.origin)])
             sale_order.update({'state': 'payment'})
         return res

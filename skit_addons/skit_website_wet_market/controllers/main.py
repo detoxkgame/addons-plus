@@ -13,7 +13,7 @@ from odoo.addons.portal.controllers.portal import CustomerPortal, pager as porta
 from werkzeug.exceptions import Forbidden, NotFound
 from odoo.addons.website.controllers.main import QueryURL
 from odoo.addons.sale.controllers.product_configurator import ProductConfiguratorController
-from odoo.addons.web.controllers.main import ensure_db, Home
+from odoo.addons.web.controllers.main import ensure_db, Home, Session
 from odoo.exceptions import UserError
 from odoo.addons.auth_signup.models.res_users import SignupError
 from odoo.tools import consteq
@@ -21,10 +21,6 @@ from odoo.addons.website_sale.controllers.main import TableCompute
 from datetime import date, datetime, timedelta
 from odoo.addons.http_routing.models.ir_http import slug
 from odoo.addons.payment.controllers.portal import PaymentProcessing
-#===============================================================================
-# from odoo import api, fields, models, tools, SUPERUSER_ID, ADMINUSER_ID, _
-# from odoo import api, models
-#===============================================================================
 
 _logger = logging.getLogger(__name__)
 
@@ -32,10 +28,118 @@ PPG = 20  # Products Per Page
 PPR = 4   # Products Per Row
 
 
+class WetSession(Session):
+
+    @http.route('/web/session/logout', type='http', auth="none")
+    def logout(self, redirect='/web'):
+        """ Replace the logout for keep customer url """
+        is_customer_url = False
+        if(request.session.get('customer_url')):
+            is_customer_url = True
+        request.session.logout(keep_db=True)
+        if(is_customer_url):
+            request.session['customer_url'] = True
+            return werkzeug.utils.redirect("/web/login?customer=true", 303)
+        return werkzeug.utils.redirect(redirect, 303)
+
+
+class Home(Home):
+
+    @http.route('/web/login', type='http', auth="none", sitemap=False)
+    def web_login(self, redirect=None, **kw):
+        ensure_db()
+        if(kw.get('customer')):
+            request.params['customer'] = True
+        request.params['login_success'] = False
+        if(request.params.get('login') and request.params.get('customer')):
+            request.params['password'] = request.params['login']
+            request.params['confirm_password'] = request.params['login']
+
+        if request.httprequest.method == 'GET' and redirect and request.session.uid:
+            return http.redirect_with_hash(redirect)
+
+        if not request.uid:
+            request.uid = odoo.SUPERUSER_ID
+
+        values = request.params.copy()
+        if(request.params.get('customer')):
+            values['show_customer'] = True
+            if(kw.get('no_user')):
+                values['login'] = request.params.get('login')
+                values['error'] = "Your mobile number not registered. Please sign up."
+                values['signup_error'] = "sign up"
+                request.session['mobile_no'] = request.params.get('login')
+                response = request.render('web.login', values)
+                response.headers['X-Frame-Options'] = 'DENY'
+                return response
+            else:
+                if(request.params.get('login') and (not request.params.get('otp'))):
+                    values['login'] = request.params.get('login')
+                    values['show_otp'] = "otp"
+                    values['message'] = "OTP has been sent to your email address"
+                    values['error'] = "OTP will expire in 10 mins"
+                    response = request.render('web.login', values)
+                    response.headers['X-Frame-Options'] = 'DENY'
+                    return response
+                else:
+                    if request.params.get('otp'):
+                        wet_otp = request.env['wet.otp.verification'].sudo().search([
+                            ('mobile', '=', request.params.get('login')),
+                            ('otp', '=', request.params.get('otp'))])
+                        if not wet_otp:
+                            values['login'] = request.params.get('login')
+                            values['show_otp'] = "otp"
+                            #values['message'] = "OTP has been sent to your email address"
+                            values['error'] = "Wrong OTP Number."
+                            response = request.render('web.login', values)
+                            response.headers['X-Frame-Options'] = 'DENY'
+                            return response
+        try:
+            values['databases'] = http.db_list()
+        except odoo.exceptions.AccessDenied:
+            values['databases'] = None
+
+        if request.httprequest.method == 'POST':
+            old_uid = request.uid
+            try:
+                uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
+                request.params['login_success'] = True
+                return http.redirect_with_hash(self._login_redirect(uid, redirect=redirect))
+            except odoo.exceptions.AccessDenied as e:
+                request.uid = old_uid
+                if e.args == odoo.exceptions.AccessDenied().args:
+                    values['error'] = _("Wrong login/password")
+                else:
+                    values['error'] = e.args[0]
+        else:
+            if 'error' in request.params and request.params.get('error') == 'access':
+                values['error'] = _('Only employee can access this database. Please contact the administrator.')
+
+        if 'login' not in values and request.session.get('auth_login'):
+            values['login'] = request.session.get('auth_login')
+
+        if not odoo.tools.config['list_db']:
+            values['disable_database_manager'] = True
+
+        # otherwise no real way to test debug mode in template as ?debug =>
+        # values['debug'] = '' but that's also the fallback value when
+        # missing variables in qweb
+        if 'debug' in values:
+            values['debug'] = True
+
+        response = request.render('web.login', values)
+        response.headers['X-Frame-Options'] = 'DENY'
+        return response
+
+
 class WetAuthSignupHome(Home):
 
     @http.route()
     def web_login(self, *args, **kw):
+        """ Inherit the web_login for set the customer_url = True for
+        portal user.send OTP for customer email.If login success the redirect
+        to home page.
+        """
         ensure_db()
         if(request.session.get('customer_url')):
             kw['customer'] = True
@@ -90,6 +194,9 @@ class WetAuthSignupHome(Home):
 
     @http.route('/web/signup', type='http', auth='public', website=True, sitemap=False)
     def web_auth_signup(self, *args, **kw):
+        """ Inherit the web_auth_signup for if portal user then,
+        show_customer=True.send OTP for user email and check the OTP
+        validation. """
         if(request.session.get('customer_url')):
             kw['customer'] = True
         if (kw.get('login') and kw.get('customer')):
@@ -141,7 +248,6 @@ class WetAuthSignupHome(Home):
                         ('otp', '=', kw.get('otp'))])
                     if not wet_otp:
                         qcontext['show_otp'] = "otp"
-                        #qcontext['otp_message'] = "OTP has been sent to your email address"
                         qcontext['error'] = "Wrong OTP Number"
                         response = request.render('auth_signup.signup', qcontext)
                         response.headers['X-Frame-Options'] = 'DENY'
@@ -200,7 +306,7 @@ class WetAuthSignupHome(Home):
 
     def do_signup(self, qcontext):
         """ Shared helper that creates a res.partner out of a token """
-        values = { key: qcontext.get(key) for key in ('login', 'name', 'password', 'email_address') }
+        values = {key: qcontext.get(key) for key in ('login', 'name', 'password', 'email_address') }
         if not values:
             raise UserError(_("The form was not properly filled in."))
         if values.get('password') != qcontext.get('confirm_password'):
@@ -214,6 +320,7 @@ class WetAuthSignupHome(Home):
     @http.route(['/resend/otp'], type='json', auth="public", methods=['POST'],
                 website=True, csrf=False)
     def resend_otp(self, **post):
+        """ Re-send OTP while customer login. """
         user_sudo = request.env['res.users'].sudo().search([('login', '=', post.get('login'))])
         if user_sudo:
             wet_otp = request.env['wet.otp.verification'].sudo().search([('mobile', '=', post.get('login'))])
@@ -245,6 +352,7 @@ class WetAuthSignupHome(Home):
     @http.route(['/saleorder/delete'], type='json', auth="public", methods=['POST'],
                 website=True, csrf=False)
     def delete_sorder(self, **post):
+        """ Cancel the Quotation """
         if(post.get('order_id')):
             sale_order = request.env['sale.order'].sudo().search([
                 ('id', '=', int(post.get('order_id')))])
@@ -255,6 +363,7 @@ class WetAuthSignupHome(Home):
     @http.route(['/signup/resend/otp'], type='json', auth="public", methods=['POST'],
                 website=True, csrf=False)
     def signup_resend_otp(self, **post):
+        """ Re-send OTP while customer signup. """
         wet_otp = request.env['wet.otp.verification'].sudo().search([
             ('mobile', '=', post.get('login'))])
         if wet_otp:
@@ -285,8 +394,25 @@ class WetAuthSignupHome(Home):
 
 class WebsiteCustomerPortal(CustomerPortal):
 
+    def _document_check_access(self, model_name, document_id, access_token=None):
+        document = request.env[model_name].browse([document_id])
+        document_sudo = document.sudo().exists()
+        if not document_sudo:
+            raise MissingError(_("This document does not exist."))
+        #=======================================================================
+        # try:
+        #     document.check_access_rights('read')
+        #     document.check_access_rule('read')
+        # except AccessError:
+        #     if not access_token or not consteq(document_sudo.access_token, access_token):
+        #         raise
+        #=======================================================================
+        return document_sudo
+
     @http.route(['/sorder/<int:order_id>'], type='json', auth="public", website=True)
-    def update_order_status(self, order_id=None,  **post):
+    def update_order_status(self, order_id=None, **post):
+        """ Find the order status and invoice id for order tracking
+        in Order page. """
         sale_order = request.env['sale.order'].sudo().search([('id', '=', order_id)])
         invoice_id = 0
         for invoice in sale_order.invoice_ids:
@@ -297,6 +423,8 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/sorder/invoice/<int:invoice_id>'], type='json', auth="public", website=True)
     def update_invoice_order_status(self, invoice_id=None,  **post):
+        """ Find the order status and invoice id for order tracking
+        in Order page. """
         invoices = request.env['account.invoice'].sudo().search([('id', '=', invoice_id)])
         sale_order = request.env['sale.order'].sudo().search([('name', '=', invoices.origin)])
         invoice_id = 0
@@ -307,6 +435,8 @@ class WebsiteCustomerPortal(CustomerPortal):
         return values
 
     def _prepare_portal_layout_values(self):
+        """ Replace the this method for add sudo() for search 
+        quotation, order and invoice count for multi-company. """
         values = super(WebsiteCustomerPortal, self)._prepare_portal_layout_values()
         partner = request.env.user.partner_id
 
@@ -331,6 +461,8 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/my/quotes', '/my/quotes/page/<int:page>'], type='http', auth="user", website=True)
     def portal_my_quotes(self, page=1, date_begin=None, date_end=None, sortby=None, **kw):
+        """ Replace the this method for add sudo() for search in
+        quotation for multi-company. """
         values = self._prepare_portal_layout_values()
         partner = request.env.user.partner_id
         SaleOrder = request.env['sale.order']
@@ -383,6 +515,8 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/my/orders', '/my/orders/page/<int:page>'], type='http', auth="user", website=True)
     def portal_my_orders(self, page=1, date_begin=None, date_end=None, sortby=None, **kw):
+        """ Replace the this method for add sudo() for search in
+        my orders for multi-company. """
         values = self._prepare_portal_layout_values()
         partner = request.env.user.partner_id
         SaleOrder = request.env['sale.order']
@@ -434,6 +568,8 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/my/invoices', '/my/invoices/page/<int:page>'], type='http', auth="user", website=True)
     def portal_my_invoices(self, page=1, date_begin=None, date_end=None, sortby=None, **kw):
+        """ Replace the this method for add sudo() for search in
+        my invoice for multi-company. """
         values = self._prepare_portal_layout_values()
         AccountInvoice = request.env['account.invoice']
         partner = request.env.user.partner_id
@@ -482,6 +618,8 @@ class WebsiteCustomerPortal(CustomerPortal):
 
     @http.route(['/my/invoices/<int:invoice_id>'], type='http', auth="public", website=True)
     def portal_my_invoice_detail(self, invoice_id, access_token=None, report_type=None, download=False, **kw):
+        """ Replace the this method for add sudo() for search in
+        invoice for portal user. """
         try:
             invoice_sudo = self._document_check_access('account.invoice', invoice_id, access_token)
         except (AccessError, MissingError):
@@ -495,64 +633,12 @@ class WebsiteCustomerPortal(CustomerPortal):
         values['sale_order'] = sale_order
         return request.render("account.portal_invoice_page", values)
 
-#===============================================================================
-#     @http.route(['/my/orders', '/my/orders/page/<int:page>'], type='http', auth="user", website=True)
-#     def portal_my_orders(self, page=1, date_begin=None, date_end=None, sortby=None, **kw):
-#         values = self._prepare_portal_layout_values()
-#         partner = request.env.user.partner_id
-#         SaleOrder = request.env['sale.order']
-# 
-#         domain = [
-#             ('message_partner_ids', 'child_of', [partner.commercial_partner_id.id]),
-#             ('state', 'in', ['sale', 'done', 'preparing', 'ready', 'delivered'])
-#         ]
-# 
-#         searchbar_sortings = {
-#             'date': {'label': _('Order Date'), 'order': 'date_order desc'},
-#             'name': {'label': _('Reference'), 'order': 'name'},
-#             'stage': {'label': _('Stage'), 'order': 'state'},
-#         }
-#         # default sortby order
-#         if not sortby:
-#             sortby = 'date'
-#         sort_order = searchbar_sortings[sortby]['order']
-# 
-#         archive_groups = self._get_archive_groups('sale.order', domain)
-#         if date_begin and date_end:
-#             domain += [('create_date', '>', date_begin), ('create_date', '<=', date_end)]
-# 
-#         # count for pager
-#         order_count = SaleOrder.search_count(domain)
-#         # pager
-#         pager = portal_pager(
-#             url="/my/orders",
-#             url_args={'date_begin': date_begin, 'date_end': date_end, 'sortby': sortby},
-#             total=order_count,
-#             page=page,
-#             step=self._items_per_page
-#         )
-#         # content according to pager and archive selected
-#         orders = SaleOrder.search(domain, order=sort_order, limit=self._items_per_page, offset=pager['offset'])
-#         request.session['my_orders_history'] = orders.ids[:100]
-# 
-#         values.update({
-#             'date': date_begin,
-#             'orders': orders.sudo(),
-#             'page_name': 'order',
-#             'pager': pager,
-#             'archive_groups': archive_groups,
-#             'default_url': '/my/orders',
-#             'searchbar_sortings': searchbar_sortings,
-#             'sortby': sortby,
-#         })
-#         return request.render("sale.portal_my_orders", values)
-#===============================================================================
-
 
 class ShopWebsiteSale(ProductConfiguratorController):
 
     @http.route(['/shop/cart/update'], type='http', auth="public", methods=['POST'], website=True, csrf=False)
     def cart_update(self, product_id, add_qty=1, set_qty=0, **kw):
+        """ This method like cart update. create a order for wet market. """
         product_custom_attribute_values = None
         if kw.get('product_custom_attribute_values'):
             product_custom_attribute_values = json.loads(kw.get('product_custom_attribute_values'))
@@ -567,6 +653,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
     @http.route(['/cart/exit/company'], type='json', auth="public", methods=['POST'], website=True, csrf=False)
     def order_company_exist(self, **post):
+        """ Check the other company order added in cart """
         order = request.website.sale_get_order()
         user = request.env.user
         if(user.company_id.id == order.company_id.id or (len(order.order_line.ids) <= 0)):
@@ -634,7 +721,7 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
     @http.route(['/website/show_optional_products_shop_website'], type='json', auth="public", methods=['POST'], website=True)
     def show_optional_products_shop_website(self, product_id, variant_values, pricelist_id, add_qty, **kw):
-
+        """ show the optional product attribute """
         product = request.env['product.template'].sudo().search([
             ('id', '=', int(product_id))])
         combination = request.env['product.template.attribute.value'].browse(variant_values)
@@ -703,6 +790,8 @@ class ShopWebsiteSale(ProductConfiguratorController):
 
     @http.route(['/shop/confirm_order'], type='http', auth="public", website=True)
     def confirm_order(self, **post):
+        """ Replace the confirm order for if customer url then
+        redirect the login page. """
         order = request.website.sale_get_order()
 
         redirection = self.checkout_redirection(order)
@@ -718,119 +807,11 @@ class ShopWebsiteSale(ProductConfiguratorController):
         if(request.session.get('customer_url')):
             order.write({'state': 'sent'})
             request.website.sale_reset()
-            return request.redirect("/web/login?customer=true")#"/my/orders/"+str(order.id))
+            return request.redirect("/web/login?customer=true")
         if extra_step.active:
             return request.redirect("/shop/confirm_order")
- 
-        return request.redirect("/shop/payment")
 
-#===============================================================================
-#     @http.route([
-#         '''/shop''',
-#         '''/shop/page/<int:page>''',
-#         '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>''',
-#         '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>/page/<int:page>'''
-#     ], type='http', auth="public", website=True)
-#     def shop(self, page=0, category=None, search='', ppg=False, **post):
-#         if category:
-#             category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
-#             if not category or not category.can_access_from_current_website():
-#                 raise NotFound()
-# 
-#         if ppg:
-#             try:
-#                 ppg = int(ppg)
-#             except ValueError:
-#                 ppg = PPG
-#             post["ppg"] = ppg
-#         else:
-#             ppg = PPG
-# 
-#         attrib_list = request.httprequest.args.getlist('attrib')
-#         attrib_values = [[int(x) for x in v.split("-")] for v in attrib_list if v]
-#         attributes_ids = {v[0] for v in attrib_values}
-#         attrib_set = {v[1] for v in attrib_values}
-# 
-#         domain = self._get_search_domain(search, category, attrib_values)
-# 
-#         keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
-# 
-#         compute_currency, pricelist_context, pricelist = self._get_compute_currency_and_context()
-# 
-#         request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
-# 
-#         url = "/shop"
-#         if search:
-#             post["search"] = search
-#         if attrib_list:
-#             post['attrib'] = attrib_list
-# 
-#         Product = request.env['product.template']
-# 
-#         Category = request.env['product.public.category']
-#         search_categories = False
-#         if search:
-#             categories = Product.search(domain).mapped('public_categ_ids')
-#             search_categories = Category.search([('id', 'parent_of', categories.ids)] + request.website.website_domain())
-#             categs = search_categories.filtered(lambda c: not c.parent_id)
-#         else:
-#             categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
-# 
-#         parent_category_ids = []
-#         if category:
-#             url = "/shop/category/%s" % slug(category)
-#             parent_category_ids = [category.id]
-#             current_category = category
-#             while current_category.parent_id:
-#                 parent_category_ids.append(current_category.parent_id.id)
-#                 current_category = current_category.parent_id
-# 
-#         product_count = Product.search_count(domain)
-#         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-#         products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
-# 
-#         ProductAttribute = request.env['product.attribute']
-#         if products:
-#             # get all products without limit
-#             selected_products = Product.search(domain, limit=False)
-#             attributes = ProductAttribute.search([('attribute_line_ids.product_tmpl_id', 'in', selected_products.ids)])
-#         else:
-#             attributes = ProductAttribute.browse(attributes_ids)
-#         user_id = http.request.env.context.get('uid')
-#         current_user = request.env['res.users'].sudo().search([('id', '=', user_id)])
-#         if not current_user.has_group('sales_team.group_sale_manager'):
-#             now = datetime.now()
-#             cdatetime = now.strftime("%Y-%m-%d")
-#             current_date = datetime.strptime(cdatetime, '%Y-%m-%d')
-#             wet_prod_template = request.env['product.template'].sudo().search([
-#                 ('expire_date', '!=', False),
-#                 ('expire_date', '<', current_date)])
-#             if wet_prod_template:
-#                 products = Product.search([
-#                     ('id', 'in', products.ids),
-#                     ('id', 'not in', wet_prod_template.ids)],order=self._get_search_order(post))
-#         values = {
-#             'search': search,
-#             'category': category,
-#             'attrib_values': attrib_values,
-#             'attrib_set': attrib_set,
-#             'pager': pager,
-#             'pricelist': pricelist,
-#             'products': products,
-#             'search_count': product_count,  # common for all searchbox
-#             'bins': TableCompute().process(products, ppg),
-#             'rows': PPR,
-#             'categories': categs,
-#             'attributes': attributes,
-#             'compute_currency': compute_currency,
-#             'keep': keep,
-#             'parent_category_ids': parent_category_ids,
-#             'search_categories_ids': search_categories and search_categories.ids,
-#         }
-#         if category:
-#             values['main_object'] = category
-#         return request.render("website_sale.products", values)
-#===============================================================================
+        return request.redirect("/shop/payment")
 
     @http.route([
         '''/shop''',
@@ -839,6 +820,8 @@ class ShopWebsiteSale(ProductConfiguratorController):
         '''/shop/category/<model("product.public.category", "[('website_id', 'in', (False, current_website_id))]"):category>/page/<int:page>'''
     ], type='http', auth="public", website=True)
     def shop(self, page=0, category=None, search='', ppg=False, **post):
+        """ Replace the shop for portal user and multi-company. update
+        the user current company. """
         add_qty = int(post.get('add_qty', 1))
         if category:
             category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
@@ -968,6 +951,8 @@ class ShopWebsiteSale(ProductConfiguratorController):
         '''/shop/product/grid'''
     ], type='http', auth="public", website=True)
     def product_grid(self, page=0, category=None, search='', ppg=False, **post):
+        """ Display the products in grid view for update attribute, qty
+        and onhand qty. """
         if category:
             category = request.env['product.public.category'].search([('id', '=', int(category))], limit=1)
             if not category or not category.can_access_from_current_website():
@@ -1084,6 +1069,7 @@ class Home(http.Controller):
 
     @http.route('/web/login', type='http', auth="none", sitemap=False)
     def web_login(self, redirect=None, **kw):
+        print('Original')
         ensure_db()
         request.params['login_success'] = False
         if(request.params.get('login')):
@@ -1136,6 +1122,8 @@ class Home(http.Controller):
     @http.route('/change/product/details', type='json',
                 auth="public", methods=['POST'], website=True)
     def product_details(self, **kw):
+        """ get price, product attribute, attribute values
+        for selected products. """
         product_tmpl_id = int(kw.get('prod_id'))
         product_template = request.env['product.template'].browse(product_tmpl_id)
         product_attribute = request.env['product.attribute'].search([])
@@ -1160,6 +1148,7 @@ class Home(http.Controller):
     @http.route('/product/details/save', type='json',
                 auth="public", methods=['POST'], website=True)
     def product_save(self, **kw):
+        """ Updated the product price, attribute and attribute values. """
         values = {}
         product_template = request.env['product.template'].browse(int(kw.get('prod_id')))
         if(kw.get('price')):
@@ -1200,6 +1189,8 @@ class Home(http.Controller):
     @http.route('/grid_product/details/save', type='json',
                 auth="public", methods=['POST'], website=True)
     def grid_product_save(self, **kw):
+        """ Updated the product price, attribute and attribute values
+        for selected products. """
         for prod in kw:
             prod_detail = kw.get(prod)
             product_template = request.env['product.template'].browse(int(prod_detail.get('prod_id')))
@@ -1270,6 +1261,7 @@ class Home(http.Controller):
     @http.route('/create/stock/inventory', type='json',
                 auth="public", methods=['POST'], website=True)
     def stock_inventory(self, **kw):
+        """ Create a stock inventory """
         values = {}
         qty = int(kw.get('qty'))
         prod_qty = float(qty)
@@ -1316,6 +1308,7 @@ class Home(http.Controller):
     @http.route('/grid/create/stock/inventory', type='json',
                 auth="public", methods=['POST'], website=True)
     def grid_stock_inventory(self, **kw):
+        """ Create a stock inventory for selected products in grid view. """
         values = {}
         company_user = request.env.user.company_id
         warehouse = request.env['stock.warehouse'].search([('company_id', '=', company_user.id)], limit=1)
