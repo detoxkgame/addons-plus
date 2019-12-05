@@ -17,7 +17,8 @@
     'depends': ['product','sale','base','project'],
     'data': [
         'views/product.xml',
-        'views/sale.xml'
+        'views/sale.xml',
+        'views/ir_sequence.xml',
     ],
     'installable': True,
     'auto_install': False,

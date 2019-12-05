@@ -19,15 +19,10 @@
             		<button name="project_document" string="Create Project Document" class="btn btn-primary"
             		attrs="{'invisible': [('isassociate_project', '=', False)] }"  type="object"/>
                 </xpath>
-            </field>
-        </record>
-        <record id="view_order_form_sales" model="ir.ui.view">
-            <field name="name">sale.order.form.view</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-             	<xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="before">
-					<field name="date" />
+          
+             	<xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="before" >
+					<field name="date"/>
+					<field name="lab_no" />
 					<field name="test_desired"/>
 				</xpath>
 				<xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
@@ -41,8 +36,45 @@
                                'required': [('display_type', '=', False)],
                                }"
                              force_save="1"/>
-                </xpath>                              
-           	</field>
-         </record>
+                </xpath>
+                <xpath   expr="//field[@name='order_line']" position="after">
+               		<group>
+                    	<group>
+                        	<div class="oe_inline">
+                            	<field name="task_no_id" >
+                            		<form>
+                            			<group  colspan="2">
+                            				<field name="task_no" />
+                            				<field name="task_name"  />
+                            			</group>
+                            		</form>
+                           
+                           			<tree   editable="bottom" string="Task" >
+                                		<field name="task_no" align="Left"/>
+                            			<field name="task_name"  />
+                            		</tree>
+                         
+                           		</field>
+                             </div>
+                      </group>
+                      <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_totals">
+                   	  	  <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                          <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                              <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                  <label for="amount_total" />
+                              </div>
+                           <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                       </group>
+                  </group>
+           	</xpath>
+            <xpath  expr="//group[@name='sale_total']" position="replace">
+            </xpath>
+             <xpath  expr="//page[@name='order_lines']" position="replace">
+              <page string="Scope of Work" attrs="{'invisible': [('sale_type','!=','soil drilling')]}">
+              </page>
+              
+             </xpath>
+         </field>
+       </record> 
     </data>
 </odoo>

@@ -11,7 +11,8 @@ class SaleOrder(models.Model):
                                 ('soil drilling', _('Soil Drilling'))], string='Sale Type',default='laboratory')
     branch = fields.Char("Branch")
     isassociate_project = fields.Boolean('Associated to a Project', default=False)
-    
+    task_no_id = fields.One2many('sale.order.line', 'order_id',"Task numbers", states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True, auto_join=True)
+
     @api.model
     def create(self, vals):
         res = super(SaleOrder, self).create(vals)
@@ -32,10 +33,12 @@ class SaleOrder(models.Model):
             'target': 'new',
         }
     
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
     _inherit="sale.order.line"
-    
-    date = fields.Date(string="Date")
+     
+    date=fields.Date(string="Date")
+    task_no=fields.Integer(string="Task number")
+    task_name=fields.Char(string="Task Name")
     test_desired=fields.Selection([
         ('lab','Laboratory Options'),
         ('soil','Soil Drilling')],'Test Desired',required="True")
@@ -43,4 +46,18 @@ class sale_order_line(models.Model):
         ('concrete','Concrete'),
         ('steel','Steel'),
         ('chemical','Chemical'),
-        ('soil','Soil')],'Section',required="True")    
+        ('soil','Soil')],'Section',required="True")  
+    lab_no = fields.Char(string="Lab No.", readonly=True, required=True, copy=False) 
+    @api.onchange('sequence')
+    def _onchange_date(self):
+        seq_no =self.env['ir.sequence'].next_by_code('sale.order.line') 
+        brch = self.order_id.branch
+        self.lab_no=seq_no
+        
+        
+    
+    
+    
+    
+    
+     
