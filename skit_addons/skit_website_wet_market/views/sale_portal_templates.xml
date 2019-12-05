@@ -209,7 +209,16 @@
                     </t>
                     	
                     </t>
-                    <span class="shop_price" t-esc="product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    <t t-set="prod_items" t-value="prod_list_item.sudo().search([('product_tmpl_id', '=', product.id)], order='id desc', limit=1)"/>
+	    			<t t-if="not prod_items">
+	    				<t t-set="prod_items" t-value="prod_list_item.sudo().search([('applied_on', '=', '3_global')], order='id desc', limit=1)"/>
+	    			</t>
+	    			<t t-if="((prod_items) and (prod_items.compute_price == 'percentage'))">
+                    	<span class="shop_price" t-esc="product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    </t>
+                    <t t-else="">
+                    	<span class="shop_price" t-esc="product.website_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    </t>
                 </h6>
 			    <div style="width:100%;">
 	            	<div id="shop_cart_details" t-if="product.website_published">
