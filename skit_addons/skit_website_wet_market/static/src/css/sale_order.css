@@ -626,3 +626,17 @@ tr:last-child td { height:auto; }
     border-radius: 13%;
     margin-right: 1%;
 }
+.non_veg{
+	padding: 1% 2%;
+    border: 2px solid rgb(212, 36, 29);
+    color: rgb(212, 36, 29);
+    margin-right: 2%;
+    font-size: 12px;
+}
+.veg{
+	padding: 1% 2%;
+    border: 2px solid rgb(0, 142, 61);
+    color: rgb(0, 142, 61);
+    margin-right: 2%;
+    font-size: 12px;
+}

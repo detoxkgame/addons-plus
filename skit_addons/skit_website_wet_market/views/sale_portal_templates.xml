@@ -199,7 +199,13 @@
     		<section class="shop_section">
             	<h6 class="pro_name_price">
             		<span class="publish_prod_id" style="display:none;" t-esc="product.id" />
-                	<span itemprop="name"  class="shop_prod_name" t-att-content="product.name" t-field="product.name" />
+                	<span itemprop="name"  class="shop_prod_name" t-att-content="product.name">
+                	 <t t-if="product.veg">
+                	 	<i class="fa fa-circle veg"></i>
+                	 </t>
+                	 <t t-if="product.non_veg"><i class="fa fa-circle non_veg"></i></t>
+                	 <t t-esc="product.name" />
+                	</span>
                     <t t-if="not show_publish and not product.website_published">
                     	<a role="button" id="product_unpublish" t-if="not show_publish and not product.website_published" class="btn btn-secondary btn-sm btn-danger" title="This product is unpublished.">Unpublished</a>
                     </t>

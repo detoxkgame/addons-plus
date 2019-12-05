@@ -12,6 +12,10 @@
             	<xpath expr="//field[@name='company_id']" position="after">
             		<field name="wetmarket_company_ids" widget="many2many_tags" />
             	</xpath>
+            	<xpath expr="//field[@name='categ_id']" position="after">
+            		<field name="veg" string="Veg"/>
+            		<field name="non_veg" string="Non-Veg"/>
+            	</xpath>
             </field>
     </record>
     

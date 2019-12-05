@@ -12,6 +12,8 @@ class ProductTemplate(models.Model):
     expire_date = fields.Date(string='Expire Date')
     wetmarket_company_ids = fields.Many2many('res.company',
                                              string="WetMarket Companies")
+    veg = fields.Boolean(string='Veg', default=False)
+    non_veg = fields.Boolean(string='Non-Veg', default=False)
 
 
 class ProductPublicCategory(models.Model):

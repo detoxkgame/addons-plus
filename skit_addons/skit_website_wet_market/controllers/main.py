@@ -669,7 +669,9 @@ class ShopWebsiteSale(ProductConfiguratorController):
             for line in order.order_line:
                 line.unlink()
         if order:
-            order.update({'company_id': user.company_id.id})
+            pricelist = request.website.get_current_pricelist()
+            order.update({'company_id': user.company_id.id,
+                          'pricelist_id': pricelist.id})
         product_tmpl = request.env['product.template'].sudo().search([
             ('id', '=', int(product_id))])
         product = request.env['product.product'].sudo().search([
@@ -1069,7 +1071,6 @@ class Home(http.Controller):
 
     @http.route('/web/login', type='http', auth="none", sitemap=False)
     def web_login(self, redirect=None, **kw):
-        print('Original')
         ensure_db()
         request.params['login_success'] = False
         if(request.params.get('login')):
