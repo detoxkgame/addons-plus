@@ -31,3 +31,5 @@ For a standard installation please follow the <a href="https://www.odoo.com/docu
 from the documentation.
 
 Then follow <a href="https://www.odoo.com/documentation/master/tutorials.html">the developer tutorials</a>
+
+https://odoo-code-search.com/
